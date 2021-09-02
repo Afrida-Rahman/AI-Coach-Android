@@ -19,6 +19,7 @@
     <string name="reach_arms_over_head_exercise">Reach Arms Over Head Exercise</string>
     <string name="seated_knee_extension">Seated Knee Extension</string>
     <string name="seated_knee_extension_exercise">Seated Knee Extension Exercise</string>
+    <string name="the_fetched_data">The Fetched Data:</string>
 
     <string-array name="tfe_pe_models_array">
         <item>Movenet Thunder</item>
