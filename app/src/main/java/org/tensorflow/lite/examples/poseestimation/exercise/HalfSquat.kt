@@ -1,5 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
+import android.graphics.Canvas
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Point
@@ -95,14 +96,14 @@ class HalfSquat(
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = shoulderPoint,
-                middlePoint = hipPoint,
+                middlePoint1 = hipPoint,
                 endPoint = kneePoint,
                 clockWise = true
             ),
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = hipPoint,
-                middlePoint = kneePoint,
+                middlePoint1 = kneePoint,
                 endPoint = anklePoint,
                 clockWise = false
             )

@@ -1,14 +1,12 @@
 package org.tensorflow.lite.examples.poseestimation
 
+import org.tensorflow.lite.examples.poseestimation.data.ExerciseConstraint
+import org.tensorflow.lite.examples.poseestimation.data.PostedData
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ExerciseConstraintApiInterface {
-
     @POST("GetKeyPointsRestriction")
-    fun  getConstraint(@Body postedData : PostedData) : Call<List<KeyPointsRestriction>>
-
+    fun  getConstraint(@Body postedData : PostedData) : Call<ExerciseConstraint>
 }

@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.graphics.Color
 import android.util.Log
+import org.tensorflow.lite.examples.poseestimation.MainActivity
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Point
@@ -18,7 +19,8 @@ class ReachArmsOverHand(
     R.drawable.ic_reach_arms_over_head,
     audioPlayer
 ) {
-    private val leftShoulderAngleMin = 15f
+    var receivedResponse = MainActivity.keyPointsRestriction
+    private var leftShoulderAngleMin = 15f
     private val leftShoulderAngleMax = 180f
 
     private val rightShoulderAngleMin = 15f
@@ -112,7 +114,7 @@ class ReachArmsOverHand(
         } else {
             if (!isHandStraight) {
                 wrongFrameCount++
-                if (wrongFrameCount >= maxWrongCountFrame){
+                if (wrongFrameCount >= maxWrongCountFrame) {
                     handNotStraight()
                     wrongFrameCount = 0
                 }
@@ -163,14 +165,14 @@ class ReachArmsOverHand(
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = leftElbowPoint,
-                middlePoint = leftShoulderPoint,
+                middlePoint1 = leftShoulderPoint,
                 endPoint = leftHipPoint,
                 clockWise = false
             ),
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = rightElbowPoint,
-                middlePoint = rightShoulderPoint,
+                middlePoint1 = rightShoulderPoint,
                 endPoint = rightHipPoint,
                 clockWise = true
             )

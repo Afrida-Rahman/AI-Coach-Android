@@ -54,6 +54,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:onClick="test"
+        />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -262,11 +269,6 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-            <TextView
-                android:id="@+id/tv_retrofit_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/the_fetched_data"/>
 
         </LinearLayout>
 
