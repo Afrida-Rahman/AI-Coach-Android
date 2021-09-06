@@ -2,12 +2,10 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import org.tensorflow.lite.examples.poseestimation.data.ExerciseConstraint
 import org.tensorflow.lite.examples.poseestimation.data.ExerciseData
+import org.tensorflow.lite.examples.poseestimation.data.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.data.KeyPointsRestriction
 import org.tensorflow.lite.examples.poseestimation.data.PostedData
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
@@ -63,40 +61,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun test(view: View){
-        Log.d("retrofit", "hello$keyPointsRestriction")
-    }
-
-    fun getExerciseConstraint(){
+    fun getExerciseConstraint() {
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(url)
             .build()
             .create(ExerciseConstraintApiInterface::class.java)
 
-        val postedData = PostedData(KeyPointsRestrictions = listOf(ExerciseData(347)), Tenant = "emma")
+        val postedData =
+            PostedData(KeyPointsRestrictions = listOf(ExerciseData(347)), Tenant = "emma")
         val retrofitData = retrofitBuilder.getConstraint(postedData)
 
-        Log.d("retrofit", " all data::::")
+        retrofitData.enqueue(object : Callback<KeyPointRestrictions> {
 
-        retrofitData.enqueue(object : Callback<ExerciseConstraint> {
-
-        override fun onResponse (
-                call: Call<ExerciseConstraint>,
-                response: Response<ExerciseConstraint>
+            override fun onResponse(
+                call: Call<KeyPointRestrictions>,
+                response: Response<KeyPointRestrictions>
             ) {
                 val responseBody = response.body()
                 val receivedNeededConstraint = StringBuilder()
                 if (responseBody != null) {
-                    for (myData in responseBody.KeyPointsRestrictions) {
-//                        Log.d("retrofit", " all data:::: ${myData.Direction}")
+                    for (myData in responseBody[0].KeyPointsRestrictionGroup[1].KeyPointsRestriction) {
+                        Log.d(
+                            "retrofit",
+                            " all keypoint:::: ${responseBody[0].KeyPointsRestrictionGroup[0].KeyPointsRestriction}"
+                        )
+                        Log.d(
+                            "retrofit",
+                            " all phase:::: ${responseBody[0].KeyPointsRestrictionGroup[0].Phase}"
+                        )
+                        Log.d("retrofit", " all data:::: ${responseBody}")
                     }
                 }
-                keyPointsRestriction = responseBody?.KeyPointsRestrictions as List<KeyPointsRestriction>
-                Log.d("retrofit", " all data:::: ${keyPointsRestriction!![0].MaxValidationValue}, -- ${keyPointsRestriction!![0].MinValidationValue}")
+                keyPointsRestriction = responseBody as List<KeyPointsRestriction>
+//                Log.d("retrofit", " all data:::: ${keyPointsRestriction!![0].MaxValidationValue}, -- ${keyPointsRestriction!![0].MinValidationValue}")
             }
 
-            override fun onFailure(call: Call<ExerciseConstraint>, t: Throwable) {
+            override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
                 Log.d("retrofit", "on failure ::: " + t.message)
             }
         })
