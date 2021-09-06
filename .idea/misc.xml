@@ -11,7 +11,9 @@
         <entry key="app/src/main/res/layout/activity_exercise_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/bottom_sheet_layout.xml" value="0.2796875" />
+        <entry key="app/src/main/res/layout/demo_fetch_data.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/exercise_item.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fetch_retrofit_data.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/item_exercise.xml" value="0.33" />
       </map>
     </option>

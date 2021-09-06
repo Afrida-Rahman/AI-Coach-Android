@@ -16,6 +16,7 @@ abstract class Exercise(
     companion object {
         const val deltaValue = 15f
     }
+
     private var setCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private val wrongAudioInstruction = R.raw.keep_hand_straight
@@ -45,7 +46,7 @@ abstract class Exercise(
         }
     }
 
-    fun handNotStraight(){
+    fun handNotStraight() {
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
@@ -56,4 +57,5 @@ abstract class Exercise(
     fun getRepetitionCount() = repetitionCounter
 
     fun getSetCount() = setCounter
+
 }

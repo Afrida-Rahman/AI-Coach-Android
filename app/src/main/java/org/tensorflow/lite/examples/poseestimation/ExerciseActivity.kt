@@ -197,6 +197,8 @@ class ExerciseActivity : AppCompatActivity() {
 
         val exerciseName = intent.getStringExtra("exerciseName")
 
+        Log.d("retrofit", " all data::::${MainActivity.keyPointsRestriction}")
+
         for (index in exercises.indices) {
             if (exercises[index].name == exerciseName) {
                 exercise = exercises[index]
@@ -470,7 +472,8 @@ class ExerciseActivity : AppCompatActivity() {
                     bitmap,
                     exercise.drawingRules(person),
                     exercise.getRepetitionCount(),
-                    exercise.getSetCount()
+                    exercise.getSetCount(),
+                    person
                 )
             }
         }

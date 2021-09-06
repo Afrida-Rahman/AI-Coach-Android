@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.graphics.Color
 import android.util.Log
+import org.tensorflow.lite.examples.poseestimation.MainActivity
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Point
@@ -18,11 +19,12 @@ class ReachArmsOverHand(
     R.drawable.ic_reach_arms_over_head,
     audioPlayer
 ) {
-    private val leftShoulderAngleMin = 15f
-    private val leftShoulderAngleMax = 180f
+    private var receivedResponse = MainActivity.keyPointsRestriction
+    var shoulderAngleDownMin = 0f
+    var shoulderAngleDownMax = 10f
 
-    private val rightShoulderAngleMin = 15f
-    private val rightShoulderAngleMax = 180f
+    var shoulderAngleUpMin = 165f
+    var shoulderAngleUpMax = 195f
 
     private val straightHandAngleMin = 150f
     private val straightHandAngleMax = 210f
@@ -31,27 +33,6 @@ class ReachArmsOverHand(
     private var currentIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
-
-    private val states: Array<FloatArray> = arrayOf(
-        floatArrayOf(
-            leftShoulderAngleMin - deltaValue,
-            leftShoulderAngleMin + deltaValue,
-            rightShoulderAngleMin - deltaValue,
-            rightShoulderAngleMin + deltaValue
-        ),
-        floatArrayOf(
-            leftShoulderAngleMax - deltaValue,
-            leftShoulderAngleMax + deltaValue,
-            rightShoulderAngleMax - deltaValue,
-            rightShoulderAngleMax + deltaValue
-        ),
-        floatArrayOf(
-            leftShoulderAngleMin - deltaValue,
-            leftShoulderAngleMin + deltaValue,
-            rightShoulderAngleMin - deltaValue,
-            rightShoulderAngleMin + deltaValue
-        )
-    )
 
     override fun exerciseCount(person: Person) {
         val leftShoulderPoint = Point(
@@ -86,6 +67,39 @@ class ReachArmsOverHand(
             person.keyPoints[8].coordinate.x,
             -person.keyPoints[8].coordinate.y
         )
+        if (receivedResponse != null){
+            shoulderAngleDownMin = receivedResponse!![3].MinValidationValue.toFloat() //0f
+            shoulderAngleDownMax = receivedResponse!![3].MaxValidationValue.toFloat() //10f
+
+            shoulderAngleUpMin = receivedResponse!![0].MinValidationValue.toFloat() //165f
+            shoulderAngleUpMax = receivedResponse!![0].MaxValidationValue.toFloat() //195f
+        }else{
+             shoulderAngleDownMin = 0f
+             shoulderAngleDownMax = 30f
+             shoulderAngleUpMin = 165f
+             shoulderAngleUpMax = 195f
+        }
+
+        val states: Array<FloatArray> = arrayOf(
+            floatArrayOf(
+                shoulderAngleDownMin,
+                shoulderAngleDownMax,
+                shoulderAngleDownMin,
+                shoulderAngleDownMax
+            ),
+            floatArrayOf(
+                shoulderAngleUpMin,
+                shoulderAngleUpMax,
+                shoulderAngleUpMin,
+                shoulderAngleUpMax
+            ),
+            floatArrayOf(
+                shoulderAngleDownMin,
+                shoulderAngleDownMax,
+                shoulderAngleDownMin,
+                shoulderAngleDownMax
+            )
+        )
 
         val leftShoulderAngle =
             Utilities().angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
@@ -96,6 +110,21 @@ class ReachArmsOverHand(
         val rightStraightHandAngle =
             Utilities().angle(rightShoulderPoint, rightElbowPoint, rightWristPoint, false)
 
+//        for (i in 1..4) {
+//            if (receivedResponse!![i].ExerciseId == 347) {
+//                if (receivedResponse!![i].Phase == 1) {
+//                    shoulderAngleDownMin = receivedResponse!![i].MinValidationValue.toFloat()
+//                    shoulderAngleDownMax = receivedResponse!![i].MaxValidationValue.toFloat()
+//                    Log.d("hey","Down Min::: $shoulderAngleDownMin --- Down Max::: $shoulderAngleDownMax")
+//                }
+//                if (receivedResponse!![i].Phase == 2) {
+//                    shoulderAngleUpMin = receivedResponse!![i].MinValidationValue.toFloat()
+//                    shoulderAngleUpMax = receivedResponse!![i].MaxValidationValue.toFloat()
+//                    Log.d("hey", "Up Min::: $shoulderAngleUpMin --- Up Max::: $shoulderAngleUpMax")
+//                }
+//                Log.d("hey", "Response is received & transferring data....${receivedResponse!![0]}")
+//            }
+//        }
         val isHandStraight =
             leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax &&
                     rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
@@ -104,6 +133,7 @@ class ReachArmsOverHand(
             rightShoulderAngle > states[currentIndex][2] && rightShoulderAngle < states[currentIndex][3] &&
             isHandStraight
         ) {
+            Log.d("hey", "check part::: ${states[currentIndex][1]}")
             currentIndex += 1
             if (currentIndex == totalStates) {
                 currentIndex = 0
@@ -112,7 +142,7 @@ class ReachArmsOverHand(
         } else {
             if (!isHandStraight) {
                 wrongFrameCount++
-                if (wrongFrameCount >= maxWrongCountFrame){
+                if (wrongFrameCount >= maxWrongCountFrame) {
                     handNotStraight()
                     wrongFrameCount = 0
                 }
@@ -163,14 +193,14 @@ class ReachArmsOverHand(
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = leftElbowPoint,
-                middlePoint = leftShoulderPoint,
+                middlePoint1 = leftShoulderPoint,
                 endPoint = leftHipPoint,
                 clockWise = false
             ),
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = rightElbowPoint,
-                middlePoint = rightShoulderPoint,
+                middlePoint1 = rightShoulderPoint,
                 endPoint = rightHipPoint,
                 clockWise = true
             )

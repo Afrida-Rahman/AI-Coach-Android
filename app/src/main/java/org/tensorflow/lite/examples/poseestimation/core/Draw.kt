@@ -111,4 +111,19 @@ class Draw(
         circle(middlePoint, radius, referenceVector, angleValue.toFloat(), _clockWise = _clockWise)
         writeText("$angleValue", textPosition)
     }
+
+    fun border(
+        firstPoint: Point,
+        secondPoint: Point,
+        thirdPoint: Point,
+        forthPoint: Point,
+        _color: Int = color,
+        lineType: Paint.Style? = Paint.Style.FILL,
+        _thickness : Float = thickness
+    ) {
+        line(firstPoint, secondPoint, lineType, _color,_thickness)
+        line(secondPoint, thirdPoint, lineType, _color,_thickness)
+        line(thirdPoint, forthPoint, lineType, _color,_thickness)
+        line(forthPoint, firstPoint, lineType, _color,_thickness)
+    }
 }

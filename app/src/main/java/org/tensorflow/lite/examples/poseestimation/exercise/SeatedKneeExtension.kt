@@ -73,7 +73,7 @@ class SeatedKneeExtension(
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = hipPoint,
-                middlePoint = kneePoint,
+                middlePoint1 = kneePoint,
                 endPoint = anklePoint,
                 clockWise = false
             )
