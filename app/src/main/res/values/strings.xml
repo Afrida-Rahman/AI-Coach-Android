@@ -20,6 +20,7 @@
     <string name="seated_knee_extension">Seated Knee Extension</string>
     <string name="seated_knee_extension_exercise">Seated Knee Extension Exercise</string>
     <string name="the_fetched_data">The Fetched Data:</string>
+    <string name="flip_camera">Flip Camera</string>
 
     <string-array name="tfe_pe_models_array">
         <item>Movenet Thunder</item>

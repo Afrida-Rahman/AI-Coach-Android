@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.graphics.Color
-import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.MainActivity
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
@@ -129,7 +128,6 @@ class ReachArmsOverHand(
                 shoulderAngleDownMax
             )
         )
-        Log.d("RightStateIndex", "$rightStateIndex")
         if (
             leftShoulderAngle > rightCountStates[rightStateIndex][0] && leftShoulderAngle < rightCountStates[rightStateIndex][1] &&
             rightShoulderAngle > rightCountStates[rightStateIndex][2] && rightShoulderAngle < rightCountStates[rightStateIndex][3] &&
@@ -182,7 +180,6 @@ class ReachArmsOverHand(
         val leftShoulderAngle = Utilities().angle(leftWristPoint, leftShoulderPoint, leftHipPoint)
         val rightShoulderAngle =
             Utilities().angle(rightWristPoint, rightShoulderPoint, rightHipPoint, true)
-        Log.d("WrongCount", "Left: $leftShoulderAngle - Right: $rightShoulderAngle")
         if (
             leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1] &&
             rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]
@@ -280,29 +277,22 @@ class ReachArmsOverHand(
     }
 
     override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
-        val nosePoint = Point(
-            person.keyPoints[0].coordinate.x,
-            person.keyPoints[0].coordinate.y
-        )
-        val leftAnklePoint = Point(
-            person.keyPoints[15].coordinate.x,
-            person.keyPoints[15].coordinate.y
-        )
-        val rightAnklePoint = Point(
-            person.keyPoints[16].coordinate.x,
-            person.keyPoints[16].coordinate.y
-        )
-        val middleBorderPoint = Point(
-            (nosePoint.x + (leftAnklePoint.x + rightAnklePoint.x)) / 2,
-            (nosePoint.y + (leftAnklePoint.y + rightAnklePoint.y)) / 2
-        )
-        val rightPosition =
-            middleBorderPoint.x > canvasHeight * 4 / 9f && middleBorderPoint.x < canvasHeight * 6 / 9f
-
-        return if (!rightPosition) {
-            Color.RED
-        } else {
+        val left = canvasWidth * 4f / 20f
+        val right = canvasWidth * 16f / 20f
+        val top = canvasHeight * 2.5f / 20f
+        val bottom = canvasHeight * 18.5f / 20f
+        var rightPosition = true
+        person.keyPoints.forEach {
+            val x = it.coordinate.x
+            val y = it.coordinate.y
+            if (x < left || x > right || y < top || y > bottom) {
+                rightPosition = false
+            }
+        }
+        return if (rightPosition) {
             Color.GREEN
+        } else {
+            Color.RED
         }
     }
 }

@@ -32,19 +32,19 @@ class MainActivity : AppCompatActivity() {
 
         getExerciseConstraint()
 
-        binding.kneeSquat.setOnClickListener {
-            val intent = Intent(this, ExerciseActivity::class.java).apply {
-                putExtra("exerciseName", "Knee Squat")
-            }
-            startActivity(intent)
-        }
-
-        binding.halfKneeSquat.setOnClickListener {
-            val intent = Intent(this, ExerciseActivity::class.java).apply {
-                putExtra("exerciseName", "Half Squat")
-            }
-            startActivity(intent)
-        }
+//        binding.kneeSquat.setOnClickListener {
+//            val intent = Intent(this, ExerciseActivity::class.java).apply {
+//                putExtra("exerciseName", "Knee Squat")
+//            }
+//            startActivity(intent)
+//        }
+//
+//        binding.halfKneeSquat.setOnClickListener {
+//            val intent = Intent(this, ExerciseActivity::class.java).apply {
+//                putExtra("exerciseName", "Half Squat")
+//            }
+//            startActivity(intent)
+//        }
 
         binding.reachArmsOverHear.setOnClickListener {
             val intent = Intent(this, ExerciseActivity::class.java).apply {
@@ -53,12 +53,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.seatedKneeExtension.setOnClickListener {
-            val intent = Intent(this, ExerciseActivity::class.java).apply {
-                putExtra("exerciseName", "Seated Knee Extension")
-            }
-            startActivity(intent)
-        }
+//        binding.seatedKneeExtension.setOnClickListener {
+//            val intent = Intent(this, ExerciseActivity::class.java).apply {
+//                putExtra("exerciseName", "Seated Knee Extension")
+//            }
+//            startActivity(intent)
+//        }
     }
 
     private fun getExerciseConstraint() {

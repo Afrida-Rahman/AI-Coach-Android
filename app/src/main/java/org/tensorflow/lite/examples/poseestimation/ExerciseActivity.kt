@@ -197,8 +197,6 @@ class ExerciseActivity : AppCompatActivity() {
 
         val exerciseName = intent.getStringExtra("exerciseName")
 
-        Log.d("retrofit", " all data::::${MainActivity.keyPointsRestrictionGroup}")
-
         for (index in exercises.indices) {
             if (exercises[index].name == exerciseName) {
                 exercise = exercises[index]
@@ -351,12 +349,11 @@ class ExerciseActivity : AppCompatActivity() {
 
                 // We don't use a front facing camera in this sample.
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
-                if (cameraDirection != null &&
-                    cameraDirection == CameraCharacteristics.LENS_FACING_FRONT
-                ) {
+
+//                Log.d("CameraIdNumber", "Camera ID: $cameraId")
+                if (cameraDirection != null && cameraDirection != CameraCharacteristics.LENS_FACING_FRONT) {
                     continue
                 }
-
                 previewSize = Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)
 
                 imageReader = ImageReader.newInstance(
@@ -460,7 +457,6 @@ class ExerciseActivity : AppCompatActivity() {
     private fun processImage(bitmap: Bitmap) {
         var score = 0f
         var outputBitmap = bitmap
-        val canvas: Canvas = surfaceHolder.lockCanvas()
 
         // run detect pose
         // draw points and lines on original image
@@ -469,16 +465,20 @@ class ExerciseActivity : AppCompatActivity() {
             if (score > minConfidence) {
                 exercise.exerciseCount(person)
                 exercise.wrongExerciseCount(person)
+                val height = bitmap.height
+                val width = bitmap.width
 
                 outputBitmap = VisualizationUtils.drawBodyKeypoints(
                     bitmap,
                     exercise.drawingRules(person),
                     exercise.getRepetitionCount(),
                     exercise.getWrongCount(),
-                    exercise.getBorderColor(person, canvas.height, canvas.width)
+                    exercise.getBorderColor(person, height, width)
                 )
             }
         }
+
+        val canvas: Canvas = surfaceHolder.lockCanvas()
 
         val screenWidth: Int
         val screenHeight: Int
@@ -500,6 +500,8 @@ class ExerciseActivity : AppCompatActivity() {
         }
         val right: Int = left + screenWidth
         val bottom: Int = top + screenHeight
+
+        Log.d("BitMapValue", "$outputBitmap")
 
         canvas.drawBitmap(
             outputBitmap, Rect(0, 0, outputBitmap.width, outputBitmap.height),
