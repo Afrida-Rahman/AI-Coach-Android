@@ -16,9 +16,9 @@ object VisualizationUtils {
     fun drawBodyKeypoints(
         input: Bitmap,
         drawingRules: List<Rule>,
-        setCount: Int,
         repCount: Int,
-        person: Person
+        wrongCount: Int,
+        borderColor: Int = Color.GREEN
     ): Bitmap {
         val output = input.copy(Bitmap.Config.ARGB_8888, true)
         val draw = Draw(Canvas(output), Color.WHITE, LINE_WIDTH)
@@ -38,50 +38,27 @@ object VisualizationUtils {
             }
         }
         draw.writeText(
-            setCount.toString(),
-            Point(width * 1 / 3f, 60f),
-            Color.rgb(6, 122, 72),//green
-            65f
-        )
-        draw.writeText(
             repCount.toString(),
-            Point(width * 2 / 3f, 60f),
+            Point(width * 1 / 3f, 60f),
             Color.rgb(19, 93, 148),//blue
             65f
         )
-        val nosePoint = Point(
-            person.keyPoints[0].coordinate.x,
-            person.keyPoints[0].coordinate.y
+        draw.writeText(
+            wrongCount.toString(),
+            Point(width * 2 / 3f, 60f),
+            Color.rgb(255, 0, 0),//green
+            65f
         )
-        val leftAnklePoint = Point(
-            person.keyPoints[15].coordinate.x,
-            person.keyPoints[15].coordinate.y
-        )
-        val rightAnklePoint = Point(
-            person.keyPoints[16].coordinate.x,
-            person.keyPoints[16].coordinate.y
-        )
-        val middleBorderPoint = Point(
-            (nosePoint.x + (leftAnklePoint.x + rightAnklePoint.x)) / 2,
-            (nosePoint.y + (leftAnklePoint.y + rightAnklePoint.y)) / 2
-        )
-//        val rightPosition = middlePoint.x > 450f && middlePoint.x < 550f && middlePoint.y > 600f && middlePoint.y < 800f
-        val rightPosition =
-            middleBorderPoint.x > height * 4 / 9f && middleBorderPoint.x < height * 6 / 9f
-
-        val color: Int = if (!rightPosition) {
-            Color.RED
-        } else {
-            Color.GREEN
+        if(borderColor != -1) {
+            draw.rectangle(
+                Point(width * 4f / 20f, height * 2.5f / 20f),
+                Point(width * 16f / 20f, height * 2.5f / 20f),
+                Point(width * 16f / 20f, height * 18.5f / 20f),
+                Point(width * 4f / 20f, height * 18.5f / 20f),
+                _color = borderColor,
+                _thickness = BORDER_WIDTH
+            )
         }
-        draw.border(
-            Point(width * 4f / 20f, height * 2.5f / 20f),
-            Point(width * 16f / 20f, height * 2.5f / 20f),
-            Point(width * 16f / 20f, height * 18.5f / 20f),
-            Point(width * 4f / 20f, height * 18.5f / 20f),
-            _color = color,
-            _thickness = BORDER_WIDTH
-        )
         return output
     }
 }

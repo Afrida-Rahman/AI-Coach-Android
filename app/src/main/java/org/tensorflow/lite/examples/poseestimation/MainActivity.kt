@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import org.tensorflow.lite.examples.poseestimation.data.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.data.KeyPointRestrictions
-import org.tensorflow.lite.examples.poseestimation.data.KeyPointsRestriction
+import org.tensorflow.lite.examples.poseestimation.data.KeyPointsRestrictionGroup
 import org.tensorflow.lite.examples.poseestimation.data.PostedData
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
 import retrofit2.Call
@@ -18,11 +18,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    private var url: String = "https://vaapi.injurycloud.com/api/exercisekeypoint/"
+    private var url: String = "https://vaapi.injurycloud.com"
     private lateinit var binding: ActivityMainBinding
 
     companion object {
-        var keyPointsRestriction: List<KeyPointRestrictions>? = null
+        var keyPointsRestrictionGroup: List<KeyPointsRestrictionGroup>? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,16 +78,8 @@ class MainActivity : AppCompatActivity() {
                 call: Call<KeyPointRestrictions>,
                 response: Response<KeyPointRestrictions>
             ) {
-                val responseBody = response.body()
-                val receivedNeededConstraint = StringBuilder()
-                if (responseBody != null) {
-                    for (myData in responseBody[0].KeyPointsRestrictionGroup[1].KeyPointsRestriction) {
-//                        Log.d("retrofit"," all keypoint:::: ${responseBody[0].KeyPointsRestrictionGroup[0].KeyPointsRestriction}")
-//                        Log.d("retrofit"," all phase:::: ${responseBody[0].KeyPointsRestrictionGroup[0].Phase}")
-                        Log.d("retrofit", " all data:::: $responseBody")
-                    }
-                }
-                keyPointsRestriction = responseBody as List<KeyPointRestrictions>
+                val responseBody = response.body()!!
+                keyPointsRestrictionGroup = responseBody[0].KeyPointsRestrictionGroup
             }
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {

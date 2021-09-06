@@ -9,20 +9,21 @@ abstract class Exercise(
     val name: String,
     val description: String,
     val image: Int,
-    private val audioPlayer: AudioPlayer,
-    private var repetitionCounter: Int = 0,
-    private val maxRepetitionCounter: Int = 10
+    private val audioPlayer: AudioPlayer
 ) {
+
     companion object {
         const val deltaValue = 15f
     }
-
-    private var setCounter = 0
+    private var repetitionCounter = 0
+    private var wrongCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private val wrongAudioInstruction = R.raw.keep_hand_straight
 
     abstract fun exerciseCount(person: Person)
+    abstract fun wrongExerciseCount(person: Person)
     abstract fun drawingRules(person: Person): List<Rule>
+    abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
 
     fun repetitionCount() {
         repetitionCounter++
@@ -40,10 +41,10 @@ abstract class Exercise(
             else -> R.raw.hello
         }
         audioPlayer.play(resourceId)
-        if (repetitionCounter >= maxRepetitionCounter) {
-            setCounter++
-            repetitionCounter = 0
-        }
+    }
+
+    fun wrongCount(){
+        wrongCounter++
     }
 
     fun handNotStraight() {
@@ -56,6 +57,6 @@ abstract class Exercise(
 
     fun getRepetitionCount() = repetitionCounter
 
-    fun getSetCount() = setCounter
+    fun getWrongCount() = wrongCounter
 
 }

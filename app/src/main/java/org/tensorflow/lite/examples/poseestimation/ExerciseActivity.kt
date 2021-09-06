@@ -197,7 +197,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         val exerciseName = intent.getStringExtra("exerciseName")
 
-        Log.d("retrofit", " all data::::${MainActivity.keyPointsRestriction}")
+        Log.d("retrofit", " all data::::${MainActivity.keyPointsRestrictionGroup}")
 
         for (index in exercises.indices) {
             if (exercises[index].name == exerciseName) {
@@ -460,6 +460,7 @@ class ExerciseActivity : AppCompatActivity() {
     private fun processImage(bitmap: Bitmap) {
         var score = 0f
         var outputBitmap = bitmap
+        val canvas: Canvas = surfaceHolder.lockCanvas()
 
         // run detect pose
         // draw points and lines on original image
@@ -467,19 +468,17 @@ class ExerciseActivity : AppCompatActivity() {
             score = person.score
             if (score > minConfidence) {
                 exercise.exerciseCount(person)
+                exercise.wrongExerciseCount(person)
 
                 outputBitmap = VisualizationUtils.drawBodyKeypoints(
                     bitmap,
                     exercise.drawingRules(person),
                     exercise.getRepetitionCount(),
-                    exercise.getSetCount(),
-                    person
+                    exercise.getWrongCount(),
+                    exercise.getBorderColor(person, canvas.height, canvas.width)
                 )
             }
         }
-
-        // Draw `bitmap` and `person`
-        val canvas: Canvas = surfaceHolder.lockCanvas()
 
         val screenWidth: Int
         val screenHeight: Int

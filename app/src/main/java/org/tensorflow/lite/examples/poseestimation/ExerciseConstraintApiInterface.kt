@@ -7,6 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ExerciseConstraintApiInterface {
-    @POST("GetKeyPointsRestriction")
+    @POST("/api/exercisekeypoint/GetKeyPointsRestriction")
     fun getConstraint(@Body postedData: PostedData): Call<KeyPointRestrictions>
 }

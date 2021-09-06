@@ -19,20 +19,35 @@ class ReachArmsOverHand(
     R.drawable.ic_reach_arms_over_head,
     audioPlayer
 ) {
-    private var receivedResponse = MainActivity.keyPointsRestriction
     private var shoulderAngleDownMin = 0f
     private var shoulderAngleDownMax = 10f
-
     private var shoulderAngleUpMin = 165f
+
     private var shoulderAngleUpMax = 195f
-
     private val straightHandAngleMin = 150f
-    private val straightHandAngleMax = 210f
 
+    private val straightHandAngleMax = 210f
     private val totalStates = 3
-    private var currentIndex = 0
+
+    private var rightStateIndex = 0
+    private var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
+    private var receivedResponse = MainActivity.keyPointsRestrictionGroup?.sortedBy { it.Phase }
+    private val wrongCountStates: Array<FloatArray> = arrayOf(
+        floatArrayOf(
+            0f, 30f,
+            0f, 30f
+        ),
+        floatArrayOf(
+            120f, 150f,
+            120f, 150f
+        ),
+        floatArrayOf(
+            0f, 30f,
+            0f, 30f
+        )
+    )
 
     override fun exerciseCount(person: Person) {
         val leftShoulderPoint = Point(
@@ -67,19 +82,34 @@ class ReachArmsOverHand(
             person.keyPoints[8].coordinate.x,
             -person.keyPoints[8].coordinate.y
         )
-        if (receivedResponse != null){
-//            shoulderAngleDownMin = receivedResponse!![3].MinValidationValue.toFloat()//0f
-//            shoulderAngleDownMax = receivedResponse!![3].MaxValidationValue.toFloat() //10f
-//            shoulderAngleUpMin = receivedResponse!![0].MinValidationValue.toFloat() //165f
-//            shoulderAngleUpMax = receivedResponse!![0].MaxValidationValue.toFloat() //195f
-        }else{
-             shoulderAngleDownMin = 0f
-             shoulderAngleDownMax = 30f
-             shoulderAngleUpMin = 165f
-             shoulderAngleUpMax = 195f
+        if (receivedResponse != null) {
+            shoulderAngleDownMin =
+                receivedResponse!![0].KeyPointsRestriction[0].MinValidationValue.toFloat()
+            shoulderAngleDownMax =
+                receivedResponse!![0].KeyPointsRestriction[0].MaxValidationValue.toFloat()
+            shoulderAngleUpMin =
+                receivedResponse!![1].KeyPointsRestriction[0].MinValidationValue.toFloat()
+            shoulderAngleUpMax =
+                receivedResponse!![1].KeyPointsRestriction[0].MaxValidationValue.toFloat()
+        } else {
+            shoulderAngleDownMin = 0f
+            shoulderAngleDownMax = 30f
+            shoulderAngleUpMin = 165f
+            shoulderAngleUpMax = 195f
         }
 
-        val states: Array<FloatArray> = arrayOf(
+        val leftShoulderAngle =
+            Utilities().angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
+        val rightShoulderAngle =
+            Utilities().angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
+        val leftStraightHandAngle =
+            Utilities().angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
+        val rightStraightHandAngle =
+            Utilities().angle(rightShoulderPoint, rightElbowPoint, rightWristPoint, false)
+        val isHandStraight =
+            leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax &&
+                    rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
+        val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 shoulderAngleDownMin,
                 shoulderAngleDownMax,
@@ -99,43 +129,18 @@ class ReachArmsOverHand(
                 shoulderAngleDownMax
             )
         )
-
-        val leftShoulderAngle =
-            Utilities().angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
-        val rightShoulderAngle =
-            Utilities().angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
-        val leftStraightHandAngle =
-            Utilities().angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
-        val rightStraightHandAngle =
-            Utilities().angle(rightShoulderPoint, rightElbowPoint, rightWristPoint, false)
-
-//        for (i in 1..4) {
-//            if (receivedResponse!![i].ExerciseId == 347) {
-//                if (receivedResponse!![i].Phase == 1) {
-//                    shoulderAngleDownMin = receivedResponse!![i].MinValidationValue.toFloat()
-//                    shoulderAngleDownMax = receivedResponse!![i].MaxValidationValue.toFloat()
-//                    Log.d("hey","Down Min::: $shoulderAngleDownMin --- Down Max::: $shoulderAngleDownMax")
-//                }
-//                if (receivedResponse!![i].Phase == 2) {
-//                    shoulderAngleUpMin = receivedResponse!![i].MinValidationValue.toFloat()
-//                    shoulderAngleUpMax = receivedResponse!![i].MaxValidationValue.toFloat()
-//                    Log.d("hey", "Up Min::: $shoulderAngleUpMin --- Up Max::: $shoulderAngleUpMax")
-//                }
-//                Log.d("hey", "Response is received & transferring data....${receivedResponse!![0]}")
-//            }
-//        }
-        val isHandStraight =
-            leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax &&
-                    rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
+        Log.d("RightStateIndex", "$rightStateIndex")
         if (
-            leftShoulderAngle > states[currentIndex][0] && leftShoulderAngle < states[currentIndex][1] &&
-            rightShoulderAngle > states[currentIndex][2] && rightShoulderAngle < states[currentIndex][3] &&
+            leftShoulderAngle > rightCountStates[rightStateIndex][0] && leftShoulderAngle < rightCountStates[rightStateIndex][1] &&
+            rightShoulderAngle > rightCountStates[rightStateIndex][2] && rightShoulderAngle < rightCountStates[rightStateIndex][3] &&
             isHandStraight
         ) {
-            Log.d("hey", "check part::: ${states[currentIndex][1]}")
-            currentIndex += 1
-            if (currentIndex == totalStates) {
-                currentIndex = 0
+            rightStateIndex += 1
+            if (rightStateIndex == rightCountStates.size - 1) {
+                wrongStateIndex = 0
+            }
+            if (rightStateIndex == totalStates) {
+                rightStateIndex = 0
                 repetitionCount()
             }
         } else {
@@ -145,6 +150,47 @@ class ReachArmsOverHand(
                     handNotStraight()
                     wrongFrameCount = 0
                 }
+            }
+        }
+    }
+
+    override fun wrongExerciseCount(person: Person) {
+        val leftShoulderPoint = Point(
+            person.keyPoints[5].coordinate.x,
+            -person.keyPoints[5].coordinate.y
+        )
+        val rightShoulderPoint = Point(
+            person.keyPoints[6].coordinate.x,
+            -person.keyPoints[6].coordinate.y
+        )
+        val leftWristPoint = Point(
+            person.keyPoints[9].coordinate.x,
+            -person.keyPoints[9].coordinate.y
+        )
+        val rightWristPoint = Point(
+            person.keyPoints[10].coordinate.x,
+            -person.keyPoints[10].coordinate.y
+        )
+        val leftHipPoint = Point(
+            person.keyPoints[11].coordinate.x,
+            -person.keyPoints[11].coordinate.y
+        )
+        val rightHipPoint = Point(
+            person.keyPoints[12].coordinate.x,
+            -person.keyPoints[12].coordinate.y
+        )
+        val leftShoulderAngle = Utilities().angle(leftWristPoint, leftShoulderPoint, leftHipPoint)
+        val rightShoulderAngle =
+            Utilities().angle(rightWristPoint, rightShoulderPoint, rightHipPoint, true)
+        Log.d("WrongCount", "Left: $leftShoulderAngle - Right: $rightShoulderAngle")
+        if (
+            leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1] &&
+            rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]
+        ) {
+            wrongStateIndex += 1
+            if (wrongStateIndex == wrongCountStates.size) {
+                wrongStateIndex = 0
+                wrongCount()
             }
         }
     }
@@ -232,7 +278,31 @@ class ReachArmsOverHand(
         }
         return rules
     }
-}
 
-//leftShoulderAngle > states[0][2] && leftShoulderAngle < states[0][3]) || (leftShoulderAngle > states[1][2] && leftShoulderAngle < states[1][3]) ||
-//rightShoulderAngle > states[0][2] && rightShoulderAngle < states[0][3]) || (rightShoulderAngle > states[1][2] && rightShoulderAngle < states[1][3])
+    override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
+        val nosePoint = Point(
+            person.keyPoints[0].coordinate.x,
+            person.keyPoints[0].coordinate.y
+        )
+        val leftAnklePoint = Point(
+            person.keyPoints[15].coordinate.x,
+            person.keyPoints[15].coordinate.y
+        )
+        val rightAnklePoint = Point(
+            person.keyPoints[16].coordinate.x,
+            person.keyPoints[16].coordinate.y
+        )
+        val middleBorderPoint = Point(
+            (nosePoint.x + (leftAnklePoint.x + rightAnklePoint.x)) / 2,
+            (nosePoint.y + (leftAnklePoint.y + rightAnklePoint.y)) / 2
+        )
+        val rightPosition =
+            middleBorderPoint.x > canvasHeight * 4 / 9f && middleBorderPoint.x < canvasHeight * 6 / 9f
+
+        return if (!rightPosition) {
+            Color.RED
+        } else {
+            Color.GREEN
+        }
+    }
+}
