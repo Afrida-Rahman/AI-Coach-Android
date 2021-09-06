@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     companion object {
-        var keyPointsRestriction: List<KeyPointsRestriction>? = null
+        var keyPointsRestriction: List<KeyPointRestrictions>? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getExerciseConstraint() {
+    private fun getExerciseConstraint() {
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(url)
@@ -82,19 +82,12 @@ class MainActivity : AppCompatActivity() {
                 val receivedNeededConstraint = StringBuilder()
                 if (responseBody != null) {
                     for (myData in responseBody[0].KeyPointsRestrictionGroup[1].KeyPointsRestriction) {
-                        Log.d(
-                            "retrofit",
-                            " all keypoint:::: ${responseBody[0].KeyPointsRestrictionGroup[0].KeyPointsRestriction}"
-                        )
-                        Log.d(
-                            "retrofit",
-                            " all phase:::: ${responseBody[0].KeyPointsRestrictionGroup[0].Phase}"
-                        )
-                        Log.d("retrofit", " all data:::: ${responseBody}")
+//                        Log.d("retrofit"," all keypoint:::: ${responseBody[0].KeyPointsRestrictionGroup[0].KeyPointsRestriction}")
+//                        Log.d("retrofit"," all phase:::: ${responseBody[0].KeyPointsRestrictionGroup[0].Phase}")
+                        Log.d("retrofit", " all data:::: $responseBody")
                     }
                 }
-                keyPointsRestriction = responseBody as List<KeyPointsRestriction>
-//                Log.d("retrofit", " all data:::: ${keyPointsRestriction!![0].MaxValidationValue}, -- ${keyPointsRestriction!![0].MinValidationValue}")
+                keyPointsRestriction = responseBody as List<KeyPointRestrictions>
             }
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {

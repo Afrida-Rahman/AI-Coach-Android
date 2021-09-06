@@ -20,11 +20,11 @@ class ReachArmsOverHand(
     audioPlayer
 ) {
     private var receivedResponse = MainActivity.keyPointsRestriction
-    var shoulderAngleDownMin = 0f
-    var shoulderAngleDownMax = 10f
+    private var shoulderAngleDownMin = 0f
+    private var shoulderAngleDownMax = 10f
 
-    var shoulderAngleUpMin = 165f
-    var shoulderAngleUpMax = 195f
+    private var shoulderAngleUpMin = 165f
+    private var shoulderAngleUpMax = 195f
 
     private val straightHandAngleMin = 150f
     private val straightHandAngleMax = 210f
@@ -68,11 +68,10 @@ class ReachArmsOverHand(
             -person.keyPoints[8].coordinate.y
         )
         if (receivedResponse != null){
-            shoulderAngleDownMin = receivedResponse!![3].MinValidationValue.toFloat() //0f
-            shoulderAngleDownMax = receivedResponse!![3].MaxValidationValue.toFloat() //10f
-
-            shoulderAngleUpMin = receivedResponse!![0].MinValidationValue.toFloat() //165f
-            shoulderAngleUpMax = receivedResponse!![0].MaxValidationValue.toFloat() //195f
+//            shoulderAngleDownMin = receivedResponse!![3].MinValidationValue.toFloat()//0f
+//            shoulderAngleDownMax = receivedResponse!![3].MaxValidationValue.toFloat() //10f
+//            shoulderAngleUpMin = receivedResponse!![0].MinValidationValue.toFloat() //165f
+//            shoulderAngleUpMax = receivedResponse!![0].MaxValidationValue.toFloat() //195f
         }else{
              shoulderAngleDownMin = 0f
              shoulderAngleDownMax = 30f
