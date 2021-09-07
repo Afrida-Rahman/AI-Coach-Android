@@ -29,10 +29,8 @@ import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.data.Device
 import org.tensorflow.lite.examples.poseestimation.data.ExerciseList
 import org.tensorflow.lite.examples.poseestimation.exercise.Exercise
-import org.tensorflow.lite.examples.poseestimation.ml.ModelType
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
-import org.tensorflow.lite.examples.poseestimation.ml.PoseNet
 
 class ExerciseActivity : AppCompatActivity() {
     companion object {
@@ -236,8 +234,6 @@ class ExerciseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-//        soundPool?.release()
-//        soundPool = null
         poseDetector?.close()
     }
 
@@ -262,11 +258,7 @@ class ExerciseActivity : AppCompatActivity() {
         stopBackgroundThread()
         poseDetector?.close()
         poseDetector = null
-        poseDetector = when (modelPos) {
-            0 -> MoveNet.create(this, device, ModelType.Thunder)
-            1 -> MoveNet.create(this, device)
-            else -> PoseNet.create(this, device)
-        }
+        poseDetector = MoveNet.create(this, device)
         openCamera()
         startBackgroundThread()
     }
@@ -351,7 +343,7 @@ class ExerciseActivity : AppCompatActivity() {
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
 
 //                Log.d("CameraIdNumber", "Camera ID: $cameraId")
-                if (cameraDirection != null && cameraDirection != CameraCharacteristics.LENS_FACING_FRONT) {
+                if (cameraDirection != null && cameraDirection == CameraCharacteristics.LENS_FACING_FRONT) {
                     continue
                 }
                 previewSize = Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)

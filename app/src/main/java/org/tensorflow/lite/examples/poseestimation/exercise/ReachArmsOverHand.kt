@@ -19,13 +19,18 @@ class ReachArmsOverHand(
     audioPlayer
 ) {
     private var shoulderAngleDownMin = 0f
-    private var shoulderAngleDownMax = 10f
-    private var shoulderAngleUpMin = 165f
+    private var shoulderAngleDownMax = 30f
+    private var shoulderAngleUpMin = 150f
+    private var shoulderAngleUpMax = 190f
 
-    private var shoulderAngleUpMax = 195f
+    private var wrongShoulderAngleDownMin = 0f
+    private var wrongShoulderAngleDownMax = 30f
+    private var wrongShoulderAngleUpMin = 120f
+    private var wrongShoulderAngleUpMax = 150f
+
     private val straightHandAngleMin = 150f
-
     private val straightHandAngleMax = 210f
+
     private val totalStates = 3
 
     private var rightStateIndex = 0
@@ -33,20 +38,6 @@ class ReachArmsOverHand(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
     private var receivedResponse = MainActivity.keyPointsRestrictionGroup?.sortedBy { it.Phase }
-    private val wrongCountStates: Array<FloatArray> = arrayOf(
-        floatArrayOf(
-            0f, 30f,
-            0f, 30f
-        ),
-        floatArrayOf(
-            120f, 150f,
-            120f, 150f
-        ),
-        floatArrayOf(
-            0f, 30f,
-            0f, 30f
-        )
-    )
 
     override fun exerciseCount(person: Person) {
         val leftShoulderPoint = Point(
@@ -93,7 +84,7 @@ class ReachArmsOverHand(
         } else {
             shoulderAngleDownMin = 0f
             shoulderAngleDownMax = 30f
-            shoulderAngleUpMin = 165f
+            shoulderAngleUpMin = 150f
             shoulderAngleUpMax = 195f
         }
 
@@ -176,6 +167,39 @@ class ReachArmsOverHand(
         val rightHipPoint = Point(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
+        )
+
+        if (receivedResponse != null) {
+            wrongShoulderAngleDownMin = receivedResponse!![0].KeyPointsRestriction[0].MinValidationValue.toFloat() - 40
+            wrongShoulderAngleDownMax = receivedResponse!![0].KeyPointsRestriction[0].MaxValidationValue.toFloat() - 40
+            wrongShoulderAngleUpMin = receivedResponse!![1].KeyPointsRestriction[0].MinValidationValue.toFloat() - 40
+            wrongShoulderAngleUpMax = receivedResponse!![1].KeyPointsRestriction[0].MaxValidationValue.toFloat() - 40
+        } else {
+            wrongShoulderAngleDownMin = 0f
+            wrongShoulderAngleDownMax = 20f
+            wrongShoulderAngleUpMin = 120f
+            wrongShoulderAngleUpMax = 150f
+        }
+
+        val wrongCountStates: Array<FloatArray> = arrayOf(
+            floatArrayOf(
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax,
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
+            ),
+            floatArrayOf(
+                wrongShoulderAngleUpMin,
+                wrongShoulderAngleUpMax,
+                wrongShoulderAngleUpMin,
+                wrongShoulderAngleUpMax
+            ),
+            floatArrayOf(
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax,
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
+            )
         )
         val leftShoulderAngle = Utilities().angle(leftWristPoint, leftShoulderPoint, leftHipPoint)
         val rightShoulderAngle =
