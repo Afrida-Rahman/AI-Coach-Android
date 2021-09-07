@@ -112,7 +112,7 @@ class Draw(
         writeText("$angleValue", textPosition)
     }
 
-    fun border(
+    fun rectangle(
         firstPoint: Point,
         secondPoint: Point,
         thirdPoint: Point,

@@ -29,10 +29,8 @@ import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.data.Device
 import org.tensorflow.lite.examples.poseestimation.data.ExerciseList
 import org.tensorflow.lite.examples.poseestimation.exercise.Exercise
-import org.tensorflow.lite.examples.poseestimation.ml.ModelType
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
-import org.tensorflow.lite.examples.poseestimation.ml.PoseNet
 
 class ExerciseActivity : AppCompatActivity() {
     companion object {
@@ -197,8 +195,6 @@ class ExerciseActivity : AppCompatActivity() {
 
         val exerciseName = intent.getStringExtra("exerciseName")
 
-        Log.d("retrofit", " all data::::${MainActivity.keyPointsRestriction}")
-
         for (index in exercises.indices) {
             if (exercises[index].name == exerciseName) {
                 exercise = exercises[index]
@@ -238,8 +234,6 @@ class ExerciseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-//        soundPool?.release()
-//        soundPool = null
         poseDetector?.close()
     }
 
@@ -264,11 +258,7 @@ class ExerciseActivity : AppCompatActivity() {
         stopBackgroundThread()
         poseDetector?.close()
         poseDetector = null
-        poseDetector = when (modelPos) {
-            0 -> MoveNet.create(this, device, ModelType.Thunder)
-            1 -> MoveNet.create(this, device)
-            else -> PoseNet.create(this, device)
-        }
+        poseDetector = MoveNet.create(this, device)
         openCamera()
         startBackgroundThread()
     }
@@ -351,12 +341,11 @@ class ExerciseActivity : AppCompatActivity() {
 
                 // We don't use a front facing camera in this sample.
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
-                if (cameraDirection != null &&
-                    cameraDirection == CameraCharacteristics.LENS_FACING_FRONT
-                ) {
+
+//                Log.d("CameraIdNumber", "Camera ID: $cameraId")
+                if (cameraDirection != null && cameraDirection == CameraCharacteristics.LENS_FACING_FRONT) {
                     continue
                 }
-
                 previewSize = Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)
 
                 imageReader = ImageReader.newInstance(
@@ -467,18 +456,20 @@ class ExerciseActivity : AppCompatActivity() {
             score = person.score
             if (score > minConfidence) {
                 exercise.exerciseCount(person)
+                exercise.wrongExerciseCount(person)
+                val height = bitmap.height
+                val width = bitmap.width
 
                 outputBitmap = VisualizationUtils.drawBodyKeypoints(
                     bitmap,
                     exercise.drawingRules(person),
                     exercise.getRepetitionCount(),
-                    exercise.getSetCount(),
-                    person
+                    exercise.getWrongCount(),
+                    exercise.getBorderColor(person, height, width)
                 )
             }
         }
 
-        // Draw `bitmap` and `person`
         val canvas: Canvas = surfaceHolder.lockCanvas()
 
         val screenWidth: Int
@@ -501,6 +492,8 @@ class ExerciseActivity : AppCompatActivity() {
         }
         val right: Int = left + screenWidth
         val bottom: Int = top + screenHeight
+
+        Log.d("BitMapValue", "$outputBitmap")
 
         canvas.drawBitmap(
             outputBitmap, Rect(0, 0, outputBitmap.width, outputBitmap.height),

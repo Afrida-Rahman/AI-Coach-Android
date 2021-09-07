@@ -18,11 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#050505"
-        android:text=" "
+        android:text="@string/Description"
         android:textAlignment="center"
         android:textColor="#FBF7F7"
         android:textSize="40sp" />
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

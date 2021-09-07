@@ -6,7 +6,7 @@ data class KeyPointsRestriction(
     val Direction: String,
     val EndKeyPosition: String,
     val ExerciseId: Int,
-    val IsPhaseFinished: Boolean,
+    val Id: Int,
     val LineType: String,
     val MaxValidationValue: Int,
     val MiddleKeyPosition: String,
@@ -14,8 +14,7 @@ data class KeyPointsRestriction(
     val NoOfKeyPoints: Int,
     val Phase: Int,
     val Scale: String,
-    val StartKeyPosition: String,
-    val Tenant: Any
+    val StartKeyPosition: String
 )
 
 data class ExerciseData(

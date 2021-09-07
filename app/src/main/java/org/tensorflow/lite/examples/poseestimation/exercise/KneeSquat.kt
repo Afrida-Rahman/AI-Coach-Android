@@ -1,5 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
+import android.graphics.Color
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Point
@@ -72,6 +73,14 @@ class KneeSquat(
                 repetitionCount()
             }
         }
+    }
+
+    override fun wrongExerciseCount(person: Person) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
+        return Color.GREEN
     }
 
     override fun drawingRules(person: Person): List<Rule> {
