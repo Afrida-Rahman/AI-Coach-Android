@@ -170,8 +170,8 @@ class ReachArmsOverHand(
         )
 
         if (receivedResponse != null) {
-            wrongShoulderAngleDownMin = receivedResponse!![0].KeyPointsRestriction[0].MinValidationValue.toFloat() - 40
-            wrongShoulderAngleDownMax = receivedResponse!![0].KeyPointsRestriction[0].MaxValidationValue.toFloat() - 40
+            wrongShoulderAngleDownMin = receivedResponse!![0].KeyPointsRestriction[0].MinValidationValue.toFloat()
+            wrongShoulderAngleDownMax = receivedResponse!![0].KeyPointsRestriction[0].MaxValidationValue.toFloat()
             wrongShoulderAngleUpMin = receivedResponse!![1].KeyPointsRestriction[0].MinValidationValue.toFloat() - 40
             wrongShoulderAngleUpMax = receivedResponse!![1].KeyPointsRestriction[0].MaxValidationValue.toFloat() - 40
         } else {
