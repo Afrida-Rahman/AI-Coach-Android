@@ -51,10 +51,10 @@ object VisualizationUtils {
         )
         if(borderColor != -1) {
             draw.rectangle(
-                Point(width * 4f / 20f, height * 2.5f / 20f),
-                Point(width * 16f / 20f, height * 2.5f / 20f),
-                Point(width * 16f / 20f, height * 18.5f / 20f),
-                Point(width * 4f / 20f, height * 18.5f / 20f),
+                Point(width * 2f / 20f, height * 2.5f / 20f),
+                Point(width * 18.5f / 20f, height * 2.5f / 20f),
+                Point(width * 18.5f / 20f, height * 18.5f / 20f),
+                Point(width * 2f / 20f, height * 18.5f / 20f),
                 _color = borderColor,
                 _thickness = BORDER_WIDTH
             )
