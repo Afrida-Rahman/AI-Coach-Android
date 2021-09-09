@@ -1,4 +1,4 @@
-package org.tensorflow.lite.examples.poseestimation.data
+package org.tensorflow.lite.examples.poseestimation.domain.model
 
 enum class RuleType {
     ANGLE,

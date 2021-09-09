@@ -3,7 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.core
 import kotlin.math.acos
 import kotlin.math.sqrt
 
-class Utilities {
+object Utilities {
     fun angle(
         startPoint: Point,
         middlePoint: Point = Point(0f, 0f),

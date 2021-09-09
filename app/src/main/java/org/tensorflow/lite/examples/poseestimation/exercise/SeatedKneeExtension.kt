@@ -1,21 +1,22 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
+import android.content.Context
 import android.graphics.Color
 import org.tensorflow.lite.examples.poseestimation.R
-import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
-import org.tensorflow.lite.examples.poseestimation.data.Person
-import org.tensorflow.lite.examples.poseestimation.data.Rule
-import org.tensorflow.lite.examples.poseestimation.data.RuleType
+import org.tensorflow.lite.examples.poseestimation.domain.model.Person
+import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
+import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class SeatedKneeExtension(
-    audioPlayer: AudioPlayer
-) : Exercise(
+    context: Context
+) : IExercise(
+    context,
+    3,
     "Seated Knee Extension",
     "Simple Seated Knee Extension",
-    R.drawable.ic_seated_knee_extension,
-    audioPlayer
+    R.drawable.seated_legs_riase
 ) {
     private val kneeAngleMin = 90f
     private val kneeAngleMax = 165f
@@ -47,7 +48,7 @@ class SeatedKneeExtension(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-        val kneeAngle = Utilities().angle(hipPoint, kneePoint, anklePoint, false)
+        val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint, false)
         if (kneeAngle > states[currentIndex][0] && kneeAngle < states[currentIndex][1]) {
             currentIndex += 1
             if (currentIndex == totalStates) {
@@ -82,7 +83,7 @@ class SeatedKneeExtension(
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = hipPoint,
-                middlePoint1 = kneePoint,
+                middlePoint = kneePoint,
                 endPoint = anklePoint,
                 clockWise = false
             )

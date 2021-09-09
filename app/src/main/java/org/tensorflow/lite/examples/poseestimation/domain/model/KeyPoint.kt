@@ -14,11 +14,8 @@ limitations under the License.
 ==============================================================================
 */
 
-package org.tensorflow.lite.examples.poseestimation.data
+package org.tensorflow.lite.examples.poseestimation.domain.model
 
-data class TorsoAndBodyDistance(
-    val maxTorsoYDistance: Float,
-    val maxTorsoXDistance: Float,
-    val maxBodyYDistance: Float,
-    val maxBodyXDistance: Float
-)
+import android.graphics.PointF
+
+data class KeyPoint(val bodyPart: BodyPart, var coordinate: PointF, val score: Float)

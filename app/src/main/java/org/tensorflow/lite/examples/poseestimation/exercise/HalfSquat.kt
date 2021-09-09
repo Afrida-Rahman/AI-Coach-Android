@@ -1,18 +1,17 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
-import android.graphics.Canvas
+import android.content.Context
 import android.graphics.Color
 import org.tensorflow.lite.examples.poseestimation.R
-import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
-import org.tensorflow.lite.examples.poseestimation.data.Person
-import org.tensorflow.lite.examples.poseestimation.data.Rule
-import org.tensorflow.lite.examples.poseestimation.data.RuleType
+import org.tensorflow.lite.examples.poseestimation.domain.model.Person
+import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
+import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class HalfSquat(
-    audioPlayer: AudioPlayer
-) : Exercise("Half Squat", "Simple half squat", R.drawable.ic_half_squat, audioPlayer) {
+    context: Context
+) : IExercise(context, 2, "Half Squat", "Simple half squat", R.drawable.half_squat) {
     private val hipAngleMin = 90f
     private val hipAngleMax = 180f
 
@@ -62,8 +61,8 @@ class HalfSquat(
             -person.keyPoints[15].coordinate.y
         )
 
-        val hipAngle = Utilities().angle(shoulderPoint, hipPoint, kneePoint, true)
-        val kneeAngle = Utilities().angle(hipPoint, kneePoint, anklePoint)
+        val hipAngle = Utilities.angle(shoulderPoint, hipPoint, kneePoint, true)
+        val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint)
         if (
             hipAngle > states[currentIndex][0] && hipAngle < states[currentIndex][1] &&
             kneeAngle > states[currentIndex][2] && kneeAngle < states[currentIndex][3]
@@ -105,14 +104,14 @@ class HalfSquat(
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = shoulderPoint,
-                middlePoint1 = hipPoint,
+                middlePoint = hipPoint,
                 endPoint = kneePoint,
                 clockWise = true
             ),
             Rule(
                 type = RuleType.ANGLE,
                 startPoint = hipPoint,
-                middlePoint1 = kneePoint,
+                middlePoint = kneePoint,
                 endPoint = anklePoint,
                 clockWise = false
             )

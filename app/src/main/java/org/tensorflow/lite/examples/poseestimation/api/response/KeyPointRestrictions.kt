@@ -1,3 +1,3 @@
-package org.tensorflow.lite.examples.poseestimation.data
+package org.tensorflow.lite.examples.poseestimation.api.response
 
 class KeyPointRestrictions : ArrayList<KeyPointRestrictionsItem>()

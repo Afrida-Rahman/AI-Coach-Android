@@ -1,20 +1,24 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
+import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
-import org.tensorflow.lite.examples.poseestimation.data.Person
-import org.tensorflow.lite.examples.poseestimation.data.Rule
+import org.tensorflow.lite.examples.poseestimation.domain.model.Person
+import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 
-abstract class Exercise(
+abstract class IExercise(
+    context: Context,
+    val id: Int,
     val name: String,
     val description: String,
-    val image: Int,
-    private val audioPlayer: AudioPlayer
+    val imageResourceId: Int
 ) {
 
     companion object {
         const val deltaValue = 15f
     }
+
+    private val audioPlayer = AudioPlayer(context)
     private var repetitionCounter = 0
     private var wrongCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
@@ -43,7 +47,7 @@ abstract class Exercise(
         audioPlayer.play(resourceId)
     }
 
-    fun wrongCount(){
+    fun wrongCount() {
         wrongCounter++
     }
 

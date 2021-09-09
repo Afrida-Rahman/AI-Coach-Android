@@ -1,4 +1,4 @@
-package org.tensorflow.lite.examples.poseestimation.data
+package org.tensorflow.lite.examples.poseestimation.api.response
 
 data class KeyPointsRestriction(
     val AngleArea: String,
@@ -15,13 +15,4 @@ data class KeyPointsRestriction(
     val Phase: Int,
     val Scale: String,
     val StartKeyPosition: String
-)
-
-data class ExerciseData(
-    val ExerciseId: Int
-)
-
-data class PostedData(
-    val KeyPointsRestrictions: List<ExerciseData>,
-    val Tenant : String
 )

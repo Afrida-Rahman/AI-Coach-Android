@@ -17,7 +17,7 @@ limitations under the License.
 package org.tensorflow.lite.examples.poseestimation.ml
 
 import android.graphics.Bitmap
-import org.tensorflow.lite.examples.poseestimation.data.Person
+import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 
 interface PoseDetector : AutoCloseable {
 

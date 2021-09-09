@@ -44,7 +44,7 @@ class Draw(
             color = _color
             style = Paint.Style.STROKE
         }
-        var startAngle = Utilities().angle(Point(vectorBc.x, -vectorBc.y))
+        var startAngle = Utilities.angle(Point(vectorBc.x, -vectorBc.y))
         if (_clockWise) {
             startAngle -= angleValue
         }
@@ -80,9 +80,9 @@ class Draw(
         val pointA = Point(startPoint.x, -startPoint.y)
         val pointB = Point(middlePoint.x, -middlePoint.y)
         val pointC = Point(endPoint.x, -endPoint.y)
-        val angleValue = Utilities().angle(pointA, pointB, pointC, _clockWise).toInt()
+        val angleValue = Utilities.angle(pointA, pointB, pointC, _clockWise).toInt()
         val vectorBc = Point(pointC.x - pointB.x, pointC.y - pointB.y)
-        val startAngle = Utilities().angle(vectorBc)
+        val startAngle = Utilities.angle(vectorBc)
         val endAngle = if (_clockWise) {
             startAngle - angleValue
         } else {
@@ -119,11 +119,11 @@ class Draw(
         forthPoint: Point,
         _color: Int = color,
         lineType: Paint.Style? = Paint.Style.FILL,
-        _thickness : Float = thickness
+        _thickness: Float = thickness
     ) {
-        line(firstPoint, secondPoint, lineType, _color,_thickness)
-        line(secondPoint, thirdPoint, lineType, _color,_thickness)
-        line(thirdPoint, forthPoint, lineType, _color,_thickness)
-        line(forthPoint, firstPoint, lineType, _color,_thickness)
+        line(firstPoint, secondPoint, lineType, _color, _thickness)
+        line(secondPoint, thirdPoint, lineType, _color, _thickness)
+        line(thirdPoint, forthPoint, lineType, _color, _thickness)
+        line(forthPoint, firstPoint, lineType, _color, _thickness)
     }
 }

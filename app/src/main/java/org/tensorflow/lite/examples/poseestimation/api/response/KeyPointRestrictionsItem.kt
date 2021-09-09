@@ -1,4 +1,4 @@
-package org.tensorflow.lite.examples.poseestimation.data
+package org.tensorflow.lite.examples.poseestimation.api.response
 
 data class KeyPointRestrictionsItem(
     val ExerciseId: Int,
