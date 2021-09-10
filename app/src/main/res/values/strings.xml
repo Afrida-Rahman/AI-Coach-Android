@@ -27,6 +27,7 @@
     <string name="sign_in">Sign In</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
+    <string name="i_m_done">I\'m Done</string>
 
     <string-array name="tfe_pe_models_array">
         <item>Movenet Thunder</item>

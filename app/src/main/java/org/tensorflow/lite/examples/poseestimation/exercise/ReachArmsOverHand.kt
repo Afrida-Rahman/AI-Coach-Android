@@ -39,7 +39,7 @@ class ReachArmsOverHand(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(person: Person, phases: List<Phase>) {
+    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -92,9 +92,12 @@ class ReachArmsOverHand(
             Utilities.angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
         val rightStraightHandAngle =
             Utilities.angle(rightShoulderPoint, rightElbowPoint, rightWristPoint, false)
-        val isHandStraight =
-            leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax &&
-                    rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
+
+        val rightHandStraight =
+            rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
+        val leftHandStraight =
+            leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
+        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 shoulderAngleDownMin,
@@ -118,7 +121,7 @@ class ReachArmsOverHand(
         if (
             leftShoulderAngle > rightCountStates[rightStateIndex][0] && leftShoulderAngle < rightCountStates[rightStateIndex][1] &&
             rightShoulderAngle > rightCountStates[rightStateIndex][2] && rightShoulderAngle < rightCountStates[rightStateIndex][3] &&
-            isHandStraight
+            rightHandStraight && leftHandStraight && insideBox
         ) {
             rightStateIndex += 1
             if (rightStateIndex == rightCountStates.size - 1) {
@@ -129,17 +132,33 @@ class ReachArmsOverHand(
                 repetitionCount()
             }
         } else {
-            if (!isHandStraight) {
-                wrongFrameCount++
-                if (wrongFrameCount >= maxWrongCountFrame) {
-                    handNotStraight()
-                    wrongFrameCount = 0
+            if(!insideBox){
+                standInside()
+            } else {
+                if (!rightHandStraight && !leftHandStraight) {
+                    wrongFrameCount++
+                    if (wrongFrameCount >= maxWrongCountFrame) {
+                        handNotStraight()
+                        wrongFrameCount = 0
+                    }
+                } else if (!rightHandStraight) {
+                    wrongFrameCount++
+                    if (wrongFrameCount >= maxWrongCountFrame) {
+                        rightHandNotStraight()
+                        wrongFrameCount = 0
+                    }
+                } else if (!leftHandStraight) {
+                    wrongFrameCount++
+                    if (wrongFrameCount >= maxWrongCountFrame) {
+                        leftHandNotStraight()
+                        wrongFrameCount = 0
+                    }
                 }
             }
         }
     }
 
-    override fun wrongExerciseCount(person: Person) {
+    override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -193,14 +212,18 @@ class ReachArmsOverHand(
         val leftShoulderAngle = Utilities.angle(leftWristPoint, leftShoulderPoint, leftHipPoint)
         val rightShoulderAngle =
             Utilities.angle(rightWristPoint, rightShoulderPoint, rightHipPoint, true)
+        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         if (
             leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1] &&
             rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]
+            && insideBox
         ) {
-            wrongStateIndex += 1
-            if (wrongStateIndex == wrongCountStates.size) {
-                wrongStateIndex = 0
-                wrongCount()
+            if(insideBox) {
+                wrongStateIndex += 1
+                if (wrongStateIndex == wrongCountStates.size) {
+                    wrongStateIndex = 0
+                    wrongCount()
+                }
             }
         }
     }
@@ -291,6 +314,14 @@ class ReachArmsOverHand(
     }
 
     override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
+        return if (isInsideBox(person, canvasHeight, canvasWidth)) {
+            Color.GREEN
+        } else {
+            Color.RED
+        }
+    }
+
+    private fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean{
         val left = canvasWidth * 2f / 20f
         val right = canvasWidth * 18.5f / 20f
         val top = canvasHeight * 2.5f / 20f
@@ -303,10 +334,6 @@ class ReachArmsOverHand(
                 rightPosition = false
             }
         }
-        return if (rightPosition) {
-            Color.GREEN
-        } else {
-            Color.RED
-        }
+        return rightPosition
     }
 }

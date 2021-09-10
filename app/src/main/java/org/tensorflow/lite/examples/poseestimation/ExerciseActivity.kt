@@ -181,6 +181,9 @@ class ExerciseActivity : AppCompatActivity() {
         exercise = Exercises.get(this, exerciseId)
 
         findViewById<TextView>(R.id.textView).text = exercise.name
+        findViewById<Button>(R.id.done_button).setOnClickListener {
+            finish()
+        }
 
         findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
             isFrontCamera = !isFrontCamera
@@ -436,10 +439,10 @@ class ExerciseActivity : AppCompatActivity() {
         poseDetector?.estimateSinglePose(bitmap)?.let { person ->
             score = person.score
             if (score > minConfidence) {
-                exercise.exerciseCount(person, phases = exerciseConstraints)
-                exercise.wrongExerciseCount(person)
                 val height = bitmap.height
                 val width = bitmap.width
+                exercise.exerciseCount(person, height, width, phases = exerciseConstraints)
+                exercise.wrongExerciseCount(person, height, width)
 
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     bitmap,

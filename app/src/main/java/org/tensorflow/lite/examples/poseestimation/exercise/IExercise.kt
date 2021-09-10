@@ -24,10 +24,9 @@ abstract class IExercise(
     private var repetitionCounter = 0
     private var wrongCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
-    private val wrongAudioInstruction = R.raw.keep_hand_straight
 
-    abstract fun exerciseCount(person: Person, phases: List<Phase>)
-    abstract fun wrongExerciseCount(person: Person)
+    abstract fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>)
+    abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
     abstract fun drawingRules(person: Person, phases: List<Phase>): List<Rule>
     abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
 
@@ -53,11 +52,35 @@ abstract class IExercise(
         wrongCounter++
     }
 
+    fun standInside(){
+        val timestamp = System.currentTimeMillis().toInt()
+        if (timestamp - lastTimePlayed >= 3500) {
+            lastTimePlayed = timestamp
+            audioPlayer.play(R.raw.stand_inside_box)
+        }
+    }
+
     fun handNotStraight() {
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
-            audioPlayer.play(wrongAudioInstruction)
+            audioPlayer.play(R.raw.keep_hand_straight)
+        }
+    }
+
+    fun rightHandNotStraight(){
+        val timestamp = System.currentTimeMillis().toInt()
+        if (timestamp - lastTimePlayed >= 3500) {
+            lastTimePlayed = timestamp
+            audioPlayer.play(R.raw.right_hand_straight)
+        }
+    }
+
+    fun leftHandNotStraight(){
+        val timestamp = System.currentTimeMillis().toInt()
+        if (timestamp - lastTimePlayed >= 3500) {
+            lastTimePlayed = timestamp
+            audioPlayer.play(R.raw.left_hand_straight)
         }
     }
 
