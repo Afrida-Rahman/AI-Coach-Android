@@ -6,6 +6,7 @@ import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
+import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
@@ -38,7 +39,7 @@ class ReachArmsOverHand(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(person: Person) {
+    override fun exerciseCount(person: Person, phases: List<Phase>) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -71,21 +72,17 @@ class ReachArmsOverHand(
             person.keyPoints[8].coordinate.x,
             -person.keyPoints[8].coordinate.y
         )
-//        if (false && receivedResponse != null) {
-//            shoulderAngleDownMin =
-//                receivedResponse!![0].KeyPointsRestriction[0].MinValidationValue.toFloat()
-//            shoulderAngleDownMax =
-//                receivedResponse!![0].KeyPointsRestriction[0].MaxValidationValue.toFloat()
-//            shoulderAngleUpMin =
-//                receivedResponse!![1].KeyPointsRestriction[0].MinValidationValue.toFloat()
-//            shoulderAngleUpMax =
-//                receivedResponse!![1].KeyPointsRestriction[0].MaxValidationValue.toFloat()
-//        } else {
-        shoulderAngleDownMin = 0f
-        shoulderAngleDownMax = 30f
-        shoulderAngleUpMin = 150f
-        shoulderAngleUpMax = 195f
-//        }
+        if (phases.size >= 2) {
+            shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
+            shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
+            shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
+            shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        } else {
+            shoulderAngleDownMin = 0f
+            shoulderAngleDownMax = 30f
+            shoulderAngleUpMin = 150f
+            shoulderAngleUpMax = 195f
+        }
 
         val leftShoulderAngle =
             Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
@@ -168,21 +165,10 @@ class ReachArmsOverHand(
             -person.keyPoints[12].coordinate.y
         )
 
-//        if (receivedResponse != null) {
-//            wrongShoulderAngleDownMin =
-//                receivedResponse!![0].KeyPointsRestriction[0].MinValidationValue.toFloat()
-//            wrongShoulderAngleDownMax =
-//                receivedResponse!![0].KeyPointsRestriction[0].MaxValidationValue.toFloat()
-//            wrongShoulderAngleUpMin =
-//                receivedResponse!![1].KeyPointsRestriction[0].MinValidationValue.toFloat() - 40
-//            wrongShoulderAngleUpMax =
-//                receivedResponse!![1].KeyPointsRestriction[0].MaxValidationValue.toFloat() - 40
-//        } else {
-        wrongShoulderAngleDownMin = 0f
-        wrongShoulderAngleDownMax = 20f
-        wrongShoulderAngleUpMin = 120f
-        wrongShoulderAngleUpMax = 150f
-//        }
+        wrongShoulderAngleDownMin = shoulderAngleDownMin
+        wrongShoulderAngleDownMax = shoulderAngleDownMax
+        wrongShoulderAngleUpMin = shoulderAngleUpMin - 40
+        wrongShoulderAngleUpMax = shoulderAngleUpMax - 40
 
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
@@ -219,7 +205,8 @@ class ReachArmsOverHand(
         }
     }
 
-    override fun drawingRules(person: Person): List<Rule> {
+    override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
+
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             person.keyPoints[5].coordinate.y

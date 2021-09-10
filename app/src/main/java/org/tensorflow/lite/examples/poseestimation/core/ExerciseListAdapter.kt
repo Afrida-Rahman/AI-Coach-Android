@@ -36,6 +36,7 @@ class ExerciseListAdapter(
             exerciseContainerView.setOnClickListener {
                 val intent = Intent(context, ExerciseActivity::class.java).apply {
                     putExtra(ExerciseActivity.ExerciseId, exercise.id)
+                    putExtra(ExerciseActivity.Tenant, "emma")
                 }
                 context.startActivity(intent)
             }

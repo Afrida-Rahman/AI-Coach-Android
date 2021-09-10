@@ -4,6 +4,7 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
+import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 
 abstract class IExercise(
@@ -11,9 +12,10 @@ abstract class IExercise(
     val id: Int,
     val name: String,
     val description: String,
-    val imageResourceId: Int
+    val imageResourceId: Int,
+    val maxRepCount: Int = 5,
+    val maxSetCount: Int = 3
 ) {
-
     companion object {
         const val deltaValue = 15f
     }
@@ -24,9 +26,9 @@ abstract class IExercise(
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private val wrongAudioInstruction = R.raw.keep_hand_straight
 
-    abstract fun exerciseCount(person: Person)
+    abstract fun exerciseCount(person: Person, phases: List<Phase>)
     abstract fun wrongExerciseCount(person: Person)
-    abstract fun drawingRules(person: Person): List<Rule>
+    abstract fun drawingRules(person: Person, phases: List<Phase>): List<Rule>
     abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
 
     fun repetitionCount() {

@@ -20,18 +20,30 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import org.tensorflow.lite.examples.poseestimation.api.IExerciseConstraintsService
+import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
+import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
+import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
-import org.tensorflow.lite.examples.poseestimation.domain.ExerciseConstraintsService
+import org.tensorflow.lite.examples.poseestimation.domain.model.Constraint
+import org.tensorflow.lite.examples.poseestimation.domain.model.ConstraintType
 import org.tensorflow.lite.examples.poseestimation.domain.model.Device
+import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
 import org.tensorflow.lite.examples.poseestimation.shared.Exercises
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ExerciseActivity : AppCompatActivity() {
     companion object {
         const val ExerciseId = "ExerciseId"
+        const val Tenant = "Tenant"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
@@ -61,8 +73,10 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var spnModel: Spinner
 
     private lateinit var exercise: IExercise
+    private var exerciseConstraints: List<Phase> = listOf()
 
     private var isFrontCamera = true
+    private var url: String = "https://vaapi.injurycloud.com"
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -159,12 +173,10 @@ class ExerciseActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val exerciseId = intent.getIntExtra(ExerciseId, 347)
+        val tenant = intent.getStringExtra(Tenant).toString()
 
         // API call
-        val service = ExerciseConstraintsService("emma", exerciseId)
-        val constraints = service.getExerciseConstraints()
-
-        Log.d(TAG, "$constraints")
+        getExerciseConstraints(tenant, exerciseId)
 
         exercise = Exercises.get(this, exerciseId)
 
@@ -188,6 +200,7 @@ class ExerciseActivity : AppCompatActivity() {
         initSpinner()
         requestPermission()
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -423,14 +436,14 @@ class ExerciseActivity : AppCompatActivity() {
         poseDetector?.estimateSinglePose(bitmap)?.let { person ->
             score = person.score
             if (score > minConfidence) {
-                exercise.exerciseCount(person)
+                exercise.exerciseCount(person, phases = exerciseConstraints)
                 exercise.wrongExerciseCount(person)
                 val height = bitmap.height
                 val width = bitmap.width
 
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     bitmap,
-                    exercise.drawingRules(person),
+                    exercise.drawingRules(person, phases = exerciseConstraints),
                     exercise.getRepetitionCount(),
                     exercise.getWrongCount(),
                     exercise.getBorderColor(person, height, width),
@@ -476,6 +489,84 @@ class ExerciseActivity : AppCompatActivity() {
         poseDetector?.lastInferenceTimeNanos()?.let {
             tvTime.text =
                 getString(R.string.tfe_pe_tv_time).format(it * 1.0f / 1_000_000)
+        }
+    }
+
+    private fun getExerciseConstraints(tenant: String, exerciseId: Int) {
+        val phases = mutableListOf<Phase>()
+        val service = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(url)
+            .build()
+            .create(IExerciseConstraintsService::class.java)
+        val requestPayload = ExerciseRequestPayload(
+            Tenant = tenant,
+            KeyPointsRestrictions = listOf(
+                ExerciseData(exerciseId)
+            )
+        )
+        val response = service.getConstraint(requestPayload)
+        response.enqueue(object : Callback<KeyPointRestrictions> {
+            override fun onResponse(
+                call: Call<KeyPointRestrictions>,
+                response: Response<KeyPointRestrictions>
+            ) {
+                val responseBody = response.body()!!
+                responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
+                    val constraints = mutableListOf<Constraint>()
+                    group.KeyPointsRestriction.forEach { restriction ->
+                        constraints.add(
+                            Constraint(
+                                minValue = restriction.MinValidationValue,
+                                maxValue = restriction.MaxValidationValue,
+                                type = if (restriction.Scale == "degree") {
+                                    ConstraintType.ANGLE
+                                } else {
+                                    ConstraintType.LINE
+                                },
+                                startPointIndex = getIndex(restriction.StartKeyPosition),
+                                middlePointIndex = getIndex(restriction.MiddleKeyPosition),
+                                endPointIndex = getIndex(restriction.EndKeyPosition),
+                                clockWise = restriction.AngleArea == "inner"
+                            )
+                        )
+                    }
+                    phases.add(
+                        Phase(
+                            phase = group.Phase,
+                            constraints = constraints
+                        )
+                    )
+                }
+                exerciseConstraints = phases.sortedBy { it.phase }
+            }
+
+            override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
+                Log.d("retrofit", "on failure ::: " + t.message)
+            }
+        })
+    }
+
+    private fun getIndex(name: String): Int {
+        return when (name) {
+            "NOSE".lowercase() -> 0
+            "LEFT_EYE".lowercase() -> 1
+            "RIGHT_EYE".lowercase() -> 2
+            "LEFT_EAR".lowercase() -> 3
+            "RIGHT_EAR".lowercase() -> 4
+            "LEFT_SHOULDER".lowercase() -> 5
+            "RIGHT_SHOULDER".lowercase() -> 6
+            "LEFT_ELBOW".lowercase() -> 7
+            "RIGHT_ELBOW".lowercase() -> 8
+            "LEFT_WRIST".lowercase() -> 9
+            "RIGHT_WRIST".lowercase() -> 10
+            "LEFT_HIP".lowercase() -> 11
+            "RIGHT_HIP".lowercase() -> 12
+            "LEFT_KNEE".lowercase() -> 13
+            "RIGHT_KNEE".lowercase() -> 14
+            "LEFT_ANKLE".lowercase() -> 15
+            "RIGHT_ANKLE".lowercase() -> 16
+            else -> 0
         }
     }
 }
