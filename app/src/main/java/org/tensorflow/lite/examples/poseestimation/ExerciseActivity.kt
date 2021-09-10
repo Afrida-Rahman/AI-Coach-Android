@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.camera2.*
@@ -18,6 +19,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseConstraintsService
@@ -182,7 +184,18 @@ class ExerciseActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.textView).text = exercise.name
         findViewById<Button>(R.id.done_button).setOnClickListener {
-            finish()
+            val alertDialog = AlertDialog.Builder(this)
+            alertDialog.setMessage("Do you feel any pain while performing this exercise?")
+            alertDialog.setPositiveButton("Yes") { _, _ ->
+                // API call
+                Toast.makeText(this, "Yes clicked", Toast.LENGTH_LONG).show()
+                finish()
+            }
+            alertDialog.setNegativeButton("No") { _, _ ->
+                Toast.makeText(this, "No clicked", Toast.LENGTH_LONG).show()
+                finish()
+            }
+            alertDialog.show()
         }
 
         findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
