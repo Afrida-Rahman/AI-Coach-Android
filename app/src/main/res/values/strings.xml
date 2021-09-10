@@ -1,5 +1,5 @@
 <resources>
-    <string name="tfe_pe_app_name">EMMA Learn Therapist</string>
+    <string name="tfe_pe_app_name">EMMA Therapist</string>
     <string name="tfe_pe_request_permission">This app needs camera permission.</string>
     <string name="tfe_pe_tv_score">Score: %.2f</string>
     <string name="tfe_pe_tv_model">Model: </string>
@@ -24,6 +24,9 @@
     <string name="mymedicalhub">MyMedicalHub</string>
     <string name="hi_i_m_emma_your_personal_exercise_assistant">Hi. I\'m EMMA.\nYour personal exercise assistant.</string>
     <string name="camera_switching_button">Camera Switching Button</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
 
     <string-array name="tfe_pe_models_array">
         <item>Movenet Thunder</item>
