@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.camera2.*
