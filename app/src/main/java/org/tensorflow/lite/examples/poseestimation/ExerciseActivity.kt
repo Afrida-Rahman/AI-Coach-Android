@@ -21,16 +21,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import org.tensorflow.lite.examples.poseestimation.api.IExerciseConstraintsService
+import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
-import org.tensorflow.lite.examples.poseestimation.domain.model.Constraint
-import org.tensorflow.lite.examples.poseestimation.domain.model.ConstraintType
-import org.tensorflow.lite.examples.poseestimation.domain.model.Device
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
+import org.tensorflow.lite.examples.poseestimation.domain.model.*
 import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
@@ -513,7 +510,7 @@ class ExerciseActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(url)
             .build()
-            .create(IExerciseConstraintsService::class.java)
+            .create(IExerciseService::class.java)
         val requestPayload = ExerciseRequestPayload(
             Tenant = tenant,
             KeyPointsRestrictions = listOf(
@@ -583,5 +580,18 @@ class ExerciseActivity : AppCompatActivity() {
             "RIGHT_ANKLE".lowercase() -> 16
             else -> 0
         }
+    }
+
+    private fun loadLogInData(): LogInData {
+        val preferences = getSharedPreferences(
+            SignInActivity.LOGIN_PREFERENCE,
+            SignInActivity.PREFERENCE_MODE
+        )
+        return LogInData(
+            firstName = preferences.getString(SignInActivity.FIRST_NAME, "") ?: "",
+            lastName = preferences.getString(SignInActivity.LAST_NAME, "") ?: "",
+            patientId = preferences.getString(SignInActivity.PATIENT_ID, "") ?: "",
+            tenant = preferences.getString(SignInActivity.TENANT, "") ?: ""
+        )
     }
 }

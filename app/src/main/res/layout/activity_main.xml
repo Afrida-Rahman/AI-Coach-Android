@@ -40,22 +40,29 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="@string/mymedicalhub"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:textColor="@color/secondary_color"/>
+                    android:textColor="@color/secondary_color" />
 
                 <TextView
-                    android:id="@+id/subTitle"
+                    android:id="@+id/patient_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="@string/hi_i_m_emma_your_personal_exercise_assistant"
+                    android:text="@string/hello_patient_name_i_m_emma"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondary_color" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/your_personal_exercise_assistant"
                     android:textSize="16sp"
                     android:textColor="@color/secondary_color" />
 
@@ -70,10 +77,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:paddingStart="16dp"
+        android:paddingHorizontal="16dp"
         android:text="@string/exercise_list"
         android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/exercise_list_container"
