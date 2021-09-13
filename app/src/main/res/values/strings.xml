@@ -29,6 +29,7 @@
     <string name="password">Password</string>
     <string name="i_m_done">I\'m Done</string>
     <string name="hello_patient_name_i_m_emma">Hello %s %s. I\'m EMMA.</string>
+    <string name="log_out_button">Log Out button</string>
 
     <string-array name="tfe_pe_models_array">
         <item>Movenet Thunder</item>

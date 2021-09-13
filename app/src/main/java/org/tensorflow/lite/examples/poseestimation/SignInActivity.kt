@@ -26,7 +26,6 @@ class SignInActivity : AppCompatActivity() {
         const val LAST_NAME = "lastName"
         const val PATIENT_ID = "patientId"
         const val TENANT = "tenant"
-        const val BASE_LOGIN_URL = "https://api.injurycloud.com"
     }
 
     private lateinit var binding: ActivitySignInBinding
@@ -45,7 +44,7 @@ class SignInActivity : AppCompatActivity() {
             it.isClickable = false
             val email = binding.emailAddressField.text.toString()
             val password = binding.passwordField.text.toString()
-            if (email.isNotEmpty() && password.isNotEmpty()) userLogin(email, password, "emma")
+            if (email.isNotEmpty() && password.isNotEmpty()) userLogin(email, password)
             else {
                 Toast.makeText(this, "Email or password cannot be empty", Toast.LENGTH_LONG).show()
                 binding.progressBar.visibility = View.GONE
@@ -54,10 +53,10 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private fun userLogin(email: String, password: String, tenant: String) {
+    private fun userLogin(email: String, password: String, tenant: String = "emma") {
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_LOGIN_URL)
+            .baseUrl("https://vaapi.injurycloud.com")
             .build()
             .create(ILogInService::class.java)
         val requestPayload = LogInRequest(
@@ -72,9 +71,9 @@ class SignInActivity : AppCompatActivity() {
                     if (it.Success) {
                         saveLogInData(
                             LogInData(
-                                firstName = it.FirstName,
-                                lastName = it.LastName,
-                                patientId = it.PatientId,
+                                firstName = it.ContactData.FirstName,
+                                lastName = it.ContactData.LastName,
+                                patientId = it.ContactData.PatientId,
                                 tenant = requestPayload.Tenant
                             )
                         )
@@ -92,12 +91,12 @@ class SignInActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-                Toast.makeText(this@SignInActivity, "Empty response body", Toast.LENGTH_LONG).show()
                 binding.progressBar.visibility = View.GONE
                 binding.signInButton.isClickable = true
             }
 
             override fun onFailure(call: Call<LogInResponse>, t: Throwable) {
+                println(t.message)
                 binding.progressBar.visibility = View.GONE
                 binding.signInButton.isClickable = true
                 Toast.makeText(

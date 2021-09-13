@@ -11,7 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blue"
+        android:orientation="vertical"
         android:paddingVertical="24dp">
+
+        <ImageButton
+            android:id="@+id/log_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_exit_to_app_24"
+            android:background="@android:color/transparent"
+            android:layout_marginHorizontal="8dp"
+            android:layout_gravity="end"
+            android:contentDescription="@string/log_out_button" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -1,6 +1,8 @@
 package org.tensorflow.lite.examples.poseestimation
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.tensorflow.lite.examples.poseestimation.core.ExerciseListAdapter
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
@@ -22,6 +24,34 @@ class MainActivity : AppCompatActivity() {
             logInData.lastName
         )
         binding.exerciseListContainer.adapter = ExerciseListAdapter(this)
+
+        binding.logOutButton.setOnClickListener {
+            saveLogInData(
+                LogInData(
+                    firstName = "",
+                    lastName = "",
+                    patientId = "",
+                    tenant = ""
+                )
+            )
+            Toast.makeText(this, "Successfully logged out", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun saveLogInData(logInData: LogInData) {
+        val preferences = getSharedPreferences(
+            SignInActivity.LOGIN_PREFERENCE,
+            SignInActivity.PREFERENCE_MODE
+        )
+        preferences.edit().apply {
+            putString(SignInActivity.FIRST_NAME, logInData.firstName)
+            putString(SignInActivity.LAST_NAME, logInData.lastName)
+            putString(SignInActivity.PATIENT_ID, logInData.patientId)
+            putString(SignInActivity.TENANT, logInData.tenant)
+            apply()
+        }
     }
 
     private fun loadLogInData(): LogInData {

@@ -8,6 +8,6 @@ import retrofit2.http.POST
 
 interface ILogInService {
 
-    @POST("/api/base/Login")
+    @POST("/api/Account/GetCrmContact")
     fun logIn(@Body requestPayload: LogInRequest): Call<LogInResponse>
 }
