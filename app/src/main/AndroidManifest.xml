@@ -10,19 +10,19 @@
         android:required="true" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/logo"
         android:label="@string/tfe_pe_app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.PoseEstimation">
         <activity
-            android:name=".MainActivity"
+            android:name=".ExerciseListActivity"
             android:exported="true"
             android:parentActivityName=".SignInActivity" />
         <activity
             android:name=".ExerciseActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ExerciseListActivity" />
         <activity
             android:name=".SignInActivity"
             android:exported="true">
