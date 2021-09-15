@@ -2,10 +2,12 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.camera2.*
 import android.media.ImageReader
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -172,6 +174,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         val exerciseId = intent.getIntExtra(ExerciseId, 347)
         val tenant = intent.getStringExtra(Tenant).toString()
+        val logInData = loadLogInData()
 
         // API call
         getExerciseConstraints(tenant, exerciseId)
@@ -184,7 +187,11 @@ class ExerciseActivity : AppCompatActivity() {
             alertDialog.setMessage("Do you feel any pain while performing this exercise?")
             alertDialog.setPositiveButton("Yes") { _, _ ->
                 // API call
-                Toast.makeText(this, "Yes clicked", Toast.LENGTH_LONG).show()
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
+                )
+                startActivity(intent)
                 finish()
             }
             alertDialog.setNegativeButton("No") { _, _ ->

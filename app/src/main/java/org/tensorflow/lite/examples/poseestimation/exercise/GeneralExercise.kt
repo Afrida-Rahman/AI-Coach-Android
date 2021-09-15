@@ -8,7 +8,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 
 class GeneralExercise(
     context: Context,
-    private val exerciseId: Int,
+    exerciseId: Int,
     override val name: String,
     override val description: String,
     override val active: Boolean
@@ -17,7 +17,7 @@ class GeneralExercise(
     exerciseId,
     name,
     description,
-    R.drawable.reach_arms_over_head,
+    R.drawable.exercise,
     active = active
 ) {
     override fun exerciseCount(

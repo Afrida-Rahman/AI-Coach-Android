@@ -63,7 +63,7 @@ class AssessmentListFragment(
             testList.add(
                 TestId(
                     id = testId,
-                    exercises = parsedExercises
+                    exercises = parsedExercises.sortedBy { it.active }
                 )
             )
         }
