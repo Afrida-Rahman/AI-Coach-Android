@@ -37,7 +37,7 @@ class SignInActivity : AppCompatActivity() {
 
         val logInData = loadLogInData()
 
-        if (logInData.patientId.isNotEmpty()) gotoExerciseListActivity()
+        if (logInData.patientId.isNotEmpty()) gotoMainActivity()
 
         binding.signInButton.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
@@ -82,7 +82,7 @@ class SignInActivity : AppCompatActivity() {
                             "Successfully logged in",
                             Toast.LENGTH_SHORT
                         ).show()
-                        gotoExerciseListActivity()
+                        gotoMainActivity()
                     } else {
                         Toast.makeText(
                             this@SignInActivity,
@@ -108,8 +108,8 @@ class SignInActivity : AppCompatActivity() {
         })
     }
 
-    private fun gotoExerciseListActivity() {
-        startActivity(Intent(this, ExerciseListActivity::class.java))
+    private fun gotoMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 

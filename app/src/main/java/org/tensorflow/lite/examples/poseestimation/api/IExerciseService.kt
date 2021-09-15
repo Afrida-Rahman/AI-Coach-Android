@@ -7,6 +7,7 @@ import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseListResp
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface IExerciseService {
@@ -17,6 +18,7 @@ interface IExerciseService {
     @POST("/api/exercisekeypoint/GetKeyPointsRestriction")
     fun saveExerciseData(@Body requestPayload: ExerciseTrackingPayload)
 
+    @Headers("Authorization: Bearer YXBpdXNlcjpZV2xoYVlUUmNHbDFjMlZ5T2lRa1RVWVRFUk1ESXc=")
     @POST("/api/exercise/getMyExercises")
     fun getExercises(@Body requestPayload: ExerciseListRequestPayload): Call<ExerciseListResponse>
 }

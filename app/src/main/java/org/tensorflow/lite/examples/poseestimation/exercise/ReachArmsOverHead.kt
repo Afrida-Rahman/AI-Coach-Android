@@ -10,7 +10,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class ReachArmsOverHand(
+class ReachArmsOverHead(
     context: Context
 ) : IExercise(
     context,
@@ -39,7 +39,12 @@ class ReachArmsOverHand(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -132,7 +137,7 @@ class ReachArmsOverHand(
                 repetitionCount()
             }
         } else {
-            if(!insideBox){
+            if (!insideBox) {
                 standInside()
             } else {
                 if (!rightHandStraight && !leftHandStraight) {
@@ -218,7 +223,7 @@ class ReachArmsOverHand(
             rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]
             && insideBox
         ) {
-            if(insideBox) {
+            if (insideBox) {
                 wrongStateIndex += 1
                 if (wrongStateIndex == wrongCountStates.size) {
                     wrongStateIndex = 0
@@ -321,7 +326,7 @@ class ReachArmsOverHand(
         }
     }
 
-    private fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean{
+    private fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
         val left = canvasWidth * 2f / 20f
         val right = canvasWidth * 18.5f / 20f
         val top = canvasHeight * 2.5f / 20f

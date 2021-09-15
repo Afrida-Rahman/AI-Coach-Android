@@ -1,24 +1,22 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.ExerciseActivity
 import org.tensorflow.lite.examples.poseestimation.R
-import org.tensorflow.lite.examples.poseestimation.shared.Exercises
+import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
 
 
 class ExerciseListAdapter(
-    private val context: Context
+    private val exerciseList: List<IExercise>
 ) : RecyclerView.Adapter<ExerciseListAdapter.ExerciseItemViewHolder>() {
-
-    private val exerciseList = Exercises.get(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseItemViewHolder {
         return ExerciseItemViewHolder(
@@ -33,12 +31,20 @@ class ExerciseListAdapter(
             exerciseImageView.setImageResource(exercise.imageResourceId)
             exerciseNameView.text = exercise.name
             exerciseDescription.text = exercise.description
-            exerciseContainerView.setOnClickListener {
-                val intent = Intent(context, ExerciseActivity::class.java).apply {
-                    putExtra(ExerciseActivity.ExerciseId, exercise.id)
-                    putExtra(ExerciseActivity.Tenant, "emma")
+            if (exercise.active) {
+                exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
+                exerciseContainerView.setOnClickListener {
+                    val intent = Intent(it.context, ExerciseActivity::class.java).apply {
+                        putExtra(ExerciseActivity.ExerciseId, exercise.id)
+                        putExtra(ExerciseActivity.Tenant, "emma")
+                    }
+                    it.context.startActivity(intent)
                 }
-                context.startActivity(intent)
+            } else {
+                exerciseStatus.setImageResource(R.drawable.ic_exercise_inactive)
+                exerciseContainerView.setOnClickListener {
+                    Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -50,5 +56,6 @@ class ExerciseListAdapter(
         val exerciseImageView: ImageView = view.findViewById(R.id.item_exercise_image)
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
         val exerciseDescription: TextView = view.findViewById(R.id.item_exercise_description)
+        var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
     }
 }

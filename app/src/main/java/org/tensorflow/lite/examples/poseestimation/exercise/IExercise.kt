@@ -10,22 +10,25 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 abstract class IExercise(
     context: Context,
     val id: Int,
-    val name: String,
-    val description: String,
+    open val name: String,
+    open val description: String,
     val imageResourceId: Int,
     val maxRepCount: Int = 5,
-    val maxSetCount: Int = 3
+    val maxSetCount: Int = 3,
+    open val active: Boolean = true
 ) {
-    companion object {
-        const val deltaValue = 15f
-    }
-
     private val audioPlayer = AudioPlayer(context)
     private var repetitionCounter = 0
     private var wrongCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
-    abstract fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>)
+    abstract fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    )
+
     abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
     abstract fun drawingRules(person: Person, phases: List<Phase>): List<Rule>
     abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
@@ -52,7 +55,7 @@ abstract class IExercise(
         wrongCounter++
     }
 
-    fun standInside(){
+    fun standInside() {
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
@@ -68,7 +71,7 @@ abstract class IExercise(
         }
     }
 
-    fun rightHandNotStraight(){
+    fun rightHandNotStraight() {
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
@@ -76,7 +79,7 @@ abstract class IExercise(
         }
     }
 
-    fun leftHandNotStraight(){
+    fun leftHandNotStraight() {
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
