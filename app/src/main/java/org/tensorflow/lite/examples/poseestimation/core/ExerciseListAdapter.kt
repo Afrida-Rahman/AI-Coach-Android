@@ -15,6 +15,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
 
 
 class ExerciseListAdapter(
+    private val testId: String,
     private val exerciseList: List<IExercise>
 ) : RecyclerView.Adapter<ExerciseListAdapter.ExerciseItemViewHolder>() {
 
@@ -36,7 +37,9 @@ class ExerciseListAdapter(
                 exerciseContainerView.setOnClickListener {
                     val intent = Intent(it.context, ExerciseActivity::class.java).apply {
                         putExtra(ExerciseActivity.ExerciseId, exercise.id)
-                        putExtra(ExerciseActivity.Tenant, "emma")
+                        putExtra(ExerciseActivity.TestId, testId)
+                        putExtra(ExerciseActivity.Name, exercise.name)
+                        putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
                     }
                     it.context.startActivity(intent)
                 }

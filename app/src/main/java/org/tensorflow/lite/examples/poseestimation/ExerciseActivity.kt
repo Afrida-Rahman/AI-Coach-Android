@@ -26,8 +26,11 @@ import androidx.core.content.ContextCompat
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
+import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
+import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
+import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.*
 import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
@@ -43,7 +46,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ExerciseActivity : AppCompatActivity() {
     companion object {
         const val ExerciseId = "ExerciseId"
-        const val Tenant = "Tenant"
+        const val TestId = "TestId"
+        const val Name = "Name"
+        const val ProtocolId = "ProtocolId"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
@@ -172,30 +177,51 @@ class ExerciseActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        val testId = intent.getStringExtra(TestId)
         val exerciseId = intent.getIntExtra(ExerciseId, 347)
-        val tenant = intent.getStringExtra(Tenant).toString()
+        val exerciseName = intent.getStringExtra(Name)
+        val protocolId = intent.getIntExtra(ProtocolId, 1)
         val logInData = loadLogInData()
 
-        // API call
-        getExerciseConstraints(tenant, exerciseId)
+        Log.d("saveExerciseData", "$protocolId")
+
+        getExerciseConstraints(logInData.tenant, exerciseId)
 
         exercise = Exercises.get(this, exerciseId)
 
-        findViewById<TextView>(R.id.textView).text = exercise.name
+        findViewById<TextView>(R.id.textView).text = exerciseName
+
         findViewById<Button>(R.id.done_button).setOnClickListener {
+            saveExerciseData(
+                ExerciseId = exerciseId,
+                TestId = testId!!,
+                ProtocolId = protocolId,
+                PatientId = logInData.patientId,
+                ExerciseDate = Utilities.currentDate(),
+                NoOfReps = exercise.getRepetitionCount(),
+                NoOfSets = exercise.getSetCount(),
+                NoOfWrongCount = exercise.getWrongCount(),
+                Tenant = logInData.tenant
+            )
             val alertDialog = AlertDialog.Builder(this)
             alertDialog.setMessage("Do you feel any pain while performing this exercise?")
             alertDialog.setPositiveButton("Yes") { _, _ ->
-                // API call
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
-                )
-                startActivity(intent)
-                finish()
+                val alertDialog2 = AlertDialog.Builder(this)
+                alertDialog2.setMessage("Do you want to track your pain with EMMA?")
+                alertDialog2.setPositiveButton("Yes") { _, _ ->
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
+                    )
+                    startActivity(intent)
+                    finish()
+                }
+                alertDialog2.setNegativeButton("No") { _, _ ->
+                    finish()
+                }
+                alertDialog2.show()
             }
             alertDialog.setNegativeButton("No") { _, _ ->
-                Toast.makeText(this, "No clicked", Toast.LENGTH_LONG).show()
                 finish()
             }
             alertDialog.show()
@@ -219,7 +245,6 @@ class ExerciseActivity : AppCompatActivity() {
         initSpinner()
         requestPermission()
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -464,6 +489,7 @@ class ExerciseActivity : AppCompatActivity() {
                     bitmap,
                     exercise.drawingRules(person, phases = exerciseConstraints),
                     exercise.getRepetitionCount(),
+                    exercise.getSetCount(),
                     exercise.getWrongCount(),
                     exercise.getBorderColor(person, height, width),
                     isFrontCamera
@@ -509,6 +535,73 @@ class ExerciseActivity : AppCompatActivity() {
             tvTime.text =
                 getString(R.string.tfe_pe_tv_time).format(it * 1.0f / 1_000_000)
         }
+    }
+
+    private fun saveExerciseData(
+        ExerciseId: Int,
+        TestId: String,
+        ProtocolId: Int,
+        PatientId: String,
+        ExerciseDate: String,
+        NoOfReps: Int,
+        NoOfSets: Int,
+        NoOfWrongCount: Int,
+        Tenant: String
+    ) {
+        val service = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://api.injurycloud.com")
+            .build()
+            .create(IExerciseService::class.java)
+        val requestPayload = ExerciseTrackingPayload(
+            ExerciseId = ExerciseId,
+            TestId = TestId,
+            ProtocolId = ProtocolId,
+            PatientId = PatientId,
+            ExerciseDate = ExerciseDate,
+            NoOfReps = NoOfReps,
+            NoOfSets = NoOfSets,
+            NoOfWrongCount = NoOfWrongCount,
+            Tenant = Tenant
+        )
+        val response = service.saveExerciseData(requestPayload)
+        response.enqueue(object : Callback<ExerciseTrackingResponse> {
+            override fun onResponse(
+                call: Call<ExerciseTrackingResponse>,
+                response: Response<ExerciseTrackingResponse>
+            ) {
+                val responseBody = response.body()
+                if (responseBody != null) {
+                    if (responseBody.Successful) {
+                        Toast.makeText(
+                            this@ExerciseActivity,
+                            responseBody.Message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@ExerciseActivity,
+                            "Could not save exercise data",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        this@ExerciseActivity,
+                        "Failed to save! Got empty response",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ExerciseTrackingResponse>, t: Throwable) {
+                Toast.makeText(
+                    this@ExerciseActivity,
+                    "Failed to save exercise data!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
     private fun getExerciseConstraints(tenant: String, exerciseId: Int) {

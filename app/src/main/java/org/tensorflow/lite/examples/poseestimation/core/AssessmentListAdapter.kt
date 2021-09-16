@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.ExerciseListFragment
@@ -35,11 +36,19 @@ class AssessmentListAdapter(
             exerciseCount.text =
                 exerciseCount.context.getString(R.string.exercise_count).format(item.exercises.size)
         }
-        holder.itemHolder.setOnClickListener {
-            manager.beginTransaction().apply {
-                replace(R.id.fragment_container, ExerciseListFragment(item.exercises))
-                commit()
+        if (item.exercises.isNotEmpty()) {
+            holder.itemHolder.setOnClickListener {
+                manager.beginTransaction().apply {
+                    replace(R.id.fragment_container, ExerciseListFragment(item.id, item.exercises))
+                    commit()
+                }
             }
+        } else {
+            Toast.makeText(
+                holder.itemHolder.context,
+                "There is no exercise assigned for this test ID",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

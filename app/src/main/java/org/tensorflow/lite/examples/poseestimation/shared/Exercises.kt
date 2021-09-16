@@ -8,7 +8,7 @@ object Exercises {
 
     fun get(context: Context): List<IExercise> {
         return listOf(
-            ReachArmsOverHead(context)
+            ReachArmsOverHead(context, "Arm Raise", "Arm Raise", 0)
         )
     }
 

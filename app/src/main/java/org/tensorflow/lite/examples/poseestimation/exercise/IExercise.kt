@@ -10,15 +10,17 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 abstract class IExercise(
     context: Context,
     val id: Int,
-    open val name: String,
-    open val description: String,
+    val name: String,
+    val description: String,
+    var protocolId: Int,
     val imageResourceId: Int,
-    val maxRepCount: Int = 5,
-    val maxSetCount: Int = 3,
-    open val active: Boolean = true
+    var maxRepCount: Int = 10,
+    var maxSetCount: Int = 1,
+    val active: Boolean = true
 ) {
     private val audioPlayer = AudioPlayer(context)
     private var repetitionCounter = 0
+    private var setCounter = 0
     private var wrongCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
@@ -49,6 +51,10 @@ abstract class IExercise(
             else -> R.raw.hello
         }
         audioPlayer.play(resourceId)
+        if (repetitionCounter >= maxRepCount) {
+            repetitionCounter = 0
+            setCounter++
+        }
     }
 
     fun wrongCount() {
@@ -87,8 +93,15 @@ abstract class IExercise(
         }
     }
 
+    fun setExercise(repetitionLimit: Int, setLimit: Int, protoId: Int) {
+        maxRepCount = repetitionLimit
+        maxSetCount = setLimit
+        protocolId = protoId
+    }
+
     fun getRepetitionCount() = repetitionCounter
 
     fun getWrongCount() = wrongCounter
 
+    fun getSetCount() = setCounter
 }

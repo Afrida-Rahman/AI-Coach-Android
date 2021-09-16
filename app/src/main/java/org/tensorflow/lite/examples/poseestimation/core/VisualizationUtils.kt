@@ -16,6 +16,7 @@ object VisualizationUtils {
         input: Bitmap,
         drawingRules: List<Rule>,
         repCount: Int,
+        setCount: Int,
         wrongCount: Int,
         borderColor: Int = Color.GREEN,
         isFrontCamera: Boolean = false
@@ -78,14 +79,14 @@ object VisualizationUtils {
             }
         }
         draw.writeText(
-            repCount.toString(),
-            Point(width * 1 / 3f, 60f),
+            "$repCount / $setCount",
+            Point(width * 1 / 7f, 60f),
             Color.rgb(19, 93, 148),//blue
             65f
         )
         draw.writeText(
             wrongCount.toString(),
-            Point(width * 2 / 3f, 60f),
+            Point(width * 2.4f / 3f, 60f),
             Color.rgb(255, 0, 0),//green
             65f
         )

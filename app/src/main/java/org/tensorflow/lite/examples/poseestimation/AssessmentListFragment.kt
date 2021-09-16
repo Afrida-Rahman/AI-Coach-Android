@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,7 @@ class AssessmentListFragment(
         val testList = mutableListOf<TestId>()
         val uniqueTestId = mutableListOf<String>()
         val implementedExercise = listOf<IExercise>(
-            ReachArmsOverHead(view.context)
+            ReachArmsOverHead(view.context, "Arm Raise", "Arm Raise", 0)
         )
         exerciseList.forEach {
             if (it.TestId !in uniqueTestId) {
@@ -39,11 +40,14 @@ class AssessmentListFragment(
         }
         uniqueTestId.forEach { testId ->
             val parsedExercises = mutableListOf<IExercise>()
+            var armRaisedExercise: ExerciseItem? = null
             exerciseList.filter { it.TestId == testId }.forEach {
                 var isAdded = false
                 for (exercise in implementedExercise) {
                     if (it.Id == exercise.id && it.TestId == testId) {
-                        parsedExercises.add(exercise)
+                        // parsedExercises.add(exercise)
+                        armRaisedExercise = it
+                        Log.d("saveExerciseData", "$it")
                         isAdded = true
                         break
                     }
@@ -51,19 +55,45 @@ class AssessmentListFragment(
                 if (!isAdded) {
                     parsedExercises.add(
                         GeneralExercise(
-                            view.context,
-                            it.Id,
-                            it.Exercise,
-                            it.Exercise,
+                            context = view.context,
+                            exerciseId = it.Id,
+                            name = it.Exercise,
+                            description = it.Exercise,
+                            protocolId = it.ProtocolId,
                             active = false
                         )
                     )
                 }
             }
+            if (armRaisedExercise != null) {
+                val exercise = ReachArmsOverHead(
+                    context = view.context,
+                    name = armRaisedExercise!!.Exercise,
+                    description = armRaisedExercise!!.Exercise,
+                    protocolId = armRaisedExercise!!.ProtocolId
+                )
+                Log.d("saveExerciseData", "${armRaisedExercise!!.ProtocolId}")
+                exercise.setExercise(10, 1, armRaisedExercise!!.ProtocolId)
+                parsedExercises.add(
+                    exercise
+                )
+            } else {
+                val protoId = parsedExercises[0].protocolId
+                val exercise = ReachArmsOverHead(
+                    context = view.context,
+                    name = "Arm Raise",
+                    description = "Arm Raise",
+                    protocolId = protoId
+                )
+                exercise.setExercise(10, 1, protoId)
+                parsedExercises.add(
+                    exercise
+                )
+            }
             testList.add(
                 TestId(
                     id = testId,
-                    exercises = parsedExercises.sortedBy { it.active }
+                    exercises = parsedExercises.sortedBy { it.active }.reversed()
                 )
             )
         }
