@@ -11,16 +11,10 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class ReachArmsOverHead(
-    context: Context,
-    name: String,
-    description: String,
-    protocolId: Int
+    context: Context
 ) : IExercise(
     context = context,
     id = 347,
-    name = name,
-    description = description,
-    protocolId = protocolId,
     imageResourceId = R.drawable.reach_arms_over_head
 ) {
     private var shoulderAngleDownMin = 0f

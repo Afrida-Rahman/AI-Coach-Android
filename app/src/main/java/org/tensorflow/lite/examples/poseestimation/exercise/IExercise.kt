@@ -10,13 +10,13 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 abstract class IExercise(
     context: Context,
     val id: Int,
-    val name: String,
-    val description: String,
-    var protocolId: Int,
     val imageResourceId: Int,
-    var maxRepCount: Int = 10,
-    var maxSetCount: Int = 1,
-    val active: Boolean = true
+    private var maxRepCount: Int = 10,
+    private var maxSetCount: Int = 1,
+    val active: Boolean = true,
+    var name: String = "",
+    var description: String = "",
+    var protocolId: Int = 0
 ) {
     private val audioPlayer = AudioPlayer(context)
     private var repetitionCounter = 0
@@ -93,7 +93,15 @@ abstract class IExercise(
         }
     }
 
-    fun setExercise(repetitionLimit: Int, setLimit: Int, protoId: Int) {
+    fun setExercise(
+        exerciseName: String,
+        exerciseDescription: String,
+        repetitionLimit: Int,
+        setLimit: Int,
+        protoId: Int
+    ) {
+        name = exerciseName
+        description = exerciseDescription
         maxRepCount = repetitionLimit
         maxSetCount = setLimit
         protocolId = protoId

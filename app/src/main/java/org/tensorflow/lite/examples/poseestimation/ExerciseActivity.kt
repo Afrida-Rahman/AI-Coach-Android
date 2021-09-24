@@ -178,12 +178,10 @@ class ExerciseActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val testId = intent.getStringExtra(TestId)
-        val exerciseId = intent.getIntExtra(ExerciseId, 347)
+        val exerciseId = intent.getIntExtra(ExerciseId, 122)
         val exerciseName = intent.getStringExtra(Name)
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val logInData = loadLogInData()
-
-        Log.d("saveExerciseData", "$protocolId")
 
         getExerciseConstraints(logInData.tenant, exerciseId)
 
@@ -624,6 +622,7 @@ class ExerciseActivity : AppCompatActivity() {
                 response: Response<KeyPointRestrictions>
             ) {
                 val responseBody = response.body()!!
+                Log.d("dataForExercise", "data ::::  $responseBody")
                 responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
                     val constraints = mutableListOf<Constraint>()
                     group.KeyPointsRestriction.forEach { restriction ->
