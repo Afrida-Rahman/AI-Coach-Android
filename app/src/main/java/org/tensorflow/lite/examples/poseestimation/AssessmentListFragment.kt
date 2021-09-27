@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
 import org.tensorflow.lite.examples.poseestimation.domain.model.ExerciseItem
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
-import org.tensorflow.lite.examples.poseestimation.exercise.GeneralExercise
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
-import org.tensorflow.lite.examples.poseestimation.exercise.PelvicBridge
-import org.tensorflow.lite.examples.poseestimation.exercise.ReachArmsOverHead
+import org.tensorflow.lite.examples.poseestimation.exercise.*
 
 class AssessmentListFragment(
     private val exerciseList: List<ExerciseItem>
@@ -21,6 +18,7 @@ class AssessmentListFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +30,9 @@ class AssessmentListFragment(
         val uniqueTestId = mutableListOf<String>()
         val implementedExercise = listOf<IExercise>(
             ReachArmsOverHead(view.context),
-            PelvicBridge(view.context)
+            PelvicBridge(view.context),
+            KneeSquat(view.context),
+            HalfSquat(view.context)
         )
         exerciseList.forEach {
             if (it.TestId !in uniqueTestId) {
