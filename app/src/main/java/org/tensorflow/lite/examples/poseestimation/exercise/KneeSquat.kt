@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -14,7 +15,7 @@ class KneeSquat(
     context: Context
 ) : IExercise(
     context = context,
-    id = 458,
+    id = 418, //458,
     imageResourceId = R.drawable.knee_squat
 ) {
     private var upHipAngleMin = 165f
@@ -61,24 +62,22 @@ class KneeSquat(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
-        if (phases.size >= 2) {
-            upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
-            upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
-            downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
-        } else {
-            upHipAngleMin = 160f
-            upHipAngleMax = 190f
-            downHipAngleMin = 60f
-            downHipAngleMax = 90f
-        }
-
-//        val rightHandStraight = rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
-//        val leftHandStraight = leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
+//        if (phases.size >= 2) {
+//            upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
+//            upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
+//            downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
+//            downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+//        } else {
+//            upHipAngleMin = 160f
+//            upHipAngleMax = 190f
+//            downHipAngleMin = 60f
+//            downHipAngleMax = 90f
+//        }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(shoulderPoint, hipPoint, kneePoint, true)
         val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint)
+        Log.d("hi", "hipAngle:: $hipAngle , kneeAngle:: $kneeAngle")
 
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
@@ -104,6 +103,7 @@ class KneeSquat(
             kneeAngle > rightCountStates[rightStateIndex][3] && kneeAngle < rightCountStates[rightStateIndex][4] &&
             insideBox
         ) {
+            rightStateIndex +=1
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
                 repetitionCount()
