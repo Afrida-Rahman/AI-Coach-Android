@@ -55,7 +55,7 @@ class PelvicBridge(
             hipAngleUpMax = 190f
         }
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val rightHipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint, true)
+        val rightHipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 hipAngleDownMin,
