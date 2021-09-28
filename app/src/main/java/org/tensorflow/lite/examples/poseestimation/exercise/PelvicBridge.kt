@@ -55,7 +55,7 @@ class PelvicBridge(
             hipAngleUpMax = 190f
         }
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val rightHipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
+        val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 hipAngleDownMin,
@@ -70,7 +70,7 @@ class PelvicBridge(
                 hipAngleDownMax
             )
         )
-        if (rightHipAngle > rightCountStates[rightStateIndex][0] && rightHipAngle < rightCountStates[rightStateIndex][1] && insideBox) {
+        if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1] && insideBox) {
             rightStateIndex +=1
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
