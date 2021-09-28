@@ -62,17 +62,17 @@ class KneeSquat(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
-//        if (phases.size >= 2) {
-//            upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
-//            upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-//            downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
-//            downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
-//        } else {
-//            upHipAngleMin = 160f
-//            upHipAngleMax = 190f
-//            downHipAngleMin = 60f
-//            downHipAngleMax = 90f
-//        }
+        if (phases.size >= 2) {
+            upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
+            upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
+            downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
+            downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+        } else {
+            upHipAngleMin = 160f
+            upHipAngleMax = 190f
+            downHipAngleMin = 60f
+            downHipAngleMax = 90f
+        }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(shoulderPoint, hipPoint, kneePoint, true)
