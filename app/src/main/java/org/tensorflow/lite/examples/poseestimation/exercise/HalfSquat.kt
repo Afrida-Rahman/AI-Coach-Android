@@ -27,52 +27,65 @@ class HalfSquat(
     private var downKneeAngleMin = 80f
     private var downKneeAngleMax = 120f
 
-    private var wrongUpHipAngleMin = 0f
-    private var wrongUpHipAngleMax = 0f
-    private var wrongUpKneeAngleMin = 0f
-    private var wrongUpKneeAngleMax = 0f
+    private var wrongUpHipAngleMin = 170f
+    private var wrongUpHipAngleMax = 190f
+    private var wrongUpKneeAngleMin = 170f
+    private var wrongUpKneeAngleMax = 190f
 
-    private var wrongDownHipAngleMin = 0f
-    private var wrongDownHipAngleMax = 0f
-    private var wrongDownKneeAngleMin = 0f
-    private var wrongDownKneeAngleMax = 0f
+    private var wrongDownHipAngleMin = 120f
+    private var wrongDownHipAngleMax = 160f
+    private var wrongDownKneeAngleMin = 120f
+    private var wrongDownKneeAngleMax = 160f
 
     private val totalStates = 3
     private var rightStateIndex = 0
-    private var wrongStateIndex = 0
 
-    override fun exerciseCount(person: Person, canvasHeight: Int,canvasWidth: Int,phases: List<Phase>) {
-        val shoulderPoint = Point(
+    private var wrongStateIndex = 0
+    private var wrongFrameCount = 0
+    private val maxWrongCountFrame = 3
+
+    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+        val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
         )
-        val hipPoint = Point(
+        val leftHipPoint = Point(
             person.keyPoints[11].coordinate.x,
             -person.keyPoints[11].coordinate.y
         )
-        val kneePoint = Point(
+        val leftKneePoint = Point(
             person.keyPoints[13].coordinate.x,
             -person.keyPoints[13].coordinate.y
         )
-        val anklePoint = Point(
+        val leftAnklePoint = Point(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
-//        if (phases.size >= 2) {
-//            upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
-//            upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-//            downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
-//            downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
-//        } else {
-//            upHipAngleMin = 160f
-//            upHipAngleMax = 190f
-//            downHipAngleMin = 60f
-//            downHipAngleMax = 90f
-//        }
+        if (phases.size >= 2) {
+            upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
+            upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
+            upKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
+            upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
+
+            downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
+            downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+            downKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
+            downKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
+        } else {
+            upHipAngleMin = 165f
+            upHipAngleMax = 190f
+            upKneeAngleMin = 165f
+            upKneeAngleMax = 190f
+
+            downHipAngleMin = 60f
+            downHipAngleMax = 95f
+            downKneeAngleMin = 60f
+            downKneeAngleMax = 95f
+        }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val hipAngle = Utilities.angle(shoulderPoint, hipPoint, kneePoint, true)
-        val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint)
+        val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, true)
+        val kneeAngle = Utilities.angle(leftHipPoint, leftKneePoint, leftAnklePoint)
 
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
@@ -94,17 +107,23 @@ class HalfSquat(
                 upKneeAngleMax
             )
         )
-        if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1] &&
-            kneeAngle > rightCountStates[rightStateIndex][3] && kneeAngle < rightCountStates[rightStateIndex][4] &&
-            insideBox
+        if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1]
+            && kneeAngle > rightCountStates[rightStateIndex][2] && kneeAngle < rightCountStates[rightStateIndex][3]
+            && insideBox
         ) {
+            rightStateIndex += 1
+            if (rightStateIndex == rightCountStates.size - 1) {
+                wrongStateIndex = 0
+            }
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
                 repetitionCount()
             }
-        } else{
-            if (!insideBox){
+        } else {
+            if (!insideBox) {
                 standInside()
+            } else if (wrongFrameCount >= maxWrongCountFrame) {
+                wrongFrameCount = 0
             }
         }
     }
@@ -163,7 +182,7 @@ class HalfSquat(
 
 
         if (hipAngle > wrongCountStates[wrongStateIndex][0] && hipAngle < wrongCountStates[wrongStateIndex][1] &&
-            kneeAngle > wrongCountStates[wrongStateIndex][3] && kneeAngle < wrongCountStates[wrongStateIndex][4] &&
+            kneeAngle > wrongCountStates[wrongStateIndex][2] && kneeAngle < wrongCountStates[wrongStateIndex][3] &&
             insideBox
         ) {
             if (insideBox) {
