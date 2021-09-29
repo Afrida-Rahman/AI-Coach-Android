@@ -31,7 +31,8 @@ class AssessmentListFragment(
         val implementedExercise = listOf<IExercise>(
             ReachArmsOverHead(view.context),
             KneeSquat(view.context),
-            HalfSquat(view.context)
+            HalfSquat(view.context),
+            SitToStand(view.context)
         )
         exerciseList.forEach {
             if (it.TestId !in uniqueTestId) {
