@@ -15,7 +15,7 @@ class SeatedKneeExtension(
     context: Context
 ) : IExercise(
     context = context,
-    id = 418,
+    id = 471,
     imageResourceId = R.drawable.seated_legs_riase
 ) {
     private var downKneeAngleMin = 70f
