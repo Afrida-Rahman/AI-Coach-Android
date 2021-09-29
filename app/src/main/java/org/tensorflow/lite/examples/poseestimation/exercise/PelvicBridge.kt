@@ -22,8 +22,14 @@ class PelvicBridge(
     private var hipAngleUpMin = 160f
     private var hipAngleUpMax = 190f
 
+    private var wrongHipAngleDownMin = 115f
+    private var wrongHipAngleDownMax = 135f
+    private var wrongHipAngleUpMin = 140f
+    private var wrongHipAngleUpMax = 160f
+
     private val totalStates = 3
     private var rightStateIndex = 0
+    private var wrongStateIndex = 0
 
     override fun exerciseCount(
         person: Person,
@@ -71,7 +77,7 @@ class PelvicBridge(
             )
         )
         if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1] && insideBox) {
-            rightStateIndex +=1
+            rightStateIndex += 1
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
                 repetitionCount()
@@ -84,7 +90,49 @@ class PelvicBridge(
     }
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
+        val rightShoulderPoint = Point(
+            person.keyPoints[6].coordinate.x,
+            -person.keyPoints[6].coordinate.y
+        )
+        val rightHipPoint = Point(
+            person.keyPoints[12].coordinate.x,
+            -person.keyPoints[12].coordinate.y
+        )
+        val rightKneePoint = Point(
+            person.keyPoints[14].coordinate.x,
+            -person.keyPoints[14].coordinate.y
+        )
 
+        wrongHipAngleDownMin = hipAngleDownMin
+        wrongHipAngleDownMax = hipAngleDownMax
+        wrongHipAngleUpMin = hipAngleUpMin - 20
+        wrongHipAngleUpMax = hipAngleUpMax - 30
+
+        val wrongCountStates: Array<FloatArray> = arrayOf(
+            floatArrayOf(
+                wrongHipAngleDownMin,
+                wrongHipAngleDownMax
+            ),
+            floatArrayOf(
+                wrongHipAngleUpMin,
+                wrongHipAngleUpMax
+            ),
+            floatArrayOf(
+                wrongHipAngleDownMin,
+                wrongHipAngleDownMax
+            )
+        )
+        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
+        if (hipAngle > wrongCountStates[wrongStateIndex][0] && hipAngle < wrongCountStates[wrongStateIndex][1] && insideBox) {
+            if (insideBox) {
+                wrongStateIndex += 1
+                if (wrongStateIndex == wrongCountStates.size) {
+                    wrongStateIndex = 0
+                    wrongCount()
+                }
+            }
+        }
     }
 
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
