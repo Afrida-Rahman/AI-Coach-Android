@@ -30,7 +30,6 @@ class AssessmentListFragment(
         val uniqueTestId = mutableListOf<String>()
         val implementedExercise = listOf<IExercise>(
             ReachArmsOverHead(view.context),
-            PelvicBridge(view.context),
             KneeSquat(view.context),
             HalfSquat(view.context)
         )
