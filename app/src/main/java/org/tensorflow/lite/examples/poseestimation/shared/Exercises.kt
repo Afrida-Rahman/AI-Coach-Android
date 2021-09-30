@@ -10,7 +10,8 @@ object Exercises {
             ReachArmsOverHead(context),
             KneeSquat(context),
             HalfSquat(context),
-            SeatedKneeExtension(context)
+            SeatedKneeExtension(context),
+            PelvicBridge(context)
         )
     }
 
