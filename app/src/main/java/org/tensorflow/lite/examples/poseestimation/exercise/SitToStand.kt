@@ -15,7 +15,7 @@ class SitToStand(
 ) : IExercise(
     context = context,
     id = 142,
-    imageResourceId = R.drawable.seated_legs_riase
+    imageResourceId = R.drawable.sit_to_stand
 ) {
     private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f

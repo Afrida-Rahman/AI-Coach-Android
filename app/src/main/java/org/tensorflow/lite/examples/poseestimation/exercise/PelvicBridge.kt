@@ -15,7 +15,7 @@ class PelvicBridge(
 ) : IExercise(
     context = context,
     id = 122,
-    imageResourceId = R.drawable.reach_arms_over_head //need to change
+    imageResourceId = R.drawable.pelvic_bridge
 ) {
     private var hipAngleDownMin = 115f
     private var hipAngleDownMax = 135f
