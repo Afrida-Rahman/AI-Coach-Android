@@ -26,7 +26,7 @@ class SeatedKneeExtension(
     private var wrongDownKneeAngleMin = 70f
     private var wrongDownKneeAngleMax = 100f
     private var wrongUpKneeAngleMin = 130f
-    private var wrongUpKneeAngleMax = 160f
+    private var wrongUpKneeAngleMax = 150f
 
     private val totalStates = 2
     private var rightStateIndex = 0
@@ -118,7 +118,7 @@ class SeatedKneeExtension(
         )
         wrongDownKneeAngleMin = downKneeAngleMin
         wrongDownKneeAngleMax = downKneeAngleMax
-        wrongUpKneeAngleMin = upKneeAngleMin - 30
+        wrongUpKneeAngleMin = upKneeAngleMin - 40
         wrongUpKneeAngleMax = upKneeAngleMax - 30
 
         val wrongCountStates: Array<FloatArray> = arrayOf(

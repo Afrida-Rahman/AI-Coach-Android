@@ -22,9 +22,15 @@ class IsometricCervicalExtension (
     private var shoulderAngleUpMin = 120f
     private var shoulderAngleUpMax = 150f
 
+    private var wrongShoulderAngleDownMin = 0f
+    private var wrongShoulderAngleDownMax = 30f
+    private var wrongShoulderAngleUpMin = 150f
+    private var wrongShoulderAngleUpMax = 190f
+
     private val totalStates = 3
     private var rightStateIndex = 0
     private var wrongStateIndex = 0
+    private val maxWrongCountFrame = 3
 
     override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
         val leftShoulderPoint = Point(
@@ -51,17 +57,17 @@ class IsometricCervicalExtension (
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
         )
-//        if (phases.size >= 2) {
-//            shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
-//            shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
-//            shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
-//            shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
-//        } else {
-//            shoulderAngleDownMin = 0f
-//            shoulderAngleDownMax = 30f
-//            shoulderAngleUpMin = 120f
-//            shoulderAngleUpMax = 150f
-//        }
+        if (phases.size >= 2) {
+            shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
+            shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
+            shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
+            shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        } else {
+            shoulderAngleDownMin = 0f
+            shoulderAngleDownMax = 30f
+            shoulderAngleUpMin = 120f
+            shoulderAngleUpMax = 150f
+        }
 
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
@@ -110,7 +116,73 @@ class IsometricCervicalExtension (
     }
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
+        val leftShoulderPoint = Point(
+            person.keyPoints[5].coordinate.x,
+            -person.keyPoints[5].coordinate.y
+        )
+        val rightShoulderPoint = Point(
+            person.keyPoints[6].coordinate.x,
+            -person.keyPoints[6].coordinate.y
+        )
+        val leftElbowPoint = Point(
+            person.keyPoints[7].coordinate.x,
+            -person.keyPoints[7].coordinate.y
+        )
+        val rightElbowPoint = Point(
+            person.keyPoints[8].coordinate.x,
+            -person.keyPoints[8].coordinate.y
+        )
+        val leftHipPoint = Point(
+            person.keyPoints[11].coordinate.x,
+            -person.keyPoints[11].coordinate.y
+        )
+        val rightHipPoint = Point(
+            person.keyPoints[12].coordinate.x,
+            -person.keyPoints[12].coordinate.y
+        )
 
+        wrongShoulderAngleDownMin = shoulderAngleDownMin
+        wrongShoulderAngleDownMax = shoulderAngleDownMax
+        wrongShoulderAngleUpMin = shoulderAngleUpMin + 30
+        wrongShoulderAngleUpMax = shoulderAngleUpMax + 30
+
+        val wrongCountStates: Array<FloatArray> = arrayOf(
+            floatArrayOf(
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax,
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
+            ),
+            floatArrayOf(
+                wrongShoulderAngleUpMin,
+                wrongShoulderAngleUpMax,
+                wrongShoulderAngleUpMin,
+                wrongShoulderAngleUpMax
+            ),
+            floatArrayOf(
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax,
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
+            )
+        )
+        val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint)
+        val rightShoulderAngle =
+            Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
+        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        if (
+            leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1] &&
+            rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]
+            && insideBox
+        ) {
+            if (insideBox) {
+                wrongStateIndex += 1
+                if (wrongStateIndex == wrongCountStates.size) {
+                    wrongStateIndex = 0
+                    wrongCount()
+                }
+            }
+        }
     }
 
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
