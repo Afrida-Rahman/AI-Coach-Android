@@ -89,12 +89,6 @@ class SitToStand(
 
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
-                upHipAngleMin,
-                upHipAngleMax,
-                upKneeAngleMin,
-                upKneeAngleMax
-            ),
-            floatArrayOf(
                 downHipAngleMin,
                 downHipAngleMax,
                 downKneeAngleMin,
@@ -105,6 +99,12 @@ class SitToStand(
                 upHipAngleMax,
                 upKneeAngleMin,
                 upKneeAngleMax
+            ),
+            floatArrayOf(
+                downHipAngleMin,
+                downHipAngleMax,
+                downKneeAngleMin,
+                downKneeAngleMax
             )
         )
         if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1]
@@ -157,12 +157,6 @@ class SitToStand(
 
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
-                wrongUpHipAngleMin,
-                wrongUpHipAngleMax,
-                wrongUpKneeAngleMin,
-                wrongUpKneeAngleMax
-            ),
-            floatArrayOf(
                 wrongDownHipAngleMin,
                 wrongDownHipAngleMax,
                 wrongDownKneeAngleMin,
@@ -173,6 +167,12 @@ class SitToStand(
                 wrongUpHipAngleMax,
                 wrongUpKneeAngleMin,
                 wrongUpKneeAngleMax
+            ),
+            floatArrayOf(
+                wrongDownHipAngleMin,
+                wrongDownHipAngleMax,
+                wrongDownKneeAngleMin,
+                wrongDownKneeAngleMax
             )
         )
 
