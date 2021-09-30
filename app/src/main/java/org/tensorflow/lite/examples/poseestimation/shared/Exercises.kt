@@ -8,6 +8,8 @@ object Exercises {
     fun get(context: Context): List<IExercise> {
         return listOf(
             ReachArmsOverHead(context),
+            KneeSquat(context),
+            HalfSquat(context),
             SeatedKneeExtension(context)
         )
     }
