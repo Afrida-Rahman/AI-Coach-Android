@@ -30,6 +30,8 @@ class PelvicBridge(
     private val totalStates = 3
     private var rightStateIndex = 0
     private var wrongStateIndex = 0
+    private var wrongFrameCount = 0
+    private val maxWrongCountFrame = 3
 
     override fun exerciseCount(
         person: Person,
@@ -78,6 +80,9 @@ class PelvicBridge(
         )
         if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1] && insideBox) {
             rightStateIndex += 1
+            if (rightStateIndex == rightCountStates.size - 1) {
+                wrongStateIndex = 0
+            }
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
                 repetitionCount()
