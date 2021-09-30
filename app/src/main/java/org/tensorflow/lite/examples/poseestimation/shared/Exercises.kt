@@ -11,7 +11,8 @@ object Exercises {
             KneeSquat(context),
             HalfSquat(context),
             SeatedKneeExtension(context),
-            PelvicBridge(context)
+            PelvicBridge(context),
+            SitToStand(context)
         )
     }
 

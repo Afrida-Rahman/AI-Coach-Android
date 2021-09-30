@@ -33,7 +33,8 @@ class AssessmentListFragment(
             KneeSquat(view.context),
             HalfSquat(view.context),
             SeatedKneeExtension(view.context),
-            PelvicBridge(view.context)
+            PelvicBridge(view.context),
+            SitToStand(view.context)
         )
         exerciseList.forEach {
             if (it.TestId !in uniqueTestId) {
