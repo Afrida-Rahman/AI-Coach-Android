@@ -18,9 +18,9 @@ class HalfSquat(
     id = 495,
     imageResourceId = R.drawable.half_squat
 ) {
-    private var upHipAngleMin = 170f
+    private var upHipAngleMin = 165f
     private var upHipAngleMax = 190f
-    private var upKneeAngleMin = 170f
+    private var upKneeAngleMin = 165f
     private var upKneeAngleMax = 190f
 
     private var downHipAngleMin = 80f
@@ -28,15 +28,15 @@ class HalfSquat(
     private var downKneeAngleMin = 80f
     private var downKneeAngleMax = 120f
 
-    private var wrongUpHipAngleMin = 170f
+    private var wrongUpHipAngleMin = 165f
     private var wrongUpHipAngleMax = 190f
-    private var wrongUpKneeAngleMin = 170f
+    private var wrongUpKneeAngleMin = 165f
     private var wrongUpKneeAngleMax = 190f
 
     private var wrongDownHipAngleMin = 120f
-    private var wrongDownHipAngleMax = 160f
+    private var wrongDownHipAngleMax = 155f
     private var wrongDownKneeAngleMin = 120f
-    private var wrongDownKneeAngleMax = 160f
+    private var wrongDownKneeAngleMax = 155f
 
     private val totalStates = 3
     private var rightStateIndex = 0

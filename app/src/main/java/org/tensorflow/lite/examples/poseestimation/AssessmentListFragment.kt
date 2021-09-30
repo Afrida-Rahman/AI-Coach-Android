@@ -31,7 +31,7 @@ class AssessmentListFragment(
         val implementedExercise = listOf<IExercise>(
             ReachArmsOverHead(view.context),
             KneeSquat(view.context),
-            HalfSquat(view.context),
+//            HalfSquat(view.context),
             SeatedKneeExtension(view.context),
             PelvicBridge(view.context),
             SitToStand(view.context)

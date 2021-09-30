@@ -9,7 +9,7 @@ object Exercises {
         return listOf(
             ReachArmsOverHead(context),
             KneeSquat(context),
-            HalfSquat(context),
+//            HalfSquat(context),
             SeatedKneeExtension(context),
             PelvicBridge(context),
             SitToStand(context)
