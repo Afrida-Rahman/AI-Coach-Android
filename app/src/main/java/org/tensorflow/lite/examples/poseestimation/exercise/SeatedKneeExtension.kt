@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -10,25 +11,26 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class PelvicBridge(
+class SeatedKneeExtension(
     context: Context
 ) : IExercise(
     context = context,
-    id = 122,
-    imageResourceId = R.drawable.reach_arms_over_head //need to change
+    id = 471,
+    imageResourceId = R.drawable.seated_legs_riase
 ) {
-    private var hipAngleDownMin = 115f
-    private var hipAngleDownMax = 135f
-    private var hipAngleUpMin = 160f
-    private var hipAngleUpMax = 190f
+    private var downKneeAngleMin = 70f
+    private var downKneeAngleMax = 100f
+    private var upKneeAngleMin = 160f
+    private var upKneeAngleMax = 190f
 
-    private var wrongHipAngleDownMin = 115f
-    private var wrongHipAngleDownMax = 135f
-    private var wrongHipAngleUpMin = 140f
-    private var wrongHipAngleUpMax = 160f
+    private var wrongDownKneeAngleMin = 70f
+    private var wrongDownKneeAngleMax = 100f
+    private var wrongUpKneeAngleMin = 130f
+    private var wrongUpKneeAngleMax = 160f
 
-    private val totalStates = 3
+    private val totalStates = 2
     private var rightStateIndex = 0
+
     private var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
@@ -39,46 +41,47 @@ class PelvicBridge(
         canvasWidth: Int,
         phases: List<Phase>
     ) {
-        val rightShoulderPoint = Point(
-            person.keyPoints[6].coordinate.x,
-            -person.keyPoints[6].coordinate.y
-        )
-        val rightHipPoint = Point(
+        val hipPoint = Point(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
         )
-        val rightKneePoint = Point(
+        val kneePoint = Point(
             person.keyPoints[14].coordinate.x,
             -person.keyPoints[14].coordinate.y
         )
+        val anklePoint = Point(
+            person.keyPoints[16].coordinate.x,
+            -person.keyPoints[16].coordinate.y
+        )
+        Log.d("hi","phase ::: ${phases.size}")
         if (phases.size >= 2) {
-            hipAngleDownMin = phases[0].constraints[0].minValue.toFloat()
-            hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
-            hipAngleUpMin = phases[1].constraints[0].minValue.toFloat()
-            hipAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+            downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
+            downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
+            upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
+            upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
         } else {
-            hipAngleDownMin = 115f
-            hipAngleDownMax = 135f
-            hipAngleUpMin = 160f
-            hipAngleUpMax = 190f
+            downKneeAngleMin = 70f
+            downKneeAngleMax = 100f
+            upKneeAngleMin = 160f
+            upKneeAngleMax = 190f
         }
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
+
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
-                hipAngleDownMin,
-                hipAngleDownMax
+                downKneeAngleMin,
+                downKneeAngleMax
             ),
             floatArrayOf(
-                hipAngleUpMin,
-                hipAngleUpMax
-            ),
-            floatArrayOf(
-                hipAngleDownMin,
-                hipAngleDownMax
+                upKneeAngleMin,
+                upKneeAngleMax
             )
         )
-        if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1] && insideBox) {
+
+        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint, false)
+        if (kneeAngle > rightCountStates[rightStateIndex][0] && kneeAngle < rightCountStates[rightStateIndex][1]
+            && insideBox
+        ) {
             rightStateIndex += 1
             if (rightStateIndex == rightCountStates.size - 1) {
                 wrongStateIndex = 0
@@ -90,46 +93,50 @@ class PelvicBridge(
         } else {
             if (!insideBox) {
                 standInside()
+            } else {
+                if (wrongFrameCount >= maxWrongCountFrame) {
+                    wrongFrameCount++
+                    wrongFrameCount = 0
+                }
             }
         }
     }
 
+
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        val rightShoulderPoint = Point(
-            person.keyPoints[6].coordinate.x,
-            -person.keyPoints[6].coordinate.y
-        )
-        val rightHipPoint = Point(
+        val hipPoint = Point(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
         )
-        val rightKneePoint = Point(
+        val kneePoint = Point(
             person.keyPoints[14].coordinate.x,
             -person.keyPoints[14].coordinate.y
         )
-
-        wrongHipAngleDownMin = hipAngleDownMin
-        wrongHipAngleDownMax = hipAngleDownMax
-        wrongHipAngleUpMin = hipAngleUpMin - 20
-        wrongHipAngleUpMax = hipAngleUpMax - 30
+        val anklePoint = Point(
+            person.keyPoints[16].coordinate.x,
+            -person.keyPoints[16].coordinate.y
+        )
+        wrongDownKneeAngleMin = downKneeAngleMin
+        wrongDownKneeAngleMax = downKneeAngleMax
+        wrongUpKneeAngleMin = upKneeAngleMin - 30
+        wrongUpKneeAngleMax = upKneeAngleMax - 30
 
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
-                wrongHipAngleDownMin,
-                wrongHipAngleDownMax
+                wrongDownKneeAngleMin,
+                wrongDownKneeAngleMax
             ),
             floatArrayOf(
-                wrongHipAngleUpMin,
-                wrongHipAngleUpMax
-            ),
-            floatArrayOf(
-                wrongHipAngleDownMin,
-                wrongHipAngleDownMax
+                wrongUpKneeAngleMin,
+                wrongUpKneeAngleMin
             )
         )
+
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
-        if (hipAngle > wrongCountStates[wrongStateIndex][0] && hipAngle < wrongCountStates[wrongStateIndex][1] && insideBox) {
+        val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint, false)
+        if (kneeAngle > wrongCountStates[wrongStateIndex][0] && kneeAngle < wrongCountStates[wrongStateIndex][1]
+            && insideBox
+        ) {
             if (insideBox) {
                 wrongStateIndex += 1
                 if (wrongStateIndex == wrongCountStates.size) {
@@ -141,24 +148,25 @@ class PelvicBridge(
     }
 
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val rightShoulderPoint = Point(
-            person.keyPoints[6].coordinate.x,
-            person.keyPoints[6].coordinate.y
-        )
-        val rightHipPoint = Point(
+        val hipPoint = Point(
             person.keyPoints[12].coordinate.x,
             person.keyPoints[12].coordinate.y
         )
-        val rightKneePoint = Point(
+        val kneePoint = Point(
             person.keyPoints[14].coordinate.x,
             person.keyPoints[14].coordinate.y
+        )
+        val anklePoint = Point(
+            person.keyPoints[16].coordinate.x,
+            person.keyPoints[16].coordinate.y
         )
         return mutableListOf(
             Rule(
                 type = RuleType.ANGLE,
-                startPoint = rightShoulderPoint,
-                middlePoint = rightHipPoint,
-                endPoint = rightKneePoint
+                startPoint = hipPoint,
+                middlePoint = kneePoint,
+                endPoint = anklePoint,
+                clockWise = false
             )
         )
     }
