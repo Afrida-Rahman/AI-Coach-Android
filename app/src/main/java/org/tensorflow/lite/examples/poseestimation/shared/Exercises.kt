@@ -12,7 +12,8 @@ object Exercises {
             HalfSquat(context),
             SeatedKneeExtension(context),
             PelvicBridge(context),
-            SitToStand(context)
+            SitToStand(context),
+            BirdDog(context)
         )
     }
 
