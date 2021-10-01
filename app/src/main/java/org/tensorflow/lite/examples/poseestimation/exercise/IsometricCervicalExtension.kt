@@ -30,7 +30,6 @@ class IsometricCervicalExtension (
     private val totalStates = 3
     private var rightStateIndex = 0
     private var wrongStateIndex = 0
-    private val maxWrongCountFrame = 3
 
     override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
         val leftShoulderPoint = Point(
