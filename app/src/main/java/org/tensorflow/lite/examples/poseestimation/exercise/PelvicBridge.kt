@@ -31,12 +31,7 @@ class PelvicBridge(
     private var rightStateIndex = 0
     private var wrongStateIndex = 0
 
-    override fun exerciseCount(
-        person: Person,
-        canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
-    ) {
+    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
         val rightShoulderPoint = Point(
             person.keyPoints[6].coordinate.x,
             -person.keyPoints[6].coordinate.y
