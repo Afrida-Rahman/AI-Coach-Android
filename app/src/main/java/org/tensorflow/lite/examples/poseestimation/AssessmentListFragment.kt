@@ -35,7 +35,8 @@ class AssessmentListFragment(
             SeatedKneeExtension(view.context),
             PelvicBridge(view.context),
             SitToStand(view.context),
-            IsometricCervicalExtension(view.context)
+            IsometricCervicalExtension(view.context),
+            LateralTrunkStretch(view.context)
         )
         exerciseList.forEach {
             if (it.TestId !in uniqueTestId) {

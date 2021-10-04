@@ -13,7 +13,8 @@ object Exercises {
             SeatedKneeExtension(context),
             PelvicBridge(context),
             SitToStand(context),
-            IsometricCervicalExtension(context)
+            IsometricCervicalExtension(context),
+            LateralTrunkStretch(context)
         )
     }
 
