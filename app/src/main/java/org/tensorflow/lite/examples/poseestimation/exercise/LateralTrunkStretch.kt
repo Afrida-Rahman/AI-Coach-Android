@@ -17,27 +17,25 @@ class LateralTrunkStretch(
     id = 156,
     imageResourceId = R.drawable.lateral_trunk_stretch
 ) {
-    private val shoulderAngleDownMin = 0f
-    private val shoulderAngleDownMax = 30f
-    private val shoulderAngleUpMin = 180f
-    private val shoulderAngleUpMax = 220f
+    private var shoulderAngleDownMin = 0f
+    private var shoulderAngleDownMax = 30f
+    private var shoulderAngleUpMin = 180f
+    private var shoulderAngleUpMax = 210f
 
     private val deviationAngleDownMin = 0f
-    private val deviationAngleDownMax = 8f
     private val deviationAngleUpMin = 25f
 
-    private val wrongShoulderAngleDownMin = 0f
-    private val wrongShoulderAngleDownMax = 30f
-    private val wrongShoulderAngleUpMin = 100f
-    private val wrongShoulderAngleUpMax = 180f
+    private var wrongShoulderAngleDownMin = 0f
+    private var wrongShoulderAngleDownMax = 30f
+    private var wrongShoulderAngleUpMin = 100f
+    private var wrongShoulderAngleUpMax = 180f
 
     private val wrongDeviationAngleDownMin = 0f
-    private val wrongDeviationAngleDownMax = 8f
     private val wrongDeviationAngleUpMin = 25f
 
 
     private val straightHandAngleMin = 150f
-    private val straightHandAngleMax = 210f
+    private val straightHandAngleMax = 225f
 
     private val totalStates = 3
 
@@ -92,6 +90,18 @@ class LateralTrunkStretch(
             -(rightShoulderPoint.y + rightShoulderPoint.y) / 2
         )
 
+        if (phases.size >= 2) {
+            shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
+            shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
+            shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
+            shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        } else {
+            shoulderAngleDownMin = 0f
+            shoulderAngleDownMax = 30f
+            shoulderAngleUpMin = 180f
+            shoulderAngleUpMax = 210f
+        }
+
         val leftShoulderAngle =
             Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
 
@@ -111,13 +121,13 @@ class LateralTrunkStretch(
             rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
         val leftHandStraight =
             leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
+
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 shoulderAngleDownMin,
                 shoulderAngleDownMax,
-                deviationAngleDownMin,
-                deviationAngleDownMax
+                deviationAngleDownMin
             ),
             floatArrayOf(
                 shoulderAngleUpMin,
@@ -127,13 +137,13 @@ class LateralTrunkStretch(
             floatArrayOf(
                 shoulderAngleDownMin,
                 shoulderAngleDownMax,
-                deviationAngleDownMin,
-                deviationAngleDownMax
+                deviationAngleDownMin
             )
         )
 
-        if (leftShoulderAngle > rightCountStates[rightStateIndex][0] && leftShoulderAngle < rightCountStates[rightStateIndex][1]
-            && shoulderDeviationAngle > rightCountStates[rightStateIndex][2] && shoulderDeviationAngle < rightCountStates[rightStateIndex][3]
+        if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
+            && leftShoulderAngle < rightCountStates[rightStateIndex][1]
+            && shoulderDeviationAngle > rightCountStates[rightStateIndex][2]
             && insideBox
         ) {
             rightStateIndex += 1
@@ -172,21 +182,9 @@ class LateralTrunkStretch(
     }
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        val leftWristPoint = Point(
-            person.keyPoints[9].coordinate.x,
-            -person.keyPoints[9].coordinate.y
-        )
-        val rightWristPoint = Point(
-            person.keyPoints[10].coordinate.x,
-            -person.keyPoints[10].coordinate.y
-        )
         val leftElbowPoint = Point(
             person.keyPoints[7].coordinate.x,
             -person.keyPoints[7].coordinate.y
-        )
-        val rightElbowPoint = Point(
-            person.keyPoints[8].coordinate.x,
-            -person.keyPoints[8].coordinate.y
         )
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
@@ -221,8 +219,7 @@ class LateralTrunkStretch(
             floatArrayOf(
                 wrongShoulderAngleDownMin,
                 wrongShoulderAngleDownMax,
-                wrongDeviationAngleDownMin,
-                wrongDeviationAngleDownMax
+                wrongDeviationAngleDownMin
             ),
             floatArrayOf(
                 wrongShoulderAngleUpMin,
@@ -232,10 +229,14 @@ class LateralTrunkStretch(
             floatArrayOf(
                 wrongShoulderAngleDownMin,
                 wrongShoulderAngleDownMax,
-                wrongDeviationAngleDownMin,
-                wrongDeviationAngleDownMax
+                wrongDeviationAngleDownMin
             )
         )
+
+        wrongShoulderAngleDownMin = shoulderAngleDownMin
+        wrongShoulderAngleDownMax = shoulderAngleDownMax
+        wrongShoulderAngleUpMin = shoulderAngleUpMin - 80
+        wrongShoulderAngleUpMax = shoulderAngleUpMin
 
         val leftShoulderAngle =
             Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
@@ -246,10 +247,15 @@ class LateralTrunkStretch(
         } else {
             deviationAngle
         }
+
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
 
-        if (leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1]
-            && shoulderDeviationAngle < wrongCountStates[wrongStateIndex][2] && insideBox
+        if (((leftShoulderAngle > wrongCountStates[wrongStateIndex][0]
+                    && leftShoulderAngle < wrongCountStates[wrongStateIndex][1]
+                    && shoulderDeviationAngle < wrongCountStates[wrongStateIndex][2])
+                    || (leftShoulderAngle > wrongCountStates[wrongStateIndex][0]
+                    && leftShoulderAngle < wrongCountStates[wrongStateIndex][1]))
+            && insideBox
         ) {
             wrongStateIndex += 1
             if (wrongStateIndex == wrongCountStates.size) {
@@ -257,8 +263,6 @@ class LateralTrunkStretch(
                 wrongCount()
             }
         }
-
-
     }
 
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
