@@ -14,7 +14,8 @@ object Exercises {
             PelvicBridge(context),
             SitToStand(context),
             IsometricCervicalExtension(context),
-            LateralTrunkStretch(context)
+            LateralTrunkStretch(context),
+            AROMStandingTrunkFlexion(context)
         )
     }
 
