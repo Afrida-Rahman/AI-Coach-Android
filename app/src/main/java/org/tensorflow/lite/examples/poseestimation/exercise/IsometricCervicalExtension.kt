@@ -89,16 +89,16 @@ class IsometricCervicalExtension (
             )
         )
 
-        val leftShoulderAngle =
-            Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
-        val rightShoulderAngle =
-            Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
+        val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
+        val rightShoulderAngle = Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
 
-        if (
-            leftShoulderAngle > rightCountStates[rightStateIndex][0] && leftShoulderAngle < rightCountStates[rightStateIndex][1] &&
-            rightShoulderAngle > rightCountStates[rightStateIndex][2] && rightShoulderAngle < rightCountStates[rightStateIndex][3] &&
-            insideBox) {
+        if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
+            && leftShoulderAngle < rightCountStates[rightStateIndex][1]
+            && rightShoulderAngle > rightCountStates[rightStateIndex][2]
+            && rightShoulderAngle < rightCountStates[rightStateIndex][3]
+            && insideBox
+        ) {
             rightStateIndex += 1
             if (rightStateIndex == rightCountStates.size - 1) {
                 wrongStateIndex = 0
