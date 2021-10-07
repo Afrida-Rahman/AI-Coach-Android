@@ -10,7 +10,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class IsometricCervicalExtension (
+class IsometricCervicalExtension(
     context: Context
 ) : IExercise(
     context = context,
@@ -19,8 +19,8 @@ class IsometricCervicalExtension (
 ) {
     private var shoulderAngleDownMin = 0f
     private var shoulderAngleDownMax = 30f
-    private var shoulderAngleUpMin = 120f
-    private var shoulderAngleUpMax = 150f
+    private var shoulderAngleUpMin = 115f
+    private var shoulderAngleUpMax = 140f
 
     private var wrongShoulderAngleDownMin = 0f
     private var wrongShoulderAngleDownMax = 30f
@@ -64,8 +64,8 @@ class IsometricCervicalExtension (
         } else {
             shoulderAngleDownMin = 0f
             shoulderAngleDownMax = 30f
-            shoulderAngleUpMin = 120f
-            shoulderAngleUpMax = 150f
+            shoulderAngleUpMin = 115f
+            shoulderAngleUpMax = 140f
         }
 
         val rightCountStates: Array<FloatArray> = arrayOf(
@@ -89,20 +89,17 @@ class IsometricCervicalExtension (
             )
         )
 
-        val leftShoulderAngle =
-            Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
-        val rightShoulderAngle =
-            Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
+        val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
+        val rightShoulderAngle = Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
 
-        if (
-            leftShoulderAngle > rightCountStates[rightStateIndex][0] && leftShoulderAngle < rightCountStates[rightStateIndex][1] &&
-            rightShoulderAngle > rightCountStates[rightStateIndex][2] && rightShoulderAngle < rightCountStates[rightStateIndex][3] &&
-            insideBox) {
+        if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
+            && leftShoulderAngle < rightCountStates[rightStateIndex][1]
+            && rightShoulderAngle > rightCountStates[rightStateIndex][2]
+            && rightShoulderAngle < rightCountStates[rightStateIndex][3]
+            && insideBox
+        ) {
             rightStateIndex += 1
-            if (rightStateIndex == rightCountStates.size - 1) {
-                wrongStateIndex = 0
-            }
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
                 repetitionCount()
@@ -142,10 +139,10 @@ class IsometricCervicalExtension (
 
         wrongShoulderAngleDownMin = shoulderAngleDownMin
         wrongShoulderAngleDownMax = shoulderAngleDownMax
-        wrongShoulderAngleUpMin = shoulderAngleUpMin + 30
-        wrongShoulderAngleUpMax = shoulderAngleUpMax + 30
+        wrongShoulderAngleUpMin = shoulderAngleUpMin + 35
+        wrongShoulderAngleUpMax = shoulderAngleUpMax + 50
 
-        val wrongCountStates: Array<FloatArray> = arrayOf(
+        val wrongCountStates1: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 wrongShoulderAngleDownMin,
                 wrongShoulderAngleDownMax,
@@ -165,21 +162,53 @@ class IsometricCervicalExtension (
                 wrongShoulderAngleDownMax
             )
         )
+        val wrongCountStates2: Array<FloatArray> = arrayOf(
+            floatArrayOf(
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax,
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
+            ),
+            floatArrayOf(
+                wrongShoulderAngleUpMin,
+                wrongShoulderAngleUpMax,
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
+            ),
+            floatArrayOf(
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax,
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
+            )
+        )
+
         val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint)
         val rightShoulderAngle =
             Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         if (
-            leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1] &&
-            rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]
+            (leftShoulderAngle > wrongCountStates1[wrongStateIndex][0]
+                    && leftShoulderAngle < wrongCountStates1[wrongStateIndex][1]
+                    && rightShoulderAngle > wrongCountStates1[wrongStateIndex][2]
+                    && rightShoulderAngle < wrongCountStates1[wrongStateIndex][3])
+            || (leftShoulderAngle > wrongCountStates2[wrongStateIndex][0]
+                    && leftShoulderAngle < wrongCountStates2[wrongStateIndex][1]
+                    && rightShoulderAngle > wrongCountStates2[wrongStateIndex][2]
+                    && rightShoulderAngle < wrongCountStates2[wrongStateIndex][3])
+            || (rightShoulderAngle > wrongCountStates2[wrongStateIndex][0]
+                    && rightShoulderAngle < wrongCountStates2[wrongStateIndex][1]
+                    && leftShoulderAngle > wrongCountStates2[wrongStateIndex][2]
+                    && leftShoulderAngle < wrongCountStates2[wrongStateIndex][3])
             && insideBox
         ) {
-            if (insideBox) {
-                wrongStateIndex += 1
-                if (wrongStateIndex == wrongCountStates.size) {
-                    wrongStateIndex = 0
-                    wrongCount()
-                }
+            wrongStateIndex += 1
+            if (wrongStateIndex == wrongCountStates1.size - 1) {
+                rightStateIndex = 0
+            }
+            if (wrongStateIndex == wrongCountStates1.size) {
+                wrongStateIndex = 0
+                wrongCount()
             }
         }
     }
