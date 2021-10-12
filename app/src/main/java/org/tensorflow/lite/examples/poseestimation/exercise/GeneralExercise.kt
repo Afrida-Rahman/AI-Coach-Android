@@ -9,11 +9,15 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 class GeneralExercise(
     context: Context,
     exerciseId: Int,
-    active: Boolean
+    active: Boolean,
+    instruction: String,
+    imageUrls: List<String>
 ) : IExercise(
     context = context,
     id = exerciseId,
     imageResourceId = R.drawable.exercise,
+    instruction = instruction,
+    imageUrls = imageUrls,
     active = active
 ) {
     override fun exerciseCount(

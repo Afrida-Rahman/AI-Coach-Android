@@ -28,7 +28,7 @@ class AssessmentListFragment(
         val adapter = view.findViewById<RecyclerView>(R.id.assessment_list_container)
         val testList = mutableListOf<TestId>()
         val uniqueTestId = mutableListOf<String>()
-        val implementedExercise = listOf<IExercise>(
+        val implementedExercise = listOf(
             ReachArmsOverHead(view.context),
             KneeSquat(view.context),
             HalfSquat(view.context),
@@ -50,7 +50,15 @@ class AssessmentListFragment(
                 var isAdded = false
                 for (exercise in implementedExercise) {
                     if (it.Id == exercise.id && it.TestId == testId) {
-                        exercise.setExercise(it.Exercise, it.Exercise, 10, 1, it.ProtocolId)
+                        exercise.setExercise(
+                            exerciseName = it.Exercise,
+                            exerciseDescription = it.Exercise,
+                            exerciseInstruction = it.Instructions,
+                            exerciseImageUrls = it.ImageUrl,
+                            repetitionLimit = 10,
+                            setLimit = 1,
+                            protoId = it.ProtocolId,
+                        )
                         parsedExercises.add(exercise)
                         isAdded = true
                         break
@@ -60,9 +68,19 @@ class AssessmentListFragment(
                     val exercise = GeneralExercise(
                         context = view.context,
                         exerciseId = it.Id,
-                        active = false
+                        active = false,
+                        instruction = it.Instructions,
+                        imageUrls = it.ImageUrl
                     )
-                    exercise.setExercise(it.Exercise, it.Exercise, 10, 1, it.ProtocolId)
+                    exercise.setExercise(
+                        exerciseName = it.Exercise,
+                        exerciseDescription = it.Exercise,
+                        exerciseInstruction = it.Instructions,
+                        exerciseImageUrls = it.ImageUrl,
+                        repetitionLimit = 10,
+                        setLimit = 1,
+                        protoId = it.ProtocolId,
+                    )
                     parsedExercises.add(exercise)
                 }
             }

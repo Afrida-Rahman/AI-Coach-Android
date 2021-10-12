@@ -67,4 +67,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="active">Active</string>
+    <string name="guideline">Guideline</string>
+    <string name="guidelines">Guidelines</string>
+    <string name="instructions">Instructions</string>
+    <string name="exercise_images">Exercise Images</string>
+    <string name="instruction_details">Instruction details</string>
+    <string name="images">Images</string>
+    <string name="exercise_name_guideline">Exercise Name Guideline</string>
 </resources>

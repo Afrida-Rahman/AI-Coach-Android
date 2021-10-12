@@ -4,19 +4,22 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.ExerciseActivity
+import org.tensorflow.lite.examples.poseestimation.ExerciseGuidelineFragment
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
 
-
 class ExerciseListAdapter(
     private val testId: String,
-    private val exerciseList: List<IExercise>
+    private val exerciseList: List<IExercise>,
+    private val manager: FragmentManager
 ) : RecyclerView.Adapter<ExerciseListAdapter.ExerciseItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseItemViewHolder {
@@ -49,6 +52,19 @@ class ExerciseListAdapter(
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
             }
+            guidelineButton.setOnClickListener {
+                manager.beginTransaction().apply {
+                    replace(
+                        R.id.fragment_container,
+                        ExerciseGuidelineFragment(
+                            name = exercise.name,
+                            instruction = exercise.instruction,
+                            imageUrls = exercise.imageUrls
+                        )
+                    )
+                    commit()
+                }
+            }
         }
     }
 
@@ -60,5 +76,6 @@ class ExerciseListAdapter(
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
         val exerciseDescription: TextView = view.findViewById(R.id.item_exercise_description)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
+        val guidelineButton: Button = view.findViewById(R.id.btn_guideline)
     }
 }
