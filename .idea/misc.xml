@@ -26,7 +26,7 @@
         <entry key="app/src/main/res/layout/fragment_exercise_guide_lines.xml" value="0.35989583333333336" />
         <entry key="app/src/main/res/layout/fragment_exercise_guideline.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_exercise_list.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_exercise.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/item_exercise.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_list.xml" value="0.2" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_url_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_imageurl_list.xml" value="0.1" />

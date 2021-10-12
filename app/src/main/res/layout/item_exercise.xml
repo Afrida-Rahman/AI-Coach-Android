@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/item_exercise_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginEnd="16dp"
             android:layout_gravity="center"
             android:contentDescription="@string/reach_arms_over_head"
