@@ -26,13 +26,7 @@ abstract class IExercise(
     private var wrongCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
-    abstract fun exerciseCount(
-        person: Person,
-        canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
-    )
-
+    abstract fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>)
     abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
     abstract fun drawingRules(person: Person, phases: List<Phase>): List<Rule>
     abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
