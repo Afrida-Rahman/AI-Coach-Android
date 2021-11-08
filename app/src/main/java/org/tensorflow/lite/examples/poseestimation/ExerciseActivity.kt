@@ -65,7 +65,7 @@ class ExerciseActivity : AppCompatActivity() {
     private var cameraDevice: CameraDevice? = null
     private var captureSession: CameraCaptureSession? = null
     private var poseDetector: PoseDetector? = null
-    private var device = Device.CPU
+    private var device = Device.GPU
     private var modelPos = 2
     private var imageReader: ImageReader? = null
     private val minConfidence = .2f
@@ -135,7 +135,6 @@ class ExerciseActivity : AppCompatActivity() {
             } else {
                 rotateMatrix.postRotate(90.0f)
             }
-
             val rotatedBitmap = Bitmap.createBitmap(
                 imageBitmap!!, 0, 0, previewWidth, previewHeight,
                 rotateMatrix, true
@@ -285,6 +284,7 @@ class ExerciseActivity : AppCompatActivity() {
         poseDetector?.close()
         poseDetector = null
         poseDetector = MoveNet.create(this, device)
+        Log.d("bitmap","posedetector:: $poseDetector")
         openCamera()
         startBackgroundThread()
     }
