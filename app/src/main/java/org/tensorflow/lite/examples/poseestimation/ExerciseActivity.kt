@@ -618,16 +618,17 @@ class ExerciseActivity : AppCompatActivity() {
             PatientId = patientId
         )
         val response = service.getConstraint(requestPayload)
-        response.enqueue(object : Callback<PatientExerciseConstraint>{
+        response.enqueue(object : Callback<PatientExerciseKeypointResponse>{
             override fun onResponse(
-                call: Call<PatientExerciseConstraint>,
-                response: Response<PatientExerciseConstraint>
+                call: Call<PatientExerciseKeypointResponse>,
+                response: Response<PatientExerciseKeypointResponse>
             ) {
-
+                val responseBody = response.body()!!
+                Log.d("dataForExercise", "Tenant: ${responseBody.Tenant} data ::::  ${responseBody.Assessments}")
             }
 
-            override fun onFailure(call: Call<PatientExerciseConstraint>, t: Throwable) {
-
+            override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
+                    Log.d("dataForExercise", "Failed to get response:: $t")
             }
         })
     }

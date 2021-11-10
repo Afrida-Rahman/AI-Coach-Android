@@ -18,10 +18,10 @@ interface IExerciseService {
     @POST("/api/exercisekeypoint/GetKeyPointsRestriction")
     fun getConstraint(@Body requestPayload: ExerciseRequestPayload): Call<KeyPointRestrictions>
 
-    @POST("/api/exercisekeypoint/GetKeyPointsRestriction")
+    @POST("/api/exercisekeypoint/GetPatientExercise")
     fun getConstraint(@Body requestPayload: ExerciseRequestPayload1): Call<PatientExerciseKeypointResponse>
 
-    @Headers("Authorization: Bearer YXBpdXNlcjpZV2xoYVlUUmNHbDFjMlZ5T2lRa1RVWVRFUk1ESXc=")
+    @Headers("Authorization: Bearer YXBpdXNlcjpZV2xoYVlUUmNHbDFjMlZ5T2lRa1RV    `WVRFUk1ESXc=")
     @POST("/api/exercise/SaveExerciseTracking")
     fun saveExerciseData(@Body requestPayload: ExerciseTrackingPayload): Call<ExerciseTrackingResponse>
 
