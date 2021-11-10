@@ -83,6 +83,9 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var exercise: IExercise
     private var exerciseConstraints: List<Phase> = listOf()
 
+    private var testId: String? = ""
+    private var exerciseId: Int = 0
+
     private var isFrontCamera = true
     private var url: String = "https://vaapi.injurycloud.com"
 
@@ -179,8 +182,8 @@ class ExerciseActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        val testId = intent.getStringExtra(TestId)
-        val exerciseId = intent.getIntExtra(ExerciseId, 122)
+        testId = intent.getStringExtra(TestId)
+        exerciseId = intent.getIntExtra(ExerciseId, 122)
         val exerciseName = intent.getStringExtra(Name)
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val logInData = loadLogInData()
@@ -624,7 +627,56 @@ class ExerciseActivity : AppCompatActivity() {
                 response: Response<PatientExerciseKeypointResponse>
             ) {
                 val responseBody = response.body()!!
-                Log.d("dataForExercise", "Tenant: ${responseBody.Tenant} data ::::  ${responseBody.Assessments}")
+                val phases = mutableListOf<Phase>()
+                responseBody.Assessments.forEach{ testIndex ->
+                    if (testIndex.TestId == testId){
+                        testIndex.Exercises.forEach{ exerciseIndex ->
+                            val assignedInfo = mutableListOf<assignedData>()
+                            if (exerciseIndex.ExerciseId == exerciseId){
+                                assignedInfo.add(
+                                    assignedData(
+                                        exerciseId = exerciseIndex.ExerciseId,
+                                        setCount = exerciseIndex.SetInCount,
+                                        repCount = exerciseIndex.RepetitionInCount
+                                    )
+                                )
+                                val constraints = mutableListOf<Constraint>()
+                                exerciseIndex.KeyPointsRestrictionGroup.forEach{ restrictionGroupIndex ->
+                                    restrictionGroupIndex.KeyPointsRestriction.forEach{ restrictionIndex ->
+                                        Log.d("dataForExercise", "Tenant: ${responseBody.Tenant} data ::::  ${exerciseIndex.ExerciseId}")
+                                        constraints.add(
+                                            Constraint(
+                                                minValue = restrictionIndex.MinValidationValue,
+                                                maxValue = restrictionIndex.MaxValidationValue,
+                                                type = if (restrictionIndex.Scale == "degree") {
+                                                    ConstraintType.ANGLE
+                                                } else {
+                                                    ConstraintType.LINE
+                                                },
+                                                startPointIndex = getIndex(restrictionIndex.StartKeyPosition),
+                                                middlePointIndex = getIndex(restrictionIndex.MiddleKeyPosition),
+                                                endPointIndex = getIndex(restrictionIndex.EndKeyPosition),
+                                                clockWise = restrictionIndex.AngleArea == "inner"
+                                            )
+                                        )
+
+                                    }
+                                    phases.add(
+                                        Phase(
+                                            phase = restrictionGroupIndex.Phase,
+                                            constraints = constraints,
+                                            assignedInfo = assignedInfo
+                                        )
+                                    )
+
+                                }
+                            }
+                            exerciseConstraints = phases.sortedBy { it.phase }
+                        }
+                    }
+
+
+                }
             }
 
             override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {

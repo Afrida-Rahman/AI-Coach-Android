@@ -27,6 +27,8 @@ class SeatedKneeExtension(
     private var wrongDownKneeAngleMax = 100f
     private var wrongUpKneeAngleMin = 101f
     private var wrongUpKneeAngleMax = 159f
+    private var maxSetValue = 0
+    private var maxRepValue = 0
 
     private val totalStates = 2
     private var rightStateIndex = 0
@@ -52,6 +54,9 @@ class SeatedKneeExtension(
             downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
             upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
             upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
+
+            maxRepValue = phases[0].assignedInfo[0].repCount
+            maxSetValue = phases[0].assignedInfo[0].setCount
         } else {
             downKneeAngleMin = 70f
             downKneeAngleMax = 100f
@@ -81,7 +86,7 @@ class SeatedKneeExtension(
             }
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
-                repetitionCount()
+                repetitionCount(maxRepCount = maxRepValue, maxSetCount = maxSetValue)
             }
         } else {
             if (!insideBox) {

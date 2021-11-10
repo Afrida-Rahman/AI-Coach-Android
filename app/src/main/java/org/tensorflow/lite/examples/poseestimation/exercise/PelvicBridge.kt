@@ -26,6 +26,8 @@ class PelvicBridge(
     private var wrongHipAngleDownMax = 135f
     private var wrongHipAngleUpMin = 140f
     private var wrongHipAngleUpMax = 160f
+    private var maxSetValue = 0
+    private var maxRepValue = 0
 
     private val totalStates = 3
     private var rightStateIndex = 0
@@ -49,6 +51,9 @@ class PelvicBridge(
             hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
             hipAngleUpMin = phases[1].constraints[0].minValue.toFloat()
             hipAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+
+            maxRepValue = phases[0].assignedInfo[0].repCount
+            maxSetValue = phases[0].assignedInfo[0].setCount
         } else {
             hipAngleDownMin = 115f
             hipAngleDownMax = 135f
@@ -78,7 +83,7 @@ class PelvicBridge(
             }
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
-                repetitionCount()
+                repetitionCount(maxRepCount = maxRepValue, maxSetCount = maxSetValue)
             }
         } else {
             if (!insideBox) {
