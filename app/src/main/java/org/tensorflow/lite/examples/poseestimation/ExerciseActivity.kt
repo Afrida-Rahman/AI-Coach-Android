@@ -26,7 +26,10 @@ import androidx.core.content.ContextCompat
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
+import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload1
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
+import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseConstraint
+import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
@@ -182,7 +185,8 @@ class ExerciseActivity : AppCompatActivity() {
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val logInData = loadLogInData()
 
-        getExerciseConstraints(logInData.tenant, exerciseId)
+//        getExerciseConstraints(logInData.tenant, exerciseId)
+        getExerciseConstraints(logInData.tenant, logInData.patientId)
 
         exercise = Exercises.get(this, exerciseId)
 
@@ -602,58 +606,28 @@ class ExerciseActivity : AppCompatActivity() {
         })
     }
 
-    private fun getExerciseConstraints(tenant: String, exerciseId: Int) {
+    private fun getExerciseConstraints(tenant: String, patientId: String) {
         val phases = mutableListOf<Phase>()
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(url)
             .build()
             .create(IExerciseService::class.java)
-        val requestPayload = ExerciseRequestPayload(
+        val requestPayload = ExerciseRequestPayload1(
             Tenant = tenant,
-            KeyPointsRestrictions = listOf(
-                ExerciseData(exerciseId)
-            )
+            PatientId = patientId
         )
         val response = service.getConstraint(requestPayload)
-        response.enqueue(object : Callback<KeyPointRestrictions> {
+        response.enqueue(object : Callback<PatientExerciseConstraint>{
             override fun onResponse(
-                call: Call<KeyPointRestrictions>,
-                response: Response<KeyPointRestrictions>
+                call: Call<PatientExerciseConstraint>,
+                response: Response<PatientExerciseConstraint>
             ) {
-                val responseBody = response.body()!!
-                Log.d("dataForExercise", "data ::::  $responseBody")
-                responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
-                    val constraints = mutableListOf<Constraint>()
-                    group.KeyPointsRestriction.forEach { restriction ->
-                        constraints.add(
-                            Constraint(
-                                minValue = restriction.MinValidationValue,
-                                maxValue = restriction.MaxValidationValue,
-                                type = if (restriction.Scale == "degree") {
-                                    ConstraintType.ANGLE
-                                } else {
-                                    ConstraintType.LINE
-                                },
-                                startPointIndex = getIndex(restriction.StartKeyPosition),
-                                middlePointIndex = getIndex(restriction.MiddleKeyPosition),
-                                endPointIndex = getIndex(restriction.EndKeyPosition),
-                                clockWise = restriction.AngleArea == "inner"
-                            )
-                        )
-                    }
-                    phases.add(
-                        Phase(
-                            phase = group.Phase,
-                            constraints = constraints
-                        )
-                    )
-                }
-                exerciseConstraints = phases.sortedBy { it.phase }
+
             }
 
-            override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
-                Log.d("retrofit", "on failure ::: " + t.message)
+            override fun onFailure(call: Call<PatientExerciseConstraint>, t: Throwable) {
+
             }
         })
     }
