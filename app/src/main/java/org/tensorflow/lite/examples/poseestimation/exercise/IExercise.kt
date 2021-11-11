@@ -50,10 +50,14 @@ abstract class IExercise(
         audioPlayer.play(resourceId)
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
-        }
-        if(setCounter < maxSetCount) {
             setCounter++
+            if (setCounter >= maxSetCount) {
+                setCounter = 0
+            }
         }
+//        if(setCounter < maxSetCount) {
+//            setCounter++
+//        }
     }
 
     fun wrongCount() {

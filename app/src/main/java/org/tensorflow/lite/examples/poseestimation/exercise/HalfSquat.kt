@@ -68,17 +68,17 @@ class HalfSquat(
         if (phases.size >= 2) {
             upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
             upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            downHipAngleMin = phases[0].constraints[1].minValue.toFloat()
-            downHipAngleMax = phases[0].constraints[1].maxValue.toFloat()
+            downHipAngleMin = phases[1].constraints[1].minValue.toFloat()
+            downHipAngleMax = phases[1].constraints[1].maxValue.toFloat()
 
             upKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
             upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            downKneeAngleMin = phases[0].constraints[1].minValue.toFloat()
-            downKneeAngleMax = phases[0].constraints[1].maxValue.toFloat()
+            downKneeAngleMin = phases[1].constraints[1].minValue.toFloat()
+            downKneeAngleMax = phases[1].constraints[1].maxValue.toFloat()
 
             maxRepValue = phases[0].assignedInfo[0].repCount
             maxSetValue = phases[0].assignedInfo[0].setCount
-
+            Log.d("valueCheck", "PhaseVAlue::: $phases")
 //            Log.d("angleValue","upmin:: $upHipAngleMin, upmax:: $upHipAngleMax, downmin:: $downHipAngleMin downmax:: $downHipAngleMax , rep:: $maxRepValue set:: $maxSetValue" )
         } else {
             upHipAngleMin = 160f

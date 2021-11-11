@@ -640,8 +640,9 @@ class ExerciseActivity : AppCompatActivity() {
                                         repCount = exerciseIndex.RepetitionInCount
                                     )
                                 )
-                                val constraints = mutableListOf<Constraint>()
+
                                 exerciseIndex.KeyPointsRestrictionGroup.forEach{ restrictionGroupIndex ->
+                                    val constraints = mutableListOf<Constraint>()
                                     restrictionGroupIndex.KeyPointsRestriction.forEach{ restrictionIndex ->
                                         Log.d("dataForExercise", "Tenant: ${responseBody.Tenant} data ::::  ${exerciseIndex.ExerciseId}")
                                         constraints.add(
@@ -659,7 +660,6 @@ class ExerciseActivity : AppCompatActivity() {
                                                 clockWise = restrictionIndex.AngleArea == "inner"
                                             )
                                         )
-
                                     }
                                     phases.add(
                                         Phase(
@@ -668,10 +668,12 @@ class ExerciseActivity : AppCompatActivity() {
                                             assignedInfo = assignedInfo
                                         )
                                     )
-
+//                                    exerciseConstraints = phases.sortedBy { it.phase }
+//                                    Log.d("Constraint","$exerciseConstraints")
                                 }
+                                exerciseConstraints = phases.sortedBy { it.phase }
+                                Log.d("Constraint","$exerciseConstraints")
                             }
-                            exerciseConstraints = phases.sortedBy { it.phase }
                         }
                     }
 
