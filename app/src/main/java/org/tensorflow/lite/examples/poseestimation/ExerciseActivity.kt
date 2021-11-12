@@ -88,6 +88,7 @@ class ExerciseActivity : AppCompatActivity() {
 
     private var isFrontCamera = true
     private var url: String = "https://vaapi.injurycloud.com"
+    private var url1: String = "https://stgvaapi.injurycloud.com"
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -613,7 +614,7 @@ class ExerciseActivity : AppCompatActivity() {
         val phases = mutableListOf<Phase>()
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(url)
+            .baseUrl(url1)
             .build()
             .create(IExerciseService::class.java)
         val requestPayload = ExerciseRequestPayload1(

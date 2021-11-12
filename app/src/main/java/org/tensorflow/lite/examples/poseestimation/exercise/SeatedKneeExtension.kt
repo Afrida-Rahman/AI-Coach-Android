@@ -48,15 +48,17 @@ class SeatedKneeExtension(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-
+//        Log.d("phaseIssue", "phase::: ${phases.size}")
         if (phases.size >= 2) {
             downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
             downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            upKneeAngleMin = phases[1].constraints[1].minValue.toFloat()
-            upKneeAngleMax = phases[1].constraints[1].maxValue.toFloat()
+            upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
+            upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
 
             maxRepValue = phases[0].assignedInfo[0].repCount
             maxSetValue = phases[0].assignedInfo[0].setCount
+
+//            Log.d("Phase","phaseValue:: $phases")
         } else {
             downKneeAngleMin = 70f
             downKneeAngleMax = 100f
@@ -126,7 +128,6 @@ class SeatedKneeExtension(
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint, false)
-        Log.d("angle","angleValue::: $kneeAngle")
         if (kneeAngle > wrongCountStates[wrongStateIndex][0] && kneeAngle < wrongCountStates[wrongStateIndex][1]
             && insideBox
         ) {

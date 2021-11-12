@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -46,6 +47,7 @@ class PelvicBridge(
             person.keyPoints[14].coordinate.x,
             -person.keyPoints[14].coordinate.y
         )
+        Log.d("MaxRepCountIssue", "size::${phases}")
         if (phases.size >= 2) {
             hipAngleDownMin = phases[0].constraints[0].minValue.toFloat()
             hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()

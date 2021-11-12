@@ -12,8 +12,8 @@ abstract class IExercise(
     context: Context,
     val id: Int,
     val imageResourceId: Int,
-    private var maxRepCount: Int = 10,
-    private var maxSetCount: Int = 1,
+    private var maxRepCount: Int = 0,
+    private var maxSetCount: Int = 0,
     var instruction: String = "",
     var imageUrls: List<String> = listOf(),
     val active: Boolean = true,
@@ -32,7 +32,7 @@ abstract class IExercise(
     abstract fun drawingRules(person: Person, phases: List<Phase>): List<Rule>
     abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
 
-    fun repetitionCount(maxSetCount: Int = 1, maxRepCount:Int = 5) {
+    fun repetitionCount(maxRepCount:Int = 5, maxSetCount: Int = 1) {
         repetitionCounter++
         val resourceId = when (repetitionCounter) {
             1 -> R.raw.one
@@ -51,13 +51,7 @@ abstract class IExercise(
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
-            if (setCounter >= maxSetCount) {
-                setCounter = 0
-            }
         }
-//        if(setCounter < maxSetCount) {
-//            setCounter++
-//        }
     }
 
     fun wrongCount() {

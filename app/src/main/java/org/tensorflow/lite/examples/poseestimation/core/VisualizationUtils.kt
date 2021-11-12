@@ -4,6 +4,7 @@ package org.tensorflow.lite.examples.poseestimation.core
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
@@ -78,6 +79,7 @@ object VisualizationUtils {
                 }
             }
         }
+        Log.d("CountIssue", "$repCount")
         draw.writeText(
             "$repCount / $setCount",
             Point(width * 1 / 7f, 60f),
