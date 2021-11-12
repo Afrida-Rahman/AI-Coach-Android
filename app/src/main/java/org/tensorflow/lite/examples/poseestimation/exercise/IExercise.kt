@@ -14,7 +14,7 @@ abstract class IExercise(
     val imageResourceId: Int,
     private var maxRepCount: Int = 0,
     private var maxSetCount: Int = 0,
-    var instruction: String = "",
+    var instruction: String? = "",
     var imageUrls: List<String> = listOf(),
     val active: Boolean = true,
     var name: String = "",
@@ -93,7 +93,7 @@ abstract class IExercise(
     fun setExercise(
         exerciseName: String,
         exerciseDescription: String,
-        exerciseInstruction: String,
+        exerciseInstruction: String?,
         exerciseImageUrls: List<String>,
         repetitionLimit: Int,
         setLimit: Int,

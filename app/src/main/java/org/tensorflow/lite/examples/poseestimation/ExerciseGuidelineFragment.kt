@@ -12,7 +12,7 @@ import org.tensorflow.lite.examples.poseestimation.core.ExerciseGuidelineImageLi
 
 class ExerciseGuidelineFragment(
     private val name: String,
-    private var instruction: String,
+    private var instruction: String?,
     private val imageUrls: List<String>
 ) : Fragment() {
 
@@ -26,13 +26,18 @@ class ExerciseGuidelineFragment(
         val exerciseInstructionView: TextView =
             view.findViewById(R.id.exercise_instruction_guideline)
         val htmlTagRegex = Regex("<[^>]*>|&nbsp|;")
-        instruction = htmlTagRegex.replace(instruction, "").replace("\n", " ")
+        instruction = if(instruction != null){
+            instruction
+        } else {
+            ""
+        }
+        instruction = instruction?.let { htmlTagRegex.replace(it, "").replace("\n", " ") }
         exerciseInstructionView.text = instruction
         val adapter = view.findViewById<RecyclerView>(R.id.exercise_guideline_image_list_container)
         if (imageUrls.isEmpty()) {
             Toast.makeText(context, "No image is available now!", Toast.LENGTH_SHORT).show()
         }
-        adapter.adapter = ExerciseGuidelineImageListAdapter(imageUrls)
+        adapter.adapter = ExerciseGuidelineImageListAdapter(view.context, imageUrls)
         return view
     }
 }

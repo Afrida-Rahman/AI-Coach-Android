@@ -26,7 +26,7 @@ import androidx.core.content.ContextCompat
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
-import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload1
+import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
 import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseConstraint
 import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
@@ -46,7 +46,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ExerciseActivity : AppCompatActivity() {
+class ExerciseActivity(
+) : AppCompatActivity() {
     companion object {
         const val ExerciseId = "ExerciseId"
         const val TestId = "TestId"
@@ -83,12 +84,11 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var exercise: IExercise
     private var exerciseConstraints: List<Phase> = listOf()
 
-    private var testId: String? = ""
-    private var exerciseId: Int = 0
+//    private var testId: String = ""
+//    private var exerciseId: Int = 0
 
     private var isFrontCamera = true
     private var url: String = "https://vaapi.injurycloud.com"
-    private var url1: String = "https://stgvaapi.injurycloud.com"
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -183,13 +183,12 @@ class ExerciseActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        testId = intent.getStringExtra(TestId)
-        exerciseId = intent.getIntExtra(ExerciseId, 122)
+        val testId = intent.getStringExtra(TestId)
+        val exerciseId = intent.getIntExtra(ExerciseId, 122)
         val exerciseName = intent.getStringExtra(Name)
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val logInData = loadLogInData()
 
-//        getExerciseConstraints(logInData.tenant, exerciseId)
         getExerciseConstraints(logInData.tenant, logInData.patientId)
 
         exercise = Exercises.get(this, exerciseId)
@@ -208,6 +207,7 @@ class ExerciseActivity : AppCompatActivity() {
                 NoOfWrongCount = exercise.getWrongCount(),
                 Tenant = logInData.tenant
             )
+            Log.d("DataFromResponse","$exerciseId, $testId, $protocolId, ${logInData.patientId}, ${logInData.tenant}")
             val alertDialog = AlertDialog.Builder(this)
             alertDialog.setMessage("Do you feel any pain while performing this exercise?")
             alertDialog.setPositiveButton("Yes") { _, _ ->
@@ -577,6 +577,7 @@ class ExerciseActivity : AppCompatActivity() {
                 response: Response<ExerciseTrackingResponse>
             ) {
                 val responseBody = response.body()
+                Log.d("responseBody","$responseBody")
                 if (responseBody != null) {
                     if (responseBody.Successful) {
                         Toast.makeText(
@@ -611,17 +612,19 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     private fun getExerciseConstraints(tenant: String, patientId: String) {
-        val phases = mutableListOf<Phase>()
+        val testId = intent.getStringExtra(TestId)
+        val exerciseId = intent.getIntExtra(ExerciseId, 122)
+
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(url1)
+            .baseUrl(url)
             .build()
             .create(IExerciseService::class.java)
-        val requestPayload = ExerciseRequestPayload1(
+        val requestPayload = PatientDataPayload(
             Tenant = tenant,
             PatientId = patientId
         )
-        val response = service.getConstraint(requestPayload)
+        val response = service.getData(requestPayload)
         response.enqueue(object : Callback<PatientExerciseKeypointResponse>{
             override fun onResponse(
                 call: Call<PatientExerciseKeypointResponse>,
@@ -669,16 +672,12 @@ class ExerciseActivity : AppCompatActivity() {
                                             assignedInfo = assignedInfo
                                         )
                                     )
-//                                    exerciseConstraints = phases.sortedBy { it.phase }
-//                                    Log.d("Constraint","$exerciseConstraints")
                                 }
                                 exerciseConstraints = phases.sortedBy { it.phase }
                                 Log.d("Constraint","$exerciseConstraints")
                             }
                         }
                     }
-
-
                 }
             }
 

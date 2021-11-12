@@ -10,7 +10,7 @@ class GeneralExercise(
     context: Context,
     exerciseId: Int,
     active: Boolean,
-    instruction: String,
+    instruction: String?,
     imageUrls: List<String>
 ) : IExercise(
     context = context,

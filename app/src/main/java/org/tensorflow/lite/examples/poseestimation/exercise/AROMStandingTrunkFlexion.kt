@@ -66,14 +66,11 @@ class AROMStandingTrunkFlexion(
         if (phases.size >= 2) {
             hipAngleUpMin = phases[0].constraints[0].minValue.toFloat()
             hipAngleUpMax = phases[0].constraints[0].maxValue.toFloat()
-            hipAngleDownMin = phases[0].constraints[1].minValue.toFloat()
-            hipAngleDownMax = phases[0].constraints[1].maxValue.toFloat()
+            hipAngleDownMin = phases[1].constraints[0].minValue.toFloat()
+            hipAngleDownMax = phases[1].constraints[0].maxValue.toFloat()
 
             maxRepValue = phases[0].assignedInfo[0].repCount
             maxSetValue = phases[0].assignedInfo[0].setCount
-
-            Log.d("hi","phase::: ${phases[0]}")
-            Log.d("angleValue","upmin:: $hipAngleUpMin, upmax:: $hipAngleUpMax, downmin:: $hipAngleDownMin downmax:: $hipAngleDownMax , rep:: $maxRepValue set:: $maxSetValue" )
         } else {
             hipAngleUpMin = 160f
             hipAngleUpMax = 190f

@@ -10,5 +10,6 @@ data class Exercise(
     val IsPhaseFinished: Boolean,
     val KeyPointsRestrictionGroup: List<KeyPointsRestrictionGroup>,
     val RepetitionInCount: Int,
-    val SetInCount: Int
+    val SetInCount: Int,
+    val ProtocolId: Int
 )
