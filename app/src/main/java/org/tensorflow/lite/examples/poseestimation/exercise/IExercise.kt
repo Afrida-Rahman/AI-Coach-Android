@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
-import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -27,7 +26,13 @@ abstract class IExercise(
     private var wrongCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
-    abstract fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>)
+    abstract fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    )
+
     abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
     abstract fun drawingRules(person: Person, phases: List<Phase>): List<Rule>
     abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
@@ -48,7 +53,7 @@ abstract class IExercise(
             else -> R.raw.hello
         }
         audioPlayer.play(resourceId)
-        if (repetitionCounter >= this.maxRepCount) {
+        if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
         }
