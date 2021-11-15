@@ -646,7 +646,7 @@ class ExerciseActivity : AppCompatActivity() {
                                     "Constraint",
                                     "Issue: ${exerciseIndex.KeyPointsRestrictionGroup}"
                                 )
-                                if (exerciseIndex.KeyPointsRestrictionGroup.isNotEmpty()){
+                                if (exerciseIndex.KeyPointsRestrictionGroup.isNotEmpty()) {
                                     exerciseIndex.KeyPointsRestrictionGroup.forEach { restrictionGroupIndex ->
                                         val constraints = mutableListOf<Constraint>()
                                         restrictionGroupIndex.KeyPointsRestriction.sortedByDescending { it.Id }
@@ -679,7 +679,7 @@ class ExerciseActivity : AppCompatActivity() {
                                             )
                                         )
                                     }
-                                } else{
+                                } else {
                                     Toast.makeText(
                                         this@ExerciseActivity,
                                         "Don't have enough data to perform ${exerciseIndex.ExerciseName} exercise!",

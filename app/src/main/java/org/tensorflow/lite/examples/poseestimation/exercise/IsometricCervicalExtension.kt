@@ -107,7 +107,7 @@ class IsometricCervicalExtension(
             rightStateIndex += 1
             if (rightStateIndex == totalStates) {
                 rightStateIndex = 0
-                repetitionCount(maxRepCount = maxRepValue, maxSetCount = maxSetValue)
+                repetitionCount()
             }
         } else {
             if (!insideBox) {

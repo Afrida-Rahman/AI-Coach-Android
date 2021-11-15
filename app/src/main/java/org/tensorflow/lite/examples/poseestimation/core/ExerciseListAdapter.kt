@@ -4,7 +4,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -34,7 +33,6 @@ class ExerciseListAdapter(
         holder.apply {
             exerciseImageView.setImageResource(exercise.imageResourceId)
             exerciseNameView.text = exercise.name
-            exerciseDescription.text = exercise.description
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
                 exerciseContainerView.setOnClickListener {
@@ -65,6 +63,7 @@ class ExerciseListAdapter(
                     commit()
                 }
             }
+            setRepDisplay.text = setRepDisplay.context.getString(R.string.sets_repetitions_set).format(exercise.maxSetCount, exercise.maxRepCount)
         }
     }
 
@@ -74,8 +73,8 @@ class ExerciseListAdapter(
         val exerciseContainerView: CardView = view.findViewById(R.id.item_exercise_container)
         val exerciseImageView: ImageView = view.findViewById(R.id.item_exercise_image)
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
-        val exerciseDescription: TextView = view.findViewById(R.id.item_exercise_description)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
-        val guidelineButton: Button = view.findViewById(R.id.btn_guideline)
+        val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
+        val setRepDisplay: TextView = view.findViewById(R.id.set_rep_display)
     }
 }

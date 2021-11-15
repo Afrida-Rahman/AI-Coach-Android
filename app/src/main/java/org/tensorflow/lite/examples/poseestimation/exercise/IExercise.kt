@@ -12,8 +12,8 @@ abstract class IExercise(
     context: Context,
     val id: Int,
     val imageResourceId: Int,
-    private var maxRepCount: Int = 0,
-    private var maxSetCount: Int = 0,
+    var maxRepCount: Int = 0,
+    var maxSetCount: Int = 0,
     var instruction: String? = "",
     var imageUrls: List<String> = listOf(),
     val active: Boolean = true,
@@ -32,7 +32,7 @@ abstract class IExercise(
     abstract fun drawingRules(person: Person, phases: List<Phase>): List<Rule>
     abstract fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int
 
-    fun repetitionCount(maxRepCount:Int = 5, maxSetCount: Int = 1) {
+    fun repetitionCount() {
         repetitionCounter++
         val resourceId = when (repetitionCounter) {
             1 -> R.raw.one
@@ -48,7 +48,7 @@ abstract class IExercise(
             else -> R.raw.hello
         }
         audioPlayer.play(resourceId)
-        if (repetitionCounter >= maxRepCount) {
+        if (repetitionCounter >= this.maxRepCount) {
             repetitionCounter = 0
             setCounter++
         }
