@@ -642,38 +642,49 @@ class ExerciseActivity : AppCompatActivity() {
                                         repCount = exerciseIndex.RepetitionInCount
                                     )
                                 )
-
-                                exerciseIndex.KeyPointsRestrictionGroup.forEach { restrictionGroupIndex ->
-                                    val constraints = mutableListOf<Constraint>()
-                                    restrictionGroupIndex.KeyPointsRestriction.sortedByDescending { it.Id }
-                                        .forEach { restrictionIndex ->
-                                            Log.d(
-                                                "dataForExercise",
-                                                "Tenant: ${responseBody.Tenant} data ::::  ${exerciseIndex.ExerciseId}"
-                                            )
-                                            constraints.add(
-                                                Constraint(
-                                                    minValue = restrictionIndex.MinValidationValue,
-                                                    maxValue = restrictionIndex.MaxValidationValue,
-                                                    type = if (restrictionIndex.Scale == "degree") {
-                                                        ConstraintType.ANGLE
-                                                    } else {
-                                                        ConstraintType.LINE
-                                                    },
-                                                    startPointIndex = getIndex(restrictionIndex.StartKeyPosition),
-                                                    middlePointIndex = getIndex(restrictionIndex.MiddleKeyPosition),
-                                                    endPointIndex = getIndex(restrictionIndex.EndKeyPosition),
-                                                    clockWise = restrictionIndex.AngleArea == "inner"
+                                Log.d(
+                                    "Constraint",
+                                    "Issue: ${exerciseIndex.KeyPointsRestrictionGroup}"
+                                )
+                                if (exerciseIndex.KeyPointsRestrictionGroup.isNotEmpty()){
+                                    exerciseIndex.KeyPointsRestrictionGroup.forEach { restrictionGroupIndex ->
+                                        val constraints = mutableListOf<Constraint>()
+                                        restrictionGroupIndex.KeyPointsRestriction.sortedByDescending { it.Id }
+                                            .forEach { restrictionIndex ->
+                                                Log.d(
+                                                    "dataForExercise",
+                                                    "Tenant: ${responseBody.Tenant} data ::::  ${exerciseIndex.ExerciseId}"
                                                 )
+                                                constraints.add(
+                                                    Constraint(
+                                                        minValue = restrictionIndex.MinValidationValue,
+                                                        maxValue = restrictionIndex.MaxValidationValue,
+                                                        type = if (restrictionIndex.Scale == "degree") {
+                                                            ConstraintType.ANGLE
+                                                        } else {
+                                                            ConstraintType.LINE
+                                                        },
+                                                        startPointIndex = getIndex(restrictionIndex.StartKeyPosition),
+                                                        middlePointIndex = getIndex(restrictionIndex.MiddleKeyPosition),
+                                                        endPointIndex = getIndex(restrictionIndex.EndKeyPosition),
+                                                        clockWise = restrictionIndex.AngleArea == "inner"
+                                                    )
+                                                )
+                                            }
+                                        phases.add(
+                                            Phase(
+                                                phase = restrictionGroupIndex.Phase,
+                                                constraints = constraints,
+                                                assignedInfo = assignedInfo
                                             )
-                                        }
-                                    phases.add(
-                                        Phase(
-                                            phase = restrictionGroupIndex.Phase,
-                                            constraints = constraints,
-                                            assignedInfo = assignedInfo
                                         )
-                                    )
+                                    }
+                                } else{
+                                    Toast.makeText(
+                                        this@ExerciseActivity,
+                                        "Don't have enough data to perform ${exerciseIndex.ExerciseName} exercise!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
                                 exerciseConstraints = phases.sortedBy { it.phase }
                                 Log.d("Constraint", "$exerciseConstraints")
