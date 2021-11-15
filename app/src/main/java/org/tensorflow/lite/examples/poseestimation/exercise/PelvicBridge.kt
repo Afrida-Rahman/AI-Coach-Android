@@ -47,7 +47,7 @@ class PelvicBridge(
             person.keyPoints[14].coordinate.x,
             -person.keyPoints[14].coordinate.y
         )
-
+        Log.d("angleIssue","phaseIssue: ${phases.size}")
         if (phases.size >= 2) {
             hipAngleDownMin = phases[0].constraints[0].minValue.toFloat()
             hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
@@ -56,6 +56,7 @@ class PelvicBridge(
 
             maxRepValue = phases[0].assignedInfo[0].repCount
             maxSetValue = phases[0].assignedInfo[0].setCount
+            Log.d("angleIssue","phaseIssue: ($hipAngleDownMin,$hipAngleDownMax), ($hipAngleUpMin,$hipAngleUpMax)")
         } else {
             hipAngleDownMin = 115f
             hipAngleDownMax = 135f

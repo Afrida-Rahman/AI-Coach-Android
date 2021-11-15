@@ -24,14 +24,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
-import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
-import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
-import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
-import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseConstraint
+import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
 import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
-import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
@@ -46,8 +42,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ExerciseActivity(
-) : AppCompatActivity() {
+class ExerciseActivity : AppCompatActivity() {
     companion object {
         const val ExerciseId = "ExerciseId"
         const val TestId = "TestId"
@@ -207,7 +202,10 @@ class ExerciseActivity(
                 NoOfWrongCount = exercise.getWrongCount(),
                 Tenant = logInData.tenant
             )
-            Log.d("DataFromResponse","$exerciseId, $testId, $protocolId, ${logInData.patientId}, ${logInData.tenant}")
+            Log.d(
+                "DataFromResponse",
+                "$exerciseId, $testId, $protocolId, ${logInData.patientId}, ${logInData.tenant}"
+            )
             val alertDialog = AlertDialog.Builder(this)
             alertDialog.setMessage("Do you feel any pain while performing this exercise?")
             alertDialog.setPositiveButton("Yes") { _, _ ->
@@ -292,7 +290,7 @@ class ExerciseActivity(
         poseDetector?.close()
         poseDetector = null
         poseDetector = MoveNet.create(this, device)
-        Log.d("bitmap","posedetector:: $poseDetector")
+        Log.d("bitmap", "posedetector:: $poseDetector")
         openCamera()
         startBackgroundThread()
     }
@@ -577,7 +575,7 @@ class ExerciseActivity(
                 response: Response<ExerciseTrackingResponse>
             ) {
                 val responseBody = response.body()
-                Log.d("responseBody","$responseBody")
+                Log.d("responseBody", "$responseBody")
                 if (responseBody != null) {
                     if (responseBody.Successful) {
                         Toast.makeText(
@@ -625,18 +623,18 @@ class ExerciseActivity(
             PatientId = patientId
         )
         val response = service.getData(requestPayload)
-        response.enqueue(object : Callback<PatientExerciseKeypointResponse>{
+        response.enqueue(object : Callback<PatientExerciseKeypointResponse> {
             override fun onResponse(
                 call: Call<PatientExerciseKeypointResponse>,
                 response: Response<PatientExerciseKeypointResponse>
             ) {
                 val responseBody = response.body()!!
                 val phases = mutableListOf<Phase>()
-                responseBody.Assessments.forEach{ testIndex ->
-                    if (testIndex.TestId == testId){
-                        testIndex.Exercises.forEach{ exerciseIndex ->
+                responseBody.Assessments.forEach { testIndex ->
+                    if (testIndex.TestId == testId) {
+                        testIndex.Exercises.forEach { exerciseIndex ->
                             val assignedInfo = mutableListOf<assignedData>()
-                            if (exerciseIndex.ExerciseId == exerciseId){
+                            if (exerciseIndex.ExerciseId == exerciseId) {
                                 assignedInfo.add(
                                     assignedData(
                                         exerciseId = exerciseIndex.ExerciseId,
@@ -645,26 +643,30 @@ class ExerciseActivity(
                                     )
                                 )
 
-                                exerciseIndex.KeyPointsRestrictionGroup.forEach{ restrictionGroupIndex ->
+                                exerciseIndex.KeyPointsRestrictionGroup.forEach { restrictionGroupIndex ->
                                     val constraints = mutableListOf<Constraint>()
-                                    restrictionGroupIndex.KeyPointsRestriction.forEach{ restrictionIndex ->
-                                        Log.d("dataForExercise", "Tenant: ${responseBody.Tenant} data ::::  ${exerciseIndex.ExerciseId}")
-                                        constraints.add(
-                                            Constraint(
-                                                minValue = restrictionIndex.MinValidationValue,
-                                                maxValue = restrictionIndex.MaxValidationValue,
-                                                type = if (restrictionIndex.Scale == "degree") {
-                                                    ConstraintType.ANGLE
-                                                } else {
-                                                    ConstraintType.LINE
-                                                },
-                                                startPointIndex = getIndex(restrictionIndex.StartKeyPosition),
-                                                middlePointIndex = getIndex(restrictionIndex.MiddleKeyPosition),
-                                                endPointIndex = getIndex(restrictionIndex.EndKeyPosition),
-                                                clockWise = restrictionIndex.AngleArea == "inner"
+                                    restrictionGroupIndex.KeyPointsRestriction.sortedByDescending { it.Id }
+                                        .forEach { restrictionIndex ->
+                                            Log.d(
+                                                "dataForExercise",
+                                                "Tenant: ${responseBody.Tenant} data ::::  ${exerciseIndex.ExerciseId}"
                                             )
-                                        )
-                                    }
+                                            constraints.add(
+                                                Constraint(
+                                                    minValue = restrictionIndex.MinValidationValue,
+                                                    maxValue = restrictionIndex.MaxValidationValue,
+                                                    type = if (restrictionIndex.Scale == "degree") {
+                                                        ConstraintType.ANGLE
+                                                    } else {
+                                                        ConstraintType.LINE
+                                                    },
+                                                    startPointIndex = getIndex(restrictionIndex.StartKeyPosition),
+                                                    middlePointIndex = getIndex(restrictionIndex.MiddleKeyPosition),
+                                                    endPointIndex = getIndex(restrictionIndex.EndKeyPosition),
+                                                    clockWise = restrictionIndex.AngleArea == "inner"
+                                                )
+                                            )
+                                        }
                                     phases.add(
                                         Phase(
                                             phase = restrictionGroupIndex.Phase,
@@ -674,7 +676,7 @@ class ExerciseActivity(
                                     )
                                 }
                                 exerciseConstraints = phases.sortedBy { it.phase }
-                                Log.d("Constraint","$exerciseConstraints")
+                                Log.d("Constraint", "$exerciseConstraints")
                             }
                         }
                     }
@@ -682,7 +684,7 @@ class ExerciseActivity(
             }
 
             override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
-                    Log.d("dataForExercise", "Failed to get response:: $t")
+                Log.d("dataForExercise", "Failed to get response:: $t")
             }
         })
     }

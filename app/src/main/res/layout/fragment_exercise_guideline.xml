@@ -50,6 +50,8 @@
             android:id="@+id/exercise_guideline_image_list_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
             android:src="@drawable/arom_standing_trunk_flexion"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
