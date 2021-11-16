@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -30,6 +31,8 @@ class AROMStandingTrunkFlexion(
 
     private val straightHandAngleMin = 150f
     private val straightHandAngleMax = 225f
+    private var maxSetValue = 0
+    private var maxRepValue = 0
 
     private val totalStates = 3
 
@@ -65,6 +68,9 @@ class AROMStandingTrunkFlexion(
             hipAngleUpMax = phases[0].constraints[0].maxValue.toFloat()
             hipAngleDownMin = phases[1].constraints[0].minValue.toFloat()
             hipAngleDownMax = phases[1].constraints[0].maxValue.toFloat()
+
+            maxRepValue = phases[0].assignedInfo[0].repCount
+            maxSetValue = phases[0].assignedInfo[0].setCount
         } else {
             hipAngleUpMin = 160f
             hipAngleUpMax = 190f

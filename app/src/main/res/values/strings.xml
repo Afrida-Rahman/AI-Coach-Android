@@ -25,7 +25,7 @@
     <string name="seated_knee_extension_exercise">Seated Knee Extension Exercise</string>
     <string name="the_fetched_data">The Fetched Data:</string>
     <string name="flip_camera">Flip Camera</string>
-    <string name="mymedicalhub">MyMedicalHub</string>
+    <string name="mymedicalhub">MyMedicalHUB</string>
     <string name="your_personal_exercise_assistant">Your personal exercise assistant.</string>
     <string name="camera_switching_button">Camera Switching Button</string>
     <string name="sign_in">Sign In</string>
@@ -74,4 +74,7 @@
     <string name="instruction_details">Instruction details</string>
     <string name="images">Images</string>
     <string name="exercise_name_guideline">Exercise Name Guideline</string>
+    <string name="guideline_icon">guideline_icon</string>
+    <string name="sets_repetitions_set">%d Sets (%d Repetitions/set)</string>
+    <string name="back_button">Back button</string>
 </resources>

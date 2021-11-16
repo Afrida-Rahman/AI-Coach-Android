@@ -33,7 +33,12 @@ class SeatedKneeExtension(
 
     private var wrongStateIndex = 0
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val hipPoint = Point(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
@@ -46,7 +51,6 @@ class SeatedKneeExtension(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-
         if (phases.size >= 2) {
             downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
             downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
@@ -116,21 +120,22 @@ class SeatedKneeExtension(
             floatArrayOf(
                 wrongUpKneeAngleMin,
                 wrongUpKneeAngleMax
+            ),
+            floatArrayOf(
+                wrongDownKneeAngleMin,
+                wrongDownKneeAngleMax
             )
         )
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint, false)
-        Log.d("angle","angleValue::: $kneeAngle")
         if (kneeAngle > wrongCountStates[wrongStateIndex][0] && kneeAngle < wrongCountStates[wrongStateIndex][1]
             && insideBox
         ) {
-            if (insideBox) {
-                wrongStateIndex += 1
-                if (wrongStateIndex == wrongCountStates.size) {
-                    wrongStateIndex = 0
-                    wrongCount()
-                }
+            wrongStateIndex += 1
+            if (wrongStateIndex == wrongCountStates.size) {
+                wrongStateIndex = 0
+                wrongCount()
             }
         }
     }

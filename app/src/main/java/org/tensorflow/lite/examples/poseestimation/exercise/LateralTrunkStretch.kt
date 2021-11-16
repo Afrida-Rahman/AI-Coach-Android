@@ -36,6 +36,8 @@ class LateralTrunkStretch(
 
     private val straightHandAngleMin = 150f
     private val straightHandAngleMax = 225f
+    private var maxSetValue = 0
+    private var maxRepValue = 0
 
     private val totalStates = 3
 
@@ -95,6 +97,9 @@ class LateralTrunkStretch(
             shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
             shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
             shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+
+            maxRepValue = phases[0].assignedInfo[0].repCount
+            maxSetValue = phases[0].assignedInfo[0].setCount
         } else {
             shoulderAngleDownMin = 0f
             shoulderAngleDownMax = 30f
