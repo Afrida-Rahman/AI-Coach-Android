@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,9 +57,9 @@ class ExerciseListAdapter(
                     replace(
                         R.id.fragment_container,
                         ExerciseGuidelineFragment(
-                            name = exercise.name,
-                            instruction = exercise.instruction,
-                            imageUrls = exercise.imageUrls
+                            testId = testId,
+                            position = position,
+                            exerciseList = exerciseList
                         )
                     )
                     commit()

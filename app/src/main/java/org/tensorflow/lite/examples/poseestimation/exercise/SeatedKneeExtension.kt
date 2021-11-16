@@ -27,15 +27,18 @@ class SeatedKneeExtension(
     private var wrongDownKneeAngleMax = 100f
     private var wrongUpKneeAngleMin = 101f
     private var wrongUpKneeAngleMax = 159f
-    private var maxSetValue = 0
-    private var maxRepValue = 0
 
     private val totalStates = 2
     private var rightStateIndex = 0
 
     private var wrongStateIndex = 0
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val hipPoint = Point(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
@@ -48,17 +51,11 @@ class SeatedKneeExtension(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-//        Log.d("phaseIssue", "phase::: ${phases.size}")
         if (phases.size >= 2) {
             downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
             downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
             upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
             upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
-
-            maxRepValue = phases[0].assignedInfo[0].repCount
-            maxSetValue = phases[0].assignedInfo[0].setCount
-
-//            Log.d("Phase","phaseValue:: $phases")
         } else {
             downKneeAngleMin = 70f
             downKneeAngleMax = 100f
@@ -123,6 +120,10 @@ class SeatedKneeExtension(
             floatArrayOf(
                 wrongUpKneeAngleMin,
                 wrongUpKneeAngleMax
+            ),
+            floatArrayOf(
+                wrongDownKneeAngleMin,
+                wrongDownKneeAngleMax
             )
         )
 
@@ -131,12 +132,10 @@ class SeatedKneeExtension(
         if (kneeAngle > wrongCountStates[wrongStateIndex][0] && kneeAngle < wrongCountStates[wrongStateIndex][1]
             && insideBox
         ) {
-            if (insideBox) {
-                wrongStateIndex += 1
-                if (wrongStateIndex == wrongCountStates.size) {
-                    wrongStateIndex = 0
-                    wrongCount()
-                }
+            wrongStateIndex += 1
+            if (wrongStateIndex == wrongCountStates.size) {
+                wrongStateIndex = 0
+                wrongCount()
             }
         }
     }

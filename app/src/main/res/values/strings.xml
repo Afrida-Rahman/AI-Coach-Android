@@ -76,4 +76,5 @@
     <string name="exercise_name_guideline">Exercise Name Guideline</string>
     <string name="guideline_icon">guideline_icon</string>
     <string name="sets_repetitions_set">%d Sets (%d Repetitions/set)</string>
+    <string name="back_button">Back button</string>
 </resources>
