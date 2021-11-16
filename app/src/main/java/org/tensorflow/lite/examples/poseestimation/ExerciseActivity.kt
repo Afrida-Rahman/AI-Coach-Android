@@ -178,6 +178,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+
         val testId = intent.getStringExtra(TestId)
         val exerciseId = intent.getIntExtra(ExerciseId, 122)
         val exerciseName = intent.getStringExtra(Name)

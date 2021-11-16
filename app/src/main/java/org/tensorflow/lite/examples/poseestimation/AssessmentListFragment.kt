@@ -40,10 +40,11 @@ class AssessmentListFragment(
         )
         assessmentList.forEach { assessment ->
             val parsedExercises = mutableListOf<IExercise>()
-            assessment.Exercises.forEach{ exercise ->
-                val implementedExercise = implementedExerciseList.find { it.id == exercise.ExerciseId}
+            assessment.Exercises.forEach { exercise ->
+                val implementedExercise =
+                    implementedExerciseList.find { it.id == exercise.ExerciseId }
                 Log.d("ExerciseValueCheck", "${assessment.TestId}: ${exercise.ExerciseName}")
-                if (implementedExercise != null){
+                if (implementedExercise != null) {
                     implementedExercise.setExercise(
                         exerciseName = exercise.ExerciseName,
                         exerciseDescription = exercise.ExerciseName,
@@ -58,9 +59,7 @@ class AssessmentListFragment(
                     val notImplementedExercise = GeneralExercise(
                         context = view.context,
                         exerciseId = exercise.ExerciseId,
-                        active = false,
-                        instruction = exercise.Instructions,
-                        imageUrls = exercise.ImageURLs
+                        active = false
                     )
                     notImplementedExercise.setExercise(
                         exerciseName = exercise.ExerciseName,

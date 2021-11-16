@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -11,19 +12,19 @@ abstract class IExercise(
     context: Context,
     val id: Int,
     val imageResourceId: Int,
-    var maxRepCount: Int = 0,
-    var maxSetCount: Int = 0,
-    var instruction: String? = "",
-    var imageUrls: List<String> = listOf(),
     val active: Boolean = true,
     var name: String = "",
+    var protocolId: Int = 0,
     var description: String = "",
-    var protocolId: Int = 0
+    var instruction: String? = "",
+    var imageUrls: List<String> = listOf(),
+    var maxRepCount: Int = 0,
+    var maxSetCount: Int = 0
 ) {
     private val audioPlayer = AudioPlayer(context)
-    private var repetitionCounter = 0
     private var setCounter = 0
     private var wrongCounter = 0
+    private var repetitionCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
     abstract fun exerciseCount(
@@ -53,6 +54,7 @@ abstract class IExercise(
             else -> R.raw.hello
         }
         audioPlayer.play(resourceId)
+        Log.d("MaxCount", "Set count: ${this.maxSetCount} - Rep Count: ${this.maxRepCount}")
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
@@ -111,6 +113,7 @@ abstract class IExercise(
         protocolId = protoId
         instruction = exerciseInstruction
         imageUrls = exerciseImageUrls
+        Log.d("MaxCount", "Set limit: $maxSetCount - Rep Limit: $maxRepCount ($name)")
     }
 
     fun getRepetitionCount() = repetitionCounter
