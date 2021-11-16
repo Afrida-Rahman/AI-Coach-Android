@@ -48,6 +48,8 @@ class ExerciseActivity : AppCompatActivity() {
         const val TestId = "TestId"
         const val Name = "Name"
         const val ProtocolId = "ProtocolId"
+        const val RepetitionLimit = "RepetitionLimit"
+        const val SetLimit = "SetLimit"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
@@ -183,11 +185,22 @@ class ExerciseActivity : AppCompatActivity() {
         val exerciseId = intent.getIntExtra(ExerciseId, 122)
         val exerciseName = intent.getStringExtra(Name)
         val protocolId = intent.getIntExtra(ProtocolId, 1)
+        val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
+        val setLimit = intent.getIntExtra(SetLimit, 1)
         val logInData = loadLogInData()
 
         getExerciseConstraints(logInData.tenant, logInData.patientId)
 
         exercise = Exercises.get(this, exerciseId)
+        exercise.setExercise(
+            exerciseName=exerciseName ?: "",
+            exerciseDescription = exerciseName ?: "",
+            exerciseInstruction = "",
+            exerciseImageUrls = listOf(),
+            repetitionLimit = repetitionLimit,
+            setLimit = setLimit,
+            protoId = protocolId
+        )
 
         findViewById<TextView>(R.id.textView).text = exerciseName
 

@@ -1,5 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

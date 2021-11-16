@@ -113,7 +113,6 @@ abstract class IExercise(
         protocolId = protoId
         instruction = exerciseInstruction
         imageUrls = exerciseImageUrls
-        Log.d("MaxCount", "Set limit: $maxSetCount - Rep Limit: $maxRepCount ($name)")
     }
 
     fun getRepetitionCount() = repetitionCounter

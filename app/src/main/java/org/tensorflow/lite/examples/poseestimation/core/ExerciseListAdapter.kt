@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,8 @@ class ExerciseListAdapter(
                         putExtra(ExerciseActivity.ExerciseId, exercise.id)
                         putExtra(ExerciseActivity.TestId, testId)
                         putExtra(ExerciseActivity.Name, exercise.name)
+                        putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
+                        putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
                         putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
                     }
                     it.context.startActivity(intent)
