@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -33,9 +34,12 @@ class KneeSquat(
     private var wrongUpKneeAngleMax = 190f
 
     private var wrongDownHipAngleMin = 100f
-    private var wrongDownHipAngleMax = 130f
+    private var wrongDownHipAngleMax = 160f
     private var wrongDownKneeAngleMin = 100f
-    private var wrongDownKneeAngleMax = 130f
+    private var wrongDownKneeAngleMax = 160f
+
+    private var maxSetValue = 0
+    private var maxRepValue = 5
 
     private val totalStates = 3
     private var rightStateIndex = 0
@@ -61,26 +65,33 @@ class KneeSquat(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
+        Log.d("MaxRepCountIssue", "size::${phases.size}")
         if (phases.size >= 2) {
             upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
             upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            upKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
-            upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-
             downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
             downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+
+            upKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
+            upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
             downKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
             downKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
+
+            maxRepValue = phases[0].assignedInfo[0].repCount
+            maxSetValue = phases[0].assignedInfo[0].setCount
+
+
+            Log.d("MaxRepCountIssue", "rep::${phases[0].assignedInfo[0].repCount}")
         } else {
-            upHipAngleMin = 165f
+            upHipAngleMin = 160f
             upHipAngleMax = 190f
-            upKneeAngleMin = 165f
+            upKneeAngleMin = 160f
             upKneeAngleMax = 190f
 
             downHipAngleMin = 60f
-            downHipAngleMax = 95f
+            downHipAngleMax = 90f
             downKneeAngleMin = 60f
-            downKneeAngleMax = 95f
+            downKneeAngleMax = 90f
         }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
@@ -151,9 +162,9 @@ class KneeSquat(
         wrongUpKneeAngleMin = upKneeAngleMin
         wrongUpKneeAngleMax = upKneeAngleMax
         wrongDownHipAngleMin = downHipAngleMin + 40
-        wrongDownHipAngleMax = downHipAngleMax + 40
+        wrongDownHipAngleMax = downHipAngleMax + 70
         wrongDownKneeAngleMin = downKneeAngleMin + 40
-        wrongDownKneeAngleMax = downKneeAngleMax + 40
+        wrongDownKneeAngleMax = downKneeAngleMax + 70
 
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(

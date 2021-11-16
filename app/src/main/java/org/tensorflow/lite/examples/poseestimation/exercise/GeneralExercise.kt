@@ -9,7 +9,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 class GeneralExercise(
     context: Context,
     exerciseId: Int,
-    active: Boolean
+    active: Boolean = false
 ) : IExercise(
     context = context,
     id = exerciseId,

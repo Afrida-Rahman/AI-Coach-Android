@@ -25,15 +25,13 @@ class SeatedKneeExtension(
 
     private var wrongDownKneeAngleMin = 70f
     private var wrongDownKneeAngleMax = 100f
-    private var wrongUpKneeAngleMin = 130f
-    private var wrongUpKneeAngleMax = 160f
+    private var wrongUpKneeAngleMin = 101f
+    private var wrongUpKneeAngleMax = 159f
 
     private val totalStates = 2
     private var rightStateIndex = 0
 
     private var wrongStateIndex = 0
-    private var wrongFrameCount = 0
-    private val maxWrongCountFrame = 3
 
     override fun exerciseCount(
         person: Person,
@@ -53,7 +51,6 @@ class SeatedKneeExtension(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-        Log.d("hi","phase ::: ${phases.size}")
         if (phases.size >= 2) {
             downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
             downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
@@ -93,15 +90,9 @@ class SeatedKneeExtension(
         } else {
             if (!insideBox) {
                 standInside()
-            } else {
-                if (wrongFrameCount >= maxWrongCountFrame) {
-                    wrongFrameCount++
-                    wrongFrameCount = 0
-                }
             }
         }
     }
-
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
         val hipPoint = Point(
@@ -118,8 +109,8 @@ class SeatedKneeExtension(
         )
         wrongDownKneeAngleMin = downKneeAngleMin
         wrongDownKneeAngleMax = downKneeAngleMax
-        wrongUpKneeAngleMin = upKneeAngleMin - 30
-        wrongUpKneeAngleMax = upKneeAngleMax - 30
+        wrongUpKneeAngleMin = downKneeAngleMax + 1
+        wrongUpKneeAngleMax = upKneeAngleMin - 1
 
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
@@ -128,7 +119,11 @@ class SeatedKneeExtension(
             ),
             floatArrayOf(
                 wrongUpKneeAngleMin,
-                wrongUpKneeAngleMin
+                wrongUpKneeAngleMax
+            ),
+            floatArrayOf(
+                wrongDownKneeAngleMin,
+                wrongDownKneeAngleMax
             )
         )
 
@@ -137,12 +132,10 @@ class SeatedKneeExtension(
         if (kneeAngle > wrongCountStates[wrongStateIndex][0] && kneeAngle < wrongCountStates[wrongStateIndex][1]
             && insideBox
         ) {
-            if (insideBox) {
-                wrongStateIndex += 1
-                if (wrongStateIndex == wrongCountStates.size) {
-                    wrongStateIndex = 0
-                    wrongCount()
-                }
+            wrongStateIndex += 1
+            if (wrongStateIndex == wrongCountStates.size) {
+                wrongStateIndex = 0
+                wrongCount()
             }
         }
     }

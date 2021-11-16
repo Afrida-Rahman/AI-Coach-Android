@@ -8,15 +8,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.ExerciseActivity
+import org.tensorflow.lite.examples.poseestimation.ExerciseGuidelineFragment
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
 
-
 class ExerciseListAdapter(
     private val testId: String,
-    private val exerciseList: List<IExercise>
+    private val exerciseList: List<IExercise>,
+    private val manager: FragmentManager
 ) : RecyclerView.Adapter<ExerciseListAdapter.ExerciseItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseItemViewHolder {
@@ -31,7 +33,6 @@ class ExerciseListAdapter(
         holder.apply {
             exerciseImageView.setImageResource(exercise.imageResourceId)
             exerciseNameView.text = exercise.name
-            exerciseDescription.text = exercise.description
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
                 exerciseContainerView.setOnClickListener {
@@ -39,6 +40,8 @@ class ExerciseListAdapter(
                         putExtra(ExerciseActivity.ExerciseId, exercise.id)
                         putExtra(ExerciseActivity.TestId, testId)
                         putExtra(ExerciseActivity.Name, exercise.name)
+                        putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
+                        putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
                         putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
                     }
                     it.context.startActivity(intent)
@@ -49,6 +52,20 @@ class ExerciseListAdapter(
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
             }
+            guidelineButton.setOnClickListener {
+                manager.beginTransaction().apply {
+                    replace(
+                        R.id.fragment_container,
+                        ExerciseGuidelineFragment(
+                            testId = testId,
+                            position = position,
+                            exerciseList = exerciseList
+                        )
+                    )
+                    commit()
+                }
+            }
+            setRepDisplay.text = setRepDisplay.context.getString(R.string.sets_repetitions_set).format(exercise.maxSetCount, exercise.maxRepCount)
         }
     }
 
@@ -58,7 +75,8 @@ class ExerciseListAdapter(
         val exerciseContainerView: CardView = view.findViewById(R.id.item_exercise_container)
         val exerciseImageView: ImageView = view.findViewById(R.id.item_exercise_image)
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
-        val exerciseDescription: TextView = view.findViewById(R.id.item_exercise_description)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
+        val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
+        val setRepDisplay: TextView = view.findViewById(R.id.set_rep_display)
     }
 }

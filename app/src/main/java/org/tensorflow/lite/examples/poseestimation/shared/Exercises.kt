@@ -13,7 +13,9 @@ object Exercises {
             SeatedKneeExtension(context),
             PelvicBridge(context),
             SitToStand(context),
-            BirdDog(context)
+            IsometricCervicalExtension(context),
+            LateralTrunkStretch(context),
+            AROMStandingTrunkFlexion(context)
         )
     }
 

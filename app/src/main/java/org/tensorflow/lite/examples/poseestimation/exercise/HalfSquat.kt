@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -18,9 +19,9 @@ class HalfSquat(
     id = 495,
     imageResourceId = R.drawable.half_squat
 ) {
-    private var upHipAngleMin = 170f
+    private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f
-    private var upKneeAngleMin = 170f
+    private var upKneeAngleMin = 160f
     private var upKneeAngleMax = 190f
 
     private var downHipAngleMin = 80f
@@ -28,15 +29,17 @@ class HalfSquat(
     private var downKneeAngleMin = 80f
     private var downKneeAngleMax = 120f
 
-    private var wrongUpHipAngleMin = 170f
+    private var wrongUpHipAngleMin = 160f
     private var wrongUpHipAngleMax = 190f
-    private var wrongUpKneeAngleMin = 170f
+    private var wrongUpKneeAngleMin = 160f
     private var wrongUpKneeAngleMax = 190f
 
     private var wrongDownHipAngleMin = 120f
     private var wrongDownHipAngleMax = 160f
     private var wrongDownKneeAngleMin = 120f
     private var wrongDownKneeAngleMax = 160f
+    private var maxSetValue = 0
+    private var maxRepValue = 0
 
     private val totalStates = 3
     private var rightStateIndex = 0
@@ -62,20 +65,24 @@ class HalfSquat(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
+        Log.d("valueCheck", "PhaseVAlue::: ${phases.size}")
         if (phases.size >= 2) {
             upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
             upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            upKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
-            upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-
             downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
             downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+
+            upKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
+            upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
             downKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
             downKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
+
+            maxRepValue = phases[0].assignedInfo[0].repCount
+            maxSetValue = phases[0].assignedInfo[0].setCount
         } else {
-            upHipAngleMin = 170f
+            upHipAngleMin = 160f
             upHipAngleMax = 190f
-            upKneeAngleMin = 170f
+            upKneeAngleMin = 160f
             upKneeAngleMax = 190f
 
             downHipAngleMin = 80f

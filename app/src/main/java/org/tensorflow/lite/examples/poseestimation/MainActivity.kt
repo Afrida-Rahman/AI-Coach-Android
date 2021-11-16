@@ -10,12 +10,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import com.google.gson.Gson
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
-import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseListRequestPayload
-import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseListResponse
+import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
+import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
-import org.tensorflow.lite.examples.poseestimation.domain.model.Exercise
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,8 +25,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var menuToggle: ActionBarDrawerToggle
-    private lateinit var exercises: Exercise
     private var assessmentListFragment: AssessmentListFragment? = null
+
+    private var vaPortalUrl: String = "https://vaapi.injurycloud.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,40 +108,25 @@ class MainActivity : AppCompatActivity() {
     private fun getAssignedExercises(patientId: String, tenant: String) {
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.injurycloud.com")
+            .baseUrl(vaPortalUrl)
             .build()
             .create(IExerciseService::class.java)
-        val requestPayload = ExerciseListRequestPayload(
+        val requestPayload = PatientDataPayload(
             PatientId = patientId,
-            start = 0,
-            pageSize = 500,
             Tenant = tenant
         )
-        val response = service.getExercises(requestPayload)
-        response.enqueue(object : Callback<ExerciseListResponse> {
+        val response = service.getData(requestPayload)
+        response.enqueue(object : Callback<PatientExerciseKeypointResponse> {
             override fun onResponse(
-                call: Call<ExerciseListResponse>,
-                response: Response<ExerciseListResponse>
+                call: Call<PatientExerciseKeypointResponse>,
+                response: Response<PatientExerciseKeypointResponse>
             ) {
                 val responseBody = response.body()
                 if (responseBody != null) {
-                    if (responseBody.Successful) {
-                        val messageString = "{exercises: ${responseBody.Message}}"
-                        val converter = Gson()
-                        exercises = converter.fromJson(
-                            messageString,
-                            Exercise::class.java
-                        )
+                    if (responseBody.Assessments.isNotEmpty()) {
                         binding.progressIndicator.visibility = View.GONE
-                        assessmentListFragment = AssessmentListFragment(exercises.exercises)
-                        if (exercises.exercises.isEmpty()) {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "No test ID found!",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                        changeScreen(assessmentListFragment!!)
+                        assessmentListFragment = AssessmentListFragment(responseBody.Assessments)
+                        assessmentListFragment?.let { changeScreen(it) }
                     } else {
                         Toast.makeText(
                             this@MainActivity,
@@ -150,16 +134,10 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                } else {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Response body is null",
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
             }
 
-            override fun onFailure(call: Call<ExerciseListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
                 Toast.makeText(
                     this@MainActivity,
                     "Failed to get data from API",
