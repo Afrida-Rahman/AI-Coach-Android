@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val loginData = loadLogInData()
+        binding.patientName.text = getString(R.string.hello_patient_name_i_m_emma).format("${loginData.firstName} ${loginData.lastName}")
         getAssignedExercises(loginData.patientId, loginData.tenant)
 
         menuToggle = ActionBarDrawerToggle(

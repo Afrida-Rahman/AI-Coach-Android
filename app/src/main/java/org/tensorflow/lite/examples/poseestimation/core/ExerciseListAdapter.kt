@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -35,7 +36,7 @@ class ExerciseListAdapter(
             exerciseNameView.text = exercise.name
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
-                exerciseContainerView.setOnClickListener {
+                startExerciseButton.setOnClickListener {
                     val intent = Intent(it.context, ExerciseActivity::class.java).apply {
                         putExtra(ExerciseActivity.ExerciseId, exercise.id)
                         putExtra(ExerciseActivity.TestId, testId)
@@ -48,7 +49,7 @@ class ExerciseListAdapter(
                 }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_inactive)
-                exerciseContainerView.setOnClickListener {
+                startExerciseButton.setOnClickListener {
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
             }
@@ -72,7 +73,7 @@ class ExerciseListAdapter(
     override fun getItemCount(): Int = exerciseList.size
 
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val exerciseContainerView: CardView = view.findViewById(R.id.item_exercise_container)
+        val startExerciseButton: Button = view.findViewById(R.id.btn_start_exercise)
         val exerciseImageView: ImageView = view.findViewById(R.id.item_exercise_image)
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)

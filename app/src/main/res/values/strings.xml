@@ -32,7 +32,7 @@
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="i_m_done">I\'m Done</string>
-    <string name="hello_patient_name_i_m_emma">Hi! I\'m EMMA.</string>
+    <string name="hello_patient_name_i_m_emma">Hello %s.\nI\'m EMMA.</string>
     <string name="log_out_button">Log Out button</string>
     <string name="log_out">Log Out</string>
 
@@ -77,4 +77,6 @@
     <string name="guideline_icon">guideline_icon</string>
     <string name="sets_repetitions_set">%d Sets (%d Repetitions/set)</string>
     <string name="back_button">Back button</string>
+    <string name="start_exercise">Start Exercise</string>
+    <string name="hello_i_am_emma">Hello! I am EMMA.</string>
 </resources>
