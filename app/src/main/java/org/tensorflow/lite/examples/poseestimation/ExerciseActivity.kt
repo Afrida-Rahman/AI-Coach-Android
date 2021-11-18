@@ -81,9 +81,6 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var exercise: IExercise
     private var exerciseConstraints: List<Phase> = listOf()
 
-//    private var testId: String = ""
-//    private var exerciseId: Int = 0
-
     private var isFrontCamera = true
     private var url: String = "https://vaapi.injurycloud.com"
 
