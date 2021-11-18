@@ -1,9 +1,10 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
+import java.util.*
 import kotlin.math.acos
 import kotlin.math.sqrt
 
-class Utilities {
+object Utilities {
     fun angle(
         startPoint: Point,
         middlePoint: Point = Point(0f, 0f),
@@ -39,5 +40,13 @@ class Utilities {
             }
             return angleValue.toFloat()
         }
+    }
+
+    fun currentDate(): String {
+        val currentDate = Calendar.getInstance()
+        val day = currentDate.get(Calendar.DATE)
+        val month = currentDate.get(Calendar.MONTH)
+        val year = currentDate.get(Calendar.YEAR)
+        return "$month/$day/$year"
     }
 }
