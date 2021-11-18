@@ -51,6 +51,11 @@ abstract class IExercise(
             8 -> R.raw.eight
             9 -> R.raw.nine
             10 -> R.raw.ten
+            11 -> R.raw.eleven
+            12 -> R.raw.twelve
+            13 -> R.raw.thirteen
+            14 -> R.raw.fourteen
+            15 -> R.raw.fifteen
             else -> R.raw.hello
         }
         audioPlayer.play(resourceId)
