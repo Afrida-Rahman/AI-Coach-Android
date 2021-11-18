@@ -11,16 +11,10 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class ReachArmsOverHead(
-    context: Context,
-    name: String,
-    description: String,
-    protocolId: Int
+    context: Context
 ) : IExercise(
     context = context,
     id = 347,
-    name = name,
-    description = description,
-    protocolId = protocolId,
     imageResourceId = R.drawable.reach_arms_over_head
 ) {
     private var shoulderAngleDownMin = 0f
@@ -43,12 +37,7 @@ class ReachArmsOverHead(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(
-        person: Person,
-        canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
-    ) {
+    override fun exerciseCount(person: Person,canvasHeight: Int,canvasWidth: Int,phases: List<Phase>) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y

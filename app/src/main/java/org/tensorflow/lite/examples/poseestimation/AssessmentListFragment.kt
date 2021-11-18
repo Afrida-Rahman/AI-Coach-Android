@@ -7,15 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
-import org.tensorflow.lite.examples.poseestimation.domain.model.ExerciseItem
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
-import org.tensorflow.lite.examples.poseestimation.exercise.GeneralExercise
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
-import org.tensorflow.lite.examples.poseestimation.exercise.ReachArmsOverHead
+import org.tensorflow.lite.examples.poseestimation.exercise.*
 
 class AssessmentListFragment(
-    private val exerciseList: List<ExerciseItem>
+    private val assessmentList: List<Assessment>
 ) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,70 +27,56 @@ class AssessmentListFragment(
         val view = inflater.inflate(R.layout.fragment_assessment_list, container, false)
         val adapter = view.findViewById<RecyclerView>(R.id.assessment_list_container)
         val testList = mutableListOf<TestId>()
-        val uniqueTestId = mutableListOf<String>()
-        val implementedExercise = listOf<IExercise>(
-            ReachArmsOverHead(view.context, "Arm Raise", "Arm Raise", 0)
+        val implementedExerciseList = listOf(
+            ReachArmsOverHead(view.context),
+            KneeSquat(view.context),
+            HalfSquat(view.context),
+            SeatedKneeExtension(view.context),
+            PelvicBridge(view.context),
+            SitToStand(view.context),
+            IsometricCervicalExtension(view.context),
+            LateralTrunkStretch(view.context),
+            AROMStandingTrunkFlexion(view.context),
+            BirdDog(view.context)
         )
-        exerciseList.forEach {
-            if (it.TestId !in uniqueTestId) {
-                uniqueTestId.add(it.TestId)
-            }
-        }
-        uniqueTestId.forEach { testId ->
+        assessmentList.forEach { assessment ->
             val parsedExercises = mutableListOf<IExercise>()
-            var armRaisedExercise: ExerciseItem? = null
-            exerciseList.filter { it.TestId == testId }.forEach {
-                var isAdded = false
-                for (exercise in implementedExercise) {
-                    if (it.Id == exercise.id && it.TestId == testId) {
-                        // parsedExercises.add(exercise)
-                        armRaisedExercise = it
-                        Log.d("saveExerciseData", "$it")
-                        isAdded = true
-                        break
-                    }
-                }
-                if (!isAdded) {
-                    parsedExercises.add(
-                        GeneralExercise(
-                            context = view.context,
-                            exerciseId = it.Id,
-                            name = it.Exercise,
-                            description = it.Exercise,
-                            protocolId = it.ProtocolId,
-                            active = false
-                        )
+            assessment.Exercises.forEach { exercise ->
+                val implementedExercise =
+                    implementedExerciseList.find { it.id == exercise.ExerciseId }
+                Log.d("ExerciseValueCheck", "${assessment.TestId}: ${exercise.ExerciseName}")
+                if (implementedExercise != null) {
+                    implementedExercise.setExercise(
+                        exerciseName = exercise.ExerciseName,
+                        exerciseDescription = exercise.ExerciseName,
+                        exerciseInstruction = exercise.Instructions,
+                        exerciseImageUrls = exercise.ImageURLs,
+                        repetitionLimit = exercise.RepetitionInCount,
+                        setLimit = exercise.SetInCount,
+                        protoId = exercise.ProtocolId,
                     )
+                    parsedExercises.add(implementedExercise)
+                } else {
+                    val notImplementedExercise = GeneralExercise(
+                        context = view.context,
+                        exerciseId = exercise.ExerciseId,
+                        active = false
+                    )
+                    notImplementedExercise.setExercise(
+                        exerciseName = exercise.ExerciseName,
+                        exerciseDescription = exercise.ExerciseName,
+                        exerciseInstruction = exercise.Instructions,
+                        exerciseImageUrls = exercise.ImageURLs,
+                        repetitionLimit = exercise.RepetitionInCount,
+                        setLimit = exercise.SetInCount,
+                        protoId = exercise.ProtocolId,
+                    )
+                    parsedExercises.add(notImplementedExercise)
                 }
-            }
-            if (armRaisedExercise != null) {
-                val exercise = ReachArmsOverHead(
-                    context = view.context,
-                    name = armRaisedExercise!!.Exercise,
-                    description = armRaisedExercise!!.Exercise,
-                    protocolId = armRaisedExercise!!.ProtocolId
-                )
-                Log.d("saveExerciseData", "${armRaisedExercise!!.ProtocolId}")
-                exercise.setExercise(10, 1, armRaisedExercise!!.ProtocolId)
-                parsedExercises.add(
-                    exercise
-                )
-            } else {
-                val protoId = parsedExercises[0].protocolId
-                val exercise = ReachArmsOverHead(
-                    context = view.context,
-                    name = "Arm Raise",
-                    description = "Arm Raise",
-                    protocolId = protoId
-                )
-                exercise.setExercise(10, 1, protoId)
-                parsedExercises.add(
-                    exercise
-                )
             }
             testList.add(
                 TestId(
-                    id = testId,
+                    id = assessment.TestId,
                     exercises = parsedExercises.sortedBy { it.active }.reversed()
                 )
             )

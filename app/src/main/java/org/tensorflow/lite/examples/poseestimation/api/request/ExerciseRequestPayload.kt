@@ -5,3 +5,6 @@ data class ExerciseRequestPayload(
     val KeyPointsRestrictions: List<ExerciseData>,
     val Tenant : String
 )
+
+
+

@@ -1,5 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.ExerciseListFragment
 import org.tensorflow.lite.examples.poseestimation.R
+import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 
 class AssessmentListAdapter(

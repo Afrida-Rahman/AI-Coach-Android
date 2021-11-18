@@ -9,16 +9,10 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 class GeneralExercise(
     context: Context,
     exerciseId: Int,
-    name: String,
-    description: String,
-    protocolId: Int,
-    active: Boolean
+    active: Boolean = false
 ) : IExercise(
     context = context,
     id = exerciseId,
-    name = name,
-    description = description,
-    protocolId = protocolId,
     imageResourceId = R.drawable.exercise,
     active = active
 ) {

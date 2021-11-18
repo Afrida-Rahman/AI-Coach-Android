@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -10,18 +11,20 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 abstract class IExercise(
     context: Context,
     val id: Int,
-    val name: String,
-    val description: String,
-    var protocolId: Int,
     val imageResourceId: Int,
-    var maxRepCount: Int = 10,
-    var maxSetCount: Int = 1,
-    val active: Boolean = true
+    val active: Boolean = true,
+    var name: String = "",
+    var protocolId: Int = 0,
+    var description: String = "",
+    var instruction: String? = "",
+    var imageUrls: List<String> = listOf(),
+    var maxRepCount: Int = 0,
+    var maxSetCount: Int = 0
 ) {
     private val audioPlayer = AudioPlayer(context)
-    private var repetitionCounter = 0
     private var setCounter = 0
     private var wrongCounter = 0
+    private var repetitionCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
     abstract fun exerciseCount(
@@ -48,9 +51,20 @@ abstract class IExercise(
             8 -> R.raw.eight
             9 -> R.raw.nine
             10 -> R.raw.ten
+            11 -> R.raw.eleven
+            12 -> R.raw.twelve
+            13 -> R.raw.thirteen
+            14 -> R.raw.fourteen
+            15 -> R.raw.fifteen
+            16 -> R.raw.sixteen
+            17 -> R.raw.seventeen
+            18 -> R.raw.eightteen
+            19 -> R.raw.nineteen
+            20 -> R.raw.twenty
             else -> R.raw.hello
         }
         audioPlayer.play(resourceId)
+        Log.d("MaxCount", "Set count: ${this.maxSetCount} - Rep Count: ${this.maxRepCount}")
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
@@ -93,10 +107,22 @@ abstract class IExercise(
         }
     }
 
-    fun setExercise(repetitionLimit: Int, setLimit: Int, protoId: Int) {
+    fun setExercise(
+        exerciseName: String,
+        exerciseDescription: String,
+        exerciseInstruction: String?,
+        exerciseImageUrls: List<String>,
+        repetitionLimit: Int,
+        setLimit: Int,
+        protoId: Int
+    ) {
+        name = exerciseName
+        description = exerciseDescription
         maxRepCount = repetitionLimit
         maxSetCount = setLimit
         protocolId = protoId
+        instruction = exerciseInstruction
+        imageUrls = exerciseImageUrls
     }
 
     fun getRepetitionCount() = repetitionCounter
