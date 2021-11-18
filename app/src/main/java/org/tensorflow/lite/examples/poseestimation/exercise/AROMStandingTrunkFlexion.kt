@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -31,8 +30,6 @@ class AROMStandingTrunkFlexion(
 
     private val straightHandAngleMin = 150f
     private val straightHandAngleMax = 225f
-    private var maxSetValue = 0
-    private var maxRepValue = 0
 
     private val totalStates = 3
 
@@ -41,7 +38,12 @@ class AROMStandingTrunkFlexion(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             person.keyPoints[5].coordinate.y
@@ -68,9 +70,6 @@ class AROMStandingTrunkFlexion(
             hipAngleUpMax = phases[0].constraints[0].maxValue.toFloat()
             hipAngleDownMin = phases[1].constraints[0].minValue.toFloat()
             hipAngleDownMax = phases[1].constraints[0].maxValue.toFloat()
-
-            maxRepValue = phases[0].assignedInfo[0].repCount
-            maxSetValue = phases[0].assignedInfo[0].setCount
         } else {
             hipAngleUpMin = 160f
             hipAngleUpMax = 190f
@@ -79,7 +78,8 @@ class AROMStandingTrunkFlexion(
         }
 
         val leftHipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint)
-        val leftStraightHandAngle = Utilities.angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
+        val leftStraightHandAngle =
+            Utilities.angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val rightCountStates: Array<FloatArray> = arrayOf(
@@ -97,12 +97,13 @@ class AROMStandingTrunkFlexion(
             )
         )
 
-        val leftHandStraight = leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
+        val leftHandStraight =
+            leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
 
         if (leftHipAngle > rightCountStates[rightStateIndex][0]
             && leftHipAngle < rightCountStates[rightStateIndex][1]
             && insideBox
-        ){
+        ) {
             rightStateIndex += 1
             if (rightStateIndex == rightCountStates.size - 1) {
                 wrongStateIndex = 0
@@ -111,7 +112,7 @@ class AROMStandingTrunkFlexion(
                 rightStateIndex = 0
                 repetitionCount()
             }
-        }else{
+        } else {
             if (!leftHandStraight) {
                 wrongFrameCount++
                 if (wrongFrameCount >= maxWrongCountFrame) {
@@ -162,7 +163,8 @@ class AROMStandingTrunkFlexion(
 
         if (leftHipAngle > wrongCountStates[wrongStateIndex][0]
             && leftHipAngle < wrongCountStates[wrongStateIndex][1]
-            && insideBox){
+            && insideBox
+        ) {
             wrongStateIndex += 1
             if (wrongStateIndex == wrongCountStates.size) {
                 wrongStateIndex = 0
@@ -220,8 +222,10 @@ class AROMStandingTrunkFlexion(
             )
         )
 
-        val isLeftHandStraight = leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
-        val isRightHandStraight = rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
+        val isLeftHandStraight =
+            leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
+        val isRightHandStraight =
+            rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
 
         if (!isLeftHandStraight) {
             rules.add(
