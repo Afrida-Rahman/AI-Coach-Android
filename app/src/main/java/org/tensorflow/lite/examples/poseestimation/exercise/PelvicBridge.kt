@@ -27,14 +27,17 @@ class PelvicBridge(
     private var wrongHipAngleDownMax = 135f
     private var wrongHipAngleUpMin = 140f
     private var wrongHipAngleUpMax = 160f
-    private var maxSetValue = 0
-    private var maxRepValue = 0
 
     private val totalStates = 3
     private var rightStateIndex = 0
     private var wrongStateIndex = 0
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val rightShoulderPoint = Point(
             person.keyPoints[6].coordinate.x,
             -person.keyPoints[6].coordinate.y
@@ -47,16 +50,12 @@ class PelvicBridge(
             person.keyPoints[14].coordinate.x,
             -person.keyPoints[14].coordinate.y
         )
-        Log.d("angleIssue","phaseIssue: ${phases.size}")
+        Log.d("angleIssue", "phaseIssue: ${phases.size}")
         if (phases.size >= 2) {
             hipAngleDownMin = phases[0].constraints[0].minValue.toFloat()
             hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
             hipAngleUpMin = phases[1].constraints[0].minValue.toFloat()
             hipAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
-
-            maxRepValue = phases[0].assignedInfo[0].repCount
-            maxSetValue = phases[0].assignedInfo[0].setCount
-            Log.d("angleIssue","phaseIssue: ($hipAngleDownMin,$hipAngleDownMax), ($hipAngleUpMin,$hipAngleUpMax)")
         } else {
             hipAngleDownMin = 115f
             hipAngleDownMax = 135f
