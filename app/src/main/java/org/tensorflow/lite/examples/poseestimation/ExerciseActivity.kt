@@ -78,11 +78,13 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var spnDevice: Spinner
     private lateinit var spnModel: Spinner
 
+    private lateinit var getPatientExerciseURL: String
+    private lateinit var saveExerciseTrackingURL: String
+
     private lateinit var exercise: IExercise
     private var exerciseConstraints: List<Phase> = listOf()
 
     private var isFrontCamera = true
-    private var url: String = "https://vaapi.injurycloud.com"
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -186,11 +188,13 @@ class ExerciseActivity : AppCompatActivity() {
         val setLimit = intent.getIntExtra(SetLimit, 1)
         val logInData = loadLogInData()
 
+        getPatientExerciseURL = Utilities.getUrl(logInData.tenant).getPatientExerciseURL
+
         getExerciseConstraints(logInData.tenant, logInData.patientId)
 
         exercise = Exercises.get(this, exerciseId)
         exercise.setExercise(
-            exerciseName=exerciseName ?: "",
+            exerciseName = exerciseName ?: "",
             exerciseDescription = exerciseName ?: "",
             exerciseInstruction = "",
             exerciseImageUrls = listOf(),
@@ -563,11 +567,15 @@ class ExerciseActivity : AppCompatActivity() {
         NoOfWrongCount: Int,
         Tenant: String
     ) {
+        val logInData = loadLogInData()
+        saveExerciseTrackingURL = Utilities.getUrl(logInData.tenant).saveExerciseTrackingURL
+
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.injurycloud.com")
+            .baseUrl(saveExerciseTrackingURL)
             .build()
             .create(IExerciseService::class.java)
+
         val requestPayload = ExerciseTrackingPayload(
             ExerciseId = ExerciseId,
             TestId = TestId,
@@ -626,14 +634,14 @@ class ExerciseActivity : AppCompatActivity() {
 
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(url)
+            .baseUrl(getPatientExerciseURL)
             .build()
             .create(IExerciseService::class.java)
         val requestPayload = PatientDataPayload(
             Tenant = tenant,
             PatientId = patientId
         )
-        val response = service.getData(requestPayload)
+        val response = service.getPatientExercise(requestPayload)
         response.enqueue(object : Callback<PatientExerciseKeypointResponse> {
             override fun onResponse(
                 call: Call<PatientExerciseKeypointResponse>,

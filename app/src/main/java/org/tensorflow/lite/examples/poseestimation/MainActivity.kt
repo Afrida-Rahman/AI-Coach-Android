@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
 import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
+import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import retrofit2.Call
@@ -25,9 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var menuToggle: ActionBarDrawerToggle
+    private lateinit var getPatientExerciseUrl: String
     private var assessmentListFragment: AssessmentListFragment? = null
-
-    private var vaPortalUrl: String = "https://vaapi.injurycloud.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val loginData = loadLogInData()
-        binding.patientName.text = getString(R.string.hello_patient_name_i_m_emma).format("${loginData.firstName} ${loginData.lastName}")
+        binding.patientName.text =
+            getString(R.string.hello_patient_name_i_m_emma).format("${loginData.firstName} ${loginData.lastName}")
         getAssignedExercises(loginData.patientId, loginData.tenant)
 
         menuToggle = ActionBarDrawerToggle(
@@ -107,16 +108,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAssignedExercises(patientId: String, tenant: String) {
+        getPatientExerciseUrl = Utilities.getUrl(loadLogInData().tenant).getPatientExerciseURL
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(vaPortalUrl)
+            .baseUrl(getPatientExerciseUrl)
             .build()
             .create(IExerciseService::class.java)
         val requestPayload = PatientDataPayload(
             PatientId = patientId,
             Tenant = tenant
         )
-        val response = service.getData(requestPayload)
+        val response = service.getPatientExercise(requestPayload)
         response.enqueue(object : Callback<PatientExerciseKeypointResponse> {
             override fun onResponse(
                 call: Call<PatientExerciseKeypointResponse>,
@@ -134,6 +136,7 @@ class MainActivity : AppCompatActivity() {
                             "Failed to get assigned exercise information",
                             Toast.LENGTH_LONG
                         ).show()
+                        binding.progressIndicator.visibility = View.GONE
                     }
                 }
             }

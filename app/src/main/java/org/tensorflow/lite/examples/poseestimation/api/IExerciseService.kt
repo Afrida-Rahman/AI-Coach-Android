@@ -11,7 +11,7 @@ import retrofit2.http.POST
 interface IExerciseService {
 
     @POST("/api/exercisekeypoint/GetPatientExercise")
-    fun getData(@Body requestPayload: PatientDataPayload): Call<PatientExerciseKeypointResponse>
+    fun getPatientExercise(@Body requestPayload: PatientDataPayload): Call<PatientExerciseKeypointResponse>
 
     @Headers("Authorization: Bearer YXBpdXNlcjpZV2xoYVlUUmNHbDFjMlZ5T2lRa1RVWVRFUk1ESXc=")
     @POST("/api/exercise/SaveExerciseTracking")
