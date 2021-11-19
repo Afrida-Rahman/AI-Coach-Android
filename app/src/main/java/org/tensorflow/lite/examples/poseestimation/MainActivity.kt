@@ -84,14 +84,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        assessmentListFragment?.let {
-            Log.d("FragmentVisibility", it.isVisible.toString())
-            if (it.isVisible) {
+        if (assessmentListFragment != null) {
+            Log.d("FragmentVisibility", assessmentListFragment!!.isVisible.toString())
+            if (assessmentListFragment!!.isVisible) {
                 super.onBackPressed()
                 finish()
             } else {
-                changeScreen(it)
+                changeScreen(assessmentListFragment!!)
             }
+        } else {
+            finish()
         }
     }
 
@@ -133,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             this@MainActivity,
-                            "Failed to get assigned exercise information",
+                            "You have not performed any assessment yet. Please perform an assessment first.",
                             Toast.LENGTH_LONG
                         ).show()
                         binding.progressIndicator.visibility = View.GONE

@@ -38,9 +38,6 @@ class KneeSquat(
     private var wrongDownKneeAngleMin = 100f
     private var wrongDownKneeAngleMax = 160f
 
-    private var maxSetValue = 0
-    private var maxRepValue = 5
-
     private val totalStates = 3
     private var rightStateIndex = 0
 
@@ -48,7 +45,12 @@ class KneeSquat(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -76,12 +78,6 @@ class KneeSquat(
             upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
             downKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
             downKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
-
-            maxRepValue = phases[0].assignedInfo[0].repCount
-            maxSetValue = phases[0].assignedInfo[0].setCount
-
-
-            Log.d("MaxRepCountIssue", "rep::${phases[0].assignedInfo[0].repCount}")
         } else {
             upHipAngleMin = 160f
             upHipAngleMax = 190f

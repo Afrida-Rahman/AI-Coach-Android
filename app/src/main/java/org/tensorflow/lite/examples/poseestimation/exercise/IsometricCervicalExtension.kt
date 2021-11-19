@@ -26,14 +26,17 @@ class IsometricCervicalExtension(
     private var wrongShoulderAngleDownMax = 30f
     private var wrongShoulderAngleUpMin = 150f
     private var wrongShoulderAngleUpMax = 190f
-    private var maxSetValue = 0
-    private var maxRepValue = 0
 
     private val totalStates = 3
     private var rightStateIndex = 0
     private var wrongStateIndex = 0
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -63,9 +66,6 @@ class IsometricCervicalExtension(
             shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
             shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
             shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
-
-            maxRepValue = phases[0].assignedInfo[0].repCount
-            maxSetValue = phases[0].assignedInfo[0].setCount
         } else {
             shoulderAngleDownMin = 0f
             shoulderAngleDownMax = 30f
@@ -94,8 +94,10 @@ class IsometricCervicalExtension(
             )
         )
 
-        val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
-        val rightShoulderAngle = Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
+        val leftShoulderAngle =
+            Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
+        val rightShoulderAngle =
+            Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
 
         if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
