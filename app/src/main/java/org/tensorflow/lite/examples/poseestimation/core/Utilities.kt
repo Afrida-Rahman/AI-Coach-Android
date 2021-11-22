@@ -1,5 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
+import org.tensorflow.lite.examples.poseestimation.domain.model.APiUrl
 import java.util.*
 import kotlin.math.acos
 import kotlin.math.sqrt
@@ -48,5 +49,30 @@ object Utilities {
         val month = currentDate.get(Calendar.MONTH)
         val year = currentDate.get(Calendar.YEAR)
         return "$month/$day/$year"
+    }
+
+    fun getUrl(tenant: String): APiUrl {
+        val tenantName = tenant.lowercase()
+        val getPatientExerciseURL: String
+        val saveExerciseTrackingURL: String
+        val getExerciseKeyPointURL: String
+
+        if (tenantName == "stg") {
+            getPatientExerciseURL = "https://stgvaapi.injurycloud.com"
+            getExerciseKeyPointURL = "https://stgvaapi.injurycloud.com"
+            saveExerciseTrackingURL = "https://stgapi.injurycloud.com"
+        } else {
+            if (tenantName == "dev") {
+                getPatientExerciseURL = "https://devvaapi.injurycloud.com"
+                getExerciseKeyPointURL = "https://devvaapi.injurycloud.com"
+                saveExerciseTrackingURL = "https://devapi.injurycloud.com"
+            } else {
+                getPatientExerciseURL = "https://vaapi.injurycloud.com"
+                getExerciseKeyPointURL = "https://vaapi.injurycloud.com"
+                saveExerciseTrackingURL = "https://api.injurycloud.com"
+            }
+        }
+
+        return APiUrl(getPatientExerciseURL, getExerciseKeyPointURL, saveExerciseTrackingURL)
     }
 }

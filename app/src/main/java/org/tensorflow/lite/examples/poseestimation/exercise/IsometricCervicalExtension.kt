@@ -31,7 +31,12 @@ class IsometricCervicalExtension(
     private var rightStateIndex = 0
     private var wrongStateIndex = 0
 
-    override fun exerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int, phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -89,8 +94,10 @@ class IsometricCervicalExtension(
             )
         )
 
-        val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
-        val rightShoulderAngle = Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
+        val leftShoulderAngle =
+            Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
+        val rightShoulderAngle =
+            Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
 
         if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
