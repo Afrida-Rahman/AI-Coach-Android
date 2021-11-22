@@ -33,7 +33,6 @@ class LateralTrunkStretch(
     private val wrongDeviationAngleDownMin = 0f
     private val wrongDeviationAngleUpMin = 25f
 
-
     private val straightHandAngleMin = 150f
     private val straightHandAngleMax = 225f
 

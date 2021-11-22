@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import org.tensorflow.lite.examples.poseestimation.api.ILogInService
 import org.tensorflow.lite.examples.poseestimation.api.request.LogInRequest
 import org.tensorflow.lite.examples.poseestimation.api.response.LogInResponse
+import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivitySignInBinding
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import retrofit2.Call
@@ -44,19 +45,28 @@ class SignInActivity : AppCompatActivity() {
             it.isClickable = false
             val email = binding.emailAddressField.text.toString()
             val password = binding.passwordField.text.toString()
-            if (email.isNotEmpty() && password.isNotEmpty()) userLogin(email, password)
+            val tenant = binding.tenantField.text.toString().toLowerCase()
+
+            if (email.isNotEmpty() && password.isNotEmpty() && tenant.isNotEmpty()) userLogin(
+                email,
+                password,
+                tenant
+            )
             else {
                 Toast.makeText(this, "Email or password cannot be empty", Toast.LENGTH_LONG).show()
                 binding.progressBar.visibility = View.GONE
                 it.isClickable = true
             }
         }
+
+
     }
 
-    private fun userLogin(email: String, password: String, tenant: String = "emma") {
+    private fun userLogin(email: String, password: String, tenant: String) {
+        val url = Utilities.getUrl(tenant)
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://vaapi.injurycloud.com")
+            .baseUrl(url.getPatientExerciseURL)
             .build()
             .create(ILogInService::class.java)
         val requestPayload = LogInRequest(
