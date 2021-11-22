@@ -56,6 +56,11 @@ class PelvicBridge(
             hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
             hipAngleUpMin = phases[1].constraints[0].minValue.toFloat()
             hipAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+
+            Log.d(
+                "angleIssue",
+                "phaseIssue: ($hipAngleDownMin,$hipAngleDownMax), ($hipAngleUpMin,$hipAngleUpMax)"
+            )
         } else {
             hipAngleDownMin = 115f
             hipAngleDownMax = 135f

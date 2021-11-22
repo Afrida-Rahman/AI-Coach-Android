@@ -37,7 +37,12 @@ class ReachArmsOverHead(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(person: Person,canvasHeight: Int,canvasWidth: Int,phases: List<Phase>) {
+    override fun exerciseCount(
+        person: Person,
+        canvasHeight: Int,
+        canvasWidth: Int,
+        phases: List<Phase>
+    ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y

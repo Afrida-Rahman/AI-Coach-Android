@@ -27,7 +27,6 @@ class AROMStandingTrunkFlexion(
     private var wrongHipAngleDownMin = 70f
     private var wrongHipAngleDownMax = 150f
 
-
     private val straightHandAngleMin = 150f
     private val straightHandAngleMax = 225f
 
