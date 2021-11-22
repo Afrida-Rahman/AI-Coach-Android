@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -67,7 +66,6 @@ class HalfSquat(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
-        Log.d("valueCheck", "PhaseVAlue::: ${phases.size}")
         if (phases.size >= 2) {
             upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
             upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
