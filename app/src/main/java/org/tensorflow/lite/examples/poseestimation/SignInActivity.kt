@@ -111,7 +111,7 @@ class SignInActivity : AppCompatActivity() {
                 binding.signInButton.isClickable = true
                 Toast.makeText(
                     this@SignInActivity,
-                    "Failed to get data from API",
+                    "Failed to get login data from API !!!",
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -135,18 +135,24 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             this@MainActivity,
-                            "You have not performed any assessment yet. Please perform an assessment first.",
+                            "You have not performed any assessment yet. Please perform an assessment first!",
                             Toast.LENGTH_LONG
                         ).show()
                         binding.progressIndicator.visibility = View.GONE
                     }
+                } else {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Failed to get assessment list from API and got empty response!",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
                 Toast.makeText(
                     this@MainActivity,
-                    "Failed to get data from API",
+                    "Failed to get assessment list from API !!!",
                     Toast.LENGTH_LONG
                 ).show()
             }
