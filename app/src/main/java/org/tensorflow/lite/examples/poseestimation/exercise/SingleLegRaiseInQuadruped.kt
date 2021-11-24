@@ -8,6 +8,7 @@ import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
+import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class SingleLegRaiseInQuadruped(
     context: Context
@@ -16,12 +17,14 @@ class SingleLegRaiseInQuadruped(
     id = 502,
     imageResourceId = R.drawable.exercise
 ) {
-    private var hipAngleMin = 70f
-    private var hipAngleMax = 100f
-
+    private var upHipAngleMin = 160f
+    private var upHipAngleMax = 190f
     private var upKneeAngleMin = 160f
     private var upKneeAngleMax = 190f
-    private var downKneeAngleMin = 70f
+
+    private var downHipAngleMin = 60f
+    private var downHipAngleMax = 120f
+    private var downKneeAngleMin = 60f
     private var downKneeAngleMax = 100f
 
     private var wrongUpKneeAngleMin = 0f
@@ -53,43 +56,33 @@ class SingleLegRaiseInQuadruped(
             person.keyPoints[13].coordinate.x,
             -person.keyPoints[13].coordinate.y
         )
-        val rightKneePoint = Point(
-            person.keyPoints[14].coordinate.x,
-            -person.keyPoints[14].coordinate.y
-        )
         val leftAnklePoint = Point(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
-        if (phases.size >= 2){
-            downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
-            downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-
-            upKneeAngleMin = phases[0].constraints[1].minValue.toFloat()
-            upKneeAngleMax = phases[0].constraints[1].maxValue.toFloat()
-        }else{
-            downKneeAngleMin = 80f
-            downKneeAngleMax = 120f
-
-            upKneeAngleMin = 160f
-            upKneeAngleMax = 190f
-
-        }
+//        if (phases.size >= 2) {
+//            downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
+//            downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
+//
+//            upKneeAngleMin = phases[0].constraints[1].minValue.toFloat()
+//            upKneeAngleMax = phases[0].constraints[1].maxValue.toFloat()
+//        } else {
+//            downKneeAngleMin = 80f
+//            downKneeAngleMax = 120f
+//
+//            upKneeAngleMin = 160f
+//            upKneeAngleMax = 190f
+//
+//        }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, true)
-        val kneeAngle = Utilities.angle(leftHipPoint, leftKneePoint, leftAnklePoint)
+        val kneeAngle = Utilities.angle(leftHipPoint, leftKneePoint, leftAnklePoint, false)
 
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
-                hipAngleMin,
-                hipAngleMax,
-                upKneeAngleMin,
-                upKneeAngleMax
-            ),
-            floatArrayOf(
-                hipAngleMin,
-                hipAngleMax,
+                downHipAngleMin,
+                downHipAngleMax,
                 downKneeAngleMin,
                 downKneeAngleMax
             ),
@@ -98,9 +91,34 @@ class SingleLegRaiseInQuadruped(
                 upHipAngleMax,
                 upKneeAngleMin,
                 upKneeAngleMax
+            ),
+            floatArrayOf(
+                downHipAngleMin,
+                downHipAngleMax,
+                downKneeAngleMin,
+                downKneeAngleMax
             )
         )
 
+        if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1]
+            && kneeAngle > rightCountStates[rightStateIndex][2] && kneeAngle < rightCountStates[rightStateIndex][3]
+            && insideBox
+        ) {
+            rightStateIndex += 1
+            if (rightStateIndex == rightCountStates.size - 1) {
+                wrongStateIndex = 0
+            }
+            if (rightStateIndex == totalStates) {
+                rightStateIndex = 0
+                repetitionCount()
+            }
+        } else {
+            if (!insideBox) {
+                standInside()
+            } else if (wrongFrameCount >= maxWrongCountFrame) {
+                wrongFrameCount = 0
+            }
+        }
     }
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
@@ -108,6 +126,38 @@ class SingleLegRaiseInQuadruped(
     }
 
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
+        val leftShoulderPoint = Point(
+            person.keyPoints[5].coordinate.x,
+            person.keyPoints[5].coordinate.y
+        )
+        val leftHipPoint = Point(
+            person.keyPoints[11].coordinate.x,
+            person.keyPoints[11].coordinate.y
+        )
+        val leftKneePoint = Point(
+            person.keyPoints[13].coordinate.x,
+            person.keyPoints[13].coordinate.y
+        )
+        val leftAnklePoint = Point(
+            person.keyPoints[15].coordinate.x,
+            person.keyPoints[15].coordinate.y
+        )
+        return mutableListOf(
+            Rule(
+                type = RuleType.ANGLE,
+                startPoint = leftShoulderPoint,
+                middlePoint = leftHipPoint,
+                endPoint = leftKneePoint,
+                clockWise = true
+            ),
+            Rule(
+                type = RuleType.ANGLE,
+                startPoint = leftHipPoint,
+                middlePoint = leftKneePoint,
+                endPoint = leftAnklePoint,
+                clockWise = false
+            )
+        )
     }
 
     override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {

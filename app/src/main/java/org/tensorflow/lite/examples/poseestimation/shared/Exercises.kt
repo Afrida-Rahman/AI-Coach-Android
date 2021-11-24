@@ -16,7 +16,8 @@ object Exercises {
             IsometricCervicalExtension(context),
             LateralTrunkStretch(context),
             AROMStandingTrunkFlexion(context),
-            BirdDog(context)
+            BirdDog(context),
+            SingleLegRaiseInQuadruped(context)
         )
     }
 
