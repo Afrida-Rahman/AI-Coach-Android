@@ -17,15 +17,15 @@ class LumberFlexionSitting(
     id = 341,
     imageResourceId = R.drawable.lumber_flexion_setting
 ) {
-    private var sittingHipAngleMin = 80f
-    private var sittingHipAngleMax = 100f
-    private var sittingShoulderAngleMin = 170f
+    private var sittingHipAngleMin = 200f
+    private var sittingHipAngleMax = 250f
+    private var sittingShoulderAngleMin = 120f
     private var sittingShoulderAngleMax = 190f
 
-    private var downHipAngleMin = 110f
-    private var downHipAngleMax = 130f
-    private var downShoulderAngleMin = 170f
-    private var downShoulderAngleMax = 190f
+    private var downHipAngleMin = 260f
+    private var downHipAngleMax = 320f
+    private var downShoulderAngleMin = 80f
+    private var downShoulderAngleMax = 140f
 
     private var wrongUpHipAngleMin = 160f
     private var wrongUpHipAngleMax = 190f
@@ -80,7 +80,7 @@ class LumberFlexionSitting(
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, false)
-        val shoulderAngle = Utilities.angle(leftHipPoint, leftKneePoint, leftElbowPoint)
+        val shoulderAngle = Utilities.angle(leftHipPoint, leftShoulderPoint, leftElbowPoint, false)
 
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
