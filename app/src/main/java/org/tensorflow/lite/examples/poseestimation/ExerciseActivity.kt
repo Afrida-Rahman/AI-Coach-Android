@@ -607,14 +607,14 @@ class ExerciseActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             this@ExerciseActivity,
-                            "Could not save exercise data",
+                            "Could not save exercise data!",
                             Toast.LENGTH_LONG
                         ).show()
                     }
                 } else {
                     Toast.makeText(
                         this@ExerciseActivity,
-                        "Failed to save! Got empty response",
+                        "Failed to save and got empty response! ",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -623,7 +623,7 @@ class ExerciseActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ExerciseTrackingResponse>, t: Throwable) {
                 Toast.makeText(
                     this@ExerciseActivity,
-                    "Failed to save exercise data!",
+                    "Failed to save exercise data !!!",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -650,42 +650,51 @@ class ExerciseActivity : AppCompatActivity() {
                 call: Call<KeyPointRestrictions>,
                 response: Response<KeyPointRestrictions>
             ) {
-                val responseBody = response.body()!!
+                val responseBody = response.body()
                 Log.d("dataForExercise", "data ::::  $responseBody")
-                if (responseBody[0].KeyPointsRestrictionGroup.isNotEmpty()) {
-                    responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
-                        val constraints = mutableListOf<Constraint>()
-                        group.KeyPointsRestriction.sortedByDescending { it.Id }
-                            .forEach { restriction ->
-                                constraints.add(
-                                    Constraint(
-                                        minValue = restriction.MinValidationValue,
-                                        maxValue = restriction.MaxValidationValue,
-                                        type = if (restriction.Scale == "degree") {
-                                            ConstraintType.ANGLE
-                                        } else {
-                                            ConstraintType.LINE
-                                        },
-                                        startPointIndex = getIndex(restriction.StartKeyPosition),
-                                        middlePointIndex = getIndex(restriction.MiddleKeyPosition),
-                                        endPointIndex = getIndex(restriction.EndKeyPosition),
-                                        clockWise = restriction.AngleArea == "inner"
-                                    )
-                                )
-                            }
-                        phases.add(
-                            Phase(
-                                phase = group.Phase,
-                                constraints = constraints
-                            )
-                        )
-                    }
-                } else {
+                if (responseBody == null) {
                     Toast.makeText(
                         this@ExerciseActivity,
-                        "Don't have enough data to perform this exercise!",
+                        "Failed to get necessary constraints for this exercise and got empty response. So, this exercise can't be performed now!",
                         Toast.LENGTH_LONG
                     ).show()
+                    finish()
+                } else {
+                    if (responseBody[0].KeyPointsRestrictionGroup.isNotEmpty()) {
+                        responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
+                            val constraints = mutableListOf<Constraint>()
+                            group.KeyPointsRestriction.sortedByDescending { it.Id }
+                                .forEach { restriction ->
+                                    constraints.add(
+                                        Constraint(
+                                            minValue = restriction.MinValidationValue,
+                                            maxValue = restriction.MaxValidationValue,
+                                            type = if (restriction.Scale == "degree") {
+                                                ConstraintType.ANGLE
+                                            } else {
+                                                ConstraintType.LINE
+                                            },
+                                            startPointIndex = getIndex(restriction.StartKeyPosition),
+                                            middlePointIndex = getIndex(restriction.MiddleKeyPosition),
+                                            endPointIndex = getIndex(restriction.EndKeyPosition),
+                                            clockWise = restriction.AngleArea == "inner"
+                                        )
+                                    )
+                                }
+                            phases.add(
+                                Phase(
+                                    phase = group.Phase,
+                                    constraints = constraints
+                                )
+                            )
+                        }
+                    } else {
+                        Toast.makeText(
+                            this@ExerciseActivity,
+                            "Don't have enough data to perform this exercise. Please provide details of this exercise using EMMA LPT app!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
                 exerciseConstraints = phases.sortedBy { it.phase }
                 Log.d("Constraint", "$exerciseConstraints")
@@ -693,6 +702,11 @@ class ExerciseActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
                 Log.d("retrofit", "on failure ::: " + t.message)
+                Toast.makeText(
+                    this@ExerciseActivity,
+                    "Failed to get exercise response from API !!!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         })
     }
