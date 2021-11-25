@@ -18,7 +18,8 @@ object Exercises {
             AROMStandingTrunkFlexion(context),
             BirdDog(context),
             LumberFlexionSitting(context),
-            SingleLegRaiseInQuadruped(context)
+            SingleLegRaiseInQuadruped(context),
+            SingleLegRaiseInProne(context)
         )
     }
 
