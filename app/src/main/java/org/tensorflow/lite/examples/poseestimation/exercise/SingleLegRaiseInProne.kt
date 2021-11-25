@@ -15,7 +15,7 @@ class SingleLegRaiseInProne(
 ) : IExercise(
     context = context,
     id = 499,
-    imageResourceId = R.drawable.single_leg_raise_in_quadruped
+    imageResourceId = R.drawable.single_leg_raise_in_prone
 ) {
     private var downHipAngleMin = 175f
     private var downHipAngleMax = 310f
