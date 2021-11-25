@@ -19,7 +19,7 @@ object Exercises {
             BirdDog(context),
             LumberFlexionSitting(context),
             SingleLegRaiseInQuadruped(context),
-            SingleLegRaiseInProne(context)
+            ProneOnElbows(context)
         )
     }
 
