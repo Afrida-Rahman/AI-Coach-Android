@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -19,10 +20,10 @@ class SingleLegRaiseInQuadruped(
 ) {
     private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f
-    private var upKneeAngleMin = 160f
+    private var upKneeAngleMin = 140f
     private var upKneeAngleMax = 190f
 
-    private var downHipAngleMin = 60f
+    private var downHipAngleMin = 70f
     private var downHipAngleMax = 120f
     private var downKneeAngleMin = 60f
     private var downKneeAngleMax = 100f
@@ -60,20 +61,28 @@ class SingleLegRaiseInQuadruped(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
-//        if (phases.size >= 2) {
-//            downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
-//            downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-//
-//            upKneeAngleMin = phases[0].constraints[1].minValue.toFloat()
-//            upKneeAngleMax = phases[0].constraints[1].maxValue.toFloat()
-//        } else {
-//            downKneeAngleMin = 80f
-//            downKneeAngleMax = 120f
-//
-//            upKneeAngleMin = 160f
-//            upKneeAngleMax = 190f
-//
-//        }
+        if (phases.size >= 2) {
+            downHipAngleMin = phases[0].constraints[0].minValue.toFloat()
+            downHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
+            downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
+            downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
+
+            upHipAngleMin = phases[1].constraints[0].minValue.toFloat()
+            upHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+            upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
+            upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
+        } else {
+            downHipAngleMin = 70f
+            downHipAngleMax = 120f
+            downKneeAngleMin = 60f
+            downKneeAngleMax = 100f
+
+            upHipAngleMin = 160f
+            upHipAngleMax = 190f
+            upKneeAngleMin = 140f
+            upKneeAngleMax = 190f
+
+        }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, true)
@@ -91,15 +100,8 @@ class SingleLegRaiseInQuadruped(
                 upHipAngleMax,
                 upKneeAngleMin,
                 upKneeAngleMax
-            ),
-            floatArrayOf(
-                downHipAngleMin,
-                downHipAngleMax,
-                downKneeAngleMin,
-                downKneeAngleMax
             )
         )
-
         if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1]
             && kneeAngle > rightCountStates[rightStateIndex][2] && kneeAngle < rightCountStates[rightStateIndex][3]
             && insideBox
