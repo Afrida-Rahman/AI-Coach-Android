@@ -17,7 +17,8 @@ object Exercises {
             LateralTrunkStretch(context),
             AROMStandingTrunkFlexion(context),
             BirdDog(context),
-            LumberFlexionSitting(context)
+            LumberFlexionSitting(context),
+            SingleLegRaiseInQuadruped(context)
         )
     }
 

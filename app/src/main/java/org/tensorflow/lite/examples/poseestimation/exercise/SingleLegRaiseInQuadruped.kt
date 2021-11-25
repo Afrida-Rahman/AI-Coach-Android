@@ -16,7 +16,7 @@ class SingleLegRaiseInQuadruped(
 ) : IExercise(
     context = context,
     id = 502,
-    imageResourceId = R.drawable.exercise
+    imageResourceId = R.drawable.single_leg_raise_in_quadruped
 ) {
     private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f
