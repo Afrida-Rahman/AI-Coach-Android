@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
@@ -13,7 +12,6 @@ class GeneralExercise(
 ) : IExercise(
     context = context,
     id = exerciseId,
-    imageResourceId = R.drawable.exercise,
     active = active
 ) {
     override fun exerciseCount(

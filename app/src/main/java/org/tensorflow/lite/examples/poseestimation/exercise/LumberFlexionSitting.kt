@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -14,8 +13,7 @@ class LumberFlexionSitting(
     context: Context
 ) : IExercise(
     context = context,
-    id = 341,
-    imageResourceId = R.drawable.lumber_flexion_setting
+    id = 341
 ) {
     private var sittingHipAngleMin = 200f
     private var sittingHipAngleMax = 250f

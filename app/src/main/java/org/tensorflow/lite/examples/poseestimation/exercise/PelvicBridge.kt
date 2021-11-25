@@ -3,7 +3,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -15,8 +14,7 @@ class PelvicBridge(
     context: Context
 ) : IExercise(
     context = context,
-    id = 122,
-    imageResourceId = R.drawable.pelvic_bridge
+    id = 122
 ) {
     private var hipAngleDownMin = 115f
     private var hipAngleDownMax = 135f

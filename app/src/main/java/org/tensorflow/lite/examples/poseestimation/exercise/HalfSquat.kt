@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -14,8 +13,7 @@ class HalfSquat(
     context: Context
 ) : IExercise(
     context = context,
-    id = 495,
-    imageResourceId = R.drawable.half_squat
+    id = 495
 ) {
     private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f

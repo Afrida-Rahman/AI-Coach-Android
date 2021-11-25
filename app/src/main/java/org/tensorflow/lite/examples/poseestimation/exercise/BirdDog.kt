@@ -2,20 +2,18 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class BirdDog (
+class BirdDog(
     context: Context
 ) : IExercise(
     context = context,
-    id = 332,
-    imageResourceId = R.drawable.bird_dog
-){
+    id = 332
+) {
     override fun exerciseCount(
         person: Person,
         canvasHeight: Int,
@@ -63,7 +61,7 @@ class BirdDog (
                 type = RuleType.ANGLE,
                 startPoint = leftWristPoint,
                 middlePoint = leftShoulderPoint,
-                endPoint =leftHipPoint
+                endPoint = leftHipPoint
             ),
             Rule(
                 type = RuleType.ANGLE,

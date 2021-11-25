@@ -11,7 +11,6 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 abstract class IExercise(
     context: Context,
     val id: Int,
-    val imageResourceId: Int,
     val active: Boolean = true,
     var name: String = "",
     var protocolId: Int = 0,

@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -14,8 +13,7 @@ class SingleLegRaiseInProne(
     context: Context
 ) : IExercise(
     context = context,
-    id = 499,
-    imageResourceId = R.drawable.single_leg_raise_in_prone
+    id = 499
 ) {
     private var downHipAngleMin = 175f
     private var downHipAngleMax = 310f
@@ -98,11 +96,11 @@ class SingleLegRaiseInProne(
                 isInLastState = false
             }
             if (rightStateIndex == totalStates) {
-                if(!isInLastState){
+                if (!isInLastState) {
                     isInLastState = true
                     lastStateTimestamp = System.currentTimeMillis()
                 } else {
-                    if((System.currentTimeMillis() - lastStateTimestamp) > 2000){
+                    if ((System.currentTimeMillis() - lastStateTimestamp) > 2000) {
                         rightStateIndex = 0
                         repetitionCount()
                     }

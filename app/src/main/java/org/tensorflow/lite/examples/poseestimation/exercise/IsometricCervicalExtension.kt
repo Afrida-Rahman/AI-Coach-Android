@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -14,8 +13,7 @@ class IsometricCervicalExtension(
     context: Context
 ) : IExercise(
     context = context,
-    id = 75,
-    imageResourceId = R.drawable.isometric_cervical_extension
+    id = 75
 ) {
     private var shoulderAngleDownMin = 0f
     private var shoulderAngleDownMax = 30f

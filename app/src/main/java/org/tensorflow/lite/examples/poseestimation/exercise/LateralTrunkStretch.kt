@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -14,8 +13,7 @@ class LateralTrunkStretch(
     context: Context
 ) : IExercise(
     context = context,
-    id = 156,
-    imageResourceId = R.drawable.lateral_trunk_stretch
+    id = 156
 ) {
     private var shoulderAngleDownMin = 0f
     private var shoulderAngleDownMax = 30f

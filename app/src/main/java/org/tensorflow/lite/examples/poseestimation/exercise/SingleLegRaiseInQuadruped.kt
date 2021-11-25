@@ -2,8 +2,6 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -15,8 +13,7 @@ class SingleLegRaiseInQuadruped(
     context: Context
 ) : IExercise(
     context = context,
-    id = 502,
-    imageResourceId = R.drawable.single_leg_raise_in_quadruped
+    id = 502
 ) {
     private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f
