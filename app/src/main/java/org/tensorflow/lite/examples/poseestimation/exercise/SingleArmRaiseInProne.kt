@@ -10,17 +10,17 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class ProneOnElbows(
+class SingleArmRaiseInProne(
     context: Context
 ) : IExercise(
     context = context,
-    id = 167,
-    imageResourceId = R.drawable.prone_on_elbow
+    id = 500,
+    imageResourceId = R.drawable.exercise
 ) {
-    private var downHipAngleMin = 180f
-    private var downHipAngleMax = 190f
-    private var upHipAngleMin = 160f
-    private var upHipAngleMax = 175f
+    private var downArmAngleMin = 190f
+    private var downArmAngleMax = 220f
+    private var upArmAngleMin = 160f
+    private var upArmAngleMax = 180f
 
     private val totalStates = 3
     private var rightStateIndex = 0
@@ -28,13 +28,16 @@ class ProneOnElbows(
     private var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
-
     override fun exerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,
         phases: List<Phase>
     ) {
+        val leftWristPoint = Point(
+            person.keyPoints[9].coordinate.x,
+            -person.keyPoints[9].coordinate.y
+        )
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -43,40 +46,35 @@ class ProneOnElbows(
             person.keyPoints[11].coordinate.x,
             -person.keyPoints[11].coordinate.y
         )
-        val leftKneePoint = Point(
-            person.keyPoints[13].coordinate.x,
-            -person.keyPoints[13].coordinate.y
-        )
         if (phases.size >= 2) {
-            downHipAngleMin = phases[0].constraints[0].minValue.toFloat()
-            downHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            upHipAngleMin = phases[1].constraints[0].minValue.toFloat()
-            upHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+            downArmAngleMin = phases[0].constraints[0].minValue.toFloat()
+            downArmAngleMax = phases[0].constraints[0].maxValue.toFloat()
+            upArmAngleMin = phases[1].constraints[0].minValue.toFloat()
+            upArmAngleMax = phases[1].constraints[0].maxValue.toFloat()
         } else {
-            downHipAngleMin = 180f
-            downHipAngleMax = 190f
-            upHipAngleMin = 160f
-            upHipAngleMax = 175f
+            downArmAngleMin = 190f
+            downArmAngleMax = 220f
+            upArmAngleMin = 160f
+            upArmAngleMax = 180f
         }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, false)
+        val shoulderAngle = Utilities.angle(leftWristPoint, leftShoulderPoint, leftHipPoint, false)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
-                downHipAngleMin,
-                downHipAngleMax
+                downArmAngleMin,
+                downArmAngleMax
             ),
             floatArrayOf(
-                upHipAngleMin,
-                upHipAngleMax
+                upArmAngleMin,
+                upArmAngleMax
             ),
             floatArrayOf(
-                downHipAngleMin,
-                downHipAngleMax
+                downArmAngleMin,
+                downArmAngleMax
             )
         )
-
-        if (hipAngle > rightCountStates[rightStateIndex][0] && hipAngle < rightCountStates[rightStateIndex][1]
+        if (shoulderAngle > rightCountStates[rightStateIndex][0] && shoulderAngle < rightCountStates[rightStateIndex][1]
             && insideBox
         ) {
             rightStateIndex += 1
@@ -101,25 +99,24 @@ class ProneOnElbows(
     }
 
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val shoulderPoint = Point(
+        val leftWristPoint = Point(
+            person.keyPoints[9].coordinate.x,
+            person.keyPoints[9].coordinate.y
+        )
+        val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             person.keyPoints[5].coordinate.y
         )
-        val hipPoint = Point(
+        val leftHipPoint = Point(
             person.keyPoints[11].coordinate.x,
             person.keyPoints[11].coordinate.y
         )
-        val kneePoint = Point(
-            person.keyPoints[13].coordinate.x,
-            person.keyPoints[13].coordinate.y
-        )
-
         return mutableListOf(
             Rule(
                 type = RuleType.ANGLE,
-                startPoint = shoulderPoint,
-                middlePoint = hipPoint,
-                endPoint = kneePoint,
+                startPoint = leftWristPoint,
+                middlePoint = leftShoulderPoint,
+                endPoint = leftHipPoint,
                 clockWise = false
             )
         )
@@ -148,5 +145,4 @@ class ProneOnElbows(
         }
         return rightPosition
     }
-
 }
