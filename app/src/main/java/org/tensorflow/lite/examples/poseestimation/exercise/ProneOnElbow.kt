@@ -14,8 +14,7 @@ class ProneOnElbows(
     context: Context
 ) : IExercise(
     context = context,
-    id = 167,
-    imageResourceId = R.drawable.prone_on_elbow
+    id = 167
 ) {
     private var downHipAngleMin = 180f
     private var downHipAngleMax = 190f
