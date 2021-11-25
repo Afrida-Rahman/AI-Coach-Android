@@ -1,9 +1,7 @@
-
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -16,8 +14,7 @@ class ProneOnElbows(
 ) : IExercise(
     context = context,
     id = 167,
-    imageResourceId = R.drawable.prone_on_elbow
-){
+) {
     private var downHipAngleMin = 180f
     private var downHipAngleMax = 190f
     private var upHipAngleMin = 160f

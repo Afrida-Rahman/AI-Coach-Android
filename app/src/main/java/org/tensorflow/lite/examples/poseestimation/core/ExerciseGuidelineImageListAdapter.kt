@@ -30,21 +30,13 @@ class ExerciseGuidelineImageListAdapter(
 
     override fun onBindViewHolder(holder: ExerciseImageItemViewHolder, position: Int) {
         val imageUrl = exerciseImageUrls[position]
-//        Glide.with(context)
-//            .load(imageUrl)
-//            .placeholder(R.drawable.loading)
-//            .error(R.drawable.loading_failed)
-//            .into(holder.exerciseImageUrlsView)
-
         Glide.with(context)
             .load(imageUrl)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .thumbnail(Glide.with(context).load(R.drawable.loading).centerCrop())
             .transition(DrawableTransitionOptions.withCrossFade(300))
-            .override(300,300)
-//            .centerCrop()
+            .override(300, 300)
             .into(holder.exerciseImageUrlsView)
-//        Picasso.get().load(imageUrl).into(holder.exerciseImageUrlsView)
     }
 
     override fun getItemCount(): Int = exerciseImageUrls.size

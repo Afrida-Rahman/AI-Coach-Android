@@ -74,13 +74,23 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/set_rep_display"
+                android:id="@+id/assigned_set"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textStyle="bold"
                 android:textSize="14sp"
-                android:text="@string/sets_repetitions_set"/>
+                android:text="@string/assigned_set"/>
+
+            <TextView
+                android:id="@+id/assigned_rep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:text="@string/assigned_repetition"/>
+
             <Button
                 android:id="@+id/btn_start_exercise"
                 android:layout_width="wrap_content"

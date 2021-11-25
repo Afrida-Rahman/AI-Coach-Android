@@ -80,8 +80,10 @@ class ExerciseListAdapter(
                     commit()
                 }
             }
-            setRepDisplay.text = setRepDisplay.context.getString(R.string.sets_repetitions_set)
-                .format(exercise.maxSetCount, exercise.maxRepCount)
+            assignedSet.text =
+                assignedSet.context.getString(R.string.assigned_set).format(exercise.maxSetCount)
+            assignedRep.text = assignedRep.context.getString(R.string.assigned_repetition)
+                .format(exercise.maxRepCount)
         }
     }
 
@@ -93,6 +95,7 @@ class ExerciseListAdapter(
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
         val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
-        val setRepDisplay: TextView = view.findViewById(R.id.set_rep_display)
+        val assignedSet: TextView = view.findViewById(R.id.assigned_set)
+        val assignedRep: TextView = view.findViewById(R.id.assigned_rep)
     }
 }
