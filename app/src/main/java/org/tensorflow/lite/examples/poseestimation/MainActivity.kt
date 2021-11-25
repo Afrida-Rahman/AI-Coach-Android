@@ -10,6 +10,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
 import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
@@ -37,8 +40,10 @@ class MainActivity : AppCompatActivity() {
         val loginData = loadLogInData()
         binding.patientName.text =
             getString(R.string.hello_patient_name_i_m_emma).format("${loginData.firstName} ${loginData.lastName}")
-        getAssignedExercises(loginData.patientId, loginData.tenant)
 
+        CoroutineScope(IO).launch {
+            getAssignedExercises(loginData.patientId, loginData.tenant)
+        }
         menuToggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
