@@ -8,9 +8,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import org.tensorflow.lite.examples.poseestimation.ExerciseActivity
 import org.tensorflow.lite.examples.poseestimation.ExerciseGuidelineFragment
 import org.tensorflow.lite.examples.poseestimation.R
@@ -32,7 +34,19 @@ class ExerciseListAdapter(
     override fun onBindViewHolder(holder: ExerciseItemViewHolder, position: Int) {
         val exercise = exerciseList[position]
         holder.apply {
-            exerciseImageView.setImageResource(exercise.imageResourceId)
+            val imageUrl = if (exercise.imageUrls.isNotEmpty()) {
+                exercise.imageUrls[0]
+            } else {
+                R.drawable.exercise
+            }
+            val context = this.exerciseImageView.context
+            Glide.with(context)
+                .load(imageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .thumbnail(Glide.with(context).load(R.drawable.loading).centerCrop())
+                .transition(DrawableTransitionOptions.withCrossFade(300))
+                .override(300, 300)
+                .into(this.exerciseImageView)
             exerciseNameView.text = exercise.name
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
@@ -66,7 +80,8 @@ class ExerciseListAdapter(
                     commit()
                 }
             }
-            setRepDisplay.text = setRepDisplay.context.getString(R.string.sets_repetitions_set).format(exercise.maxSetCount, exercise.maxRepCount)
+            setRepDisplay.text = setRepDisplay.context.getString(R.string.sets_repetitions_set)
+                .format(exercise.maxSetCount, exercise.maxRepCount)
         }
     }
 
