@@ -20,7 +20,7 @@ object Exercises {
             LumberFlexionSitting(context),
             SingleLegRaiseInQuadruped(context),
             ProneOnElbows(context),
-            SingleLegRaiseInProne(context)
+            SingleArmRaiseInProne(context)
         )
     }
 
