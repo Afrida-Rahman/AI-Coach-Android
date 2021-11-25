@@ -38,7 +38,7 @@ class AssessmentListFragment(
             LateralTrunkStretch(view.context),
             AROMStandingTrunkFlexion(view.context),
             BirdDog(view.context),
-            LumberFlexionSitting(view.context)
+            SingleLegRaiseInQuadruped(view.context)
         )
         assessmentList.forEach { assessment ->
             val parsedExercises = mutableListOf<IExercise>()
