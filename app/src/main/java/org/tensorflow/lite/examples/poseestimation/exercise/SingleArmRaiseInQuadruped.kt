@@ -8,23 +8,23 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class SingleArmRaiseInProne(
+class SingleArmRaiseInQuadruped(
     context: Context
 ) : IExercise(
     context = context,
-    id = 500
+    id = 350
 ) {
-    private var downArmAngleMin = 190f
-    private var downArmAngleMax = 220f
-    private var upArmAngleMin = 160f
-    private var upArmAngleMax = 180f
+    private var downArmAngleMin = 80f
+    private var downArmAngleMax = 110f
+    private var upArmAngleMin = 150f
+    private var upArmAngleMax = 190f
 
-    private val totalStates = 3
     private var rightStateIndex = 0
 
     private var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
+
     override fun exerciseCount(
         person: Person,
         canvasHeight: Int,
@@ -51,7 +51,7 @@ class SingleArmRaiseInProne(
         }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val shoulderAngle = Utilities.angle(leftWristPoint, leftShoulderPoint, leftHipPoint, false)
+        val shoulderAngle = Utilities.angle(leftWristPoint, leftShoulderPoint, leftHipPoint, true)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 downArmAngleMin,
@@ -73,7 +73,7 @@ class SingleArmRaiseInProne(
             if (rightStateIndex == rightCountStates.size - 1) {
                 wrongStateIndex = 0
             }
-            if (rightStateIndex == totalStates) {
+            if (rightStateIndex == rightCountStates.size) {
                 rightStateIndex = 0
                 repetitionCount()
             }
@@ -109,7 +109,7 @@ class SingleArmRaiseInProne(
                 startPoint = leftWristPoint,
                 middlePoint = leftShoulderPoint,
                 endPoint = leftHipPoint,
-                clockWise = false
+                clockWise = true
             )
         )
     }

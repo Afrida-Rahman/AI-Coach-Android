@@ -1,9 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -15,8 +12,7 @@ class PelvicBridge(
     context: Context
 ) : IExercise(
     context = context,
-    id = 122,
-    imageResourceId = R.drawable.pelvic_bridge
+    id = 122
 ) {
     private var hipAngleDownMin = 115f
     private var hipAngleDownMax = 135f
@@ -50,22 +46,11 @@ class PelvicBridge(
             person.keyPoints[14].coordinate.x,
             -person.keyPoints[14].coordinate.y
         )
-        Log.d("angleIssue", "phaseIssue: ${phases.size}")
         if (phases.size >= 2) {
             hipAngleDownMin = phases[0].constraints[0].minValue.toFloat()
             hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
             hipAngleUpMin = phases[1].constraints[0].minValue.toFloat()
             hipAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
-
-            Log.d(
-                "angleIssue",
-                "phaseIssue: ($hipAngleDownMin,$hipAngleDownMax), ($hipAngleUpMin,$hipAngleUpMax)"
-            )
-        } else {
-            hipAngleDownMin = 115f
-            hipAngleDownMax = 135f
-            hipAngleUpMin = 160f
-            hipAngleUpMax = 190f
         }
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
@@ -167,29 +152,4 @@ class PelvicBridge(
             )
         )
     }
-
-    override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
-        return if (isInsideBox(person, canvasHeight, canvasWidth)) {
-            Color.GREEN
-        } else {
-            Color.RED
-        }
-    }
-
-    private fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
-        val left = canvasWidth * 2f / 20f
-        val right = canvasWidth * 18.5f / 20f
-        val top = canvasHeight * 2.5f / 20f
-        val bottom = canvasHeight * 18.5f / 20f
-        var rightPosition = true
-        person.keyPoints.forEach {
-            val x = it.coordinate.x
-            val y = it.coordinate.y
-            if (x < left || x > right || y < top || y > bottom) {
-                rightPosition = false
-            }
-        }
-        return rightPosition
-    }
-
 }

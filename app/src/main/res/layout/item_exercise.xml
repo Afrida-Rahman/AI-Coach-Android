@@ -23,7 +23,6 @@
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/reach_arms_over_head"
-                android:src="@drawable/reach_arms_over_head"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,23 +64,33 @@
                     android:id="@+id/btn_guideline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:contentDescription="@string/guideline_icon"
                     android:paddingVertical="5dp"
                     android:src="@drawable/ic_guideline"
-                    android:background="@android:color/transparent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/set_rep_display"
+                android:id="@+id/assigned_set"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textStyle="bold"
                 android:textSize="14sp"
-                android:text="@string/sets_repetitions_set"/>
+                android:text="@string/assigned_set"/>
+
+            <TextView
+                android:id="@+id/assigned_repetition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:text="@string/assigned_repetition"/>
+
             <Button
                 android:id="@+id/btn_start_exercise"
                 android:layout_width="wrap_content"

@@ -1,9 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -15,8 +12,7 @@ class SeatedKneeExtension(
     context: Context
 ) : IExercise(
     context = context,
-    id = 471,
-    imageResourceId = R.drawable.seated_legs_riase
+    id = 471
 ) {
     private var downKneeAngleMin = 70f
     private var downKneeAngleMax = 100f
@@ -56,11 +52,6 @@ class SeatedKneeExtension(
             downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
             upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
             upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
-        } else {
-            downKneeAngleMin = 70f
-            downKneeAngleMax = 100f
-            upKneeAngleMin = 160f
-            upKneeAngleMax = 190f
         }
 
         val rightCountStates: Array<FloatArray> = arrayOf(
@@ -163,29 +154,4 @@ class SeatedKneeExtension(
             )
         )
     }
-
-    override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
-        return if (isInsideBox(person, canvasHeight, canvasWidth)) {
-            Color.GREEN
-        } else {
-            Color.RED
-        }
-    }
-
-    private fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
-        val left = canvasWidth * 2f / 20f
-        val right = canvasWidth * 18.5f / 20f
-        val top = canvasHeight * 2.5f / 20f
-        val bottom = canvasHeight * 18.5f / 20f
-        var rightPosition = true
-        person.keyPoints.forEach {
-            val x = it.coordinate.x
-            val y = it.coordinate.y
-            if (x < left || x > right || y < top || y > bottom) {
-                rightPosition = false
-            }
-        }
-        return rightPosition
-    }
-
 }
