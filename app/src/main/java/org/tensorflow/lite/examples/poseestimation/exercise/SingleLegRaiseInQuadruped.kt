@@ -1,9 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
-import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -15,8 +12,7 @@ class SingleLegRaiseInQuadruped(
     context: Context
 ) : IExercise(
     context = context,
-    id = 502,
-    imageResourceId = R.drawable.single_leg_raise_in_quadruped
+    id = 502
 ) {
     private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f
@@ -28,17 +24,13 @@ class SingleLegRaiseInQuadruped(
     private var downKneeAngleMin = 60f
     private var downKneeAngleMax = 100f
 
-    private var wrongUpKneeAngleMin = 0f
-    private var wrongUpKneeAngleMax = 0f
-    private var wrongDownKneeAngleMin = 0f
-    private var wrongDownKneeAngleMax = 0f
-
     private val totalStates = 2
     private var rightStateIndex = 0
 
     private var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
+
     override fun exerciseCount(
         person: Person,
         canvasHeight: Int,
@@ -71,17 +63,6 @@ class SingleLegRaiseInQuadruped(
             upHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
             upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
             upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
-        } else {
-            downHipAngleMin = 70f
-            downHipAngleMax = 120f
-            downKneeAngleMin = 60f
-            downKneeAngleMax = 100f
-
-            upHipAngleMin = 160f
-            upHipAngleMax = 190f
-            upKneeAngleMin = 140f
-            upKneeAngleMax = 190f
-
         }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
@@ -160,29 +141,5 @@ class SingleLegRaiseInQuadruped(
                 clockWise = false
             )
         )
-    }
-
-    override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
-        return if (isInsideBox(person, canvasHeight, canvasWidth)) {
-            Color.GREEN
-        } else {
-            Color.RED
-        }
-    }
-
-    private fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
-        val left = canvasWidth * 2f / 20f
-        val right = canvasWidth * 18.5f / 20f
-        val top = canvasHeight * 2.5f / 20f
-        val bottom = canvasHeight * 18.5f / 20f
-        var rightPosition = true
-        person.keyPoints.forEach {
-            val x = it.coordinate.x
-            val y = it.coordinate.y
-            if (x < left || x > right || y < top || y > bottom) {
-                rightPosition = false
-            }
-        }
-        return rightPosition
     }
 }
