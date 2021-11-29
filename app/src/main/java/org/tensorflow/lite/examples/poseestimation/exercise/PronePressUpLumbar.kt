@@ -121,23 +121,23 @@ class PronePressUpLumbar(
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
         val leftWristPoint = Point(
             person.keyPoints[9].coordinate.x,
-            -person.keyPoints[9].coordinate.y
+            person.keyPoints[9].coordinate.y
         )
         val leftElbowPoint = Point(
             person.keyPoints[7].coordinate.x,
-            -person.keyPoints[7].coordinate.y
+            person.keyPoints[7].coordinate.y
         )
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
-            -person.keyPoints[5].coordinate.y
+            person.keyPoints[5].coordinate.y
         )
         val leftHipPoint = Point(
             person.keyPoints[11].coordinate.x,
-            -person.keyPoints[11].coordinate.y
+            person.keyPoints[11].coordinate.y
         )
         val leftKneePoint = Point(
             person.keyPoints[13].coordinate.x,
-            -person.keyPoints[13].coordinate.y
+            person.keyPoints[13].coordinate.y
         )
         return mutableListOf(
             Rule(
@@ -152,7 +152,7 @@ class PronePressUpLumbar(
                 startPoint = leftShoulderPoint,
                 middlePoint = leftHipPoint,
                 endPoint = leftKneePoint,
-                clockWise = true
+                clockWise = false
             )
         )
     }
