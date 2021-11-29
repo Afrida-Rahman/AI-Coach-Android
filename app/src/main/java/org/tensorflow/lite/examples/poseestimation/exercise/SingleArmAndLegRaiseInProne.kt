@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -16,13 +17,13 @@ class SingleArmAndLegRaiseInProne(
 ) {
     private var downArmAngleMin = 190f
     private var downArmAngleMax = 220f
-    private var downLegAngleMin = 0f
-    private var downLegAngleMax = 0f
+    private var downLegAngleMin = 190f
+    private var downLegAngleMax = 220f
 
     private var upArmAngleMin = 160f
     private var upArmAngleMax = 180f
-    private var upLegAngleMin = 0f
-    private var upLegAngleMax = 0f
+    private var upLegAngleMin = 140f
+    private var upLegAngleMax = 170f
 
     private val totalStates = 3
     private var rightStateIndex = 0
@@ -91,6 +92,7 @@ class SingleArmAndLegRaiseInProne(
                 downLegAngleMax
             )
         )
+        Log.d("Armangle","{shoulder: $shoulderAngle, knee: $kneeAngle}")
         if (shoulderAngle > rightCountStates[rightStateIndex][0] && shoulderAngle < rightCountStates[rightStateIndex][1]
             && kneeAngle > rightCountStates[rightStateIndex][2] && kneeAngle < rightCountStates[rightStateIndex][3]
             && insideBox
