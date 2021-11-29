@@ -17,7 +17,7 @@ class SingleArmAndLegRaiseInProne(
 ) {
     private var downArmAngleMin = 190f
     private var downArmAngleMax = 220f
-    private var downLegAngleMin = 190f
+    private var downLegAngleMin = 180f
     private var downLegAngleMax = 220f
 
     private var upArmAngleMin = 160f
@@ -58,7 +58,7 @@ class SingleArmAndLegRaiseInProne(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-        if (phases.size >= 2){
+        if (phases.isNotEmpty()){
             downArmAngleMin = phases[0].constraints[0].minValue.toFloat()
             downArmAngleMax = phases[0].constraints[0].maxValue.toFloat()
             downLegAngleMin = phases[0].constraints[0].minValue.toFloat()
@@ -92,7 +92,7 @@ class SingleArmAndLegRaiseInProne(
                 downLegAngleMax
             )
         )
-        Log.d("Armangle","{shoulder: $shoulderAngle, knee: $kneeAngle}")
+
         if (shoulderAngle > rightCountStates[rightStateIndex][0] && shoulderAngle < rightCountStates[rightStateIndex][1]
             && kneeAngle > rightCountStates[rightStateIndex][2] && kneeAngle < rightCountStates[rightStateIndex][3]
             && insideBox
