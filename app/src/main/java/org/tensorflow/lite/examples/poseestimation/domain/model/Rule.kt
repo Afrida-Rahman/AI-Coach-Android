@@ -10,5 +10,6 @@ data class Rule(
     val middlePoint: Point = Point(0f, 0f),
     val endPoint: Point,
     val clockWise: Boolean = false,
+    val radius:Float = 50f,
     val color: Int = Color.WHITE
 )

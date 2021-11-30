@@ -35,6 +35,7 @@ class AssessmentListFragment(
             BirdDog(view.context),
             LumberFlexionSitting(view.context),
             SingleLegRaiseInQuadruped(view.context),
+            SingleLegRaiseInProne(view.context),
             ProneOnElbows(view.context),
             SingleArmRaiseInProne(view.context),
             SingleArmRaiseInQuadruped(view.context),
