@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
@@ -16,13 +17,13 @@ class PronePressUpLumbar(
 ) {
     private var downElbowAngleMin = 30f
     private var downElbowAngleMax = 200f
-    private var upElbowAngleMin = 170f
-    private var upElbowAngleMax = 190f
-
     private var downHipAngleMin = 170f
     private var downHipAngleMax = 190f
+
+    private var upElbowAngleMin = 60f
+    private var upElbowAngleMax = 100f
     private var upHipAngleMin = 130f
-    private var upHipAngleMax = 170f
+    private var upHipAngleMax = 180f
 
     private var rightStateIndex = 0
 
@@ -71,7 +72,7 @@ class PronePressUpLumbar(
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val elbowAngle = Utilities.angle(leftWristPoint, leftElbowPoint, leftShoulderPoint, false)
-        val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, true)
+        val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, false)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 downElbowAngleMin,
