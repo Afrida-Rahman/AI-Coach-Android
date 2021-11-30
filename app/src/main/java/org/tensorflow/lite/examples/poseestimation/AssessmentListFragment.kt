@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +14,6 @@ import org.tensorflow.lite.examples.poseestimation.exercise.*
 class AssessmentListFragment(
     private val assessmentList: List<Assessment>
 ) : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,14 +37,16 @@ class AssessmentListFragment(
             SingleLegRaiseInQuadruped(view.context),
             ProneOnElbows(view.context),
             SingleArmRaiseInProne(view.context),
-            SingleLegRaiseInProne(view.context)
+            SingleArmRaiseInQuadruped(view.context),
+            Quadruped(view.context),
+            SingleArmAndLegRaiseInProne(view.context),
+            PronePressUpLumbar(view.context)
         )
         assessmentList.forEach { assessment ->
             val parsedExercises = mutableListOf<IExercise>()
             assessment.Exercises.forEach { exercise ->
                 val implementedExercise =
                     implementedExerciseList.find { it.id == exercise.ExerciseId }
-                Log.d("ExerciseValueCheck", "${assessment.TestId}: ${exercise.ExerciseName}")
                 if (implementedExercise != null) {
                     implementedExercise.setExercise(
                         exerciseName = exercise.ExerciseName,

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.core.ExerciseListAdapter
 import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
@@ -14,9 +13,6 @@ class ExerciseListFragment(
     private val assessmentId: String,
     private val exerciseList: List<IExercise>
 ) : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

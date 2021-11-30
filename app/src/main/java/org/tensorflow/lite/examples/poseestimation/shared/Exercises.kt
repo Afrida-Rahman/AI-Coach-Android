@@ -21,7 +21,10 @@ object Exercises {
             SingleLegRaiseInQuadruped(context),
             ProneOnElbows(context),
             SingleArmRaiseInProne(context),
-            SingleLegRaiseInProne(context)
+            SingleArmRaiseInQuadruped(context),
+            Quadruped(context),
+            SingleArmAndLegRaiseInProne(context),
+            PronePressUpLumbar(context)
         )
     }
 

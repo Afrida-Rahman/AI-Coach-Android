@@ -64,10 +64,10 @@
                     android:id="@+id/btn_guideline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:contentDescription="@string/guideline_icon"
                     android:paddingVertical="5dp"
                     android:src="@drawable/ic_guideline"
-                    android:background="@android:color/transparent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,7 +83,7 @@
                 android:text="@string/assigned_set"/>
 
             <TextView
-                android:id="@+id/assigned_rep"
+                android:id="@+id/assigned_repetition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

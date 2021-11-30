@@ -30,8 +30,4 @@ class GeneralExercise(
     override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
         TODO("Not yet implemented")
     }
-
-    override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
-        TODO("Not yet implemented")
-    }
 }

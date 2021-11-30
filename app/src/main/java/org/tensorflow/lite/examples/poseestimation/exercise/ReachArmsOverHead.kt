@@ -313,28 +313,4 @@ class ReachArmsOverHead(
         }
         return rules
     }
-
-    override fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
-        return if (isInsideBox(person, canvasHeight, canvasWidth)) {
-            Color.GREEN
-        } else {
-            Color.RED
-        }
-    }
-
-    private fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
-        val left = canvasWidth * 2f / 20f
-        val right = canvasWidth * 18.5f / 20f
-        val top = canvasHeight * 2.5f / 20f
-        val bottom = canvasHeight * 18.5f / 20f
-        var rightPosition = true
-        person.keyPoints.forEach {
-            val x = it.coordinate.x
-            val y = it.coordinate.y
-            if (x < left || x > right || y < top || y > bottom) {
-                rightPosition = false
-            }
-        }
-        return rightPosition
-    }
 }

@@ -34,17 +34,17 @@ class ExerciseListAdapter(
     override fun onBindViewHolder(holder: ExerciseItemViewHolder, position: Int) {
         val exercise = exerciseList[position]
         holder.apply {
+            val context = this.exerciseImageView.context
             val imageUrl = if (exercise.imageUrls.isNotEmpty()) {
                 exercise.imageUrls[0]
             } else {
                 R.drawable.exercise
             }
-            val context = this.exerciseImageView.context
             Glide.with(context)
                 .load(imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .thumbnail(Glide.with(context).load(R.drawable.loading).centerCrop())
-                .transition(DrawableTransitionOptions.withCrossFade(300))
+                .transition(DrawableTransitionOptions.withCrossFade(500))
                 .override(300, 300)
                 .into(this.exerciseImageView)
             exerciseNameView.text = exercise.name
@@ -82,7 +82,7 @@ class ExerciseListAdapter(
             }
             assignedSet.text =
                 assignedSet.context.getString(R.string.assigned_set).format(exercise.maxSetCount)
-            assignedRep.text = assignedRep.context.getString(R.string.assigned_repetition)
+            assignedRepetition.text = assignedRepetition.context.getString(R.string.assigned_repetition)
                 .format(exercise.maxRepCount)
         }
     }
@@ -96,6 +96,6 @@ class ExerciseListAdapter(
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
         val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
         val assignedSet: TextView = view.findViewById(R.id.assigned_set)
-        val assignedRep: TextView = view.findViewById(R.id.assigned_rep)
+        val assignedRepetition: TextView = view.findViewById(R.id.assigned_repetition)
     }
 }

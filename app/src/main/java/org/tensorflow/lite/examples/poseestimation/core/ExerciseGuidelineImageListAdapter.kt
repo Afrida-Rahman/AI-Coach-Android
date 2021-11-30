@@ -35,7 +35,7 @@ class ExerciseGuidelineImageListAdapter(
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .thumbnail(Glide.with(context).load(R.drawable.loading).centerCrop())
             .transition(DrawableTransitionOptions.withCrossFade(300))
-            .override(300, 300)
+            .override(300,300)
             .into(holder.exerciseImageUrlsView)
     }
 
