@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 if (responseBody != null) {
                     if (responseBody.Assessments.isNotEmpty()) {
                         binding.progressIndicator.visibility = View.GONE
-                        assessmentListFragment = AssessmentListFragment(responseBody.Assessments)
+                        assessmentListFragment = AssessmentListFragment(responseBody.Assessments, patientId, tenant)
                         assessmentListFragment?.let { changeScreen(it) }
                     } else {
                         Toast.makeText(

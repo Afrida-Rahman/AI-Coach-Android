@@ -1,13 +1,14 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
+import android.content.Context
 import android.content.Intent
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,12 +17,22 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import org.tensorflow.lite.examples.poseestimation.ExerciseActivity
 import org.tensorflow.lite.examples.poseestimation.ExerciseGuidelineFragment
 import org.tensorflow.lite.examples.poseestimation.R
+import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
+import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
+import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
 import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ExerciseListAdapter(
     private val testId: String,
     private val exerciseList: List<IExercise>,
-    private val manager: FragmentManager
+    private val manager: FragmentManager,
+    private val patientId: String,
+    private val tenant: String
 ) : RecyclerView.Adapter<ExerciseListAdapter.ExerciseItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseItemViewHolder {
@@ -61,11 +72,55 @@ class ExerciseListAdapter(
                     }
                     it.context.startActivity(intent)
                 }
+                manualTrackingButton.setOnClickListener {
+                    val alertDialog = AlertDialog.Builder(context)
+                    val layout = LinearLayout(context)
+                    layout.orientation = LinearLayout.VERTICAL
+
+                    alertDialog.setTitle("Manual Tracking")
+                    val setInput = EditText(context)
+                    setInput.setSingleLine()
+                    setInput.hint = "Enter Set Count"
+                    setInput.inputType = InputType.TYPE_CLASS_NUMBER
+                    layout.addView(setInput)
+
+                    val repInput = EditText(context)
+                    repInput.setSingleLine()
+                    repInput.hint = "Enter Repetition Count"
+                    repInput.inputType = InputType.TYPE_CLASS_NUMBER
+                    layout.addView(repInput)
+
+                    layout.setPadding(100, 50, 100, 50)
+                    alertDialog.setView(layout)
+
+                    alertDialog.setPositiveButton("Submit") { _, _ ->
+                        val setText = setInput.text.toString().toInt()
+                        val repText = repInput.text.toString().toInt()
+                        Log.d("checkCount", "$setText, $repText")
+
+                        saveManualTrackingData(
+                            ExerciseId = exercise.id,
+                            TestId = testId,
+                            ProtocolId = exercise.protocolId,
+                            PatientId = patientId,
+                            ExerciseDate = Utilities.currentDate(),
+                            NoOfReps = setText,
+                            NoOfSets = repText,
+                            NoOfWrongCount = exercise.getWrongCount(),
+                            Tenant = tenant,
+                            context = it.context
+                        )
+                    }
+                    alertDialog.setNegativeButton("Cancel") { alert, _ -> alert.cancel() }
+
+                    alertDialog.show()
+                }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_inactive)
                 startExerciseButton.setOnClickListener {
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
+
             }
             guidelineButton.setOnClickListener {
                 manager.beginTransaction().apply {
@@ -74,7 +129,9 @@ class ExerciseListAdapter(
                         ExerciseGuidelineFragment(
                             testId = testId,
                             position = position,
-                            exerciseList = exerciseList
+                            exerciseList = exerciseList,
+                            patientId,
+                            tenant
                         )
                     )
                     commit()
@@ -82,15 +139,84 @@ class ExerciseListAdapter(
             }
             assignedSet.text =
                 assignedSet.context.getString(R.string.assigned_set).format(exercise.maxSetCount)
-            assignedRepetition.text = assignedRepetition.context.getString(R.string.assigned_repetition)
-                .format(exercise.maxRepCount)
+            assignedRepetition.text =
+                assignedRepetition.context.getString(R.string.assigned_repetition)
+                    .format(exercise.maxRepCount)
         }
     }
+
+    private fun saveManualTrackingData(
+        ExerciseId: Int,
+        TestId: String,
+        ProtocolId: Int,
+        PatientId: String,
+        ExerciseDate: String,
+        NoOfReps: Int,
+        NoOfSets: Int,
+        NoOfWrongCount: Int = 0,
+        Tenant: String,
+        context: Context
+    ) {
+        Log.d("checkCount","$tenant,$testId,$ProtocolId,$PatientId,$ExerciseDate, $NoOfReps, $NoOfSets, $NoOfWrongCount, $ExerciseId")
+        val saveExerciseTrackingURL = Utilities.getUrl(tenant).saveExerciseTrackingURL
+        val service = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(saveExerciseTrackingURL)
+            .build()
+            .create(IExerciseService::class.java)
+
+        val requestPayload = ExerciseTrackingPayload(
+            ExerciseId = ExerciseId,
+            TestId = TestId,
+            ProtocolId = ProtocolId,
+            PatientId = PatientId,
+            ExerciseDate = ExerciseDate,
+            NoOfReps = NoOfReps,
+            NoOfSets = NoOfSets,
+            NoOfWrongCount = NoOfWrongCount,
+            Tenant = Tenant
+        )
+        val response = service.saveExerciseData(requestPayload)
+        response.enqueue(object : Callback<ExerciseTrackingResponse> {
+            override fun onResponse(
+                call: Call<ExerciseTrackingResponse>,
+                response: Response<ExerciseTrackingResponse>
+            ) {
+                val responseBody = response.body()
+                Log.d("checkCount", "$responseBody")
+                if (responseBody != null) {
+                    Log.d("checkCount","response: ${responseBody.Message}")
+                    if (responseBody.Successful) {
+                        Toast.makeText(context, responseBody.Message, Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(context, "Could not save exercise data!", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Failed to save and got empty response! ",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ExerciseTrackingResponse>, t: Throwable) {
+                Toast.makeText(
+                    context,
+                    "Failed to track data !!!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
 
     override fun getItemCount(): Int = exerciseList.size
 
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val startExerciseButton: Button = view.findViewById(R.id.btn_start_exercise)
+        val manualTrackingButton: Button = view.findViewById(R.id.btn_manual_tracking)
         val exerciseImageView: ImageView = view.findViewById(R.id.item_exercise_image)
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
