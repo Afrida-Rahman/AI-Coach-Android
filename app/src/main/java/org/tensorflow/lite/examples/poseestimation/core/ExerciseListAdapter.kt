@@ -72,55 +72,62 @@ class ExerciseListAdapter(
                     }
                     it.context.startActivity(intent)
                 }
-                manualTrackingButton.setOnClickListener {
-                    val alertDialog = AlertDialog.Builder(context)
-                    val layout = LinearLayout(context)
-                    layout.orientation = LinearLayout.VERTICAL
-
-                    alertDialog.setTitle("Manual Tracking")
-                    val setInput = EditText(context)
-                    setInput.setSingleLine()
-                    setInput.hint = "Enter Set Count"
-                    setInput.inputType = InputType.TYPE_CLASS_NUMBER
-                    layout.addView(setInput)
-
-                    val repInput = EditText(context)
-                    repInput.setSingleLine()
-                    repInput.hint = "Enter Repetition Count"
-                    repInput.inputType = InputType.TYPE_CLASS_NUMBER
-                    layout.addView(repInput)
-
-                    layout.setPadding(100, 50, 100, 50)
-                    alertDialog.setView(layout)
-
-                    alertDialog.setPositiveButton("Submit") { _, _ ->
-                        val setText = setInput.text.toString().toInt()
-                        val repText = repInput.text.toString().toInt()
-                        Log.d("checkCount", "$setText, $repText")
-
-                        saveManualTrackingData(
-                            ExerciseId = exercise.id,
-                            TestId = testId,
-                            ProtocolId = exercise.protocolId,
-                            PatientId = patientId,
-                            ExerciseDate = Utilities.currentDate(),
-                            NoOfReps = setText,
-                            NoOfSets = repText,
-                            NoOfWrongCount = exercise.getWrongCount(),
-                            Tenant = tenant,
-                            context = it.context
-                        )
-                    }
-                    alertDialog.setNegativeButton("Cancel") { alert, _ -> alert.cancel() }
-
-                    alertDialog.show()
-                }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_inactive)
                 startExerciseButton.setOnClickListener {
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
+            }
+            manualTrackingButton.setOnClickListener {
+                val alertDialog = AlertDialog.Builder(context)
+                val layout = LinearLayout(context)
+                layout.orientation = LinearLayout.VERTICAL
 
+                alertDialog.setTitle("Manual Tracking")
+                val setInput = EditText(context)
+                setInput.setSingleLine()
+                setInput.hint = "Enter Set Count"
+                setInput.inputType = InputType.TYPE_CLASS_NUMBER
+                layout.addView(setInput)
+
+                val repInput = EditText(context)
+                repInput.setSingleLine()
+                repInput.hint = "Enter Repetition Count"
+                repInput.inputType = InputType.TYPE_CLASS_NUMBER
+                layout.addView(repInput)
+
+                val wrongInput = EditText(context)
+                wrongInput.setSingleLine()
+                wrongInput.hint = "Enter Wrong Count"
+                wrongInput.inputType = InputType.TYPE_CLASS_NUMBER
+                layout.addView(wrongInput)
+
+                layout.setPadding(100, 50, 100, 50)
+                alertDialog.setView(layout)
+
+                alertDialog.setPositiveButton("Submit") { _, _ ->
+                    val setText = setInput.text.toString().toInt()
+                    val repText = repInput.text.toString().toInt()
+                    val wrongText = wrongInput.text.toString().toInt()
+
+                    Log.d("checkCount", "$setText, $repText, $wrongText")
+
+                    saveManualTrackingData(
+                        ExerciseId = exercise.id,
+                        TestId = testId,
+                        ProtocolId = exercise.protocolId,
+                        PatientId = patientId,
+                        ExerciseDate = Utilities.currentDate(),
+                        NoOfReps = setText,
+                        NoOfSets = repText,
+                        NoOfWrongCount = wrongText,
+                        Tenant = tenant,
+                        context = it.context
+                    )
+                }
+                alertDialog.setNegativeButton("Cancel") { alert, _ -> alert.cancel() }
+
+                alertDialog.show()
             }
             guidelineButton.setOnClickListener {
                 manager.beginTransaction().apply {
@@ -195,7 +202,7 @@ class ExerciseListAdapter(
                 } else {
                     Toast.makeText(
                         context,
-                        "Failed to save and got empty response! ",
+                        "Failed to save and got empty response! ($responseBody)",
                         Toast.LENGTH_LONG
                     ).show()
                 }
