@@ -63,30 +63,7 @@ abstract class IExercise(
 
     fun repetitionCount() {
         repetitionCounter++
-        val resourceId = when (repetitionCounter) {
-            1 -> R.raw.one
-            2 -> R.raw.two
-            3 -> R.raw.three
-            4 -> R.raw.four
-            5 -> R.raw.five
-            6 -> R.raw.six
-            7 -> R.raw.seven
-            8 -> R.raw.eight
-            9 -> R.raw.nine
-            10 -> R.raw.ten
-            11 -> R.raw.eleven
-            12 -> R.raw.twelve
-            13 -> R.raw.thirteen
-            14 -> R.raw.fourteen
-            15 -> R.raw.fifteen
-            16 -> R.raw.sixteen
-            17 -> R.raw.seventeen
-            18 -> R.raw.eightteen
-            19 -> R.raw.nineteen
-            20 -> R.raw.twenty
-            else -> R.raw.hello
-        }
-        audioPlayer.play(resourceId)
+        audioPlayer.play(R.raw.right_count)
         Log.d("MaxCount", "Set count: ${this.maxSetCount} - Rep Count: ${this.maxRepCount}")
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
@@ -96,6 +73,7 @@ abstract class IExercise(
 
     fun wrongCount() {
         wrongCounter++
+        audioPlayer.play(R.raw.wrong_count)
     }
 
     fun standInside() {
