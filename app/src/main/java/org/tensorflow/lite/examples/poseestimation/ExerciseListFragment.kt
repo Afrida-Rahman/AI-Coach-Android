@@ -11,7 +11,9 @@ import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
 
 class ExerciseListFragment(
     private val assessmentId: String,
-    private val exerciseList: List<IExercise>
+    private val exerciseList: List<IExercise>,
+    private val patientId: String,
+    private val tenant: String,
 ) : Fragment() {
 
     override fun onCreateView(
@@ -20,7 +22,7 @@ class ExerciseListFragment(
     ): View? {
         val view = inflater.inflate(R.layout.fragment_exercise_list, container, false)
         val adapter = view.findViewById<RecyclerView>(R.id.exercise_list_container)
-        adapter.adapter = ExerciseListAdapter(assessmentId, exerciseList, parentFragmentManager)
+        adapter.adapter = ExerciseListAdapter(assessmentId, exerciseList, parentFragmentManager,patientId,tenant)
         return view
     }
 }

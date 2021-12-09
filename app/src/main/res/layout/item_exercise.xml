@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="16dp"
@@ -90,14 +91,41 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:text="@string/assigned_repetition"/>
-
-            <Button
-                android:id="@+id/btn_start_exercise"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/start_exercise"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/btn_start_exercise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/start_exercise"
+                    android:textSize="9dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_manual_tracking"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_manual_tracking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manual_tracking"
+                    android:textSize="9dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_start_exercise"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginEnd="6dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
         </LinearLayout>
 

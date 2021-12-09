@@ -16,6 +16,8 @@ class ExerciseGuidelineFragment(
     private val testId : String,
     private val position : Int,
     private val exerciseList : List<IExercise>,
+    private val patientId: String,
+    private val tenant: String
 ) : Fragment() {
 
     override fun onCreateView(
@@ -34,7 +36,7 @@ class ExerciseGuidelineFragment(
             parentFragmentManager.beginTransaction().apply {
                 replace(
                     R.id.fragment_container,
-                    ExerciseListFragment(testId, exerciseList)
+                    ExerciseListFragment(testId, exerciseList,patientId,tenant)
                 )
                 commit()
             }
