@@ -12,7 +12,9 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 import org.tensorflow.lite.examples.poseestimation.exercise.*
 
 class AssessmentListFragment(
-    private val assessmentList: List<Assessment>
+    private val assessmentList: List<Assessment>,
+    private val patientId: String,
+    private val tenant: String
 ) : Fragment() {
 
     override fun onCreateView(
@@ -84,7 +86,7 @@ class AssessmentListFragment(
                 )
             )
         }
-        adapter.adapter = AssessmentListAdapter(testList, parentFragmentManager)
+        adapter.adapter = AssessmentListAdapter(testList, parentFragmentManager, patientId, tenant)
         return view
     }
 

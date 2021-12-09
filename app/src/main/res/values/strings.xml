@@ -89,4 +89,5 @@
     <string name="hello_i_am_emma">Hello! I am EMMA.</string>
     <string name="select_tenant">Select Tenant</string>
     <string name="tenant">Tenant</string>
+    <string name="manual_tracking">Manual Tracking</string>
 </resources>
