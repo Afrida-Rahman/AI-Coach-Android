@@ -6,6 +6,7 @@ data class Constraint(
     val type: ConstraintType,
     val startPointIndex: Int,
     val middlePointIndex: Int,
+    val scale: String,
     val endPointIndex: Int,
     val clockWise: Boolean = false,
     val color: Int = Color.WHITE,

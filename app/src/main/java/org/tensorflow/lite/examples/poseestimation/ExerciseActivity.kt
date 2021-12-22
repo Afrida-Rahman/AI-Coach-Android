@@ -669,7 +669,8 @@ class ExerciseActivity : AppCompatActivity() {
                                         Constraint(
                                             minValue = restriction.MinValidationValue,
                                             maxValue = restriction.MaxValidationValue,
-                                            type = if (restriction.Scale == "degree") {
+                                            scale = restriction.Scale,
+                                            type = if ((restriction.Scale == "degree") || (restriction.Scale =="inch") ) {
                                                 ConstraintType.ANGLE
                                             } else {
                                                 ConstraintType.LINE
@@ -697,7 +698,8 @@ class ExerciseActivity : AppCompatActivity() {
                     }
                 }
                 exerciseConstraints = phases.sortedBy { it.phase }
-                Log.d("Constraint", "$exerciseConstraints")
+                Log.d("Constraint", "$exerciseConstraints \n constraint size = ${exerciseConstraints[0].constraints[0]}, \n phase num = ${exerciseConstraints.size} " +
+                        "\n ${exerciseConstraints[0].constraints[0].startPointIndex}")
             }
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
