@@ -670,6 +670,7 @@ class ExerciseActivity : AppCompatActivity() {
                                             minValue = restriction.MinValidationValue,
                                             maxValue = restriction.MaxValidationValue,
                                             scale = restriction.Scale,
+                                            uniqueId = restriction.Id,
                                             type = if ((restriction.Scale == "degree") || (restriction.Scale =="inch") ) {
                                                 ConstraintType.ANGLE
                                             } else {
