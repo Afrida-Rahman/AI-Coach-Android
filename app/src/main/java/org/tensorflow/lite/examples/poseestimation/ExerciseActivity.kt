@@ -685,7 +685,7 @@ class ExerciseActivity : AppCompatActivity() {
                                 }
                             phases.add(
                                 Phase(
-                                    phase = group.Phase,
+                                    phaseNum = group.Phase,
                                     constraints = constraints
                                 )
                             )
@@ -698,7 +698,7 @@ class ExerciseActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-                exerciseConstraints = phases.sortedBy { it.phase }
+                exerciseConstraints = phases.sortedBy { it.phaseNum }
                 Log.d("Constraint", "$exerciseConstraints \n constraint size = ${exerciseConstraints[0].constraints[0]}, \n phase num = ${exerciseConstraints.size} " +
                         "\n ${exerciseConstraints[0].constraints[0].startPointIndex}")
             }
