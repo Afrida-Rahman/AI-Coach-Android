@@ -12,7 +12,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 import org.tensorflow.lite.examples.poseestimation.exercise.*
 
 class AssessmentListFragment(
-    private val assessmentList: List<Assessment>,
+    private val assessments: List<Assessment>,
     private val patientId: String,
     private val tenant: String
 ) : Fragment() {
@@ -45,9 +45,9 @@ class AssessmentListFragment(
             PronePressUpLumbar(view.context),
             Plank(view.context)
         )
-        assessmentList.forEach { assessment ->
+        assessments.forEach { assessment ->
             val parsedExercises = mutableListOf<IExercise>()
-            assessment.Exercises.forEach { exercise ->
+            assessment.exercises.forEach { exercise ->
                 val implementedExercise =
                     implementedExerciseList.find { it.id == exercise.ExerciseId }
                 if (implementedExercise != null) {
@@ -81,7 +81,7 @@ class AssessmentListFragment(
             }
             testList.add(
                 TestId(
-                    id = assessment.TestId,
+                    id = assessment.testId,
                     exercises = parsedExercises.sortedBy { it.active }.reversed()
                 )
             )

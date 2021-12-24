@@ -665,27 +665,52 @@ class ExerciseActivity : AppCompatActivity() {
                             val constraints = mutableListOf<Constraint>()
                             group.KeyPointsRestriction.sortedByDescending { it.Id }
                                 .forEach { restriction ->
-                                    constraints.add(
-                                        Constraint(
-                                            minValue = restriction.MinValidationValue,
-                                            maxValue = restriction.MaxValidationValue,
-                                            scale = restriction.Scale,
-                                            uniqueId = restriction.Id,
-                                            type = if ((restriction.Scale == "degree") || (restriction.Scale =="inch") ) {
-                                                ConstraintType.ANGLE
-                                            } else {
-                                                ConstraintType.LINE
-                                            },
-                                            startPointIndex = getIndex(restriction.StartKeyPosition),
-                                            middlePointIndex = getIndex(restriction.MiddleKeyPosition),
-                                            endPointIndex = getIndex(restriction.EndKeyPosition),
-                                            clockWise = restriction.AngleArea == "inner"
-                                        )
-                                    )
+                                    val constraintType = if (restriction.Scale == "degree") {
+                                        ConstraintType.ANGLE
+                                    } else {
+                                        ConstraintType.LINE
+                                    }
+                                    val startPointIndex = getIndex(restriction.StartKeyPosition)
+                                    val middlePointIndex = getIndex(restriction.MiddleKeyPosition)
+                                    val endPointIndex = getIndex(restriction.EndKeyPosition)
+                                    when (constraintType) {
+                                        ConstraintType.LINE -> {
+                                            if (startPointIndex >= 0 && endPointIndex >= 0) {
+                                                constraints.add(
+                                                    Constraint(
+                                                        minValue = restriction.MinValidationValue,
+                                                        maxValue = restriction.MaxValidationValue,
+                                                        uniqueId = restriction.Id,
+                                                        type = constraintType,
+                                                        startPointIndex = startPointIndex,
+                                                        middlePointIndex = middlePointIndex,
+                                                        endPointIndex = endPointIndex,
+                                                        clockWise = restriction.AngleArea == "inner"
+                                                    )
+                                                )
+                                            }
+                                        }
+                                        ConstraintType.ANGLE -> {
+                                            if (startPointIndex >= 0 && middlePointIndex >= 0 && endPointIndex >= 0) {
+                                                constraints.add(
+                                                    Constraint(
+                                                        minValue = restriction.MinValidationValue,
+                                                        maxValue = restriction.MaxValidationValue,
+                                                        uniqueId = restriction.Id,
+                                                        type = constraintType,
+                                                        startPointIndex = startPointIndex,
+                                                        middlePointIndex = middlePointIndex,
+                                                        endPointIndex = endPointIndex,
+                                                        clockWise = restriction.AngleArea == "inner"
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             phases.add(
                                 Phase(
-                                    phaseNum = group.Phase,
+                                    phaseNumber = group.Phase,
                                     constraints = constraints
                                 )
                             )
@@ -698,9 +723,8 @@ class ExerciseActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-                exerciseConstraints = phases.sortedBy { it.phaseNum }
-                Log.d("Constraint", "$exerciseConstraints \n constraint size = ${exerciseConstraints[0].constraints[0]}, \n phase num = ${exerciseConstraints.size} " +
-                        "\n ${exerciseConstraints[0].constraints[0].startPointIndex}")
+                exerciseConstraints = phases.sortedBy { it.phaseNumber }
+                Log.d("Constraint", "$exerciseConstraints")
             }
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
@@ -713,7 +737,6 @@ class ExerciseActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun getIndex(name: String): Int {
         return when (name) {
@@ -734,7 +757,7 @@ class ExerciseActivity : AppCompatActivity() {
             "RIGHT_KNEE".lowercase() -> 14
             "LEFT_ANKLE".lowercase() -> 15
             "RIGHT_ANKLE".lowercase() -> 16
-            else -> 0
+            else -> -1
         }
     }
 

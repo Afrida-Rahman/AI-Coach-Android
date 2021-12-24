@@ -1,6 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.domain.model
 
 data class Phase(
-    val phaseNum: Int,
+    val phaseNumber: Int,
     val constraints: List<Constraint>
 )
