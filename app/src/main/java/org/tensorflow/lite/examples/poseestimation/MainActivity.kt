@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (assessmentListFragment != null) {
-            Log.d("FragmentVisibility", assessmentListFragment!!.isVisible.toString())
             if (assessmentListFragment!!.isVisible) {
                 super.onBackPressed()
                 finish()

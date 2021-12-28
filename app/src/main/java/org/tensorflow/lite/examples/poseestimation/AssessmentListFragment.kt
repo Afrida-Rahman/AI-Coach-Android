@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,11 +44,13 @@ class AssessmentListFragment(
             SingleArmRaiseInQuadruped(view.context),
             Quadruped(view.context),
             PronePressUpLumbar(view.context),
-            Plank(view.context)
+            Plank(view.context),
+            KneeSquat2(view.context)
         )
         assessments.forEach { assessment ->
             val parsedExercises = mutableListOf<IExercise>()
-            assessment.exercises.forEach { exercise ->
+            Log.d("AssessmentListFragment", "$assessments")
+            assessment.Exercises.forEach { exercise ->
                 val implementedExercise =
                     implementedExerciseList.find { it.id == exercise.ExerciseId }
                 if (implementedExercise != null) {
@@ -81,7 +84,7 @@ class AssessmentListFragment(
             }
             testList.add(
                 TestId(
-                    id = assessment.testId,
+                    id = assessment.TestId,
                     exercises = parsedExercises.sortedBy { it.active }.reversed()
                 )
             )

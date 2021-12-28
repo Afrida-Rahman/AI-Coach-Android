@@ -12,7 +12,7 @@ class KneeSquat(
     context: Context
 ) : IExercise(
     context = context,
-    id = 458
+    id = 0 //458
 ) {
     private var upHipAngleMin = 160f
     private var upHipAngleMax = 190f

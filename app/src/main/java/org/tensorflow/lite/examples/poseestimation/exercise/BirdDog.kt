@@ -11,7 +11,7 @@ class BirdDog(
     context: Context
 ) : IExercise(
     context = context,
-    id = 332
+    id = 0 //332
 ) {
     override fun exerciseCount(
         person: Person,

@@ -12,7 +12,7 @@ class LumberFlexionSitting(
     context: Context
 ) : IExercise(
     context = context,
-    id = 341
+    id = 0 //341
 ) {
     private var sittingHipAngleMin = 200f
     private var sittingHipAngleMax = 250f
