@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
 import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
@@ -24,6 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -115,9 +117,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun getAssignedExercises(patientId: String, tenant: String) {
         getPatientExerciseUrl = Utilities.getUrl(loadLogInData().tenant).getPatientExerciseURL
+        val client = OkHttpClient.Builder()
+            .connectTimeout(2, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
         val service = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(getPatientExerciseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IExerciseService::class.java)
         val requestPayload = PatientDataPayload(
@@ -134,7 +142,8 @@ class MainActivity : AppCompatActivity() {
                 if (responseBody != null) {
                     if (responseBody.Assessments.isNotEmpty()) {
                         binding.progressIndicator.visibility = View.GONE
-                        assessmentListFragment = AssessmentListFragment(responseBody.Assessments, patientId, tenant)
+                        assessmentListFragment =
+                            AssessmentListFragment(responseBody.Assessments, patientId, tenant)
                         assessmentListFragment?.let { changeScreen(it) }
                     } else {
                         Toast.makeText(
