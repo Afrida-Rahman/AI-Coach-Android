@@ -3,7 +3,6 @@ package org.tensorflow.lite.examples.poseestimation.core
 import android.content.Context
 import android.content.Intent
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,6 +68,7 @@ class ExerciseListAdapter(
                         putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
                         putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
                         putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
+                        putExtra(ExerciseActivity.HoldTimeLimit, exercise.maxHoldTimeLimit)
                     }
                     it.context.startActivity(intent)
                 }
@@ -109,8 +109,6 @@ class ExerciseListAdapter(
                     val setText = setInput.text.toString().toInt()
                     val repText = repInput.text.toString().toInt()
                     val wrongText = wrongInput.text.toString().toInt()
-
-                    Log.d("checkCount", "$setText, $repText, $wrongText")
 
                     saveManualTrackingData(
                         ExerciseId = exercise.id,
@@ -164,7 +162,6 @@ class ExerciseListAdapter(
         Tenant: String,
         context: Context
     ) {
-        Log.d("checkCount","$tenant,$testId,$ProtocolId,$PatientId,$ExerciseDate, $NoOfReps, $NoOfSets, $NoOfWrongCount, $ExerciseId")
         val saveExerciseTrackingURL = Utilities.getUrl(tenant).saveExerciseTrackingURL
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -190,9 +187,7 @@ class ExerciseListAdapter(
                 response: Response<ExerciseTrackingResponse>
             ) {
                 val responseBody = response.body()
-                Log.d("checkCount", "$responseBody")
                 if (responseBody != null) {
-                    Log.d("checkCount","response: ${responseBody.Message}")
                     if (responseBody.Successful) {
                         Toast.makeText(context, responseBody.Message, Toast.LENGTH_LONG).show()
                     } else {

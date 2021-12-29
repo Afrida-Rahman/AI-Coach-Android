@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,43 +24,42 @@ class AssessmentListFragment(
         val view = inflater.inflate(R.layout.fragment_assessment_list, container, false)
         val adapter = view.findViewById<RecyclerView>(R.id.assessment_list_container)
         val testList = mutableListOf<TestId>()
-        val implementedExerciseList = listOf(
-            ReachArmsOverHead(view.context),
-            KneeSquat(view.context),
-            HalfSquat(view.context),
-            SeatedKneeExtension(view.context),
-            PelvicBridge(view.context),
-            SitToStand(view.context),
-            IsometricCervicalExtension(view.context),
-            LateralTrunkStretch(view.context),
-            TrunkFlexionInStanding(view.context),
-            BirdDog(view.context),
-            LumberFlexionSitting(view.context),
-            SingleLegRaiseInQuadruped(view.context),
-            SingleLegRaiseInProne(view.context),
-            ProneOnElbows(view.context),
-            SingleArmRaiseInProne(view.context),
-            SingleArmRaiseInQuadruped(view.context),
-            Quadruped(view.context),
-            PronePressUpLumbar(view.context),
-            Plank(view.context),
-            KneeSquat2(view.context)
-        )
         assessments.forEach { assessment ->
+            val implementedExerciseList = listOf(
+                ReachArmsOverHead(view.context),
+                KneeSquat(view.context),
+                HalfSquat(view.context),
+                SeatedKneeExtension(view.context),
+                PelvicBridge(view.context),
+                SitToStand(view.context),
+                IsometricCervicalExtension(view.context),
+                LateralTrunkStretch(view.context),
+                TrunkFlexionInStanding(view.context),
+                BirdDog(view.context),
+                LumberFlexionSitting(view.context),
+                SingleLegRaiseInQuadruped(view.context),
+                SingleLegRaiseInProne(view.context),
+                ProneOnElbows(view.context),
+                SingleArmRaiseInProne(view.context),
+                SingleArmRaiseInQuadruped(view.context),
+                Quadruped(view.context),
+                PronePressUpLumbar(view.context),
+                Plank(view.context),
+                CommonExercise(view.context)
+            )
             val parsedExercises = mutableListOf<IExercise>()
-            Log.d("AssessmentListFragment", "$assessments")
             assessment.Exercises.forEach { exercise ->
                 val implementedExercise =
                     implementedExerciseList.find { it.id == exercise.ExerciseId }
                 if (implementedExercise != null) {
                     implementedExercise.setExercise(
                         exerciseName = exercise.ExerciseName,
-                        exerciseDescription = exercise.ExerciseName,
                         exerciseInstruction = exercise.Instructions,
                         exerciseImageUrls = exercise.ImageURLs,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
                         protoId = exercise.ProtocolId,
+                        holdLimit = exercise.HoldInSeconds.toLong()
                     )
                     parsedExercises.add(implementedExercise)
                 } else {
@@ -72,12 +70,12 @@ class AssessmentListFragment(
                     )
                     notImplementedExercise.setExercise(
                         exerciseName = exercise.ExerciseName,
-                        exerciseDescription = exercise.ExerciseName,
                         exerciseInstruction = exercise.Instructions,
                         exerciseImageUrls = exercise.ImageURLs,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
                         protoId = exercise.ProtocolId,
+                        holdLimit = exercise.HoldInSeconds.toLong()
                     )
                     parsedExercises.add(notImplementedExercise)
                 }

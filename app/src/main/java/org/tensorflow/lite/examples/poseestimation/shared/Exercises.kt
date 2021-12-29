@@ -26,7 +26,7 @@ object Exercises {
             Quadruped(context),
             PronePressUpLumbar(context),
             Plank(context),
-            KneeSquat2(context)
+            CommonExercise(context)
         )
     }
 

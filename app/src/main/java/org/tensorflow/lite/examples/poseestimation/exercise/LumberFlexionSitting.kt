@@ -5,8 +5,6 @@ import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
-import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
-import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class LumberFlexionSitting(
     context: Context
@@ -37,7 +35,7 @@ class LumberFlexionSitting(
     private val totalStates = 3
     private var rightStateIndex = 0
 
-    private var wrongStateIndex = 0
+    override var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
@@ -184,40 +182,5 @@ class LumberFlexionSitting(
                 }
             }
         }
-    }
-
-    override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val elbowPoint = Point(
-            person.keyPoints[7].coordinate.x,
-            person.keyPoints[7].coordinate.y
-        )
-        val shoulderPoint = Point(
-            person.keyPoints[5].coordinate.x,
-            person.keyPoints[5].coordinate.y
-        )
-        val hipPoint = Point(
-            person.keyPoints[11].coordinate.x,
-            person.keyPoints[11].coordinate.y
-        )
-        val kneePoint = Point(
-            person.keyPoints[13].coordinate.x,
-            person.keyPoints[13].coordinate.y
-        )
-        return mutableListOf(
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = kneePoint,
-                middlePoint = hipPoint,
-                endPoint = shoulderPoint,
-                clockWise = true
-            ),
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = hipPoint,
-                middlePoint = shoulderPoint,
-                endPoint = elbowPoint,
-                clockWise = false
-            )
-        )
     }
 }

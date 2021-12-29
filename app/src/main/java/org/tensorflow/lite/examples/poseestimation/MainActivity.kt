@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -64,6 +63,12 @@ class MainActivity : AppCompatActivity() {
             } else {
                 binding.drawerLayout.openDrawer(GravityCompat.START)
             }
+        }
+
+        binding.btnTryAgain.setOnClickListener {
+            getAssignedExercises(patientId = loginData.patientId, tenant = loginData.tenant)
+            it.visibility = View.GONE
+            binding.progressIndicator.visibility = View.VISIBLE
         }
 
         binding.navView.setNavigationItemSelectedListener {
@@ -165,9 +170,11 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
                 Toast.makeText(
                     this@MainActivity,
-                    "Failed to get assessment list from API !!!",
+                    "Failed to get assessment list from API.",
                     Toast.LENGTH_LONG
                 ).show()
+                binding.progressIndicator.visibility = View.GONE
+                binding.btnTryAgain.visibility = View.VISIBLE
             }
         })
     }
