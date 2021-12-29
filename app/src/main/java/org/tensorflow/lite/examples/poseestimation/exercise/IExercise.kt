@@ -27,7 +27,7 @@ abstract class IExercise(
     private var repetitionCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
-    abstract fun exerciseCount(
+    abstract fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,

@@ -14,7 +14,7 @@ class GeneralExercise(
     id = exerciseId,
     active = active
 ) {
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,

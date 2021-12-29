@@ -25,7 +25,7 @@ class SingleArmRaiseInProne(
     private var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,

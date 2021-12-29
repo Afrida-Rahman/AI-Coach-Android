@@ -13,7 +13,7 @@ class BirdDog(
     context = context,
     id = 0 //332
 ) {
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,

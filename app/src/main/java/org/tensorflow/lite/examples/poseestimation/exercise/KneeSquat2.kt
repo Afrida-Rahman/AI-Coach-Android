@@ -10,11 +10,11 @@ class KneeSquat2(
     context: Context
 ) : IExercise(
     context = context,
-    id = 332
+    id = 178
 ) {
     private var phaseIndex = 0
 
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,

@@ -503,7 +503,7 @@ class ExerciseActivity : AppCompatActivity() {
             if (score > minConfidence) {
                 val height = bitmap.height
                 val width = bitmap.width
-                exercise.exerciseCount(person, height, width, phases = exerciseConstraints)
+                exercise.rightExerciseCount(person, height, width, phases = exerciseConstraints)
                 exercise.wrongExerciseCount(person, height, width)
 
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(

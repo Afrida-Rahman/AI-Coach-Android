@@ -9,11 +9,11 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
 import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class AROMStandingTrunkFlexion(
+class TrunkFlexionInStanding(
     context: Context
 ) : IExercise(
     context = context,
-    id = 178
+    id = 0// 178
 ) {
     private var hipAngleUpMin = 160f
     private var hipAngleUpMax = 190f
@@ -35,7 +35,7 @@ class AROMStandingTrunkFlexion(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,
