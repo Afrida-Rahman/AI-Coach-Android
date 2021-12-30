@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -66,8 +67,8 @@ abstract class IExercise(
             }
 
             if (isInsideBox(person, canvasHeight, canvasWidth) && isConstraintsSatisfied) {
-                phaseIndex++
-                if (phaseIndex == phaseList.size) {
+                phaseIndex++ // 3
+                if (phaseIndex == phaseList.size) { // 3 == 3
                     if (!isInLastState) {
                         isInLastState = true
                         lastStateTimestamp = System.currentTimeMillis()
@@ -96,7 +97,7 @@ abstract class IExercise(
     abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
 
     fun drawingRules(phases: List<Phase>): List<Constraint> {
-        return if (phases.isNotEmpty()) {
+        return if (phases.size > phaseIndex) {
             phases[phaseIndex].constraints
         } else {
             emptyList()
