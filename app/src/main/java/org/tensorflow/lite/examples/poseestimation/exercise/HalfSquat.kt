@@ -5,8 +5,6 @@ import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
-import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
-import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class HalfSquat(
     context: Context
@@ -37,11 +35,11 @@ class HalfSquat(
     private val totalStates = 3
     private var rightStateIndex = 0
 
-    private var wrongStateIndex = 0
+    override var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,
@@ -185,40 +183,5 @@ class HalfSquat(
                 }
             }
         }
-    }
-
-    override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val shoulderPoint = Point(
-            person.keyPoints[5].coordinate.x,
-            person.keyPoints[5].coordinate.y
-        )
-        val hipPoint = Point(
-            person.keyPoints[11].coordinate.x,
-            person.keyPoints[11].coordinate.y
-        )
-        val kneePoint = Point(
-            person.keyPoints[13].coordinate.x,
-            person.keyPoints[13].coordinate.y
-        )
-        val anklePoint = Point(
-            person.keyPoints[15].coordinate.x,
-            person.keyPoints[15].coordinate.y
-        )
-        return mutableListOf(
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = shoulderPoint,
-                middlePoint = hipPoint,
-                endPoint = kneePoint,
-                clockWise = true
-            ),
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = hipPoint,
-                middlePoint = kneePoint,
-                endPoint = anklePoint,
-                clockWise = false
-            )
-        )
     }
 }

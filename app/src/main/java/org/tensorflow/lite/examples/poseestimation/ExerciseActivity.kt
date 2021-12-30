@@ -51,6 +51,7 @@ class ExerciseActivity : AppCompatActivity() {
         const val ProtocolId = "ProtocolId"
         const val RepetitionLimit = "RepetitionLimit"
         const val SetLimit = "SetLimit"
+        const val HoldTimeLimit = "HoldTimeLimit"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
@@ -188,6 +189,7 @@ class ExerciseActivity : AppCompatActivity() {
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
+        val holdTimeLimit = intent.getLongExtra(HoldTimeLimit, 0L)
         val logInData = loadLogInData()
 
         getPatientExerciseURL = Utilities.getUrl(logInData.tenant).getPatientExerciseURL
@@ -197,12 +199,12 @@ class ExerciseActivity : AppCompatActivity() {
         exercise = Exercises.get(this, exerciseId)
         exercise.setExercise(
             exerciseName = exerciseName ?: "",
-            exerciseDescription = exerciseName ?: "",
             exerciseInstruction = "",
             exerciseImageUrls = listOf(),
             repetitionLimit = repetitionLimit,
             setLimit = setLimit,
-            protoId = protocolId
+            protoId = protocolId,
+            holdLimit = holdTimeLimit * 1000
         )
 
         findViewById<TextView>(R.id.textView).text = exerciseName
@@ -218,10 +220,6 @@ class ExerciseActivity : AppCompatActivity() {
                 NoOfSets = exercise.getSetCount(),
                 NoOfWrongCount = exercise.getWrongCount(),
                 Tenant = logInData.tenant
-            )
-            Log.d(
-                "DataFromResponse",
-                "$exerciseId, $testId, $protocolId, ${logInData.patientId}, ${logInData.tenant}"
             )
             val alertDialog = AlertDialog.Builder(this)
             alertDialog.setMessage("Do you feel any pain while performing this exercise?")
@@ -264,6 +262,8 @@ class ExerciseActivity : AppCompatActivity() {
 
         initSpinner()
         requestPermission()
+        closeCamera()
+        openCamera()
     }
 
     override fun onStart() {
@@ -307,7 +307,6 @@ class ExerciseActivity : AppCompatActivity() {
         poseDetector?.close()
         poseDetector = null
         poseDetector = MoveNet.create(this, device)
-        Log.d("bitmap", "posedetector:: $poseDetector")
         openCamera()
         startBackgroundThread()
     }
@@ -383,11 +382,8 @@ class ExerciseActivity : AppCompatActivity() {
         try {
             for (cameraId in manager.cameraIdList) {
                 val characteristics = manager.getCameraCharacteristics(cameraId)
-
-                // We don't use a front facing camera in this sample.
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
 
-//                Log.d("CameraIdNumber", "Camera ID: $cameraId")
                 if (isFrontCamera) {
                     if (cameraDirection != null && cameraDirection != CameraCharacteristics.LENS_FACING_FRONT) {
                         continue
@@ -503,17 +499,19 @@ class ExerciseActivity : AppCompatActivity() {
             if (score > minConfidence) {
                 val height = bitmap.height
                 val width = bitmap.width
-                exercise.exerciseCount(person, height, width, phases = exerciseConstraints)
+                exercise.rightExerciseCount(person, height, width, phases = exerciseConstraints)
                 exercise.wrongExerciseCount(person, height, width)
 
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
-                    bitmap,
-                    exercise.drawingRules(person, phases = exerciseConstraints),
-                    exercise.getRepetitionCount(),
-                    exercise.getSetCount(),
-                    exercise.getWrongCount(),
-                    exercise.getBorderColor(person, height, width),
-                    isFrontCamera
+                    input = bitmap,
+                    person = person,
+                    drawingRules = exercise.drawingRules(phases = exerciseConstraints),
+                    repCount = exercise.getRepetitionCount(),
+                    setCount = exercise.getSetCount(),
+                    wrongCount = exercise.getWrongCount(),
+                    holdTime = exercise.getHoldTimeLimitCount(),
+                    borderColor = exercise.getBorderColor(person, height, width),
+                    isFrontCamera = isFrontCamera
                 )
             }
         }
@@ -543,8 +541,6 @@ class ExerciseActivity : AppCompatActivity() {
         }
         val right: Int = left + screenWidth
         val bottom: Int = top + screenHeight
-
-        Log.d("BitMapValue", "$outputBitmap")
 
         canvas.drawBitmap(
             outputBitmap, Rect(0, 0, outputBitmap.width, outputBitmap.height),
@@ -596,7 +592,6 @@ class ExerciseActivity : AppCompatActivity() {
                 response: Response<ExerciseTrackingResponse>
             ) {
                 val responseBody = response.body()
-                Log.d("responseBody", "$responseBody")
                 if (responseBody != null) {
                     if (responseBody.Successful) {
                         Toast.makeText(
@@ -651,7 +646,6 @@ class ExerciseActivity : AppCompatActivity() {
                 response: Response<KeyPointRestrictions>
             ) {
                 val responseBody = response.body()
-                Log.d("dataForExercise", "data ::::  $responseBody")
                 if (responseBody == null) {
                     Toast.makeText(
                         this@ExerciseActivity,
@@ -665,25 +659,52 @@ class ExerciseActivity : AppCompatActivity() {
                             val constraints = mutableListOf<Constraint>()
                             group.KeyPointsRestriction.sortedByDescending { it.Id }
                                 .forEach { restriction ->
-                                    constraints.add(
-                                        Constraint(
-                                            minValue = restriction.MinValidationValue,
-                                            maxValue = restriction.MaxValidationValue,
-                                            type = if (restriction.Scale == "degree") {
-                                                ConstraintType.ANGLE
-                                            } else {
-                                                ConstraintType.LINE
-                                            },
-                                            startPointIndex = getIndex(restriction.StartKeyPosition),
-                                            middlePointIndex = getIndex(restriction.MiddleKeyPosition),
-                                            endPointIndex = getIndex(restriction.EndKeyPosition),
-                                            clockWise = restriction.AngleArea == "inner"
-                                        )
-                                    )
+                                    val constraintType = if (restriction.Scale == "degree") {
+                                        ConstraintType.ANGLE
+                                    } else {
+                                        ConstraintType.LINE
+                                    }
+                                    val startPointIndex = getIndex(restriction.StartKeyPosition)
+                                    val middlePointIndex = getIndex(restriction.MiddleKeyPosition)
+                                    val endPointIndex = getIndex(restriction.EndKeyPosition)
+                                    when (constraintType) {
+                                        ConstraintType.LINE -> {
+                                            if (startPointIndex >= 0 && endPointIndex >= 0) {
+                                                constraints.add(
+                                                    Constraint(
+                                                        minValue = restriction.MinValidationValue,
+                                                        maxValue = restriction.MaxValidationValue,
+                                                        uniqueId = restriction.Id,
+                                                        type = constraintType,
+                                                        startPointIndex = startPointIndex,
+                                                        middlePointIndex = middlePointIndex,
+                                                        endPointIndex = endPointIndex,
+                                                        clockWise = false
+                                                    )
+                                                )
+                                            }
+                                        }
+                                        ConstraintType.ANGLE -> {
+                                            if (startPointIndex >= 0 && middlePointIndex >= 0 && endPointIndex >= 0) {
+                                                constraints.add(
+                                                    Constraint(
+                                                        minValue = restriction.MinValidationValue,
+                                                        maxValue = restriction.MaxValidationValue,
+                                                        uniqueId = restriction.Id,
+                                                        type = constraintType,
+                                                        startPointIndex = startPointIndex,
+                                                        middlePointIndex = middlePointIndex,
+                                                        endPointIndex = endPointIndex,
+                                                        clockWise = restriction.AngleArea == "clockwise"
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             phases.add(
                                 Phase(
-                                    phase = group.Phase,
+                                    phaseNumber = group.Phase,
                                     constraints = constraints
                                 )
                             )
@@ -696,12 +717,10 @@ class ExerciseActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-                exerciseConstraints = phases.sortedBy { it.phase }
-                Log.d("Constraint", "$exerciseConstraints")
+                exerciseConstraints = phases.sortedBy { it.phaseNumber }
             }
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
-                Log.d("retrofit", "on failure ::: " + t.message)
                 Toast.makeText(
                     this@ExerciseActivity,
                     "Failed to get exercise response from API !!!",
@@ -710,7 +729,6 @@ class ExerciseActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun getIndex(name: String): Int {
         return when (name) {
@@ -731,7 +749,7 @@ class ExerciseActivity : AppCompatActivity() {
             "RIGHT_KNEE".lowercase() -> 14
             "LEFT_ANKLE".lowercase() -> 15
             "RIGHT_ANKLE".lowercase() -> 16
-            else -> 0
+            else -> -1
         }
     }
 

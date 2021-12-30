@@ -1,6 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.domain.model
 
-data class ExerciseItem(
+data class ExerciseConfig(
     val AssignReps: String?,
     val AssignSets: String?,
     val BodySubRegionList: String?,

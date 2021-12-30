@@ -1,6 +1,5 @@
 package org.tensorflow.lite.examples.poseestimation.domain.model
 
-enum class ConstraintType {
-    ANGLE,
-    LINE
-}
+data class CountStatus(
+    val isRight: Boolean
+)

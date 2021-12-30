@@ -5,14 +5,12 @@ import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
-import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
-import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class PelvicBridge(
     context: Context
 ) : IExercise(
     context = context,
-    id = 122
+    id = 0 //122
 ) {
     private var hipAngleDownMin = 115f
     private var hipAngleDownMax = 135f
@@ -26,9 +24,9 @@ class PelvicBridge(
 
     private val totalStates = 3
     private var rightStateIndex = 0
-    private var wrongStateIndex = 0
+    override var wrongStateIndex = 0
 
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,
@@ -128,28 +126,5 @@ class PelvicBridge(
                 }
             }
         }
-    }
-
-    override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val rightShoulderPoint = Point(
-            person.keyPoints[6].coordinate.x,
-            person.keyPoints[6].coordinate.y
-        )
-        val rightHipPoint = Point(
-            person.keyPoints[12].coordinate.x,
-            person.keyPoints[12].coordinate.y
-        )
-        val rightKneePoint = Point(
-            person.keyPoints[14].coordinate.x,
-            person.keyPoints[14].coordinate.y
-        )
-        return mutableListOf(
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = rightShoulderPoint,
-                middlePoint = rightHipPoint,
-                endPoint = rightKneePoint
-            )
-        )
     }
 }

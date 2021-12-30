@@ -15,7 +15,7 @@ object Exercises {
             SitToStand(context),
             IsometricCervicalExtension(context),
             LateralTrunkStretch(context),
-            AROMStandingTrunkFlexion(context),
+            TrunkFlexionInStanding(context),
             BirdDog(context),
             LumberFlexionSitting(context),
             SingleLegRaiseInQuadruped(context),
@@ -25,7 +25,8 @@ object Exercises {
             SingleArmRaiseInQuadruped(context),
             Quadruped(context),
             PronePressUpLumbar(context),
-            Plank(context)
+            Plank(context),
+            CommonExercise(context)
         )
     }
 

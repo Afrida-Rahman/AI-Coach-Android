@@ -5,8 +5,6 @@ import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
-import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
-import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class SeatedKneeExtension(
     context: Context
@@ -27,9 +25,9 @@ class SeatedKneeExtension(
     private val totalStates = 2
     private var rightStateIndex = 0
 
-    private var wrongStateIndex = 0
+    override var wrongStateIndex = 0
 
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,
@@ -129,29 +127,5 @@ class SeatedKneeExtension(
                 wrongCount()
             }
         }
-    }
-
-    override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val hipPoint = Point(
-            person.keyPoints[12].coordinate.x,
-            person.keyPoints[12].coordinate.y
-        )
-        val kneePoint = Point(
-            person.keyPoints[14].coordinate.x,
-            person.keyPoints[14].coordinate.y
-        )
-        val anklePoint = Point(
-            person.keyPoints[16].coordinate.x,
-            person.keyPoints[16].coordinate.y
-        )
-        return mutableListOf(
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = hipPoint,
-                middlePoint = kneePoint,
-                endPoint = anklePoint,
-                clockWise = false
-            )
-        )
     }
 }

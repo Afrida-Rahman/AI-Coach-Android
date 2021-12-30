@@ -1,19 +1,16 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
-import android.graphics.Color
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
-import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
-import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
-class AROMStandingTrunkFlexion(
+class TrunkFlexionInStanding(
     context: Context
 ) : IExercise(
     context = context,
-    id = 178
+    id = 0// 178
 ) {
     private var hipAngleUpMin = 160f
     private var hipAngleUpMax = 190f
@@ -31,11 +28,11 @@ class AROMStandingTrunkFlexion(
     private val totalStates = 3
 
     private var rightStateIndex = 0
-    private var wrongStateIndex = 0
+    override var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,
@@ -163,82 +160,5 @@ class AROMStandingTrunkFlexion(
                 wrongCount()
             }
         }
-    }
-
-    override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val leftElbowPoint = Point(
-            person.keyPoints[7].coordinate.x,
-            person.keyPoints[7].coordinate.y
-        )
-        val rightElbowPoint = Point(
-            person.keyPoints[8].coordinate.x,
-            person.keyPoints[8].coordinate.y
-        )
-        val leftShoulderPoint = Point(
-            person.keyPoints[5].coordinate.x,
-            person.keyPoints[5].coordinate.y
-        )
-        val rightShoulderPoint = Point(
-            person.keyPoints[6].coordinate.x,
-            person.keyPoints[6].coordinate.y
-        )
-        val leftHipPoint = Point(
-            person.keyPoints[11].coordinate.x,
-            person.keyPoints[11].coordinate.y
-        )
-        val leftKneePoint = Point(
-            person.keyPoints[13].coordinate.x,
-            person.keyPoints[13].coordinate.y
-        )
-        val leftWristPoint = Point(
-            person.keyPoints[9].coordinate.x,
-            person.keyPoints[9].coordinate.y
-        )
-        val rightWristPoint = Point(
-            person.keyPoints[10].coordinate.x,
-            person.keyPoints[10].coordinate.y
-        )
-
-        val leftStraightHandAngle =
-            Utilities.angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
-        val rightStraightHandAngle =
-            Utilities.angle(rightShoulderPoint, rightElbowPoint, rightWristPoint, false)
-
-        val rules = mutableListOf(
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = leftShoulderPoint,
-                middlePoint = leftHipPoint,
-                endPoint = leftKneePoint,
-                clockWise = true
-            )
-        )
-
-        val isLeftHandStraight =
-            leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
-        val isRightHandStraight =
-            rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
-
-        if (!isLeftHandStraight) {
-            rules.add(
-                Rule(
-                    type = RuleType.LINE,
-                    startPoint = leftElbowPoint,
-                    endPoint = leftWristPoint,
-                    color = Color.RED
-                )
-            )
-        }
-        if (!isRightHandStraight) {
-            rules.add(
-                Rule(
-                    type = RuleType.LINE,
-                    startPoint = rightElbowPoint,
-                    endPoint = rightWristPoint,
-                    color = Color.RED
-                )
-            )
-        }
-        return rules
     }
 }
