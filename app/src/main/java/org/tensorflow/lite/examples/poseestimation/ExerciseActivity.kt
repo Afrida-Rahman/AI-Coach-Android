@@ -695,7 +695,7 @@ class ExerciseActivity : AppCompatActivity() {
                                                         startPointIndex = startPointIndex,
                                                         middlePointIndex = middlePointIndex,
                                                         endPointIndex = endPointIndex,
-                                                        clockWise = restriction.AngleArea == "inner"
+                                                        clockWise = restriction.AngleArea == "clockwise"
                                                     )
                                                 )
                                             }
