@@ -30,10 +30,10 @@ class AssessmentListFragment(
                 KneeSquat(view.context),
                 HalfSquat(view.context),
                 SeatedKneeExtension(view.context),
-                PelvicBridge(view.context),
+                PelvicBridgeInSupine(view.context),
                 SitToStand(view.context),
                 IsometricCervicalExtension(view.context),
-                LateralTrunkStretch(view.context),
+                LateralBendingStretchInStanding(view.context),
                 TrunkFlexionInStanding(view.context),
                 BirdDog(view.context),
                 LumberFlexionInSitting(view.context),
@@ -44,7 +44,7 @@ class AssessmentListFragment(
                 SingleArmRaiseInQuadruped(view.context),
                 Quadruped(view.context),
                 PronePressUpLumbar(view.context),
-                Plank(view.context),
+                PlankOnElbowsInProne(view.context),
                 CommonExercise(view.context)
             )
             val parsedExercises = mutableListOf<IExercise>()

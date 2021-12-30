@@ -6,11 +6,11 @@ import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
-class PelvicBridge(
+class PelvicBridgeInSupine(
     context: Context
 ) : IExercise(
     context = context,
-    id = 0 //122
+    id = 122
 ) {
     private var hipAngleDownMin = 115f
     private var hipAngleDownMax = 135f
