@@ -36,7 +36,7 @@ class AssessmentListFragment(
                 LateralTrunkStretch(view.context),
                 TrunkFlexionInStanding(view.context),
                 BirdDog(view.context),
-                LumberFlexionSitting(view.context),
+                LumberFlexionInSitting(view.context),
                 SingleLegRaiseInQuadruped(view.context),
                 SingleLegRaiseInProne(view.context),
                 ProneOnElbows(view.context),
