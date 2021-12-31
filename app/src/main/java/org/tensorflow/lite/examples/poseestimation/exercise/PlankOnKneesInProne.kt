@@ -2,24 +2,14 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
-class BirdDog(
+class PlankOnKneesInProne(
     context: Context
 ) : IExercise(
     context = context,
-    id = 332
+    id = 194
 ) {
-    override fun rightExerciseCount(
-        person: Person,
-        canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
-    ) {
-
-    }
-
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-
+        TODO("Not yet implemented")
     }
 }

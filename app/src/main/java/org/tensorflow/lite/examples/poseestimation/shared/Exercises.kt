@@ -11,13 +11,13 @@ object Exercises {
             KneeSquat(context),
             HalfSquat(context),
             SeatedKneeExtension(context),
-            PelvicBridgeInSupine(context),
+            PelvicBridge(context),
             SitToStand(context),
             IsometricCervicalExtension(context),
-            LateralBendingStretchInStanding(context),
+            LateralTrunkStretch(context),
             TrunkFlexionInStanding(context),
             BirdDog(context),
-            LumberFlexionInSitting(context),
+            LumberFlexionSitting(context),
             SingleLegRaiseInQuadruped(context),
             SingleLegRaiseInProne(context),
             ProneOnElbows(context),
@@ -25,8 +25,15 @@ object Exercises {
             SingleArmRaiseInQuadruped(context),
             Quadruped(context),
             PronePressUpLumbar(context),
-            PlankOnElbowsInProne(context),
-            CommonExercise(context)
+            Plank(context),
+            CommonExercise(context),
+            SingleLegFallOutInSupine(context),
+            TrunkRotationInSitting(context),
+            TrunkRotationInStanding(context),
+            PlankOnKneesInProne(context),
+            IsometricShoulderAdductionInStanding(context),
+            IsometricCervicalExtensionInStanding(context),
+            HamstringCurlsInProne(context)
         )
     }
 
