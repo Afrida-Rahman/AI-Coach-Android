@@ -10,7 +10,7 @@ class TrunkFlexionInStanding(
     context: Context
 ) : IExercise(
     context = context,
-    id = 0// 178
+    id = 178
 ) {
     private var hipAngleUpMin = 160f
     private var hipAngleUpMax = 190f

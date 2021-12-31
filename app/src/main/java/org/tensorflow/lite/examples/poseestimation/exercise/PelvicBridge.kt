@@ -10,7 +10,7 @@ class PelvicBridge(
     context: Context
 ) : IExercise(
     context = context,
-    id = 0 //122
+    id = 122
 ) {
     private var hipAngleDownMin = 115f
     private var hipAngleDownMax = 135f
