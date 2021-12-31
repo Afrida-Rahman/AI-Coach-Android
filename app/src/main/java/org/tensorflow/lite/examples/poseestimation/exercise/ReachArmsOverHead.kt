@@ -10,7 +10,7 @@ class ReachArmsOverHead(
     context: Context
 ) : IExercise(
     context = context,
-    id = 0 // 347
+    id = 347
 ) {
     private var shoulderAngleDownMin = 0f
     private var shoulderAngleDownMax = 30f
