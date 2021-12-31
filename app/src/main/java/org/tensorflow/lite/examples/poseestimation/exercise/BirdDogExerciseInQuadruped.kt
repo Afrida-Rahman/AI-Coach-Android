@@ -4,7 +4,7 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
-class BirdDog(
+class BirdDogExerciseInQuadruped(
     context: Context
 ) : IExercise(
     context = context,

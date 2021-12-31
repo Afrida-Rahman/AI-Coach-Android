@@ -6,7 +6,7 @@ import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
-class LateralTrunkStretch(
+class LateralBendingStretchInStanding(
     context: Context
 ) : IExercise(
     context = context,
