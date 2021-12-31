@@ -42,7 +42,8 @@ object Exercises {
             HamstringStretchInLongSitting(context),
             SeatedRowsTheraband(context),
             IsometricShoulderAdductionInSitting(context),
-            IsometricCervicalFlexionInSitting(context)
+            IsometricCervicalFlexionInSitting(context),
+            IsometricCervicalRotationInStanding(context)
         )
     }
 
