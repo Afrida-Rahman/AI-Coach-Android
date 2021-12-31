@@ -65,7 +65,7 @@ abstract class IExercise(
                     ConstraintType.LINE -> {}
                 }
             }
-
+            Log.d("IExercise", "$phaseIndex: -> $isConstraintsSatisfied - $holdTimeLimitCounter ($maxHoldTimeLimit)")
             if (isInsideBox(person, canvasHeight, canvasWidth) && isConstraintsSatisfied) {
                 phaseIndex++ // 3
                 if (phaseIndex == phaseList.size) { // 3 == 3
