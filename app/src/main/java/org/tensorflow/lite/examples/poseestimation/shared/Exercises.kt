@@ -37,7 +37,8 @@ object Exercises {
             IsometricCervicalFlexionInStanding(context),
             PosteriorPelvicTiltInSupine(context),
             HamstringCurlsInStanding(context),
-            BirdDogInProne(context)
+            BirdDogInProne(context),
+            PlankOnHands(context)
         )
     }
 
