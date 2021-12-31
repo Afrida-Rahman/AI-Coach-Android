@@ -51,7 +51,8 @@ object Exercises {
             WallSquatsWithStabilityBall(context),
             ScapularStabilisationStabilityBallSingleHand(context),
             ScapularStabilizationStabilityBallBothHands(context),
-            TrunkExtensionOnHandInProne(context)
+            TrunkExtensionOnHandInProne(context),
+            Crunches(context)
         )
     }
 
