@@ -5,7 +5,7 @@ import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 
-class KneeSquat(
+class BodyWeightSquat(
     context: Context
 ) : IExercise(
     context = context,
