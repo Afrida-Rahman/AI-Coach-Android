@@ -29,7 +29,8 @@ object Exercises {
             CommonExercise(context),
             SingleLegFallOutInSupine(context),
             TrunkRotationInSitting(context),
-            TrunkRotationInStanding(context)
+            TrunkRotationInStanding(context),
+            PlankOnKneesInProne(context)
         )
     }
 
