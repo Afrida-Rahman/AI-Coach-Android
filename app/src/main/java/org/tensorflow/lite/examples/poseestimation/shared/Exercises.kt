@@ -54,7 +54,8 @@ object Exercises {
             TrunkExtensionOnHandInProne(context),
             Crunches(context),
             SingleKneeToChestInSupine(context),
-            AROMHipAbductionInStanding(context)
+            AROMHipAbductionInStanding(context),
+            IsometricCervicalRotationInSitting(context)
         )
     }
 
