@@ -31,7 +31,8 @@ object Exercises {
             TrunkRotationInSitting(context),
             TrunkRotationInStanding(context),
             PlankOnKneesInProne(context),
-            IsometricShoulderAdductionInStanding(context)
+            IsometricShoulderAdductionInStanding(context),
+            IsometricCervicalExtensionInStanding(context)
         )
     }
 
