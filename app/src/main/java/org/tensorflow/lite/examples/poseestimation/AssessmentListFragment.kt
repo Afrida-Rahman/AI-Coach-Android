@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
-import org.tensorflow.lite.examples.poseestimation.exercise.*
+import org.tensorflow.lite.examples.poseestimation.exercise.GeneralExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import org.tensorflow.lite.examples.poseestimation.shared.Exercises
 
 class AssessmentListFragment(
     private val assessments: List<Assessment>,
@@ -25,38 +27,7 @@ class AssessmentListFragment(
         val adapter = view.findViewById<RecyclerView>(R.id.assessment_list_container)
         val testList = mutableListOf<TestId>()
         assessments.forEach { assessment ->
-            val implementedExerciseList = listOf(
-                ReachArmsOverHead(view.context),
-                KneeSquat(view.context),
-                HalfSquat(view.context),
-                SeatedKneeExtension(view.context),
-                PelvicBridge(view.context),
-                SitToStand(view.context),
-                IsometricCervicalExtension(view.context),
-                LateralTrunkStretch(view.context),
-                TrunkFlexionInStanding(view.context),
-                BirdDog(view.context),
-                LumberFlexionSitting(view.context),
-                SingleLegRaiseInQuadruped(view.context),
-                SingleLegRaiseInProne(view.context),
-                ProneOnElbows(view.context),
-                SingleArmRaiseInProne(view.context),
-                SingleArmRaiseInQuadruped(view.context),
-                Quadruped(view.context),
-                PronePressUpLumbar(view.context),
-                Plank(view.context),
-                CommonExercise(view.context),
-                SingleLegFallOutInSupine(view.context),
-                TrunkRotationInSitting(view.context),
-                TrunkRotationInStanding(view.context),
-                PlankOnKneesInProne(view.context),
-                IsometricShoulderAdductionInStanding(view.context),
-                IsometricCervicalExtensionInStanding(view.context),
-                HamstringCurlsInProne(view.context),
-                IsometricCervicalFlexionInStanding(view.context),
-                PosteriorPelvicTiltInSupine(view.context),
-                HamstringCurlsInStanding(view.context)
-            )
+            val implementedExerciseList = Exercises.get(view.context)
             val parsedExercises = mutableListOf<IExercise>()
             assessment.Exercises.forEach { exercise ->
                 val implementedExercise =
