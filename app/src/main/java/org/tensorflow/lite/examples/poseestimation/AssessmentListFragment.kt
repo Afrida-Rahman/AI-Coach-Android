@@ -52,7 +52,8 @@ class AssessmentListFragment(
                 PlankOnKneesInProne(view.context),
                 IsometricShoulderAdductionInStanding(view.context),
                 IsometricCervicalExtensionInStanding(view.context),
-                HamstringCurlsInProne(view.context)
+                HamstringCurlsInProne(view.context),
+                IsometricCervicalFlexionInStanding(view.context)
             )
             val parsedExercises = mutableListOf<IExercise>()
             assessment.Exercises.forEach { exercise ->

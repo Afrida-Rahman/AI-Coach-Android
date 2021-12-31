@@ -33,7 +33,8 @@ object Exercises {
             PlankOnKneesInProne(context),
             IsometricShoulderAdductionInStanding(context),
             IsometricCervicalExtensionInStanding(context),
-            HamstringCurlsInProne(context)
+            HamstringCurlsInProne(context),
+            IsometricCervicalFlexionInStanding(context)
         )
     }
 
