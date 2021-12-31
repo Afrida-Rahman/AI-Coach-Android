@@ -38,7 +38,8 @@ object Exercises {
             PosteriorPelvicTiltInSupine(context),
             HamstringCurlsInStanding(context),
             BirdDogInProne(context),
-            PlankOnHands(context)
+            PlankOnHands(context),
+            HamstringStretchInLongSitting(context)
         )
     }
 
