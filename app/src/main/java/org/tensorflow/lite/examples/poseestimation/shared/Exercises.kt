@@ -43,7 +43,8 @@ object Exercises {
             SeatedRowsTheraband(context),
             IsometricShoulderAdductionInSitting(context),
             IsometricCervicalFlexionInSitting(context),
-            IsometricCervicalRotationInStanding(context)
+            IsometricCervicalRotationInStanding(context),
+            ShoulderFlexionWithWeightsInStanding(context)
         )
     }
 
