@@ -34,7 +34,8 @@ object Exercises {
             IsometricShoulderAdductionInStanding(context),
             IsometricCervicalExtensionInStanding(context),
             HamstringCurlsInProne(context),
-            IsometricCervicalFlexionInStanding(context)
+            IsometricCervicalFlexionInStanding(context),
+            PosteriorPelvicTiltInSupine(context)
         )
     }
 
