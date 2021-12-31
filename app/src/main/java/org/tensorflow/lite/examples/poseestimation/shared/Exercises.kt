@@ -52,7 +52,8 @@ object Exercises {
             ScapularStabilisationStabilityBallSingleHand(context),
             ScapularStabilizationStabilityBallBothHands(context),
             TrunkExtensionOnHandInProne(context),
-            Crunches(context)
+            Crunches(context),
+            SingleKneeToChestInSupine(context)
         )
     }
 
