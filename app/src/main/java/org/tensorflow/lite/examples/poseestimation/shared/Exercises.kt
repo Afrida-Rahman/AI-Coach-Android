@@ -30,7 +30,8 @@ object Exercises {
             SingleLegFallOutInSupine(context),
             TrunkRotationInSitting(context),
             TrunkRotationInStanding(context),
-            PlankOnKneesInProne(context)
+            PlankOnKneesInProne(context),
+            IsometricShoulderAdductionInStanding(context)
         )
     }
 
