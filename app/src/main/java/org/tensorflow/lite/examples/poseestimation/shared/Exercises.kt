@@ -41,7 +41,8 @@ object Exercises {
             PlankOnHands(context),
             HamstringStretchInLongSitting(context),
             SeatedRowsTheraband(context),
-            IsometricShoulderAdductionInSitting(context)
+            IsometricShoulderAdductionInSitting(context),
+            IsometricCervicalFlexionInSitting(context)
         )
     }
 
