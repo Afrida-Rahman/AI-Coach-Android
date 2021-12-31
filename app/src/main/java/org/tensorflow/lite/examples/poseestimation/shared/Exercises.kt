@@ -44,7 +44,8 @@ object Exercises {
             IsometricShoulderAdductionInSitting(context),
             IsometricCervicalFlexionInSitting(context),
             IsometricCervicalRotationInStanding(context),
-            ShoulderFlexionWithWeightsInStanding(context)
+            ShoulderFlexionWithWeightsInStanding(context),
+            ShoulderExtensionWithWeightsInStanding(context)
         )
     }
 
