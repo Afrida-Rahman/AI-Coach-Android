@@ -1,17 +1,14 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import android.content.Context
-import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
-import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
-import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
 
 class SingleArmAndLegRaiseInProne(
     context: Context
-) :  IExercise(
+) : IExercise(
     context = context,
     id = 501
 ) {
@@ -28,11 +25,11 @@ class SingleArmAndLegRaiseInProne(
     private val totalStates = 3
     private var rightStateIndex = 0
 
-    private var wrongStateIndex = 0
+    override var wrongStateIndex = 0
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun exerciseCount(
+    override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int,
@@ -58,7 +55,7 @@ class SingleArmAndLegRaiseInProne(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-        if (phases.isNotEmpty()){
+        if (phases.isNotEmpty()) {
             downArmAngleMin = phases[0].constraints[0].minValue.toFloat()
             downArmAngleMax = phases[0].constraints[0].maxValue.toFloat()
             downLegAngleMin = phases[0].constraints[0].minValue.toFloat()
@@ -116,44 +113,5 @@ class SingleArmAndLegRaiseInProne(
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
 
-    }
-
-    override fun drawingRules(person: Person, phases: List<Phase>): List<Rule> {
-        val leftWristPoint = Point(
-            person.keyPoints[9].coordinate.x,
-            person.keyPoints[9].coordinate.y
-        )
-        val leftShoulderPoint = Point(
-            person.keyPoints[5].coordinate.x,
-            person.keyPoints[5].coordinate.y
-        )
-        val leftHipPoint = Point(
-            person.keyPoints[11].coordinate.x,
-            person.keyPoints[11].coordinate.y
-        )
-        val rightKneePoint = Point(
-            person.keyPoints[14].coordinate.x,
-            person.keyPoints[14].coordinate.y
-        )
-        val rightAnklePoint = Point(
-            person.keyPoints[16].coordinate.x,
-            person.keyPoints[16].coordinate.y
-        )
-        return mutableListOf(
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = leftWristPoint,
-                middlePoint = leftShoulderPoint,
-                endPoint = leftHipPoint,
-                clockWise = false
-            ),
-            Rule(
-                type = RuleType.ANGLE,
-                startPoint = leftHipPoint,
-                middlePoint = rightKneePoint,
-                endPoint = rightAnklePoint,
-                clockWise = false
-            )
-        )
     }
 }

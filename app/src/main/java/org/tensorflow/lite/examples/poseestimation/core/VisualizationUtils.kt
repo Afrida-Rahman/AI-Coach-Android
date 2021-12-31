@@ -5,8 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.util.Log
-import org.tensorflow.lite.examples.poseestimation.domain.model.Rule
-import org.tensorflow.lite.examples.poseestimation.domain.model.RuleType
+import org.tensorflow.lite.examples.poseestimation.domain.model.*
 
 
 object VisualizationUtils {
@@ -15,10 +14,12 @@ object VisualizationUtils {
 
     fun drawBodyKeyPoints(
         input: Bitmap,
-        drawingRules: List<Rule>,
+        person: Person,
+        drawingRules: List<Constraint>,
         repCount: Int,
         setCount: Int,
         wrongCount: Int,
+        holdTime: Long,
         borderColor: Int = Color.GREEN,
         isFrontCamera: Boolean = false
     ): Bitmap {
@@ -31,29 +32,33 @@ object VisualizationUtils {
         val width = draw.canvas.width
         val height = draw.canvas.height
 
+
         for (rule in drawingRules) {
-            if (rule.type == RuleType.ANGLE) {
+            val startPoint = person.keyPoints[rule.startPointIndex].toCanvasPoint()
+            val middlePoint = person.keyPoints[rule.middlePointIndex].toCanvasPoint()
+            val endPoint = person.keyPoints[rule.endPointIndex].toCanvasPoint()
+            if (rule.type == ConstraintType.ANGLE) {
                 if (isFrontCamera) {
                     draw.angle(
                         Point(
-                            output.width - rule.startPoint.x,
-                            rule.startPoint.y
+                            output.width - startPoint.x,
+                            startPoint.y
                         ),
                         Point(
-                            output.width - rule.middlePoint.x,
-                            rule.middlePoint.y
+                            output.width - middlePoint.x,
+                            middlePoint.y
                         ),
                         Point(
-                            output.width - rule.endPoint.x,
-                            rule.endPoint.y
+                            output.width - endPoint.x,
+                            endPoint.y
                         ),
                         _clockWise = !rule.clockWise
                     )
                 } else {
                     draw.angle(
-                        rule.startPoint,
-                        rule.middlePoint,
-                        rule.endPoint,
+                        startPoint,
+                        middlePoint,
+                        endPoint,
                         _clockWise = rule.clockWise
                     )
                 }
@@ -61,30 +66,35 @@ object VisualizationUtils {
                 if (isFrontCamera) {
                     draw.line(
                         Point(
-                            output.width - rule.startPoint.x,
-                            rule.startPoint.y
+                            output.width - startPoint.x,
+                            startPoint.y
                         ),
                         Point(
-                            output.width - rule.endPoint.x,
-                            rule.endPoint.y
+                            output.width - endPoint.x,
+                            endPoint.y
                         ),
                         _color = rule.color
                     )
                 } else {
                     draw.line(
-                        rule.startPoint,
-                        rule.endPoint,
+                        startPoint,
+                        endPoint,
                         _color = rule.color
                     )
                 }
             }
         }
-        Log.d("CountIssue", "$repCount")
         draw.writeText(
             "$repCount / $setCount",
             Point(width * 1 / 7f, 60f),
             Color.rgb(19, 93, 148),//blue
             65f
+        )
+        draw.writeText(
+            "$holdTime",
+            Point(width * 1 / 2f, 60f),
+            Color.rgb(19, 93, 148),//blue
+            35f
         )
         draw.writeText(
             wrongCount.toString(),
@@ -94,10 +104,10 @@ object VisualizationUtils {
         )
         if (borderColor != -1) {
             draw.rectangle(
-                Point(width * 2f / 20f, height * 2.5f / 20f),
-                Point(width * 18.5f / 20f, height * 2.5f / 20f),
-                Point(width * 18.5f / 20f, height * 18.5f / 20f),
-                Point(width * 2f / 20f, height * 18.5f / 20f),
+                Point(width * 1f / 20f, height * 2.5f / 20f),
+                Point(width * 19f / 20f, height * 2.5f / 20f),
+                Point(width * 19f / 20f, height * 18.5f / 20f),
+                Point(width * 1f / 20f, height * 18.5f / 20f),
                 _color = borderColor,
                 _thickness = BORDER_WIDTH
             )

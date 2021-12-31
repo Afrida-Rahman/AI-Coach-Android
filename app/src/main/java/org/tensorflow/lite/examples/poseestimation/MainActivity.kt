@@ -2,7 +2,6 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
 import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
@@ -24,6 +24,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,6 +65,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.btnTryAgain.setOnClickListener {
+            getAssignedExercises(patientId = loginData.patientId, tenant = loginData.tenant)
+            it.visibility = View.GONE
+            binding.progressIndicator.visibility = View.VISIBLE
+        }
+
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.log_out_button -> {
@@ -90,7 +97,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (assessmentListFragment != null) {
-            Log.d("FragmentVisibility", assessmentListFragment!!.isVisible.toString())
             if (assessmentListFragment!!.isVisible) {
                 super.onBackPressed()
                 finish()
@@ -116,9 +122,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun getAssignedExercises(patientId: String, tenant: String) {
         getPatientExerciseUrl = Utilities.getUrl(loadLogInData().tenant).getPatientExerciseURL
+        val client = OkHttpClient.Builder()
+            .connectTimeout(2, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
         val service = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(getPatientExerciseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IExerciseService::class.java)
         val requestPayload = PatientDataPayload(
@@ -135,7 +147,8 @@ class MainActivity : AppCompatActivity() {
                 if (responseBody != null) {
                     if (responseBody.Assessments.isNotEmpty()) {
                         binding.progressIndicator.visibility = View.GONE
-                        assessmentListFragment = AssessmentListFragment(responseBody.Assessments, patientId, tenant)
+                        assessmentListFragment =
+                            AssessmentListFragment(responseBody.Assessments, patientId, tenant)
                         assessmentListFragment?.let { changeScreen(it) }
                     } else {
                         Toast.makeText(
@@ -157,9 +170,11 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
                 Toast.makeText(
                     this@MainActivity,
-                    "Failed to get assessment list from API !!!",
+                    "Failed to get assessment list from API.",
                     Toast.LENGTH_LONG
                 ).show()
+                binding.progressIndicator.visibility = View.GONE
+                binding.btnTryAgain.visibility = View.VISIBLE
             }
         })
     }
