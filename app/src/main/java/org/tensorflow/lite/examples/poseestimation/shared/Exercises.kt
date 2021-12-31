@@ -40,7 +40,8 @@ object Exercises {
             BirdDogInProne(context),
             PlankOnHands(context),
             HamstringStretchInLongSitting(context),
-            SeatedRowsTheraband(context)
+            SeatedRowsTheraband(context),
+            IsometricShoulderAdductionInSitting(context)
         )
     }
 
