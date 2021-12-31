@@ -46,7 +46,8 @@ object Exercises {
             IsometricCervicalRotationInStanding(context),
             ShoulderFlexionWithWeightsInStanding(context),
             ShoulderExtensionWithWeightsInStanding(context),
-            AROMAnkleDorsiflexionInSitting(context)
+            AROMAnkleDorsiflexionInSitting(context),
+            WallSquatsWithBallSqueeze(context)
         )
     }
 
