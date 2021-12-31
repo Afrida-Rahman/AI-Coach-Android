@@ -27,7 +27,8 @@ object Exercises {
             PronePressUpLumbar(context),
             Plank(context),
             CommonExercise(context),
-            SingleLegFallOutInSupine(context)
+            SingleLegFallOutInSupine(context),
+            TrunkRotationInSitting(context)
         )
     }
 

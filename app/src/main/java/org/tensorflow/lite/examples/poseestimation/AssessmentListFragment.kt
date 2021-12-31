@@ -46,7 +46,8 @@ class AssessmentListFragment(
                 PronePressUpLumbar(view.context),
                 Plank(view.context),
                 CommonExercise(view.context),
-                SingleLegFallOutInSupine(view.context)
+                SingleLegFallOutInSupine(view.context),
+                TrunkRotationInSitting(view.context)
             )
             val parsedExercises = mutableListOf<IExercise>()
             assessment.Exercises.forEach { exercise ->
