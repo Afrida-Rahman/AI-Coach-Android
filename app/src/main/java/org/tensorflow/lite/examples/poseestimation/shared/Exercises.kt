@@ -53,7 +53,8 @@ object Exercises {
             ScapularStabilizationStabilityBallBothHands(context),
             TrunkExtensionOnHandInProne(context),
             Crunches(context),
-            SingleKneeToChestInSupine(context)
+            SingleKneeToChestInSupine(context),
+            AROMHipAbductionInStanding(context)
         )
     }
 
