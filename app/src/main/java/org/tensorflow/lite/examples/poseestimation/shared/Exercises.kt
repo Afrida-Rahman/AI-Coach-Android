@@ -39,7 +39,8 @@ object Exercises {
             HamstringCurlsInStanding(context),
             BirdDogInProne(context),
             PlankOnHands(context),
-            HamstringStretchInLongSitting(context)
+            HamstringStretchInLongSitting(context),
+            SeatedRowsTheraband(context)
         )
     }
 
