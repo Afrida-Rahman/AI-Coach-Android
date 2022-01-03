@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
+import androidx.annotation.RawRes
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -10,6 +11,9 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Constraint
 import org.tensorflow.lite.examples.poseestimation.domain.model.ConstraintType
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
+import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isBothHandStraight
+import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isLeftHandStraight
+import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isRightHandStraight
 
 abstract class IExercise(
     context: Context,
@@ -65,7 +69,10 @@ abstract class IExercise(
                     ConstraintType.LINE -> {}
                 }
             }
-            Log.d("IExercise", "$phaseIndex: -> $isConstraintsSatisfied - $holdTimeLimitCounter ($maxHoldTimeLimit)")
+            Log.d(
+                "IExercise",
+                "$phaseIndex: -> $isConstraintsSatisfied - $holdTimeLimitCounter ($maxHoldTimeLimit)"
+            )
             if (isInsideBox(person, canvasHeight, canvasWidth) && isConstraintsSatisfied) {
                 phaseIndex++ // 3
                 if (phaseIndex == phaseList.size) { // 3 == 3
@@ -91,6 +98,7 @@ abstract class IExercise(
                 isInLastState = false
                 holdTimeLimitCounter = 0L
             }
+            commonInstruction(person, phaseList[phaseIndex].constraints)
         }
     }
 
@@ -142,35 +150,41 @@ abstract class IExercise(
         audioPlayer.play(R.raw.wrong_count)
     }
 
-    fun standInside() {
-        val timestamp = System.currentTimeMillis().toInt()
-        if (timestamp - lastTimePlayed >= 3500) {
-            lastTimePlayed = timestamp
-            audioPlayer.play(R.raw.stand_inside_box)
+    private fun commonInstruction(person: Person, constraints: List<Constraint>) {
+        constraints.forEach {
+            if (!isBothHandStraight(
+                    person = person,
+                    constraints = constraints
+                )
+            ) onEvent(CommonInstructionEvent.HandIsNotStraight)
+            else if (!isLeftHandStraight(
+                    person = person,
+                    constraint = it
+                )
+            ) onEvent(CommonInstructionEvent.LeftHandIsNotStraight)
+            else if (!isRightHandStraight(
+                    person = person,
+                    constraint = it
+                )
+            ) onEvent(CommonInstructionEvent.RightHandIsNotStraight)
         }
     }
 
-    fun handNotStraight() {
-        val timestamp = System.currentTimeMillis().toInt()
-        if (timestamp - lastTimePlayed >= 3500) {
-            lastTimePlayed = timestamp
-            audioPlayer.play(R.raw.keep_hand_straight)
+
+    private fun onEvent(event: CommonInstructionEvent) {
+        when (event) {
+            is CommonInstructionEvent.OutSideOfBox -> playAudio(R.raw.stand_inside_box)
+            is CommonInstructionEvent.HandIsNotStraight -> playAudio(R.raw.keep_hand_straight)
+            is CommonInstructionEvent.LeftHandIsNotStraight -> playAudio(R.raw.left_hand_straight)
+            is CommonInstructionEvent.RightHandIsNotStraight -> playAudio(R.raw.right_hand_straight)
         }
     }
 
-    fun rightHandNotStraight() {
+    private fun playAudio(@RawRes resource: Int) {
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
-            audioPlayer.play(R.raw.right_hand_straight)
-        }
-    }
-
-    fun leftHandNotStraight() {
-        val timestamp = System.currentTimeMillis().toInt()
-        if (timestamp - lastTimePlayed >= 3500) {
-            lastTimePlayed = timestamp
-            audioPlayer.play(R.raw.left_hand_straight)
+            audioPlayer.play(resource)
         }
     }
 
@@ -199,4 +213,11 @@ abstract class IExercise(
     fun getSetCount() = setCounter
 
     fun getHoldTimeLimitCount() = holdTimeLimitCounter
+
+    sealed class CommonInstructionEvent {
+        object OutSideOfBox : CommonInstructionEvent()
+        object HandIsNotStraight : CommonInstructionEvent()
+        object LeftHandIsNotStraight : CommonInstructionEvent()
+        object RightHandIsNotStraight : CommonInstructionEvent()
+    }
 }
