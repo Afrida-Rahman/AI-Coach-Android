@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
-import org.tensorflow.lite.examples.poseestimation.exercise.GeneralExercise
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.GeneralExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 import org.tensorflow.lite.examples.poseestimation.shared.Exercises
 
 class AssessmentListFragment(
@@ -28,7 +28,7 @@ class AssessmentListFragment(
         val testList = mutableListOf<TestId>()
         assessments.forEach { assessment ->
             val implementedExerciseList = Exercises.get(view.context)
-            val parsedExercises = mutableListOf<IExercise>()
+            val parsedExercises = mutableListOf<HomeExercise>()
             assessment.Exercises.forEach { exercise ->
                 val implementedExercise =
                     implementedExerciseList.find { it.id == exercise.ExerciseId }

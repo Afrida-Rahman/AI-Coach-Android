@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.core.ExerciseListAdapter
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class ExerciseListFragment(
     private val assessmentId: String,
-    private val exerciseList: List<IExercise>,
+    private val exerciseList: List<HomeExercise>,
     private val patientId: String,
     private val tenant: String,
 ) : Fragment() {
