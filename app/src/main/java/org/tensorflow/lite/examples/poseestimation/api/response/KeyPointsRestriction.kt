@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.api.response
 
 data class KeyPointsRestriction(
+    val ResistanceId: Int,
     val AngleArea: String,
     val CapturedImage: String,
     val Direction: String,
