@@ -1,9 +1,9 @@
 package org.tensorflow.lite.examples.poseestimation.exercise
 
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.domain.model.BodyPart
 import org.tensorflow.lite.examples.poseestimation.domain.model.Constraint
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.shared.PoseIndex
 
 object CommonInstructions {
 
@@ -13,14 +13,14 @@ object CommonInstructions {
     private const val RIGHT_ELBOW_MAX = 190f
 
     private val LEFT_HAND_KEY_POINTS = setOf(
-        PoseIndex.LEFT_WRIST,
-        PoseIndex.LEFT_ELBOW,
-        PoseIndex.LEFT_SHOULDER
+        BodyPart.LEFT_WRIST.position,
+        BodyPart.LEFT_ELBOW.position,
+        BodyPart.LEFT_SHOULDER.position
     )
     private val RIGHT_HAND_KEY_POINTS = setOf(
-        PoseIndex.RIGHT_WRIST,
-        PoseIndex.RIGHT_ELBOW,
-        PoseIndex.RIGHT_SHOULDER
+        BodyPart.RIGHT_WRIST.position,
+        BodyPart.RIGHT_ELBOW.position,
+        BodyPart.RIGHT_SHOULDER.position
     )
 
     fun isBothHandStraight(person: Person, constraints: List<Constraint>): Boolean {

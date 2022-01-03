@@ -732,23 +732,23 @@ class ExerciseActivity : AppCompatActivity() {
 
     private fun getIndex(name: String): Int {
         return when (name) {
-            "NOSE".lowercase() -> 0
-            "LEFT_EYE".lowercase() -> 1
-            "RIGHT_EYE".lowercase() -> 2
-            "LEFT_EAR".lowercase() -> 3
-            "RIGHT_EAR".lowercase() -> 4
-            "LEFT_SHOULDER".lowercase() -> 5
-            "RIGHT_SHOULDER".lowercase() -> 6
-            "LEFT_ELBOW".lowercase() -> 7
-            "RIGHT_ELBOW".lowercase() -> 8
-            "LEFT_WRIST".lowercase() -> 9
-            "RIGHT_WRIST".lowercase() -> 10
-            "LEFT_HIP".lowercase() -> 11
-            "RIGHT_HIP".lowercase() -> 12
-            "LEFT_KNEE".lowercase() -> 13
-            "RIGHT_KNEE".lowercase() -> 14
-            "LEFT_ANKLE".lowercase() -> 15
-            "RIGHT_ANKLE".lowercase() -> 16
+            "NOSE".lowercase() -> BodyPart.NOSE.position
+            "LEFT_EYE".lowercase() -> BodyPart.LEFT_EYE.position
+            "RIGHT_EYE".lowercase() -> BodyPart.RIGHT_EYE.position
+            "LEFT_EAR".lowercase() -> BodyPart.LEFT_EAR.position
+            "RIGHT_EAR".lowercase() -> BodyPart.RIGHT_EAR.position
+            "LEFT_SHOULDER".lowercase() -> BodyPart.LEFT_SHOULDER.position
+            "RIGHT_SHOULDER".lowercase() -> BodyPart.RIGHT_SHOULDER.position
+            "LEFT_ELBOW".lowercase() -> BodyPart.LEFT_ELBOW.position
+            "RIGHT_ELBOW".lowercase() -> BodyPart.RIGHT_ELBOW.position
+            "LEFT_WRIST".lowercase() -> BodyPart.LEFT_WRIST.position
+            "RIGHT_WRIST".lowercase() -> BodyPart.RIGHT_WRIST.position
+            "LEFT_HIP".lowercase() -> BodyPart.LEFT_HIP.position
+            "RIGHT_HIP".lowercase() -> BodyPart.RIGHT_HIP.position
+            "LEFT_KNEE".lowercase() -> BodyPart.LEFT_KNEE.position
+            "RIGHT_KNEE".lowercase() -> BodyPart.RIGHT_KNEE.position
+            "LEFT_ANKLE".lowercase() -> BodyPart.LEFT_ANKLE.position
+            "RIGHT_ANKLE".lowercase() -> BodyPart.RIGHT_ANKLE.position
             else -> -1
         }
     }

@@ -171,7 +171,7 @@ abstract class IExercise(
     }
 
 
-    private fun onEvent(event: CommonInstructionEvent) {
+    open fun onEvent(event: CommonInstructionEvent) {
         when (event) {
             is CommonInstructionEvent.OutSideOfBox -> playAudio(R.raw.stand_inside_box)
             is CommonInstructionEvent.HandIsNotStraight -> playAudio(R.raw.keep_hand_straight)
