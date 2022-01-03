@@ -68,7 +68,6 @@ class ExerciseListAdapter(
                         putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
                         putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
                         putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
-                        putExtra(ExerciseActivity.HoldTimeLimit, exercise.maxHoldTimeLimit)
                     }
                     it.context.startActivity(intent)
                 }
@@ -147,8 +146,6 @@ class ExerciseListAdapter(
             assignedRepetition.text =
                 assignedRepetition.context.getString(R.string.assigned_repetition)
                     .format(exercise.maxRepCount)
-            holdTimeDisplay.text = holdTimeDisplay.context.getString(R.string.hold_for)
-                .format(exercise.maxHoldTimeLimit.toInt())
         }
     }
 
@@ -227,6 +224,5 @@ class ExerciseListAdapter(
         val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
         val assignedSet: TextView = view.findViewById(R.id.assigned_set)
         val assignedRepetition: TextView = view.findViewById(R.id.assigned_repetition)
-        val holdTimeDisplay: TextView = view.findViewById(R.id.hold_for)
     }
 }

@@ -91,5 +91,4 @@
     <string name="tenant">Tenant</string>
     <string name="manual_tracking">Manual Tracking</string>
     <string name="try_again">Try Again</string>
-    <string name="hold_for">Hold For: %d second(s)</string>
 </resources>

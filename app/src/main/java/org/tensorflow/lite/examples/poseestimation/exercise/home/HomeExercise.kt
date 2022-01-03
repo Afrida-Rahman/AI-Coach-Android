@@ -23,18 +23,18 @@ abstract class HomeExercise(
     var instruction: String? = "",
     var imageUrls: List<String> = listOf(),
     var maxRepCount: Int = 0,
-    var maxSetCount: Int = 0,
-    var maxHoldTimeLimit: Long = 0L
+    var maxSetCount: Int = 0
 ) {
     private var phaseIndex = 0
     open var wrongStateIndex = 0
-    private var isInLastState = false
+    private var stateStarted = false
     private var lastStateTimestamp = 0L
     private val audioPlayer = AudioPlayer(context)
     private var setCounter = 0
     private var wrongCounter = 0
     private var repetitionCounter = 0
     private var holdTimeLimitCounter = 0L
+    private var maxHoldTime = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
     open fun rightExerciseCount(
@@ -43,65 +43,108 @@ abstract class HomeExercise(
         canvasWidth: Int,
         phases: List<Phase>
     ) {
-        val phaseIndices = mutableListOf<Int>()
-        val phaseList = phases.sortedBy { it.phaseNumber }.filter {
-            val shouldAdd = !phaseIndices.contains(it.phaseNumber)
-            phaseIndices.add(it.phaseNumber)
-            shouldAdd
-        }
+        val phaseList = sortedPhaseList(phases)
         if (phaseList.isNotEmpty() && phaseIndex < phaseList.size) {
-            var isConstraintsSatisfied = true
-
-            phaseList[phaseIndex].constraints.forEach {
-                when (it.type) {
-                    ConstraintType.ANGLE -> {
-                        val angle = Utilities.angle(
-                            startPoint = person.keyPoints[it.startPointIndex].toRealPoint(),
-                            middlePoint = person.keyPoints[it.middlePointIndex].toRealPoint(),
-                            endPoint = person.keyPoints[it.endPointIndex].toRealPoint(),
-                            clockWise = it.clockWise
-                        )
-                        if (angle < it.minValue || angle > it.maxValue) {
-                            isConstraintsSatisfied = false
-                        }
-                    }
-                    ConstraintType.LINE -> {}
-                }
-            }
+            val phase = phaseList[phaseIndex]
+            val constraintSatisfied = isConstraintSatisfied(
+                person,
+                phase.constraints
+            )
+            maxHoldTime = phase.holdTime
             Log.d(
                 "IExercise",
-                "$phaseIndex: -> $isConstraintsSatisfied - $holdTimeLimitCounter ($maxHoldTimeLimit)"
+                "$phaseIndex: -> $constraintSatisfied - $holdTimeLimitCounter / $maxHoldTime"
             )
-            if (isInsideBox(person, canvasHeight, canvasWidth) && isConstraintsSatisfied) {
-                phaseIndex++
-                if (phaseIndex == phaseList.size) {
-                    if (!isInLastState) {
-                        isInLastState = true
-                        lastStateTimestamp = System.currentTimeMillis()
-                        phaseIndex--
-                    } else {
-                        if (holdTimeLimitCounter > maxHoldTimeLimit) {
-                            phaseIndex = 0
-                            wrongStateIndex = 0
-                            repetitionCount()
-                            isInLastState = false
-                        } else {
-                            phaseIndex--
-                        }
+
+            if (isInsideBox(person, canvasHeight, canvasWidth) && constraintSatisfied) {
+//                phaseIndex++
+//                if (phaseIndex == phaseList.size) {
+//                    if (!isInLastState) {
+//                        isInLastState = true
+//                        lastStateTimestamp = System.currentTimeMillis()
+//                        phaseIndex--
+//                    } else {
+//                        if (holdTimeLimitCounter > phase.holdTime) {
+//                            phaseIndex = 0
+//                            wrongStateIndex = 0
+//                            repetitionCount()
+//                            isInLastState = false
+//                        } else {
+//                            phaseIndex--
+//                        }
+//                    }
+//                    holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
+//                } else {
+//                    holdTimeLimitCounter = 0L
+//                }
+                if (!stateStarted) {
+                    lastStateTimestamp = System.currentTimeMillis()
+                    stateStarted = true
+                }
+                if (phaseIndex == phaseList.size - 1) {
+                    phaseIndex = 0
+                    wrongStateIndex = 0
+                    repetitionCount()
+                } else {
+                    if (holdTimeLimitCounter > maxHoldTime * 1000) {
+                        phaseIndex++
+                        stateStarted = false
                     }
                     holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
-                } else {
-                    holdTimeLimitCounter = 0L
                 }
             } else {
-                isInLastState = false
-                holdTimeLimitCounter = 0L
+                stateStarted = false
+                holdTimeLimitCounter = 0
             }
-            commonInstruction(person, phaseList[phaseIndex].constraints, canvasHeight, canvasWidth)
+            if (phaseIndex == phaseList.size) {
+                commonInstruction(
+                    person,
+                    phaseList[phaseIndex].constraints,
+                    canvasHeight,
+                    canvasWidth
+                )
+            } else {
+                commonInstruction(
+                    person,
+                    phaseList[phaseIndex].constraints,
+                    canvasHeight,
+                    canvasWidth
+                )
+            }
         }
     }
 
     abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
+
+    private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {
+        var constraintSatisfied = true
+        constraints.forEach {
+            when (it.type) {
+                ConstraintType.ANGLE -> {
+                    val angle = Utilities.angle(
+                        startPoint = person.keyPoints[it.startPointIndex].toRealPoint(),
+                        middlePoint = person.keyPoints[it.middlePointIndex].toRealPoint(),
+                        endPoint = person.keyPoints[it.endPointIndex].toRealPoint(),
+                        clockWise = it.clockWise
+                    )
+                    if (angle < it.minValue || angle > it.maxValue) {
+                        constraintSatisfied = false
+                    }
+                }
+                ConstraintType.LINE -> {}
+            }
+        }
+        return constraintSatisfied
+    }
+
+    private fun sortedPhaseList(phases: List<Phase>): List<Phase> {
+        val phaseIndices = mutableListOf<Int>()
+        return phases.sortedBy { it.phaseNumber }.filter {
+            val shouldAdd = !phaseIndices.contains(it.phaseNumber)
+            phaseIndices.add(it.phaseNumber)
+            shouldAdd
+        }
+    }
 
     fun drawingRules(phases: List<Phase>): List<Constraint> {
         return if (phases.size > phaseIndex) {
@@ -199,8 +242,7 @@ abstract class HomeExercise(
         exerciseImageUrls: List<String>,
         repetitionLimit: Int,
         setLimit: Int,
-        protoId: Int,
-        holdLimit: Long
+        protoId: Int
     ) {
         name = exerciseName
         maxRepCount = repetitionLimit
@@ -208,7 +250,6 @@ abstract class HomeExercise(
         protocolId = protoId
         instruction = exerciseInstruction
         imageUrls = exerciseImageUrls
-        maxHoldTimeLimit = holdLimit
     }
 
     fun getRepetitionCount() = repetitionCounter
@@ -217,7 +258,9 @@ abstract class HomeExercise(
 
     fun getSetCount() = setCounter
 
-    fun getHoldTimeLimitCount() = holdTimeLimitCounter
+    fun getHoldTimeLimitCount(): Int = (holdTimeLimitCounter / 1000).toInt()
+
+    fun getMaxHoldTime(): Int = maxHoldTime
 
     sealed class CommonInstructionEvent {
         object OutSideOfBox : CommonInstructionEvent()

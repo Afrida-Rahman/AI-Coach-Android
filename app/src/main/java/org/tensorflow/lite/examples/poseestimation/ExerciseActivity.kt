@@ -189,7 +189,6 @@ class ExerciseActivity : AppCompatActivity() {
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
-        val holdTimeLimit = intent.getLongExtra(HoldTimeLimit, 0L)
         val logInData = loadLogInData()
 
         getPatientExerciseURL = Utilities.getUrl(logInData.tenant).getPatientExerciseURL
@@ -203,8 +202,7 @@ class ExerciseActivity : AppCompatActivity() {
             exerciseImageUrls = listOf(),
             repetitionLimit = repetitionLimit,
             setLimit = setLimit,
-            protoId = protocolId,
-            holdLimit = holdTimeLimit * 1000
+            protoId = protocolId
         )
 
         findViewById<TextView>(R.id.textView).text = exerciseName
@@ -510,6 +508,7 @@ class ExerciseActivity : AppCompatActivity() {
                     setCount = exercise.getSetCount(),
                     wrongCount = exercise.getWrongCount(),
                     holdTime = exercise.getHoldTimeLimitCount(),
+                    maxHoldTime = exercise.getMaxHoldTime(),
                     borderColor = exercise.getBorderColor(person, height, width),
                     isFrontCamera = isFrontCamera
                 )
@@ -705,7 +704,8 @@ class ExerciseActivity : AppCompatActivity() {
                             phases.add(
                                 Phase(
                                     phaseNumber = group.Phase,
-                                    constraints = constraints
+                                    constraints = constraints,
+                                    holdTime = group.HoldInSeconds
                                 )
                             )
                         }

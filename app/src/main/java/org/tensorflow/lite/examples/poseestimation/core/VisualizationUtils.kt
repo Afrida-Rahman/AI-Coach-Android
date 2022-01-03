@@ -4,7 +4,6 @@ package org.tensorflow.lite.examples.poseestimation.core
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.util.Log
 import org.tensorflow.lite.examples.poseestimation.domain.model.*
 
 
@@ -19,7 +18,8 @@ object VisualizationUtils {
         repCount: Int,
         setCount: Int,
         wrongCount: Int,
-        holdTime: Long,
+        holdTime: Int,
+        maxHoldTime: Int,
         borderColor: Int = Color.GREEN,
         isFrontCamera: Boolean = false
     ): Bitmap {
@@ -91,7 +91,7 @@ object VisualizationUtils {
             65f
         )
         draw.writeText(
-            "$holdTime",
+            "$holdTime/$maxHoldTime",
             Point(width * 1 / 2f, 60f),
             Color.rgb(19, 93, 148),//blue
             35f
