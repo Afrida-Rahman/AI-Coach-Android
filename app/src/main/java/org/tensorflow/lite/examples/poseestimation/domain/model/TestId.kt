@@ -1,8 +1,8 @@
 package org.tensorflow.lite.examples.poseestimation.domain.model
 
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 data class TestId(
     val id: String,
-    val exercises: List<IExercise>
+    val exercises: List<HomeExercise>
 )

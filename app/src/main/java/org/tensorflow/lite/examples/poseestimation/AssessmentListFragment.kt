@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
-import org.tensorflow.lite.examples.poseestimation.exercise.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.GeneralExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
+import org.tensorflow.lite.examples.poseestimation.shared.Exercises
 
 class AssessmentListFragment(
-    private val assessmentList: List<Assessment>
+    private val assessments: List<Assessment>,
+    private val patientId: String,
+    private val tenant: String
 ) : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,33 +26,20 @@ class AssessmentListFragment(
         val view = inflater.inflate(R.layout.fragment_assessment_list, container, false)
         val adapter = view.findViewById<RecyclerView>(R.id.assessment_list_container)
         val testList = mutableListOf<TestId>()
-        val implementedExerciseList = listOf(
-            ReachArmsOverHead(view.context),
-            KneeSquat(view.context),
-            HalfSquat(view.context),
-            SeatedKneeExtension(view.context),
-            PelvicBridge(view.context),
-            SitToStand(view.context),
-            IsometricCervicalExtension(view.context),
-            LateralTrunkStretch(view.context),
-            AROMStandingTrunkFlexion(view.context),
-            BirdDog(view.context)
-        )
-        assessmentList.forEach { assessment ->
-            val parsedExercises = mutableListOf<IExercise>()
+        assessments.forEach { assessment ->
+            val implementedExerciseList = Exercises.get(view.context)
+            val parsedExercises = mutableListOf<HomeExercise>()
             assessment.Exercises.forEach { exercise ->
                 val implementedExercise =
                     implementedExerciseList.find { it.id == exercise.ExerciseId }
-                Log.d("ExerciseValueCheck", "${assessment.TestId}: ${exercise.ExerciseName}")
                 if (implementedExercise != null) {
                     implementedExercise.setExercise(
                         exerciseName = exercise.ExerciseName,
-                        exerciseDescription = exercise.ExerciseName,
                         exerciseInstruction = exercise.Instructions,
                         exerciseImageUrls = exercise.ImageURLs,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
-                        protoId = exercise.ProtocolId,
+                        protoId = exercise.ProtocolId
                     )
                     parsedExercises.add(implementedExercise)
                 } else {
@@ -64,12 +50,11 @@ class AssessmentListFragment(
                     )
                     notImplementedExercise.setExercise(
                         exerciseName = exercise.ExerciseName,
-                        exerciseDescription = exercise.ExerciseName,
                         exerciseInstruction = exercise.Instructions,
                         exerciseImageUrls = exercise.ImageURLs,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
-                        protoId = exercise.ProtocolId,
+                        protoId = exercise.ProtocolId
                     )
                     parsedExercises.add(notImplementedExercise)
                 }
@@ -81,7 +66,7 @@ class AssessmentListFragment(
                 )
             )
         }
-        adapter.adapter = AssessmentListAdapter(testList, parentFragmentManager)
+        adapter.adapter = AssessmentListAdapter(testList, parentFragmentManager, patientId, tenant)
         return view
     }
 

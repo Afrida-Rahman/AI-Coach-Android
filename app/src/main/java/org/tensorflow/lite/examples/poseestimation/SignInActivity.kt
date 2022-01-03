@@ -45,7 +45,7 @@ class SignInActivity : AppCompatActivity() {
             it.isClickable = false
             val email = binding.emailAddressField.text.toString()
             val password = binding.passwordField.text.toString()
-            val tenant = binding.tenantField.text.toString().toLowerCase()
+            val tenant = binding.tenantField.text.toString().lowercase()
 
             if (email.isNotEmpty() && password.isNotEmpty() && tenant.isNotEmpty()) userLogin(
                 email,
@@ -53,7 +53,7 @@ class SignInActivity : AppCompatActivity() {
                 tenant
             )
             else {
-                Toast.makeText(this, "Email or password cannot be empty", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Tenant, email or password cannot be empty", Toast.LENGTH_LONG).show()
                 binding.progressBar.visibility = View.GONE
                 it.isClickable = true
             }
@@ -111,7 +111,7 @@ class SignInActivity : AppCompatActivity() {
                 binding.signInButton.isClickable = true
                 Toast.makeText(
                     this@SignInActivity,
-                    "Failed to get data from API",
+                    "Failed to get login data from API !!!",
                     Toast.LENGTH_SHORT
                 ).show()
             }
