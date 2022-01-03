@@ -1,16 +1,28 @@
 package org.tensorflow.lite.examples.poseestimation.shared
 
 import android.content.Context
-import org.tensorflow.lite.examples.poseestimation.exercise.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.AROMHipAbductionInStanding
+import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.BodyWeightSquat
+import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.WallSquatsWithBallSqueeze
+import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.WallSquatsWithStabilityBall
+import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringCurlsInProne
+import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringCurlsInStanding
+import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringStretchInLongSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.KneeExtensionInSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.shoulder.*
 
 object Exercises {
 
-    fun get(context: Context): List<IExercise> {
+    fun get(context: Context): List<HomeExercise> {
         return listOf(
             ReachArmsOverHead(context),
             BodyWeightSquat(context),
             HalfSquat(context),
-            SeatedKneeExtension(context),
+            KneeExtensionInSitting(context),
             PelvicBridgeInSupine(context),
             SitToStand(context),
             IsometricCervicalExtension(context),
@@ -26,7 +38,6 @@ object Exercises {
             Quadruped(context),
             PronePressUpLumbar(context),
             PlankOnElbowsInProne(context),
-            CommonExercise(context),
             SingleLegFallOutInSupine(context),
             TrunkRotationInSitting(context),
             TrunkRotationInStanding(context),
@@ -59,7 +70,7 @@ object Exercises {
         )
     }
 
-    fun get(context: Context, exerciseId: Int): IExercise {
+    fun get(context: Context, exerciseId: Int): HomeExercise {
         return get(context).filter { it.id == exerciseId }[0]
     }
 

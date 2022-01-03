@@ -33,7 +33,7 @@ import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.*
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
 import org.tensorflow.lite.examples.poseestimation.shared.Exercises
@@ -84,7 +84,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var saveExerciseTrackingURL: String
     private lateinit var exerciseConstraintURL: String
 
-    private lateinit var exercise: IExercise
+    private lateinit var exercise: HomeExercise
     private var exerciseConstraints: List<Phase> = listOf()
 
     private var isFrontCamera = true

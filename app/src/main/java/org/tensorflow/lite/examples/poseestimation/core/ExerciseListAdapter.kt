@@ -19,7 +19,7 @@ import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ExerciseListAdapter(
     private val testId: String,
-    private val exerciseList: List<IExercise>,
+    private val exerciseList: List<HomeExercise>,
     private val manager: FragmentManager,
     private val patientId: String,
     private val tenant: String
