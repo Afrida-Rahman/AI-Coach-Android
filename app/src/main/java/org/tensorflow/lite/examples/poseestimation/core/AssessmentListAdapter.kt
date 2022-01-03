@@ -1,6 +1,5 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +10,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.ExerciseListFragment
 import org.tensorflow.lite.examples.poseestimation.R
-import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 
 class AssessmentListAdapter(
     private val testList: List<TestId>,
-    private val manager: FragmentManager
+    private val manager: FragmentManager,
+    private val patientId: String,
+    private val tenant: String
 ) : RecyclerView.Adapter<AssessmentListAdapter.AssessmentItemViewHolder>() {
 
     class AssessmentItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -41,7 +41,10 @@ class AssessmentListAdapter(
         if (item.exercises.isNotEmpty()) {
             holder.itemHolder.setOnClickListener {
                 manager.beginTransaction().apply {
-                    replace(R.id.fragment_container, ExerciseListFragment(item.id, item.exercises))
+                    replace(
+                        R.id.fragment_container,
+                        ExerciseListFragment(item.id, item.exercises, patientId, tenant)
+                    )
                     commit()
                 }
             }

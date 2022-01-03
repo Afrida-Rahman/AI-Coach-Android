@@ -10,12 +10,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.core.ExerciseGuidelineImageListAdapter
-import org.tensorflow.lite.examples.poseestimation.exercise.IExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class ExerciseGuidelineFragment(
     private val testId : String,
     private val position : Int,
-    private val exerciseList : List<IExercise>,
+    private val exerciseList : List<HomeExercise>,
+    private val patientId: String,
+    private val tenant: String
 ) : Fragment() {
 
     override fun onCreateView(
@@ -34,7 +36,7 @@ class ExerciseGuidelineFragment(
             parentFragmentManager.beginTransaction().apply {
                 replace(
                     R.id.fragment_container,
-                    ExerciseListFragment(testId, exerciseList)
+                    ExerciseListFragment(testId, exerciseList,patientId,tenant)
                 )
                 commit()
             }

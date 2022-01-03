@@ -14,11 +14,11 @@
         <entry key="app/src/main/res/drawable/rounded_edge.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout/activity_camera.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_exercise_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.37395833333333334" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.2" />
         <entry key="app/src/main/res/layout/app_bar_dashboard.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/bottom_sheet_layout.xml" value="0.2796875" />
         <entry key="app/src/main/res/layout/content_dashboard.xml" value="0.37395833333333334" />
@@ -29,7 +29,7 @@
         <entry key="app/src/main/res/layout/fragment_exercise_guide_lines.xml" value="0.35989583333333336" />
         <entry key="app/src/main/res/layout/fragment_exercise_guideline.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_exercise_list.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_exercise.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/item_exercise.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_list.xml" value="0.2" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_url_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_imageurl_list.xml" value="0.1" />
