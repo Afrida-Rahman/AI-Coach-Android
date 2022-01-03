@@ -4,10 +4,7 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
-import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.AROMHipAbductionInStanding
-import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.BodyWeightSquat
-import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.WallSquatsWithBallSqueeze
-import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.WallSquatsWithStabilityBall
+import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringCurlsInProne
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringCurlsInStanding
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringStretchInLongSitting
@@ -19,13 +16,13 @@ object Exercises {
 
     fun get(context: Context): List<HomeExercise> {
         return listOf(
-            ReachArmsOverHead(context),
-            BodyWeightSquat(context),
+            ArmRaiseInStanding(context),
+            BodyWeightSquats(context),
             HalfSquat(context),
             KneeExtensionInSitting(context),
             PelvicBridgeInSupine(context),
             SitToStand(context),
-            IsometricCervicalExtension(context),
+            IsometricCervicalExtensionInSitting(context),
             LateralBendingStretchInStanding(context),
             TrunkFlexionInStanding(context),
             BirdDogInQuadruped(context),
@@ -66,7 +63,8 @@ object Exercises {
             Crunches(context),
             SingleKneeToChestInSupine(context),
             AROMHipAbductionInStanding(context),
-            IsometricCervicalRotationInSitting(context)
+            IsometricCervicalRotationInSitting(context),
+            SingleArmAndLegRaiseInProne(context)
         )
     }
 

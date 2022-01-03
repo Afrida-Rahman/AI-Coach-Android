@@ -1,35 +1,30 @@
-package org.tensorflow.lite.examples.poseestimation.exercise.home
+package org.tensorflow.lite.examples.poseestimation.exercise.home.shoulder
 
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
-class LateralBendingStretchInStanding(
+class ArmRaiseInStanding(
     context: Context
 ) : HomeExercise(
     context = context,
-    id = 156
+    id = 347
 ) {
     private var shoulderAngleDownMin = 0f
     private var shoulderAngleDownMax = 30f
-    private var shoulderAngleUpMin = 180f
-    private var shoulderAngleUpMax = 210f
-
-    private val deviationAngleDownMin = 0f
-    private val deviationAngleUpMin = 25f
+    private var shoulderAngleUpMin = 150f
+    private var shoulderAngleUpMax = 190f
 
     private var wrongShoulderAngleDownMin = 0f
     private var wrongShoulderAngleDownMax = 30f
-    private var wrongShoulderAngleUpMin = 100f
-    private var wrongShoulderAngleUpMax = 180f
-
-    private val wrongDeviationAngleDownMin = 0f
-    private val wrongDeviationAngleUpMin = 25f
+    private var wrongShoulderAngleUpMin = 120f
+    private var wrongShoulderAngleUpMax = 150f
 
     private val straightHandAngleMin = 150f
-    private val straightHandAngleMax = 225f
+    private val straightHandAngleMax = 210f
 
     private val totalStates = 3
 
@@ -44,22 +39,6 @@ class LateralBendingStretchInStanding(
         canvasWidth: Int,
         phases: List<Phase>
     ) {
-        val leftWristPoint = Point(
-            person.keyPoints[9].coordinate.x,
-            -person.keyPoints[9].coordinate.y
-        )
-        val rightWristPoint = Point(
-            person.keyPoints[10].coordinate.x,
-            -person.keyPoints[10].coordinate.y
-        )
-        val leftElbowPoint = Point(
-            person.keyPoints[7].coordinate.x,
-            -person.keyPoints[7].coordinate.y
-        )
-        val rightElbowPoint = Point(
-            person.keyPoints[8].coordinate.x,
-            -person.keyPoints[8].coordinate.y
-        )
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -67,6 +46,14 @@ class LateralBendingStretchInStanding(
         val rightShoulderPoint = Point(
             person.keyPoints[6].coordinate.x,
             -person.keyPoints[6].coordinate.y
+        )
+        val leftWristPoint = Point(
+            person.keyPoints[9].coordinate.x,
+            -person.keyPoints[9].coordinate.y
+        )
+        val rightWristPoint = Point(
+            person.keyPoints[10].coordinate.x,
+            -person.keyPoints[10].coordinate.y
         )
         val leftHipPoint = Point(
             person.keyPoints[11].coordinate.x,
@@ -76,36 +63,30 @@ class LateralBendingStretchInStanding(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
         )
-        val shoulderMidPoint = Point(
-            (leftShoulderPoint.x + rightShoulderPoint.x) / 2,
-            -(rightShoulderPoint.y + rightShoulderPoint.y) / 2
+        val leftElbowPoint = Point(
+            person.keyPoints[7].coordinate.x,
+            -person.keyPoints[7].coordinate.y
         )
-        val hipMidPoint = Point(
-            (leftHipPoint.x + rightHipPoint.x) / 2,
-            -(rightHipPoint.y + rightHipPoint.y) / 2
+        val rightElbowPoint = Point(
+            person.keyPoints[8].coordinate.x,
+            -person.keyPoints[8].coordinate.y
         )
-        val shoulderDeviationPoint = Point(
-            (leftHipPoint.x + rightHipPoint.x) / 2,
-            -(rightShoulderPoint.y + rightShoulderPoint.y) / 2
-        )
-
         if (phases.size >= 2) {
             shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
             shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
             shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
             shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        } else {
+            shoulderAngleDownMin = 0f
+            shoulderAngleDownMax = 30f
+            shoulderAngleUpMin = 150f
+            shoulderAngleUpMax = 195f
         }
 
         val leftShoulderAngle =
             Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
-
-        val deviationAngle = Utilities.angle(shoulderMidPoint, hipMidPoint, shoulderDeviationPoint)
-        val shoulderDeviationAngle = if (deviationAngle > 90) {
-            360 - deviationAngle
-        } else {
-            deviationAngle
-        }
-
+        val rightShoulderAngle =
+            Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
         val leftStraightHandAngle =
             Utilities.angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
         val rightStraightHandAngle =
@@ -115,30 +96,31 @@ class LateralBendingStretchInStanding(
             rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
         val leftHandStraight =
             leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
-
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 shoulderAngleDownMin,
                 shoulderAngleDownMax,
-                deviationAngleDownMin
+                shoulderAngleDownMin,
+                shoulderAngleDownMax
             ),
             floatArrayOf(
                 shoulderAngleUpMin,
                 shoulderAngleUpMax,
-                deviationAngleUpMin
+                shoulderAngleUpMin,
+                shoulderAngleUpMax
             ),
             floatArrayOf(
                 shoulderAngleDownMin,
                 shoulderAngleDownMax,
-                deviationAngleDownMin
+                shoulderAngleDownMin,
+                shoulderAngleDownMax
             )
         )
-
-        if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
-            && leftShoulderAngle < rightCountStates[rightStateIndex][1]
-            && shoulderDeviationAngle > rightCountStates[rightStateIndex][2]
-            && insideBox
+        if (
+            leftShoulderAngle > rightCountStates[rightStateIndex][0] && leftShoulderAngle < rightCountStates[rightStateIndex][1] &&
+            rightShoulderAngle > rightCountStates[rightStateIndex][2] && rightShoulderAngle < rightCountStates[rightStateIndex][3] &&
+            rightHandStraight && leftHandStraight && insideBox
         ) {
             rightStateIndex += 1
             if (rightStateIndex == rightCountStates.size - 1) {
@@ -176,10 +158,6 @@ class LateralBendingStretchInStanding(
     }
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        val leftElbowPoint = Point(
-            person.keyPoints[7].coordinate.x,
-            -person.keyPoints[7].coordinate.y
-        )
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -187,6 +165,14 @@ class LateralBendingStretchInStanding(
         val rightShoulderPoint = Point(
             person.keyPoints[6].coordinate.x,
             -person.keyPoints[6].coordinate.y
+        )
+        val leftWristPoint = Point(
+            person.keyPoints[9].coordinate.x,
+            -person.keyPoints[9].coordinate.y
+        )
+        val rightWristPoint = Point(
+            person.keyPoints[10].coordinate.x,
+            -person.keyPoints[10].coordinate.y
         )
         val leftHipPoint = Point(
             person.keyPoints[11].coordinate.x,
@@ -196,65 +182,47 @@ class LateralBendingStretchInStanding(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
         )
-        val shoulderMidPoint = Point(
-            (leftShoulderPoint.x + rightShoulderPoint.x) / 2,
-            -(rightShoulderPoint.y + rightShoulderPoint.y) / 2
-        )
-        val hipMidPoint = Point(
-            (leftHipPoint.x + rightHipPoint.x) / 2,
-            -(rightHipPoint.y + rightHipPoint.y) / 2
-        )
-        val shoulderDeviationPoint = Point(
-            (leftHipPoint.x + rightHipPoint.x) / 2,
-            -(rightShoulderPoint.y + rightShoulderPoint.y) / 2
-        )
+
+        wrongShoulderAngleDownMin = shoulderAngleDownMin
+        wrongShoulderAngleDownMax = shoulderAngleDownMax
+        wrongShoulderAngleUpMin = shoulderAngleUpMin - 40
+        wrongShoulderAngleUpMax = shoulderAngleUpMax - 40
 
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 wrongShoulderAngleDownMin,
                 wrongShoulderAngleDownMax,
-                wrongDeviationAngleDownMin
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
             ),
             floatArrayOf(
                 wrongShoulderAngleUpMin,
                 wrongShoulderAngleUpMax,
-                wrongDeviationAngleUpMin
+                wrongShoulderAngleUpMin,
+                wrongShoulderAngleUpMax
             ),
             floatArrayOf(
                 wrongShoulderAngleDownMin,
                 wrongShoulderAngleDownMax,
-                wrongDeviationAngleDownMin
+                wrongShoulderAngleDownMin,
+                wrongShoulderAngleDownMax
             )
         )
-
-        wrongShoulderAngleDownMin = shoulderAngleDownMin
-        wrongShoulderAngleDownMax = shoulderAngleDownMax
-        wrongShoulderAngleUpMin = shoulderAngleUpMin - 80
-        wrongShoulderAngleUpMax = shoulderAngleUpMin
-
-        val leftShoulderAngle =
-            Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
-
-        val deviationAngle = Utilities.angle(shoulderMidPoint, hipMidPoint, shoulderDeviationPoint)
-        val shoulderDeviationAngle = if (deviationAngle > 90) {
-            360 - deviationAngle
-        } else {
-            deviationAngle
-        }
-
+        val leftShoulderAngle = Utilities.angle(leftWristPoint, leftShoulderPoint, leftHipPoint)
+        val rightShoulderAngle =
+            Utilities.angle(rightWristPoint, rightShoulderPoint, rightHipPoint, true)
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-
-        if (((leftShoulderAngle > wrongCountStates[wrongStateIndex][0]
-                    && leftShoulderAngle < wrongCountStates[wrongStateIndex][1]
-                    && shoulderDeviationAngle < wrongCountStates[wrongStateIndex][2])
-                    || (leftShoulderAngle > wrongCountStates[wrongStateIndex][0]
-                    && leftShoulderAngle < wrongCountStates[wrongStateIndex][1]))
+        if (
+            leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1] &&
+            rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]
             && insideBox
         ) {
-            wrongStateIndex += 1
-            if (wrongStateIndex == wrongCountStates.size) {
-                wrongStateIndex = 0
-                wrongCount()
+            if (insideBox) {
+                wrongStateIndex += 1
+                if (wrongStateIndex == wrongCountStates.size) {
+                    wrongStateIndex = 0
+                    wrongCount()
+                }
             }
         }
     }

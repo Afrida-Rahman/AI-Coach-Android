@@ -1,4 +1,4 @@
-package org.tensorflow.lite.examples.poseestimation.exercise.home.hip
+package org.tensorflow.lite.examples.poseestimation.exercise.home.back
 
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
@@ -6,21 +6,21 @@ import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
-class BodyWeightSquat(
+class LumberFlexionInSitting(
     context: Context
 ) : HomeExercise(
     context = context,
-    id = 458
+    id = 341
 ) {
-    private var upHipAngleMin = 160f
-    private var upHipAngleMax = 190f
-    private var upKneeAngleMin = 160f
-    private var upKneeAngleMax = 190f
+    private var sittingHipAngleMin = 200f
+    private var sittingHipAngleMax = 250f
+    private var sittingShoulderAngleMin = 120f
+    private var sittingShoulderAngleMax = 190f
 
-    private var downHipAngleMin = 60f
-    private var downHipAngleMax = 90f
-    private var downKneeAngleMin = 60f
-    private var downKneeAngleMax = 90f
+    private var downHipAngleMin = 260f
+    private var downHipAngleMax = 320f
+    private var downShoulderAngleMin = 80f
+    private var downShoulderAngleMax = 140f
 
     private var wrongUpHipAngleMin = 160f
     private var wrongUpHipAngleMax = 190f
@@ -35,6 +35,10 @@ class BodyWeightSquat(
     override var wrongStateIndex = 0
 
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
+        val leftElbowPoint = Point(
+            person.keyPoints[7].coordinate.x,
+            -person.keyPoints[7].coordinate.y
+        )
         val shoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -47,19 +51,15 @@ class BodyWeightSquat(
             person.keyPoints[13].coordinate.x,
             -person.keyPoints[13].coordinate.y
         )
-        val anklePoint = Point(
-            person.keyPoints[15].coordinate.x,
-            -person.keyPoints[15].coordinate.y
-        )
 
-        wrongUpHipAngleMin = upHipAngleMin
-        wrongUpHipAngleMax = upHipAngleMax
-        wrongUpKneeAngleMin = upKneeAngleMin
-        wrongUpKneeAngleMax = upKneeAngleMax
+        wrongUpHipAngleMin = sittingHipAngleMin
+        wrongUpHipAngleMax = sittingHipAngleMax
+        wrongUpKneeAngleMin = sittingShoulderAngleMin
+        wrongUpKneeAngleMax = sittingShoulderAngleMax
         wrongDownHipAngleMin = downHipAngleMin + 40
         wrongDownHipAngleMax = downHipAngleMax + 70
-        wrongDownKneeAngleMin = downKneeAngleMin + 40
-        wrongDownKneeAngleMax = downKneeAngleMax + 70
+        wrongDownKneeAngleMin = downShoulderAngleMin + 40
+        wrongDownKneeAngleMax = downShoulderAngleMax + 70
 
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
@@ -83,12 +83,11 @@ class BodyWeightSquat(
         )
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
-        val hipAngle = Utilities.angle(shoulderPoint, hipPoint, kneePoint, true)
-        val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint)
-
+        val hipAngle = Utilities.angle(shoulderPoint, hipPoint, kneePoint, false)
+        val shoulderAngle = Utilities.angle(leftElbowPoint, shoulderPoint, hipPoint)
 
         if (hipAngle > wrongCountStates[wrongStateIndex][0] && hipAngle < wrongCountStates[wrongStateIndex][1] &&
-            kneeAngle > wrongCountStates[wrongStateIndex][2] && kneeAngle < wrongCountStates[wrongStateIndex][3] &&
+            shoulderAngle > wrongCountStates[wrongStateIndex][2] && shoulderAngle < wrongCountStates[wrongStateIndex][3] &&
             insideBox
         ) {
             if (insideBox) {

@@ -1,12 +1,13 @@
-package org.tensorflow.lite.examples.poseestimation.exercise.home
+package org.tensorflow.lite.examples.poseestimation.exercise.home.neck
 
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
-class IsometricCervicalExtension(
+class IsometricCervicalExtensionInSitting(
     context: Context
 ) : HomeExercise(
     context = context,
