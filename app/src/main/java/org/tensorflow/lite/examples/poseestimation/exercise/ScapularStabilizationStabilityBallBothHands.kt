@@ -7,6 +7,6 @@ class ScapularStabilizationStabilityBallBothHands(
     context: Context
 ) : IExercise(context = context, id = 210) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
+
     }
 }

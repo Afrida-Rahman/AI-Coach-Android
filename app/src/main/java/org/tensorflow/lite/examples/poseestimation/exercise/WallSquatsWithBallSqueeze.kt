@@ -7,6 +7,5 @@ class WallSquatsWithBallSqueeze(
     context: Context
 ) : IExercise(context = context, id = 397) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
     }
 }

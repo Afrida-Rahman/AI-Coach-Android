@@ -104,7 +104,7 @@ class SingleArmAndLegRaiseInProne(
             }
         } else {
             if (!insideBox) {
-                standInside()
+                onEvent(CommonInstructionEvent.OutSideOfBox)
             } else if (wrongFrameCount >= maxWrongCountFrame) {
                 wrongFrameCount = 0
             }

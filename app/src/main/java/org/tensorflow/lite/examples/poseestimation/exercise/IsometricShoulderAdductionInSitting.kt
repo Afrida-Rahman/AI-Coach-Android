@@ -7,6 +7,6 @@ class IsometricShoulderAdductionInSitting(
     context: Context
 ) : IExercise(context = context, id = 526) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
+
     }
 }

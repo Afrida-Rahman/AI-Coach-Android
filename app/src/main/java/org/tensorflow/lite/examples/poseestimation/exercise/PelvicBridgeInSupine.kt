@@ -77,7 +77,7 @@ class PelvicBridgeInSupine(
             }
         } else {
             if (!insideBox) {
-                standInside()
+                onEvent(CommonInstructionEvent.OutSideOfBox)
             }
         }
     }

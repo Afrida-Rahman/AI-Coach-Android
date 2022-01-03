@@ -150,24 +150,24 @@ class LateralBendingStretchInStanding(
             }
         } else {
             if (!insideBox) {
-                standInside()
+                onEvent(CommonInstructionEvent.OutSideOfBox)
             } else {
                 if (!rightHandStraight && !leftHandStraight) {
                     wrongFrameCount++
                     if (wrongFrameCount >= maxWrongCountFrame) {
-                        handNotStraight()
+                        onEvent(CommonInstructionEvent.HandIsNotStraight)
                         wrongFrameCount = 0
                     }
                 } else if (!rightHandStraight) {
                     wrongFrameCount++
                     if (wrongFrameCount >= maxWrongCountFrame) {
-                        rightHandNotStraight()
+                        onEvent(CommonInstructionEvent.RightHandIsNotStraight)
                         wrongFrameCount = 0
                     }
                 } else if (!leftHandStraight) {
                     wrongFrameCount++
                     if (wrongFrameCount >= maxWrongCountFrame) {
-                        leftHandNotStraight()
+                        onEvent(CommonInstructionEvent.LeftHandIsNotStraight)
                         wrongFrameCount = 0
                     }
                 }

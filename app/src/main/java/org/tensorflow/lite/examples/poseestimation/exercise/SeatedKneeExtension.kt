@@ -78,7 +78,7 @@ class SeatedKneeExtension(
             }
         } else {
             if (!insideBox) {
-                standInside()
+                onEvent(CommonInstructionEvent.HandIsNotStraight)
             }
         }
     }

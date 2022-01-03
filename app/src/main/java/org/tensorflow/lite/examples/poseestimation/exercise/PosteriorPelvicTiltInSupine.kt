@@ -5,6 +5,6 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 
 class PosteriorPelvicTiltInSupine(context: Context) : IExercise(context = context, id = 160) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
+
     }
 }

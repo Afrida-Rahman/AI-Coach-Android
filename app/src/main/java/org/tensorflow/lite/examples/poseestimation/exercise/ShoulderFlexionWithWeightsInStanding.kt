@@ -7,6 +7,6 @@ class ShoulderFlexionWithWeightsInStanding(
     context: Context
 ) : IExercise(context = context, id = 407) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
+
     }
 }

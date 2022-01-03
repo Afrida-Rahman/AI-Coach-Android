@@ -7,6 +7,6 @@ class IsometricCervicalFlexionInStanding(
     context: Context
 ) : IExercise(context = context, id = 529) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
+
     }
 }

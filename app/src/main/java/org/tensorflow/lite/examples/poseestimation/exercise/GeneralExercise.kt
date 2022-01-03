@@ -13,6 +13,5 @@ class GeneralExercise(
     active = active
 ) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
     }
 }

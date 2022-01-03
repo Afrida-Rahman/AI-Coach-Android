@@ -5,6 +5,5 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 
 class HamstringCurlsInStanding(context: Context) : IExercise(context = context, id = 399) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
     }
 }

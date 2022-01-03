@@ -10,6 +10,6 @@ class TrunkRotationInSitting(
     id = 197
 ) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
+
     }
 }

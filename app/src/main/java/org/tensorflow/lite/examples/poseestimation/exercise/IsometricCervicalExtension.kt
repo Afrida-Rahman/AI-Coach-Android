@@ -103,7 +103,7 @@ class IsometricCervicalExtension(
             }
         } else {
             if (!insideBox) {
-                standInside()
+                onEvent(CommonInstructionEvent.OutSideOfBox)
             }
         }
     }

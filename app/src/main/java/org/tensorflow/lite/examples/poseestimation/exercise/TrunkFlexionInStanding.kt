@@ -105,7 +105,7 @@ class TrunkFlexionInStanding(
             if (!leftHandStraight) {
                 wrongFrameCount++
                 if (wrongFrameCount >= maxWrongCountFrame) {
-                    leftHandNotStraight()
+                    onEvent(CommonInstructionEvent.HandIsNotStraight)
                     wrongFrameCount = 0
                 }
             }

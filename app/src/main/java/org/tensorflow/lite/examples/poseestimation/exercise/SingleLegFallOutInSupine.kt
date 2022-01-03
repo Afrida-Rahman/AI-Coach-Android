@@ -10,6 +10,6 @@ class SingleLegFallOutInSupine(
     id = 171
 ) {
     override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
-        TODO("Not yet implemented")
+
     }
 }
