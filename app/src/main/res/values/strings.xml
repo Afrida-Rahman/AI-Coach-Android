@@ -29,12 +29,6 @@
     <string name="log_out_button">Log Out button</string>
     <string name="log_out">Log Out</string>
 
-    <string-array name="tenant_name">
-        <item>EMMA</item>
-        <item>DEV</item>
-        <item>NPC</item>
-    </string-array>
-
     <string-array name="tfe_pe_models_array">
         <item>Movenet Thunder</item>
         <item>Movenet Lightning</item>
@@ -46,6 +40,14 @@
         <item>GPU</item>
         <item>NNAPI</item>
     </string-array>
+
+    <string-array name="tenant_name">
+        <item>EMMA</item>
+        <item>DEV</item>
+        <item>STG</item>
+        <item>NPC</item>
+    </string-array>
+
     <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
