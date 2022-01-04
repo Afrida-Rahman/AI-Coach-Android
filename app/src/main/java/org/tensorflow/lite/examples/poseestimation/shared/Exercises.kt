@@ -65,7 +65,8 @@ object Exercises {
             AROMHipAbductionInStanding(context),
             IsometricCervicalRotationInSitting(context),
             SingleArmAndLegRaiseInProne(context),
-            TrunkFlexionInSitting(context)
+            TrunkFlexionInSitting(context),
+            DoubleKneeToChestInSupine(context)
         )
     }
 
