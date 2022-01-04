@@ -1,7 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.api
 
 import org.tensorflow.lite.examples.poseestimation.api.request.*
-import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
+import org.tensorflow.lite.examples.poseestimation.api.response.PatientExerciseKeypointResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import retrofit2.Call

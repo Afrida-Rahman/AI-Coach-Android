@@ -1,4 +1,4 @@
-package org.tensorflow.lite.examples.poseestimation.api.resp
+package org.tensorflow.lite.examples.poseestimation.api.response
 
 data class Assessment(
     val Exercises: List<Exercise>,

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
+import org.tensorflow.lite.examples.poseestimation.api.response.Assessment
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 import org.tensorflow.lite.examples.poseestimation.exercise.home.GeneralExercise
