@@ -66,7 +66,8 @@ object Exercises {
             IsometricCervicalRotationInSitting(context),
             SingleArmAndLegRaiseInProne(context),
             TrunkFlexionInSitting(context),
-            DoubleKneeToChestInSupine(context)
+            DoubleKneeToChestInSupine(context),
+            TrunkLateralBendingInSitting(context)
         )
     }
 
