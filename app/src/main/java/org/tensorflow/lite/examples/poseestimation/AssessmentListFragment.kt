@@ -62,6 +62,13 @@ class AssessmentListFragment(
             testList.add(
                 TestId(
                     id = assessment.TestId,
+                    bodyRegionId = assessment.BodyRegionId,
+                    bodyRegionName = assessment.BodyRegionName,
+                    providerName = assessment.ProviderName,
+                    providerId = assessment.ProviderId,
+                    testDate = assessment.CreatedOnUtc,
+                    isReportReady = assessment.IsReportReady,
+                    registrationType = assessment.RegistrationType,
                     exercises = parsedExercises.sortedBy { it.active }.reversed()
                 )
             )
