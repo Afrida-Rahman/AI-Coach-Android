@@ -16,14 +16,6 @@
     <string name="exercise_image">Exercise image</string>
     <string name="exercise_list">Exercise List</string>
     <string name="exercise_assistant">I am your personal exercise assistant</string>
-    <string name="knee_squat">Knee Squat</string>
-    <string name="knee_squat_exercise">Knee Squat Exercise</string>
-    <string name="half_knee_squat">Half Knee Squat</string>
-    <string name="half_knee_squat_exercise">Half Knee Squat Exercise</string>
-    <string name="reach_arms_over_head">Reach Arms Over Head</string>
-    <string name="reach_arms_over_head_exercise">Reach Arms Over Head Exercise</string>
-    <string name="seated_knee_extension">Seated Knee Extension</string>
-    <string name="seated_knee_extension_exercise">Seated Knee Extension Exercise</string>
     <string name="the_fetched_data">The Fetched Data:</string>
     <string name="flip_camera">Flip Camera</string>
     <string name="mymedicalhub">MyMedicalHUB</string>
