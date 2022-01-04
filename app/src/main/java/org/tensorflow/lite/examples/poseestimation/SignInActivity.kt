@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.tensorflow.lite.examples.poseestimation.api.ILogInService
@@ -40,12 +41,17 @@ class SignInActivity : AppCompatActivity() {
 
         if (logInData.patientId.isNotEmpty()) gotoMainActivity()
 
+        val adapter = ArrayAdapter.createFromResource(this,
+            R.array.tenant_name, android.R.layout.simple_spinner_item)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinner.adapter = adapter
+
         binding.signInButton.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
             it.isClickable = false
             val email = binding.emailAddressField.text.toString()
             val password = binding.passwordField.text.toString()
-            val tenant = binding.tenantField.text.toString().lowercase()
+            val tenant = binding.spinner.selectedItem.toString().lowercase()
 
             if (email.isNotEmpty() && password.isNotEmpty() && tenant.isNotEmpty()) userLogin(
                 email,
