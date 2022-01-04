@@ -27,7 +27,7 @@ class AssessmentListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssessmentItemViewHolder {
         return AssessmentItemViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_test, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_assessment, parent, false)
         )
     }
 

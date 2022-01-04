@@ -4,7 +4,7 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="test_id">Test ID: %s</string>
-    <string name="exercise_count">Exercise Count: %d</string>
+    <string name="exercise_count">Home Exercise: %d</string>
     <string name="tfe_pe_request_permission">This app needs camera permission.</string>
     <string name="tfe_pe_tv_score">Score: %.2f</string>
     <string name="tfe_pe_tv_model">Model: </string>
