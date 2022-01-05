@@ -4,7 +4,6 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class TrunkFlexionInStanding(
@@ -36,8 +35,7 @@ class TrunkFlexionInStanding(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
@@ -60,11 +58,11 @@ class TrunkFlexionInStanding(
             person.keyPoints[7].coordinate.y
         )
 
-        if (phases.size >= 2) {
-            hipAngleUpMin = phases[0].constraints[0].minValue.toFloat()
-            hipAngleUpMax = phases[0].constraints[0].maxValue.toFloat()
-            hipAngleDownMin = phases[1].constraints[0].minValue.toFloat()
-            hipAngleDownMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            hipAngleUpMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            hipAngleUpMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            hipAngleDownMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            hipAngleDownMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
         val leftHipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint)

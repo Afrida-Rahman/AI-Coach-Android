@@ -4,7 +4,6 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class Quadruped(
@@ -29,8 +28,7 @@ class Quadruped(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftElbowPoint = Point(
             person.keyPoints[7].coordinate.x,
@@ -48,11 +46,11 @@ class Quadruped(
             person.keyPoints[13].coordinate.x,
             -person.keyPoints[13].coordinate.y
         )
-        if (phases.isNotEmpty()) {
-            hipAngleMin = phases[0].constraints[0].minValue.toFloat()
-            hipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            shoulderAngleMin = phases[0].constraints[0].minValue.toFloat()
-            shoulderAngleMax = phases[0].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.isNotEmpty()) {
+            hipAngleMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            hipAngleMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            shoulderAngleMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            shoulderAngleMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
         }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)

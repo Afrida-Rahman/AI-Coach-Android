@@ -4,7 +4,6 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class SingleArmRaiseInProne(
@@ -27,8 +26,7 @@ class SingleArmRaiseInProne(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftWristPoint = Point(
             person.keyPoints[9].coordinate.x,
@@ -42,11 +40,11 @@ class SingleArmRaiseInProne(
             person.keyPoints[11].coordinate.x,
             -person.keyPoints[11].coordinate.y
         )
-        if (phases.size >= 2) {
-            downArmAngleMin = phases[0].constraints[0].minValue.toFloat()
-            downArmAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            upArmAngleMin = phases[1].constraints[0].minValue.toFloat()
-            upArmAngleMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            downArmAngleMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            downArmAngleMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            upArmAngleMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            upArmAngleMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)

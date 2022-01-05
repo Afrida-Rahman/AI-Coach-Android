@@ -4,7 +4,6 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class PelvicBridgeInSupine(
@@ -30,8 +29,7 @@ class PelvicBridgeInSupine(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val rightShoulderPoint = Point(
             person.keyPoints[6].coordinate.x,
@@ -45,11 +43,11 @@ class PelvicBridgeInSupine(
             person.keyPoints[14].coordinate.x,
             -person.keyPoints[14].coordinate.y
         )
-        if (phases.size >= 2) {
-            hipAngleDownMin = phases[0].constraints[0].minValue.toFloat()
-            hipAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
-            hipAngleUpMin = phases[1].constraints[0].minValue.toFloat()
-            hipAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            hipAngleDownMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            hipAngleDownMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            hipAngleUpMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            hipAngleUpMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)

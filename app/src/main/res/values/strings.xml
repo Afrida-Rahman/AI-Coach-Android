@@ -4,7 +4,7 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="test_id">%s</string>
-    <string name="exercise_count">Home Exercise: %d</string>
+    <string name="exercise_count">%d</string>
     <string name="tfe_pe_request_permission">This app needs camera permission.</string>
     <string name="tfe_pe_tv_score">Score: %.2f</string>
     <string name="tfe_pe_tv_model">Model: </string>
@@ -64,7 +64,7 @@
     <string name="posture_analysis">Posture Analysis</string>
     <string name="pain_recorder">Pain Recorder</string>
     <string name="appointment">Appointment</string>
-    <string name="assessment_list">Assessment List</string>
+    <string name="assessment_list">My Assessments</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="active">Active</string>
