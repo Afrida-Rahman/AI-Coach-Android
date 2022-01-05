@@ -4,8 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.146875" />
+        <entry key="../../Android/Sdk/platforms/android-30/data/res/layout/simple_spinner_dropdown_item.xml" value="0.28046875" />
         <entry key="../../Android/Sdk/platforms/android-30/data/res/layout/simple_spinner_item.xml" value="0.25677083333333334" />
-        <entry key="app/src/main/res/drawable/circular_backgroud.xml" value="0.2891891891891892" />
+        <entry key="app/src/main/res/drawable/border.xml" value="0.292578125" />
         <entry key="app/src/main/res/drawable/ic_exercise_active.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_guideline.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_guideline_button.xml" value="0.37604166666666666" />
@@ -30,7 +31,7 @@
         <entry key="app/src/main/res/layout/fragment_exercise_guide_lines.xml" value="0.35989583333333336" />
         <entry key="app/src/main/res/layout/fragment_exercise_guideline.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_exercise_list.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_assessment.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_assessment.xml" value="0.28046875" />
         <entry key="app/src/main/res/layout/item_exercise.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_list.xml" value="0.2" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_url_list.xml" value="0.33" />

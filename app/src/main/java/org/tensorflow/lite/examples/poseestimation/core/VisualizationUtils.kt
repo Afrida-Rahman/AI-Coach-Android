@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import org.tensorflow.lite.examples.poseestimation.domain.model.*
 
-
 object VisualizationUtils {
     private const val LINE_WIDTH = 3f
     private const val BORDER_WIDTH = 6f
@@ -31,7 +30,6 @@ object VisualizationUtils {
         val draw = Draw(canvas, Color.WHITE, LINE_WIDTH)
         val width = draw.canvas.width
         val height = draw.canvas.height
-
 
         for (rule in drawingRules) {
             val startPoint = person.keyPoints[rule.startPointIndex].toCanvasPoint()

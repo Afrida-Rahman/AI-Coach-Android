@@ -51,7 +51,6 @@ class ExerciseActivity : AppCompatActivity() {
         const val ProtocolId = "ProtocolId"
         const val RepetitionLimit = "RepetitionLimit"
         const val SetLimit = "SetLimit"
-        const val HoldTimeLimit = "HoldTimeLimit"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
