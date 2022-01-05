@@ -480,8 +480,6 @@ class ExerciseActivity : AppCompatActivity() {
         var score = 0f
         var outputBitmap = bitmap
 
-        // run detect pose
-        // draw points and lines on original image
         poseDetector?.estimateSinglePose(bitmap)?.let { person ->
             score = person.score
             if (score > minConfidence) {
@@ -499,7 +497,8 @@ class ExerciseActivity : AppCompatActivity() {
                     wrongCount = exercise.getWrongCount(),
                     holdTime = exercise.getHoldTimeLimitCount(),
                     borderColor = exercise.getBorderColor(person, height, width),
-                    isFrontCamera = isFrontCamera
+                    isFrontCamera = isFrontCamera,
+                    phaseDialogue = exercise.getPhaseDialogue()
                 )
             }
         }

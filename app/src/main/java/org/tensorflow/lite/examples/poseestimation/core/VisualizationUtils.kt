@@ -20,6 +20,7 @@ object VisualizationUtils {
         setCount: Int,
         wrongCount: Int,
         holdTime: Int,
+        phaseDialogue: String,
         borderColor: Int = Color.GREEN,
         isFrontCamera: Boolean = false
     ): Bitmap {
@@ -85,29 +86,35 @@ object VisualizationUtils {
                 }
             }
             draw.writeText(
+                phaseDialogue,
+                Point(width * 2 / 5f, 100f),
+                Color.rgb(0,0,0),//blue
+                30f
+            )
+            draw.writeText(
                 "$repCount / $setCount",
-                Point(width * 1 / 7f, 60f),
+                Point(width * 1 / 7f, 55f),
                 Color.rgb(19, 93, 148),//blue
-                65f
+                55f
             )
             draw.writeText(
                 "$holdTime/${it.holdTime}",
-                Point(width * 1 / 2f, 60f),
+                Point(width * 1 / 2f, 55f),
                 Color.rgb(19, 93, 148),//blue
                 35f
             )
             draw.writeText(
                 wrongCount.toString(),
-                Point(width * 2.4f / 3f, 60f),
+                Point(width * 2.4f / 3f, 55f),
                 Color.rgb(255, 0, 0),//green
-                65f
+                55f
             )
             if (borderColor != -1) {
                 draw.rectangle(
-                    Point(width * 1f / 20f, height * 2.5f / 20f),
-                    Point(width * 19f / 20f, height * 2.5f / 20f),
-                    Point(width * 19f / 20f, height * 18.5f / 20f),
-                    Point(width * 1f / 20f, height * 18.5f / 20f),
+                    Point(width * 1f / 20f, height * 2f / 20f),
+                    Point(width * 19f / 20f, height * 2f / 20f),
+                    Point(width * 19f / 20f, height * 19.5f / 20f),
+                    Point(width * 1f / 20f, height * 19.5f / 20f),
                     _color = borderColor,
                     _thickness = BORDER_WIDTH
                 )
