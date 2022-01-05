@@ -4,7 +4,6 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class KneeExtensionInSitting(
@@ -31,8 +30,7 @@ class KneeExtensionInSitting(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val hipPoint = Point(
             person.keyPoints[12].coordinate.x,
@@ -46,11 +44,11 @@ class KneeExtensionInSitting(
             person.keyPoints[16].coordinate.x,
             -person.keyPoints[16].coordinate.y
         )
-        if (phases.size >= 2) {
-            downKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
-            downKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            upKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
-            upKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            downKneeAngleMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            downKneeAngleMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            upKneeAngleMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            upKneeAngleMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
         val rightCountStates: Array<FloatArray> = arrayOf(

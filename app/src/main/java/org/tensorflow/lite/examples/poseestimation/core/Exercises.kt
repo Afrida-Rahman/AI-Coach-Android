@@ -1,4 +1,4 @@
-package org.tensorflow.lite.examples.poseestimation.shared
+package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.*

@@ -3,8 +3,8 @@
     <string name="app_version">Version : 0.0.14</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="test_id">Test ID: %s</string>
-    <string name="exercise_count">Exercise Count: %d</string>
+    <string name="test_id">%s</string>
+    <string name="exercise_count">%d</string>
     <string name="tfe_pe_request_permission">This app needs camera permission.</string>
     <string name="tfe_pe_tv_score">Score: %.2f</string>
     <string name="tfe_pe_tv_model">Model: </string>
@@ -64,7 +64,7 @@
     <string name="posture_analysis">Posture Analysis</string>
     <string name="pain_recorder">Pain Recorder</string>
     <string name="appointment">Appointment</string>
-    <string name="assessment_list">Assessment List</string>
+    <string name="assessment_list">My Assessments</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="active">Active</string>
@@ -86,4 +86,16 @@
     <string name="manual_tracking">Manual Tracking</string>
     <string name="try_again">Try Again</string>
     <string name="reach_arms_over_head">reach_arms_over_head</string>
+    <string name="report_icon">Report Icon</string>
+    <string name="let_s_start_exercise">Let\'s Start Exercise</string>
+    <string name="total_assigned_home_exercise">Total Assigned Home Exercise</string>
+    <string name="test_date">%s</string>
+    <string name="circular_background">Circular Background</string>
+    <string name="provider_name">Provider Name</string>
+    <string name="provider_name_value">%s</string>
+    <string name="body_region">Body Region</string>
+    <string name="body_region_value">%s</string>
+    <string name="registration_type">Registration Type</string>
+    <string name="registration_type_value">%s</string>
+    <string name="home_exercise_count">%d</string>
 </resources>

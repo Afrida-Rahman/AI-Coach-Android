@@ -4,7 +4,6 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class HalfSquat(
@@ -43,8 +42,7 @@ class HalfSquat(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
@@ -62,16 +60,16 @@ class HalfSquat(
             person.keyPoints[15].coordinate.x,
             -person.keyPoints[15].coordinate.y
         )
-        if (phases.size >= 2) {
-            upHipAngleMin = phases[0].constraints[0].minValue.toFloat()
-            upHipAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            downHipAngleMin = phases[1].constraints[0].minValue.toFloat()
-            downHipAngleMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            upHipAngleMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            upHipAngleMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            downHipAngleMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            downHipAngleMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
 
-            upKneeAngleMin = phases[0].constraints[0].minValue.toFloat()
-            upKneeAngleMax = phases[0].constraints[0].maxValue.toFloat()
-            downKneeAngleMin = phases[1].constraints[0].minValue.toFloat()
-            downKneeAngleMax = phases[1].constraints[0].maxValue.toFloat()
+            upKneeAngleMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            upKneeAngleMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            downKneeAngleMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            downKneeAngleMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
         val insideBox = isInsideBox(person, canvasHeight, canvasWidth)

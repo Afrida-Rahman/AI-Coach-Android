@@ -4,7 +4,6 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class LateralBendingStretchInStanding(
@@ -42,8 +41,7 @@ class LateralBendingStretchInStanding(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftWristPoint = Point(
             person.keyPoints[9].coordinate.x,
@@ -90,11 +88,11 @@ class LateralBendingStretchInStanding(
             -(rightShoulderPoint.y + rightShoulderPoint.y) / 2
         )
 
-        if (phases.size >= 2) {
-            shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
-            shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
-            shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
-            shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            shoulderAngleDownMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            shoulderAngleDownMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            shoulderAngleUpMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            shoulderAngleUpMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
         val leftShoulderAngle =

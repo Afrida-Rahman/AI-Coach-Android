@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import org.tensorflow.lite.examples.poseestimation.api.resp.Assessment
+import org.tensorflow.lite.examples.poseestimation.api.response.Assessment
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
+import org.tensorflow.lite.examples.poseestimation.core.Exercises
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 import org.tensorflow.lite.examples.poseestimation.exercise.home.GeneralExercise
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
-import org.tensorflow.lite.examples.poseestimation.shared.Exercises
 
 class AssessmentListFragment(
     private val assessments: List<Assessment>,
@@ -62,6 +62,13 @@ class AssessmentListFragment(
             testList.add(
                 TestId(
                     id = assessment.TestId,
+                    bodyRegionId = assessment.BodyRegionId,
+                    bodyRegionName = assessment.BodyRegionName,
+                    providerName = assessment.ProviderName,
+                    providerId = assessment.ProviderId,
+                    testDate = assessment.CreatedOnUtc.split("T")[0],
+                    isReportReady = assessment.IsReportReady,
+                    registrationType = assessment.RegistrationType,
                     exercises = parsedExercises.sortedBy { it.active }.reversed()
                 )
             )

@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
-import org.tensorflow.lite.examples.poseestimation.api.resp.PatientExerciseKeypointResponse
+import org.tensorflow.lite.examples.poseestimation.api.response.PatientExerciseKeypointResponse
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
