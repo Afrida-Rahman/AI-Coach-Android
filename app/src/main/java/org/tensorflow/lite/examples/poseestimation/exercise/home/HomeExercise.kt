@@ -142,7 +142,8 @@ abstract class HomeExercise(
                                 Phase(
                                     phaseNumber = group.Phase,
                                     constraints = constraints,
-                                    holdTime = group.HoldInSeconds
+                                    holdTime = group.HoldInSeconds,
+                                    phaseDialogue = group.PhaseDialogue
                                 )
                             )
                         }
@@ -243,7 +244,7 @@ abstract class HomeExercise(
             )
             Log.d(
                 "HomeExercise",
-                "$phaseIndex: -> $constraintSatisfied - $holdTimeLimitCounter / ${phase.holdTime}"
+                " $phaseIndex: -> $constraintSatisfied - $holdTimeLimitCounter / ${phase.holdTime}"
             )
 
             if (isInsideBox(person, canvasHeight, canvasWidth) && constraintSatisfied) {

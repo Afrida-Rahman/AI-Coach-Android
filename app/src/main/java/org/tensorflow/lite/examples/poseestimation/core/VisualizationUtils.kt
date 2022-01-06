@@ -10,7 +10,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
 object VisualizationUtils {
     private const val LINE_WIDTH = 3f
-    private const val BORDER_WIDTH = 6f
+    private const val BORDER_WIDTH = 4f
 
     fun drawBodyKeyPoints(
         input: Bitmap,
@@ -84,30 +84,39 @@ object VisualizationUtils {
                     }
                 }
             }
+            it.phaseDialogue?.let { dialogue ->
+                draw.writeText(
+                    dialogue,
+                    Point((width * 1 / 20f) + 20f, (height * 2f / 20f) + 50f),
+                    Color.rgb(255, 255, 255),//blue
+                    30f,
+                    true
+                )
+            }
             draw.writeText(
                 "$repCount / $setCount",
-                Point(width * 1 / 7f, 60f),
+                Point(width * 1 / 7f, 55f),
                 Color.rgb(19, 93, 148),//blue
-                65f
+                55f
             )
             draw.writeText(
                 "$holdTime/${it.holdTime}",
-                Point(width * 1 / 2f, 60f),
-                Color.rgb(19, 93, 148),//blue
+                Point(width * 1 / 2f, 55f),
+                Color.rgb(113, 106, 148),//blue
                 35f
             )
             draw.writeText(
                 wrongCount.toString(),
-                Point(width * 2.4f / 3f, 60f),
+                Point(width * 2.4f / 3f, 55f),
                 Color.rgb(255, 0, 0),//green
-                65f
+                55f
             )
             if (borderColor != -1) {
-                draw.rectangle(
-                    Point(width * 1f / 20f, height * 2.5f / 20f),
-                    Point(width * 19f / 20f, height * 2.5f / 20f),
-                    Point(width * 19f / 20f, height * 18.5f / 20f),
-                    Point(width * 1f / 20f, height * 18.5f / 20f),
+                draw.tetragonal(
+                    Point(width * 1f / 20f, height * 2f / 20f),
+                    Point(width * 19f / 20f, height * 2f / 20f),
+                    Point(width * 19f / 20f, height * 19.5f / 20f),
+                    Point(width * 1f / 20f, height * 19.5f / 20f),
                     _color = borderColor,
                     _thickness = BORDER_WIDTH
                 )

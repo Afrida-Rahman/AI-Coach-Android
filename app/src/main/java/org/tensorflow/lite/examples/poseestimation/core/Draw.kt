@@ -57,15 +57,30 @@ class Draw(
         text: String,
         position: Point,
         textColor: Int = Color.WHITE,
-        fontSize: Float = 30f
+        fontSize: Float = 30f,
+        showBackground: Boolean = false,
+        backgroundColor: Int = Color.rgb(0, 0, 0),
     ) {
         val textStyle = Paint().apply {
             color = textColor
             textSize = fontSize
             style = Paint.Style.FILL
         }
+        val textWidth = textStyle.measureText(text)
+        val fontMetrics = Paint.FontMetrics()
+        textStyle.getFontMetrics(fontMetrics)
         val xPosition = position.x
         val yPosition = position.y
+
+        if (showBackground) {
+            rectangle(
+                xPosition - 10,
+                yPosition + fontMetrics.top - 10,
+                xPosition + textWidth + 10,
+                yPosition + fontMetrics.bottom + 10,
+                backgroundColor
+            )
+        }
         canvas.drawText(text, xPosition, yPosition, textStyle)
     }
 
@@ -112,7 +127,7 @@ class Draw(
         writeText("$angleValue", textPosition)
     }
 
-    fun rectangle(
+    fun tetragonal(
         firstPoint: Point,
         secondPoint: Point,
         thirdPoint: Point,
@@ -125,5 +140,18 @@ class Draw(
         line(secondPoint, thirdPoint, lineType, _color, _thickness)
         line(thirdPoint, forthPoint, lineType, _color, _thickness)
         line(forthPoint, firstPoint, lineType, _color, _thickness)
+    }
+
+    private fun rectangle(
+        left: Float, top: Float, right: Float, bottom: Float, _color: Int = color,
+        lineType: Paint.Style? = Paint.Style.FILL,
+        _thickness: Float = thickness
+    ) {
+        val rectangleStyle = Paint().apply {
+            color = _color
+            strokeWidth = _thickness
+            style = lineType
+        }
+        canvas.drawRect(left, top, right, bottom, rectangleStyle)
     }
 }

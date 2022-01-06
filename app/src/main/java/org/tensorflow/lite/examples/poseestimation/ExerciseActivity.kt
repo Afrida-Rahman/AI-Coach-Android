@@ -480,8 +480,6 @@ class ExerciseActivity : AppCompatActivity() {
         var score = 0f
         var outputBitmap = bitmap
 
-        // run detect pose
-        // draw points and lines on original image
         poseDetector?.estimateSinglePose(bitmap)?.let { person ->
             score = person.score
             if (score > minConfidence) {
