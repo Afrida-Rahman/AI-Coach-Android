@@ -497,8 +497,7 @@ class ExerciseActivity : AppCompatActivity() {
                     wrongCount = exercise.getWrongCount(),
                     holdTime = exercise.getHoldTimeLimitCount(),
                     borderColor = exercise.getBorderColor(person, height, width),
-                    isFrontCamera = isFrontCamera,
-                    phaseDialogue = exercise.getPhaseDialogue()
+                    isFrontCamera = isFrontCamera
                 )
             }
         }

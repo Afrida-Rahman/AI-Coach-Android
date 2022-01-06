@@ -45,7 +45,6 @@ abstract class HomeExercise(
     private var setCounter = 0
     private var wrongCounter = 0
     private var repetitionCounter = 0
-    private var phaseDialogue = ""
     private var holdTimeLimitCounter = 0L
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
 
@@ -143,7 +142,8 @@ abstract class HomeExercise(
                                 Phase(
                                     phaseNumber = group.Phase,
                                     constraints = constraints,
-                                    holdTime = group.HoldInSeconds
+                                    holdTime = group.HoldInSeconds,
+                                    phaseDialogue = group.PhaseDialogue
                                 )
                             )
                         }
@@ -173,8 +173,6 @@ abstract class HomeExercise(
     fun getWrongCount() = wrongCounter
 
     fun getSetCount() = setCounter
-
-    fun getPhaseDialogue() = phaseDialogue
 
     fun getHoldTimeLimitCount(): Int = (holdTimeLimitCounter / 1000).toInt()
 
@@ -246,9 +244,8 @@ abstract class HomeExercise(
             )
             Log.d(
                 "HomeExercise",
-                "$phaseIndex: -> $constraintSatisfied - $holdTimeLimitCounter / ${phase.holdTime}"
+                " $phaseIndex: -> $constraintSatisfied - $holdTimeLimitCounter / ${phase.holdTime}"
             )
-            showPhaseDialogue(phaseIndex)
 
             if (isInsideBox(person, canvasHeight, canvasWidth) && constraintSatisfied) {
                 if (!stateStarted) {
@@ -289,16 +286,6 @@ abstract class HomeExercise(
     }
 
     abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
-
-    private fun showPhaseDialogue(phaseNumber: Int): String{
-        Log.d("phaseIndex","$phaseNumber")
-        phaseDialogue = if (phaseNumber == 0 || phaseNumber == 2) {
-            "Stand Still"
-        }else{
-            "Go Down"
-        }
-        return phaseDialogue
-    }
 
     private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {
         var constraintSatisfied = true
