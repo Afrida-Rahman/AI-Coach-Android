@@ -13,10 +13,7 @@ import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrict
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.Utilities.getIndex
-import org.tensorflow.lite.examples.poseestimation.domain.model.Constraint
-import org.tensorflow.lite.examples.poseestimation.domain.model.ConstraintType
-import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
+import org.tensorflow.lite.examples.poseestimation.domain.model.*
 import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isLeftHandStraight
 import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isRightHandStraight
 import retrofit2.Call
@@ -24,6 +21,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 abstract class HomeExercise(
     val context: Context,
@@ -47,6 +46,7 @@ abstract class HomeExercise(
     private var repetitionCounter = 0
     private var holdTimeLimitCounter = 0L
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
+    private var focalLengths: FloatArray? = null
 
     fun setExercise(
         exerciseName: String,
@@ -196,6 +196,29 @@ abstract class HomeExercise(
     fun wrongCount() {
         wrongCounter++
         audioPlayer.play(R.raw.wrong_count)
+    }
+
+    fun getPersonDistance(person: Person): Float? {
+        val pointA = person.keyPoints[BodyPart.LEFT_SHOULDER.position]
+        val pointB = person.keyPoints[BodyPart.LEFT_ELBOW.position]
+        val distanceInPx = sqrt(
+            (pointA.coordinate.x - pointB.coordinate.x).toDouble()
+                .pow(2) + (pointA.coordinate.y - pointB.coordinate.y).toDouble().pow(2)
+        )
+        var sum = 0f
+        var distance: Float? = null
+        focalLengths?.let {
+            focalLengths?.forEach { value ->
+                sum += value
+            }
+            val avgFocalLength = (sum / focalLengths!!.size) * 0.04f
+            distance = (avgFocalLength / distanceInPx.toFloat()) * 12 * 3000f
+        }
+        return distance?.let { it / 12 }
+    }
+
+    fun setFocalLength(lengths: FloatArray?) {
+        focalLengths = lengths
     }
 
     open fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {

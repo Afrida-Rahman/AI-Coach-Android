@@ -20,6 +20,7 @@ object VisualizationUtils {
         setCount: Int,
         wrongCount: Int,
         holdTime: Int,
+        personDistance: Float?,
         borderColor: Int = Color.GREEN,
         isFrontCamera: Boolean = false
     ): Bitmap {
@@ -99,12 +100,23 @@ object VisualizationUtils {
                 Color.rgb(19, 93, 148),//blue
                 55f
             )
-            draw.writeText(
-                "$holdTime/${it.holdTime}",
-                Point(width * 1 / 2f, 55f),
-                Color.rgb(113, 106, 148),//blue
-                35f
-            )
+            personDistance?.let {
+                draw.writeText(
+                    "%.1f".format(personDistance),
+                    Point(width * 1 / 2f, 70f),
+                    Color.rgb(200, 0, 0),
+                    50f
+                )
+            }
+            val timeToDisplay = it.holdTime - holdTime
+            if (timeToDisplay > 0) {
+                draw.writeText(
+                    timeToDisplay.toString(),
+                    Point(width * 3 / 7f, height * 1.2f / 2f),
+                    Color.rgb(0, 255, 0),//blue
+                    150f
+                )
+            }
             draw.writeText(
                 wrongCount.toString(),
                 Point(width * 2.4f / 3f, 55f),

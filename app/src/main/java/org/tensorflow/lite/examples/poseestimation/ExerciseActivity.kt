@@ -372,6 +372,8 @@ class ExerciseActivity : AppCompatActivity() {
                 val characteristics = manager.getCameraCharacteristics(cameraId)
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
 
+                exercise.setFocalLength(characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS))
+
                 if (isFrontCamera) {
                     if (cameraDirection != null && cameraDirection != CameraCharacteristics.LENS_FACING_FRONT) {
                         continue
@@ -496,6 +498,7 @@ class ExerciseActivity : AppCompatActivity() {
                     setCount = exercise.getSetCount(),
                     wrongCount = exercise.getWrongCount(),
                     holdTime = exercise.getHoldTimeLimitCount(),
+                    personDistance = exercise.getPersonDistance(person),
                     borderColor = exercise.getBorderColor(person, height, width),
                     isFrontCamera = isFrontCamera
                 )
