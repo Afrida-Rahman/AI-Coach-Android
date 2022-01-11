@@ -65,6 +65,9 @@ abstract class HomeExercise(
     }
 
     fun initializeConstraint(tenant: String) {
+        Log.d("AudioIssue", "++++++++kxdjcfdkbdhbfcdhbjdhc+")
+        playAudioFromUrl("")
+        Log.d("AudioIssue", "kxdjcfdkbdhbfcdhbjdhc+++++++++")
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(Utilities.getUrl(tenant).getKeyPointRestrictionURL)
@@ -186,7 +189,7 @@ abstract class HomeExercise(
 
     fun repetitionCount() {
         repetitionCounter++
-        audioPlayer.play(R.raw.right_count)
+        audioPlayer.playFromFile(R.raw.right_count)
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
@@ -195,7 +198,7 @@ abstract class HomeExercise(
 
     fun wrongCount() {
         wrongCounter++
-        audioPlayer.play(R.raw.wrong_count)
+        audioPlayer.playFromFile(R.raw.wrong_count)
     }
 
     fun getPersonDistance(person: Person): Float? {
@@ -265,6 +268,7 @@ abstract class HomeExercise(
                     if (holdTimeLimitCounter > phase.holdTime * 1000) {
                         phaseIndex++
                         stateStarted = false
+                        playAudioFromUrl("")
                     }
                     holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
                 }
@@ -338,17 +342,21 @@ abstract class HomeExercise(
             ) onEvent(CommonInstructionEvent.RightHandIsNotStraight)
         }
         getPersonDistance(person)?.let {
-            if (it > 18) {
+            if (it > 13) {
                 onEvent(CommonInstructionEvent.TooFarFromCamera)
             }
         }
+    }
+
+    private fun playAudioFromUrl(url: String) {
+        audioPlayer.playFromUrl("https://mmhva.s3.amazonaws.com/Audio%2Femma%2Femma_QUESTION_10000853_637771717022034045.wav")
     }
 
     private fun playAudio(@RawRes resource: Int) {
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
-            audioPlayer.play(resource)
+            audioPlayer.playFromFile(resource)
         }
     }
 
@@ -359,4 +367,5 @@ abstract class HomeExercise(
         object RightHandIsNotStraight : CommonInstructionEvent()
         object TooFarFromCamera : CommonInstructionEvent()
     }
+
 }
