@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
+import org.tensorflow.lite.examples.poseestimation.api.response.Assessment
 import org.tensorflow.lite.examples.poseestimation.api.response.PatientExerciseKeypointResponse
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
@@ -32,18 +33,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var menuToggle: ActionBarDrawerToggle
     private lateinit var getPatientExerciseUrl: String
     private var assessmentListFragment: AssessmentListFragment? = null
+    private var assignedAssessments: List<Assessment> = emptyList()
+    private lateinit var logInData: LogInData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val loginData = loadLogInData()
+        logInData = loadLogInData()
         binding.patientName.text =
-            getString(R.string.hello_patient_name_i_m_emma).format("${loginData.firstName} ${loginData.lastName}")
+            getString(R.string.hello_patient_name_i_m_emma).format("${logInData.firstName} ${logInData.lastName}")
 
         CoroutineScope(IO).launch {
-            getAssignedExercises(loginData.patientId, loginData.tenant)
+            getAssignedExercises(logInData.patientId, logInData.tenant)
         }
         menuToggle = ActionBarDrawerToggle(
             this,
@@ -66,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnTryAgain.setOnClickListener {
-            getAssignedExercises(patientId = loginData.patientId, tenant = loginData.tenant)
+            getAssignedExercises(patientId = logInData.patientId, tenant = logInData.tenant)
             it.visibility = View.GONE
             binding.progressIndicator.visibility = View.VISIBLE
         }
@@ -93,6 +96,13 @@ class MainActivity : AppCompatActivity() {
         assessmentListFragment?.let {
             changeScreen(it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        assessmentListFragment =
+            AssessmentListFragment(assignedAssessments, logInData.patientId, logInData.tenant)
+        assessmentListFragment?.let { changeScreen(it) }
     }
 
     override fun onBackPressed() {
@@ -147,8 +157,9 @@ class MainActivity : AppCompatActivity() {
                 if (responseBody != null) {
                     if (responseBody.Assessments.isNotEmpty()) {
                         binding.progressIndicator.visibility = View.GONE
+                        assignedAssessments = responseBody.Assessments
                         assessmentListFragment =
-                            AssessmentListFragment(responseBody.Assessments, patientId, tenant)
+                            AssessmentListFragment(assignedAssessments, patientId, tenant)
                         assessmentListFragment?.let { changeScreen(it) }
                     } else {
                         Toast.makeText(

@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.back
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -115,7 +116,7 @@ class LateralBendingStretchInStanding(
         val leftHandStraight =
             leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 shoulderAngleDownMin,
@@ -241,7 +242,7 @@ class LateralBendingStretchInStanding(
             deviationAngle
         }
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
 
         if (((leftShoulderAngle > wrongCountStates[wrongStateIndex][0]
                     && leftShoulderAngle < wrongCountStates[wrongStateIndex][1]

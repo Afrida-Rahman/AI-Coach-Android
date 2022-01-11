@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise.home
 
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RawRes
@@ -13,6 +12,7 @@ import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrict
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.Utilities.getIndex
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.*
 import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isLeftHandStraight
 import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isRightHandStraight
@@ -221,36 +221,13 @@ abstract class HomeExercise(
         focalLengths = lengths
     }
 
-    open fun getBorderColor(person: Person, canvasHeight: Int, canvasWidth: Int): Int {
-        return if (isInsideBox(person, canvasHeight, canvasWidth)) {
-            Color.GREEN
-        } else {
-            Color.RED
-        }
-    }
-
-    open fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
-        val left = canvasWidth * 2f / 20f
-        val right = canvasWidth * 18.5f / 20f
-        val top = canvasHeight * 2.5f / 20f
-        val bottom = canvasHeight * 18.5f / 20f
-        var rightPosition = true
-        person.keyPoints.forEach {
-            val x = it.coordinate.x
-            val y = it.coordinate.y
-            if (x < left || x > right || y < top || y > bottom) {
-                rightPosition = false
-            }
-        }
-        return rightPosition
-    }
-
     open fun onEvent(event: CommonInstructionEvent) {
         when (event) {
             is CommonInstructionEvent.OutSideOfBox -> playAudio(R.raw.stand_inside_box)
             is CommonInstructionEvent.HandIsNotStraight -> playAudio(R.raw.keep_hand_straight)
             is CommonInstructionEvent.LeftHandIsNotStraight -> playAudio(R.raw.left_hand_straight)
             is CommonInstructionEvent.RightHandIsNotStraight -> playAudio(R.raw.right_hand_straight)
+            is CommonInstructionEvent.TooFarFromCamera -> playAudio(R.raw.come_forward)
         }
     }
 
@@ -270,7 +247,12 @@ abstract class HomeExercise(
                 " $phaseIndex: -> $constraintSatisfied - $holdTimeLimitCounter / ${phase.holdTime}"
             )
 
-            if (isInsideBox(person, canvasHeight, canvasWidth) && constraintSatisfied) {
+            if (VisualizationUtils.isInsideBox(
+                    person,
+                    canvasHeight,
+                    canvasWidth
+                ) && constraintSatisfied
+            ) {
                 if (!stateStarted) {
                     lastStateTimestamp = System.currentTimeMillis()
                     stateStarted = true
@@ -290,21 +272,12 @@ abstract class HomeExercise(
                 stateStarted = false
                 holdTimeLimitCounter = 0
             }
-            if (phaseIndex == rightCountPhases.size) {
-                commonInstruction(
-                    person,
-                    rightCountPhases[phaseIndex].constraints,
-                    canvasHeight,
-                    canvasWidth
-                )
-            } else {
-                commonInstruction(
-                    person,
-                    rightCountPhases[phaseIndex].constraints,
-                    canvasHeight,
-                    canvasWidth
-                )
-            }
+            commonInstruction(
+                person,
+                rightCountPhases[phaseIndex].constraints,
+                canvasHeight,
+                canvasWidth
+            )
         }
     }
 
@@ -347,7 +320,7 @@ abstract class HomeExercise(
         canvasWidth: Int
     ) {
         constraints.forEach {
-            if (!isInsideBox(
+            if (!VisualizationUtils.isInsideBox(
                     person,
                     canvasHeight,
                     canvasWidth
@@ -364,6 +337,11 @@ abstract class HomeExercise(
                 )
             ) onEvent(CommonInstructionEvent.RightHandIsNotStraight)
         }
+        getPersonDistance(person)?.let {
+            if (it > 18) {
+                onEvent(CommonInstructionEvent.TooFarFromCamera)
+            }
+        }
     }
 
     private fun playAudio(@RawRes resource: Int) {
@@ -379,5 +357,6 @@ abstract class HomeExercise(
         object HandIsNotStraight : CommonInstructionEvent()
         object LeftHandIsNotStraight : CommonInstructionEvent()
         object RightHandIsNotStraight : CommonInstructionEvent()
+        object TooFarFromCamera : CommonInstructionEvent()
     }
 }

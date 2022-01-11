@@ -5,8 +5,10 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.146875" />
         <entry key="../../Android/Sdk/platforms/android-30/data/res/layout/simple_spinner_item.xml" value="0.25677083333333334" />
+        <entry key="app/src/main/res/drawable/border.xml" value="0.22083333333333333" />
         <entry key="app/src/main/res/drawable/circular_backgroud.xml" value="0.2891891891891892" />
         <entry key="app/src/main/res/drawable/circular_background.xml" value="0.292578125" />
+        <entry key="app/src/main/res/drawable/gradient_border_top.xml" value="0.22083333333333333" />
         <entry key="app/src/main/res/drawable/ic_exercise_active.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_guideline.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_guideline_button.xml" value="0.37604166666666666" />

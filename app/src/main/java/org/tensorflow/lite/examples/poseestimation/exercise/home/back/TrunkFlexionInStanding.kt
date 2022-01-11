@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.back
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -69,7 +70,7 @@ class TrunkFlexionInStanding(
         val leftStraightHandAngle =
             Utilities.angle(leftShoulderPoint, leftElbowPoint, leftWristPoint, true)
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 hipAngleUpMin,
@@ -133,7 +134,7 @@ class TrunkFlexionInStanding(
 
         val leftHipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint)
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val wrongCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 wrongHipAngleUpMin,

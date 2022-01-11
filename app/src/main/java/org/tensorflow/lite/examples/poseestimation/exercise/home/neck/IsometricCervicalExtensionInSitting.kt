@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.neck
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -87,7 +88,7 @@ class IsometricCervicalExtensionInSitting(
             Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
         val rightShoulderAngle =
             Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
 
         if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
             && leftShoulderAngle < rightCountStates[rightStateIndex][1]
@@ -182,7 +183,7 @@ class IsometricCervicalExtensionInSitting(
         val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint)
         val rightShoulderAngle =
             Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         if (
             (leftShoulderAngle > wrongCountStates1[wrongStateIndex][0]
                     && leftShoulderAngle < wrongCountStates1[wrongStateIndex][1]

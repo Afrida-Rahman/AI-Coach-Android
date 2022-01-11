@@ -20,9 +20,10 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
@@ -81,6 +82,8 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var exercise: HomeExercise
 
     private var isFrontCamera = true
+    private var showCongrats = false
+    private lateinit var logInData: LogInData
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -182,7 +185,7 @@ class ExerciseActivity : AppCompatActivity() {
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
-        val logInData = loadLogInData()
+        logInData = loadLogInData()
 
         exercise = Exercises.get(this, exerciseId)
         exercise.initializeConstraint(logInData.tenant)
@@ -209,28 +212,7 @@ class ExerciseActivity : AppCompatActivity() {
                 NoOfWrongCount = exercise.getWrongCount(),
                 Tenant = logInData.tenant
             )
-            val alertDialog = AlertDialog.Builder(this)
-            alertDialog.setMessage("Do you feel any pain while performing this exercise?")
-            alertDialog.setPositiveButton("Yes") { _, _ ->
-                val alertDialog2 = AlertDialog.Builder(this)
-                alertDialog2.setMessage("Do you want to track your pain with EMMA?")
-                alertDialog2.setPositiveButton("Yes") { _, _ ->
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
-                    )
-                    startActivity(intent)
-                    finish()
-                }
-                alertDialog2.setNegativeButton("No") { _, _ ->
-                    finish()
-                }
-                alertDialog2.show()
-            }
-            alertDialog.setNegativeButton("No") { _, _ ->
-                finish()
-            }
-            alertDialog.show()
+            askQuestions(this)
         }
 
         findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
@@ -478,18 +460,30 @@ class ExerciseActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     private fun processImage(bitmap: Bitmap) {
         var score = 0f
         var outputBitmap = bitmap
+
+        if ((exercise.getSetCount() >= exercise.maxSetCount) && !showCongrats) {
+            showCongrats = true
+            MainScope().launch {
+                congratsPatient(context = this@ExerciseActivity)
+            }
+        }
 
         poseDetector?.estimateSinglePose(bitmap)?.let { person ->
             score = person.score
             if (score > minConfidence) {
                 val height = bitmap.height
                 val width = bitmap.width
-                exercise.rightExerciseCount(person, height, width)
-                exercise.wrongExerciseCount(person, height, width)
-
+                if (!showCongrats) {
+                    exercise.rightExerciseCount(person, height, width)
+                    exercise.wrongExerciseCount(person, height, width)
+                }
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     input = bitmap,
                     person = person,
@@ -499,7 +493,6 @@ class ExerciseActivity : AppCompatActivity() {
                     wrongCount = exercise.getWrongCount(),
                     holdTime = exercise.getHoldTimeLimitCount(),
                     personDistance = exercise.getPersonDistance(person),
-                    borderColor = exercise.getBorderColor(person, height, width),
                     isFrontCamera = isFrontCamera
                 )
             }
@@ -541,6 +534,51 @@ class ExerciseActivity : AppCompatActivity() {
             tvTime.text =
                 getString(R.string.tfe_pe_tv_time).format(it * 1.0f / 1_000_000)
         }
+    }
+
+    private fun congratsPatient(context: Context) {
+        VisualizationUtils.getAlertDialogue(
+            context = context,
+            message = "Congratulation! You successfully completed the exercise.",
+            positiveButtonText = "Ok",
+            positiveButtonAction = {
+                askQuestions(context)
+            },
+            negativeButtonText = null,
+            negativeButtonAction = {}
+        ).show()
+    }
+
+    private fun askQuestions(context: Context) {
+        val askForTracking = VisualizationUtils.getAlertDialogue(
+            context = context,
+            message = "Do you want to track your pain with EMMA?",
+            positiveButtonText = "Yes",
+            positiveButtonAction = {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
+                )
+                startActivity(intent)
+                finish()
+            },
+            negativeButtonText = "No",
+            negativeButtonAction = {
+                finish()
+            }
+        )
+        VisualizationUtils.getAlertDialogue(
+            context = context,
+            message = "Do you feel any pain while performing this exercise?",
+            positiveButtonText = "Yes",
+            positiveButtonAction = {
+                askForTracking.show()
+            },
+            negativeButtonText = "No",
+            negativeButtonAction = {
+                finish()
+            }
+        ).show()
     }
 
     private fun saveExerciseData(

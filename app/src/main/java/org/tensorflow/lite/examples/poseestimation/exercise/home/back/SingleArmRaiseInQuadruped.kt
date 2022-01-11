@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.back
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -85,7 +86,7 @@ class SingleArmRaiseInQuadruped(
             upElbowAngleMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val kneeAngle = Utilities.angle(leftHipPoint, leftKneePoint, leftAnklePoint, false)
         val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, true)
         val shoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, true)

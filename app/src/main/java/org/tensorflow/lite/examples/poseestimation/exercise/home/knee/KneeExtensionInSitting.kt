@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.knee
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -62,7 +63,7 @@ class KneeExtensionInSitting(
             )
         )
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint, false)
         if (kneeAngle > rightCountStates[rightStateIndex][0] && kneeAngle < rightCountStates[rightStateIndex][1]
             && insideBox
@@ -115,7 +116,7 @@ class KneeExtensionInSitting(
             )
         )
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint, false)
         if (kneeAngle > wrongCountStates[wrongStateIndex][0] && kneeAngle < wrongCountStates[wrongStateIndex][1]
             && insideBox

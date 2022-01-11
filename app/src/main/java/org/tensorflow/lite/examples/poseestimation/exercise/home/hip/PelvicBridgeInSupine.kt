@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.hip
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -49,7 +50,7 @@ class PelvicBridgeInSupine(
             hipAngleUpMin = rightCountPhases[1].constraints[0].minValue.toFloat()
             hipAngleUpMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
@@ -114,7 +115,7 @@ class PelvicBridgeInSupine(
                 wrongHipAngleDownMax
             )
         )
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(rightShoulderPoint, rightHipPoint, rightKneePoint)
         if (hipAngle > wrongCountStates[wrongStateIndex][0] && hipAngle < wrongCountStates[wrongStateIndex][1] && insideBox) {
             if (insideBox) {

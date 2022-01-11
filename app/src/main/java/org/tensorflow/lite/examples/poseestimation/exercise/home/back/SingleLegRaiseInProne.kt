@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.back
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -63,7 +64,7 @@ class SingleLegRaiseInProne(
             upKneeAngleMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, false)
         val kneeAngle = Utilities.angle(leftHipPoint, leftKneePoint, leftAnklePoint, false)
 
