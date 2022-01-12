@@ -65,7 +65,6 @@ abstract class HomeExercise(
     }
 
     fun initializeConstraint(tenant: String) {
-        audioPlayer.playFromUrl("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(Utilities.getUrl(tenant).getKeyPointRestrictionURL)
@@ -266,7 +265,7 @@ abstract class HomeExercise(
                     if (holdTimeLimitCounter > phase.holdTime * 1000) {
                         phaseIndex++
                         stateStarted = false
-//                        audioPlayer.playFromUrl("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
+                        audioPlayer.playFromUrl("https://mmhva.s3.amazonaws.com/Audio%2femma%2femma_QUESTION_10000853_637771717022034045.wav")
                     }
                     holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
                 }
