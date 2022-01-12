@@ -128,29 +128,35 @@ object VisualizationUtils {
             it.phaseDialogue?.let { dialogue ->
                 draw.writeText(
                     dialogue,
-                    Point((width / 20f) - 20f, height - 20f),
-                    Color.rgb(255, 255, 255),//blue
+                    Point(width / 2f, height - 20f),
+                    Color.rgb(255, 255, 255),
                     25f,
                     true
                 )
             }
             draw.writeText(
                 "$repCount/$setCount",
-                Point(20f, 50f),
-                Color.rgb(19, 93, 148),//blue
+                Point(50f, 50f),
+                Color.rgb(19, 93, 148),
                 50f
+            )
+            draw.writeText(
+                "rep/set",
+                Point(50f, 70f),
+                Color.rgb(19, 93, 148),
+                20f
             )
             personDistance?.let {
                 draw.writeText(
                     "%.1f".format(personDistance),
-                    Point(width * 1 / 2f - 20, 50f),
-                    Color.rgb(3, 218,197),
+                    Point(width / 2f, 50f),
+                    Color.rgb(3, 218, 197),
                     50f
                 )
                 draw.writeText(
                     "ft",
-                    Point(width * 1 / 2f + 60, 50f),
-                    Color.rgb(3, 218,197),
+                    Point(width / 2f, 70f),
+                    Color.rgb(3, 218, 197),
                     20f
                 )
             }
@@ -165,9 +171,15 @@ object VisualizationUtils {
             }
             draw.writeText(
                 wrongCount.toString(),
-                Point(width - 50f, 50f),
+                Point(width - 40f, 50f),
                 Color.rgb(255, 0, 0),//green
                 50f
+            )
+            draw.writeText(
+                "wrong",
+                Point(width - 40f, 70f),
+                Color.rgb(255, 0, 0),//green
+                20f
             )
         }
         if (!isInsideBox(person, height, width)) {

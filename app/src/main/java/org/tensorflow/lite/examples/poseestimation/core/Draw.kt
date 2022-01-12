@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import androidx.core.graphics.withSave
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -69,7 +70,7 @@ class Draw(
         val textWidth = textStyle.measureText(text)
         val fontMetrics = Paint.FontMetrics()
         textStyle.getFontMetrics(fontMetrics)
-        val xPosition = position.x
+        val xPosition = position.x - textWidth / 2
         val yPosition = position.y
 
         if (showBackground) {
