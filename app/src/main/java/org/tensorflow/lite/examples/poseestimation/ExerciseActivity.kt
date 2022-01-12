@@ -85,6 +85,11 @@ class ExerciseActivity : AppCompatActivity() {
     private var showCongrats = false
     private lateinit var logInData: LogInData
 
+    private lateinit var countDisplay: TextView
+    private lateinit var distanceDisplay: TextView
+    private lateinit var wrongCountDisplay: TextView
+    private lateinit var timeCountDisplay: TextView
+
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
             this@ExerciseActivity.cameraDevice = camera
@@ -178,7 +183,6 @@ class ExerciseActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-
         val testId = intent.getStringExtra(TestId)
         val exerciseId = intent.getIntExtra(ExerciseId, 122)
         val exerciseName = intent.getStringExtra(Name)
@@ -197,6 +201,11 @@ class ExerciseActivity : AppCompatActivity() {
             setLimit = setLimit,
             protoId = protocolId
         )
+
+        countDisplay = findViewById(R.id.right_count)
+        distanceDisplay = findViewById(R.id.distance)
+        wrongCountDisplay = findViewById(R.id.wrong_count)
+        timeCountDisplay = findViewById(R.id.time_count_display)
 
         findViewById<TextView>(R.id.textView).text = exerciseName
 
@@ -484,15 +493,33 @@ class ExerciseActivity : AppCompatActivity() {
                     exercise.rightExerciseCount(person, height, width)
                     exercise.wrongExerciseCount(person, height, width)
                 }
+                val phase = exercise.getPhase()
+                MainScope().launch {
+                    countDisplay.text = getString(R.string.right_count_text).format(
+                        exercise.getRepetitionCount(),
+                        exercise.getSetCount()
+                    )
+                    exercise.getPersonDistance(person)?.let {
+                        distanceDisplay.text = getString(R.string.distance_text).format(it)
+                    }
+                    wrongCountDisplay.text =
+                        getString(R.string.wrong_text).format(exercise.getWrongCount())
+                    phase?.let {
+                        val holdTime = exercise.getHoldTimeLimitCount()
+                        if (holdTime > 0) {
+                            timeCountDisplay.visibility = View.VISIBLE
+                            timeCountDisplay.text =
+                                getString(R.string.time_count_text).format(it.holdTime - holdTime)
+                        } else {
+                            timeCountDisplay.visibility = View.GONE
+                            timeCountDisplay.text = getString(R.string.time_count_text).format(0)
+                        }
+                    }
+                }
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     input = bitmap,
                     person = person,
-                    phase = exercise.getPhase(),
-                    repCount = exercise.getRepetitionCount(),
-                    setCount = exercise.getSetCount(),
-                    wrongCount = exercise.getWrongCount(),
-                    holdTime = exercise.getHoldTimeLimitCount(),
-                    personDistance = exercise.getPersonDistance(person),
+                    phase = phase,
                     isFrontCamera = isFrontCamera
                 )
             }

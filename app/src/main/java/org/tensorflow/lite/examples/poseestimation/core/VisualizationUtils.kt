@@ -38,11 +38,6 @@ object VisualizationUtils {
         input: Bitmap,
         person: Person,
         phase: Phase?,
-        repCount: Int,
-        setCount: Int,
-        wrongCount: Int,
-        holdTime: Int,
-        personDistance: Float?,
         isFrontCamera: Boolean = false
     ): Bitmap {
         val output = input.copy(Bitmap.Config.ARGB_8888, true)
@@ -134,53 +129,6 @@ object VisualizationUtils {
                     true
                 )
             }
-            draw.writeText(
-                "$repCount/$setCount",
-                Point(50f, 50f),
-                Color.rgb(19, 93, 148),
-                50f
-            )
-            draw.writeText(
-                "rep/set",
-                Point(50f, 70f),
-                Color.rgb(19, 93, 148),
-                20f
-            )
-            personDistance?.let {
-                draw.writeText(
-                    "%.1f".format(personDistance),
-                    Point(width / 2f, 50f),
-                    Color.rgb(3, 218, 197),
-                    50f
-                )
-                draw.writeText(
-                    "ft",
-                    Point(width / 2f, 70f),
-                    Color.rgb(3, 218, 197),
-                    20f
-                )
-            }
-            val timeToDisplay = it.holdTime - holdTime
-            if (timeToDisplay > 0) {
-                draw.writeText(
-                    timeToDisplay.toString(),
-                    Point(width * 3 / 7f, height * 1.2f / 2f),
-                    Color.rgb(0, 255, 0),//blue
-                    150f
-                )
-            }
-            draw.writeText(
-                wrongCount.toString(),
-                Point(width - 40f, 50f),
-                Color.rgb(255, 0, 0),//green
-                50f
-            )
-            draw.writeText(
-                "wrong",
-                Point(width - 40f, 70f),
-                Color.rgb(255, 0, 0),//green
-                20f
-            )
         }
         if (!isInsideBox(person, height, width)) {
             draw.tetragonal(

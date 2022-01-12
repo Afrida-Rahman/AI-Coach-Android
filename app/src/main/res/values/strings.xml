@@ -100,4 +100,8 @@
     <string name="registration_type_value">%s</string>
     <string name="home_exercise_count">%d</string>
     <string name="view_assigned_exercises">View Assigned Exercises</string>
+    <string name="right_count_text">%d/%d</string>
+    <string name="distance_text">%.1f</string>
+    <string name="wrong_text">%d</string>
+    <string name="time_count_text">%d</string>
 </resources>
