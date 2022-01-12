@@ -39,7 +39,8 @@ class AssessmentListFragment(
                         exerciseImageUrls = exercise.ImageURLs,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
-                        protoId = exercise.ProtocolId
+                        protoId = exercise.ProtocolId,
+                        exerciseVideoUrl = exercise.ExerciseMedia
                     )
                     parsedExercises.add(implementedExercise)
                 } else {
@@ -54,7 +55,8 @@ class AssessmentListFragment(
                         exerciseImageUrls = exercise.ImageURLs,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
-                        protoId = exercise.ProtocolId
+                        protoId = exercise.ProtocolId,
+                        exerciseVideoUrl = exercise.ExerciseMedia
                     )
                     parsedExercises.add(notImplementedExercise)
                 }

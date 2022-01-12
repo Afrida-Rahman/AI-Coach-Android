@@ -18,7 +18,8 @@ class ExerciseGuidelineFragment(
     private val position: Int,
     private val exerciseList: List<HomeExercise>,
     private val patientId: String,
-    private val tenant: String
+    private val tenant: String,
+    private val videoUrl: String
 ) : Fragment() {
 
     override fun onCreateView(
@@ -34,20 +35,23 @@ class ExerciseGuidelineFragment(
         var instruction = exercise.instruction
         val imageUrls = exercise.imageUrls
 
-        val mediaController = MediaController(view.context)
-        mediaController.setMediaPlayer(videoView)
-        videoView.setMediaController(mediaController)
-        val pd = ProgressDialog(view.context)
-        pd.setMessage("Buffering video please wait...")
-        pd.show()
+        if (videoUrl.isNotEmpty()) {
+            val mediaController = MediaController(view.context)
+            mediaController.setMediaPlayer(videoView)
+            videoView.setMediaController(mediaController)
+            val pd = ProgressDialog(view.context)
+            pd.setMessage("Buffering video please wait...")
+            pd.show()
 
-        val uri: Uri =
-            Uri.parse("https://mmhai.s3.us-east-2.amazonaws.com/LearnTherapist/emma/AROM Ankle Dorsiflexion in Sitting/AROM Ankle Dorsiflexion in Sitting_1639970462_raw.mp4")
-        videoView.setVideoURI(uri)
-        videoView.start()
+            val uri: Uri = Uri.parse(videoUrl)
+            videoView.setVideoURI(uri)
+            videoView.start()
 
-        videoView.setOnPreparedListener { //close the progress dialog when buffering is done
-            pd.dismiss()
+            videoView.setOnPreparedListener { //close the progress dialog when buffering is done
+                pd.dismiss()
+            }
+        } else {
+            videoView.visibility = View.GONE
         }
 
         backButton.setOnClickListener {

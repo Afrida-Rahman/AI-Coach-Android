@@ -128,6 +128,7 @@ class ExerciseListAdapter(
             }
             guidelineButton.setOnClickListener {
                 manager.beginTransaction().apply {
+                    disallowAddToBackStack()
                     replace(
                         R.id.fragment_container,
                         ExerciseGuidelineFragment(
@@ -135,7 +136,8 @@ class ExerciseListAdapter(
                             position = position,
                             exerciseList = exerciseList,
                             patientId,
-                            tenant
+                            tenant,
+                            videoUrl = exercise.videoUrl
                         )
                     )
                     commit()
