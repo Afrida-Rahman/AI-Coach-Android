@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
+import org.tensorflow.lite.examples.poseestimation.domain.model.BodyPart
 import org.tensorflow.lite.examples.poseestimation.domain.model.ConstraintType
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
@@ -13,6 +14,25 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 object VisualizationUtils {
     private const val LINE_WIDTH = 3f
     private const val BORDER_WIDTH = 10f
+
+    private val MAPPINGS = listOf(
+        listOf(BodyPart.LEFT_EAR.position, BodyPart.LEFT_EYE.position),
+        listOf(BodyPart.LEFT_EYE.position, BodyPart.NOSE.position),
+        listOf(BodyPart.NOSE.position, BodyPart.RIGHT_EYE.position),
+        listOf(BodyPart.RIGHT_EYE.position, BodyPart.RIGHT_EAR.position),
+        listOf(BodyPart.LEFT_SHOULDER.position, BodyPart.RIGHT_SHOULDER.position),
+        listOf(BodyPart.LEFT_SHOULDER.position, BodyPart.LEFT_ELBOW.position),
+        listOf(BodyPart.LEFT_ELBOW.position, BodyPart.LEFT_WRIST.position),
+        listOf(BodyPart.LEFT_SHOULDER.position, BodyPart.LEFT_HIP.position),
+        listOf(BodyPart.LEFT_HIP.position, BodyPart.LEFT_KNEE.position),
+        listOf(BodyPart.LEFT_KNEE.position, BodyPart.LEFT_ANKLE.position),
+        listOf(BodyPart.LEFT_HIP.position, BodyPart.RIGHT_HIP.position),
+        listOf(BodyPart.RIGHT_SHOULDER.position, BodyPart.RIGHT_ELBOW.position),
+        listOf(BodyPart.RIGHT_ELBOW.position, BodyPart.RIGHT_WRIST.position),
+        listOf(BodyPart.RIGHT_SHOULDER.position, BodyPart.RIGHT_HIP.position),
+        listOf(BodyPart.RIGHT_HIP.position, BodyPart.RIGHT_KNEE.position),
+        listOf(BodyPart.RIGHT_KNEE.position, BodyPart.RIGHT_ANKLE.position)
+    )
 
     fun drawBodyKeyPoints(
         input: Bitmap,
@@ -33,6 +53,25 @@ object VisualizationUtils {
         val draw = Draw(canvas, Color.WHITE, LINE_WIDTH)
         val width = draw.canvas.width
         val height = draw.canvas.height
+
+        MAPPINGS.forEach { map ->
+            val startPoint = person.keyPoints[map[0]].toCanvasPoint()
+            val endPoint = person.keyPoints[map[1]].toCanvasPoint()
+            if (isFrontCamera) {
+                draw.line(
+                    Point(
+                        output.width - startPoint.x,
+                        startPoint.y
+                    ),
+                    Point(
+                        output.width - endPoint.x,
+                        endPoint.y
+                    )
+                )
+            } else {
+                draw.line(startPoint, endPoint)
+            }
+        }
 
         phase?.let {
             for (constraint in it.constraints) {
