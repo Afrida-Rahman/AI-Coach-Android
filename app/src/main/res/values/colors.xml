@@ -8,6 +8,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="green">#66BB6A</color>
+    <color name="nion_green">#aaff00</color>
     <color name="blue">#081859</color>
     <color name="light_blue">#0089FF</color>
     <color name="primary_color">#1176b4</color>

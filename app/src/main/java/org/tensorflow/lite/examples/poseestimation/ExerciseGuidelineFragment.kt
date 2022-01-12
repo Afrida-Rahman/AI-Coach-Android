@@ -15,6 +15,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class ExerciseGuidelineFragment(
     private val testId: String,
+    private val testDate: String,
     private val position: Int,
     private val exerciseList: List<HomeExercise>,
     private val patientId: String,
@@ -35,15 +36,17 @@ class ExerciseGuidelineFragment(
         val imageUrls = exercise.imageUrls
 
         val mediaController = MediaController(view.context)
-        mediaController.setMediaPlayer(videoView)
-        videoView.setMediaController(mediaController)
+//        mediaController.setMediaPlayer(videoView)
+        mediaController.setAnchorView(videoView)
         val pd = ProgressDialog(view.context)
         pd.setMessage("Buffering video please wait...")
         pd.show()
 
         val uri: Uri =
             Uri.parse("https://mmhai.s3.us-east-2.amazonaws.com/LearnTherapist/emma/AROM Ankle Dorsiflexion in Sitting/AROM Ankle Dorsiflexion in Sitting_1639970462_raw.mp4")
+        videoView.setMediaController(mediaController)
         videoView.setVideoURI(uri)
+        videoView.requestFocus()
         videoView.start()
 
         videoView.setOnPreparedListener { //close the progress dialog when buffering is done
@@ -54,7 +57,7 @@ class ExerciseGuidelineFragment(
             parentFragmentManager.beginTransaction().apply {
                 replace(
                     R.id.fragment_container,
-                    ExerciseListFragment(testId, exerciseList, patientId, tenant)
+                    ExerciseListFragment(testId, testDate, exerciseList, patientId, tenant)
                 )
                 commit()
             }

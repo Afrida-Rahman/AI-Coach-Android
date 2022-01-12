@@ -109,7 +109,7 @@ class Draw(
             startAngle - angleValue / 2
         }
         midAngle = (midAngle * PI.toFloat()) / 180f
-        val textPositionRadius = radius + 70
+        val textPositionRadius = radius - 10
         val textPosition = Point(
             middlePoint.x + textPositionRadius * cos(midAngle),
             middlePoint.y - textPositionRadius * sin(midAngle)
@@ -124,7 +124,7 @@ class Draw(
         circle(endPoint, 4f, endPoint, 360f, _clockWise = _clockWise)
 
         circle(middlePoint, radius, referenceVector, angleValue.toFloat(), _clockWise = _clockWise)
-        writeText("$angleValue", textPosition)
+        writeText("$angleValue", textPosition, fontSize = 20f)
     }
 
     fun tetragonal(

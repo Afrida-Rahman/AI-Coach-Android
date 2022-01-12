@@ -12,7 +12,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
 object VisualizationUtils {
-    private const val LINE_WIDTH = 3f
+    private const val LINE_WIDTH = 2.5f
     private const val BORDER_WIDTH = 10f
 
     private val MAPPINGS = listOf(
@@ -50,7 +50,7 @@ object VisualizationUtils {
         if (isFrontCamera) {
             canvas.scale(-1f, 1f, canvas.width.toFloat() / 2, canvas.height.toFloat() / 2)
         }
-        val draw = Draw(canvas, Color.WHITE, LINE_WIDTH)
+        val draw = Draw(canvas, Color.rgb(170, 255, 0), LINE_WIDTH)
         val width = draw.canvas.width
         val height = draw.canvas.height
 
@@ -130,22 +130,28 @@ object VisualizationUtils {
                     dialogue,
                     Point((width / 20f) - 20f, height - 20f),
                     Color.rgb(255, 255, 255),//blue
-                    30f,
+                    25f,
                     true
                 )
             }
             draw.writeText(
                 "$repCount/$setCount",
-                Point(width * 1 / 7f, 55f),
+                Point(20f, 50f),
                 Color.rgb(19, 93, 148),//blue
-                55f
+                50f
             )
             personDistance?.let {
                 draw.writeText(
                     "%.1f".format(personDistance),
-                    Point(width * 1 / 2f, 70f),
-                    Color.rgb(200, 0, 0),
+                    Point(width * 1 / 2f - 20, 50f),
+                    Color.rgb(3, 218,197),
                     50f
+                )
+                draw.writeText(
+                    "ft",
+                    Point(width * 1 / 2f + 60, 50f),
+                    Color.rgb(3, 218,197),
+                    20f
                 )
             }
             val timeToDisplay = it.holdTime - holdTime
@@ -159,9 +165,9 @@ object VisualizationUtils {
             }
             draw.writeText(
                 wrongCount.toString(),
-                Point(width * 2.4f / 3f, 55f),
+                Point(width - 50f, 50f),
                 Color.rgb(255, 0, 0),//green
-                55f
+                50f
             )
         }
         if (!isInsideBox(person, height, width)) {
@@ -178,15 +184,11 @@ object VisualizationUtils {
     }
 
     fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
-        val left = canvasWidth * 2f / 20f
-        val right = canvasWidth * 18.5f / 20f
-        val top = canvasHeight * 2.5f / 20f
-        val bottom = canvasHeight * 18.5f / 20f
         var rightPosition = true
         person.keyPoints.forEach {
             val x = it.coordinate.x
             val y = it.coordinate.y
-            if (x < left || x > right || y < top || y > bottom) {
+            if (x < 0 || x > canvasWidth || y < 0 || y > canvasHeight) {
                 rightPosition = false
             }
         }

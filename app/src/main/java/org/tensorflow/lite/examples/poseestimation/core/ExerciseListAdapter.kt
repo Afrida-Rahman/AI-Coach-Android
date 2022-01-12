@@ -28,6 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ExerciseListAdapter(
     private val testId: String,
+    private val testDate: String,
     private val exerciseList: List<HomeExercise>,
     private val manager: FragmentManager,
     private val patientId: String,
@@ -132,10 +133,11 @@ class ExerciseListAdapter(
                         R.id.fragment_container,
                         ExerciseGuidelineFragment(
                             testId = testId,
+                            testDate = testDate,
                             position = position,
                             exerciseList = exerciseList,
-                            patientId,
-                            tenant
+                            patientId = patientId,
+                            tenant = tenant
                         )
                     )
                     commit()
