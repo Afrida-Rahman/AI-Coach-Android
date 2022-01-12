@@ -1,21 +1,22 @@
 package org.tensorflow.lite.examples.poseestimation
 
+import android.app.ProgressDialog
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.core.ExerciseGuidelineImageListAdapter
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
+
 class ExerciseGuidelineFragment(
-    private val testId : String,
-    private val position : Int,
-    private val exerciseList : List<HomeExercise>,
+    private val testId: String,
+    private val position: Int,
+    private val exerciseList: List<HomeExercise>,
     private val patientId: String,
     private val tenant: String
 ) : Fragment() {
@@ -27,16 +28,33 @@ class ExerciseGuidelineFragment(
         val view = inflater.inflate(R.layout.fragment_exercise_guideline, container, false)
         val exerciseNameView: TextView = view.findViewById(R.id.exercise_name_guideline)
         val backButton: ImageButton = view.findViewById(R.id.back_button)
+        val videoView: VideoView = view.findViewById(R.id.video_view)
 
         val exercise = exerciseList[position]
         var instruction = exercise.instruction
         val imageUrls = exercise.imageUrls
 
+        val mediaController = MediaController(view.context)
+        mediaController.setMediaPlayer(videoView)
+        videoView.setMediaController(mediaController)
+        val pd = ProgressDialog(view.context)
+        pd.setMessage("Buffering video please wait...")
+        pd.show()
+
+        val uri: Uri =
+            Uri.parse("https://mmhai.s3.us-east-2.amazonaws.com/LearnTherapist/emma/AROM Ankle Dorsiflexion in Sitting/AROM Ankle Dorsiflexion in Sitting_1639970462_raw.mp4")
+        videoView.setVideoURI(uri)
+        videoView.start()
+
+        videoView.setOnPreparedListener { //close the progress dialog when buffering is done
+            pd.dismiss()
+        }
+
         backButton.setOnClickListener {
             parentFragmentManager.beginTransaction().apply {
                 replace(
                     R.id.fragment_container,
-                    ExerciseListFragment(testId, exerciseList,patientId,tenant)
+                    ExerciseListFragment(testId, exerciseList, patientId, tenant)
                 )
                 commit()
             }

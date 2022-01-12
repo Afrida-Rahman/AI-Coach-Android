@@ -125,7 +125,7 @@ object VisualizationUtils {
                 55f
             )
         }
-        if(!isInsideBox(person, height, width)){
+        if (!isInsideBox(person, height, width)) {
             draw.tetragonal(
                 Point(0f, 0f),
                 Point(0f, height.toFloat()),

@@ -65,9 +65,7 @@ abstract class HomeExercise(
     }
 
     fun initializeConstraint(tenant: String) {
-        Log.d("AudioIssue", "++++++++kxdjcfdkbdhbfcdhbjdhc+")
-        playAudioFromUrl("")
-        Log.d("AudioIssue", "kxdjcfdkbdhbfcdhbjdhc+++++++++")
+        audioPlayer.playFromUrl("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(Utilities.getUrl(tenant).getKeyPointRestrictionURL)
@@ -268,7 +266,7 @@ abstract class HomeExercise(
                     if (holdTimeLimitCounter > phase.holdTime * 1000) {
                         phaseIndex++
                         stateStarted = false
-                        playAudioFromUrl("")
+//                        audioPlayer.playFromUrl("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
                     }
                     holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
                 }
@@ -346,10 +344,6 @@ abstract class HomeExercise(
                 onEvent(CommonInstructionEvent.TooFarFromCamera)
             }
         }
-    }
-
-    private fun playAudioFromUrl(url: String) {
-        audioPlayer.playFromUrl("https://mmhva.s3.amazonaws.com/Audio%2Femma%2Femma_QUESTION_10000853_637771717022034045.wav")
     }
 
     private fun playAudio(@RawRes resource: Int) {
