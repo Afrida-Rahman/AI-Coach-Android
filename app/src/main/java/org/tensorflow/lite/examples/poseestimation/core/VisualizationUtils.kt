@@ -120,15 +120,6 @@ object VisualizationUtils {
                     }
                 }
             }
-            it.phaseDialogue?.let { dialogue ->
-                draw.writeText(
-                    dialogue,
-                    Point(width / 2f, height - 20f),
-                    Color.rgb(255, 255, 255),
-                    25f,
-                    true
-                )
-            }
         }
         if (!isInsideBox(person, height, width)) {
             draw.tetragonal(

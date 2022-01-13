@@ -207,6 +207,7 @@ class ExerciseActivity : AppCompatActivity() {
         distanceDisplay = findViewById(R.id.distance)
         wrongCountDisplay = findViewById(R.id.wrong_count)
         timeCountDisplay = findViewById(R.id.time_count_display)
+        phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
 
         findViewById<TextView>(R.id.textView).text = exerciseName
 
@@ -507,8 +508,12 @@ class ExerciseActivity : AppCompatActivity() {
                         getString(R.string.wrong_text).format(exercise.getWrongCount())
                     phase?.let {
                         val holdTime = exercise.getHoldTimeLimitCount()
-                        val phaseDialogue = exercise.getPhaseDialogue()
-                        phaseDialogueDisplay.text = getString(R.string.phase_dialogue).format(phaseDialogue)
+                        it.phaseDialogue?.let { dialogue ->
+                            if (dialogue.isNotEmpty()) {
+                                phaseDialogueDisplay.text =
+                                    getString(R.string.phase_dialogue).format(dialogue)
+                            }
+                        }
                         if (holdTime > 0) {
                             timeCountDisplay.visibility = View.VISIBLE
                             timeCountDisplay.text =
