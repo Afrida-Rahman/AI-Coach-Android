@@ -89,6 +89,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var distanceDisplay: TextView
     private lateinit var wrongCountDisplay: TextView
     private lateinit var timeCountDisplay: TextView
+    private lateinit var phaseDialogueDisplay: TextView
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -506,6 +507,8 @@ class ExerciseActivity : AppCompatActivity() {
                         getString(R.string.wrong_text).format(exercise.getWrongCount())
                     phase?.let {
                         val holdTime = exercise.getHoldTimeLimitCount()
+                        val phaseDialogue = exercise.getPhaseDialogue()
+                        phaseDialogueDisplay.text = getString(R.string.phase_dialogue).format(phaseDialogue)
                         if (holdTime > 0) {
                             timeCountDisplay.visibility = View.VISIBLE
                             timeCountDisplay.text =

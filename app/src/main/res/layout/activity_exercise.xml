@@ -151,6 +151,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/phase_dialogue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phase_dialogue"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/time_count_display"
+            app:layout_constraintBottom_toTopOf="@+id/done_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <Button
             android:id="@+id/done_button"
             android:layout_width="wrap_content"

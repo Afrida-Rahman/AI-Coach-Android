@@ -104,4 +104,5 @@
     <string name="distance_text">%.1f</string>
     <string name="wrong_text">%d</string>
     <string name="time_count_text">%d</string>
+    <string name="phase_dialogue">%s</string>
 </resources>

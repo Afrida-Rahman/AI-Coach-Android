@@ -45,6 +45,7 @@ abstract class HomeExercise(
     private var wrongCounter = 0
     private var repetitionCounter = 0
     private var holdTimeLimitCounter = 0L
+    private var phaseDialogueDisplay = ""
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private var focalLengths: FloatArray? = null
 
@@ -173,6 +174,8 @@ abstract class HomeExercise(
     fun getWrongCount() = wrongCounter
 
     fun getSetCount() = setCounter
+
+    fun getPhaseDialogue() = rightCountPhases[phaseIndex].phaseDialogue
 
     fun getHoldTimeLimitCount(): Int = (holdTimeLimitCounter / 1000).toInt()
 

@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import androidx.core.graphics.withSave
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
