@@ -41,9 +41,9 @@ class AssessmentListAdapter(
         val item = testList[position]
         holder.apply {
             if (item.isReportReady)
-                reportReadyIcon.setImageResource(R.drawable.icon_check)
+                reportReadyIcon.setImageResource(R.drawable.ic_check)
             else
-                reportReadyIcon.setImageResource(R.drawable.icon_cross)
+                reportReadyIcon.setImageResource(R.drawable.ic_cross)
             testId.context.apply {
                 testId.text = getString(R.string.test_id).format(item.id)
                 testDate.text = getString(R.string.test_date).format(item.testDate)

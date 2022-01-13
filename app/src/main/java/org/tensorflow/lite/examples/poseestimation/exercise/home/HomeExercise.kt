@@ -175,8 +175,6 @@ abstract class HomeExercise(
 
     fun getSetCount() = setCounter
 
-    fun getPhaseDialogue() = rightCountPhases[phaseIndex].phaseDialogue
-
     fun getHoldTimeLimitCount(): Int = (holdTimeLimitCounter / 1000).toInt()
 
     fun getPhase(): Phase? {

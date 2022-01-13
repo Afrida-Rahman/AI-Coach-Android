@@ -461,7 +461,7 @@ class ExerciseActivity : AppCompatActivity() {
                     }
 
                     override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
-                        Toast.makeText(this@ExerciseActivity, "Failed", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@ExerciseActivity, "Failed", Toast.LENGTH_SHORT).show()
                     }
                 },
                 null

@@ -56,14 +56,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/right_count_text"
-                    android:textColor="@color/blue"
+                    android:textColor="#3F5BC6"
                     android:textSize="30sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="rep/set"
-                    android:textColor="@color/blue"
+                    android:text="@string/rep_set"
+                    android:textColor="#3F5BC6"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:contentDescription="@string/camera_switching_button"
-            android:src="@drawable/ic_outline_flip_camera_ios_24"
+            android:src="@drawable/ic_flip_camera"
             android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -156,9 +156,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/phase_dialogue"
-            android:textColor="@color/red"
+            android:textColor="@color/white"
             android:textSize="20sp"
+            android:background="@drawable/bg_instruction"
             android:layout_marginBottom="40dp"
+            android:padding="2dp"
             app:layout_constraintBottom_toTopOf="@+id/done_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

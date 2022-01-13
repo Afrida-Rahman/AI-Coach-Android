@@ -5,15 +5,18 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.146875" />
         <entry key="../../Android/Sdk/platforms/android-30/data/res/layout/simple_spinner_item.xml" value="0.25677083333333334" />
+        <entry key="app/src/main/res/drawable-hdpi/instruction_background.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/border.xml" value="0.22083333333333333" />
         <entry key="app/src/main/res/drawable/circular_backgroud.xml" value="0.2891891891891892" />
         <entry key="app/src/main/res/drawable/circular_background.xml" value="0.292578125" />
         <entry key="app/src/main/res/drawable/gradient_border_top.xml" value="0.22083333333333333" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.2847222222222222" />
         <entry key="app/src/main/res/drawable/ic_exercise_active.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_guideline.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_guideline_button.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_half_squat.xml" value="0.39010416666666664" />
         <entry key="app/src/main/res/drawable/ic_knee_squat.xml" value="0.39010416666666664" />
+        <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.2847222222222222" />
         <entry key="app/src/main/res/drawable/ic_outline_flip_camera_ios_24.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/drawable/rounded_edge.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout/activity_camera.xml" value="0.35520833333333335" />

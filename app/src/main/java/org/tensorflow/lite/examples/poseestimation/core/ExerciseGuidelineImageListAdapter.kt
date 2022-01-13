@@ -33,7 +33,7 @@ class ExerciseGuidelineImageListAdapter(
         Glide.with(context)
             .load(imageUrl)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
-            .thumbnail(Glide.with(context).load(R.drawable.loading).centerCrop())
+            .thumbnail(Glide.with(context).load(R.drawable.gif_loading).centerCrop())
             .transition(DrawableTransitionOptions.withCrossFade(300))
             .override(300,300)
             .into(holder.exerciseImageUrlsView)
