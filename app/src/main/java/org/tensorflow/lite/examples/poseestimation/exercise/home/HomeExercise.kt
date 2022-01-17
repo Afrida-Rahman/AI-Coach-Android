@@ -285,7 +285,7 @@ abstract class HomeExercise(
         }
     }
 
-    abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
+    open fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {}
 
     private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {
         var constraintSatisfied = true

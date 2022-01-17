@@ -50,6 +50,7 @@ class ExerciseActivity : AppCompatActivity() {
         const val RepetitionLimit = "RepetitionLimit"
         const val SetLimit = "SetLimit"
         const val TAG = "ExerciseActivityTag"
+        const val VideoUrl = "VideoUrl"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
     }
@@ -185,6 +186,7 @@ class ExerciseActivity : AppCompatActivity() {
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
+        val videoUrl = intent.getStringExtra(VideoUrl) ?: ""
         logInData = loadLogInData()
 
         exercise = Exercises.get(this, exerciseId)
@@ -195,7 +197,8 @@ class ExerciseActivity : AppCompatActivity() {
             exerciseImageUrls = listOf(),
             repetitionLimit = repetitionLimit,
             setLimit = setLimit,
-            protoId = protocolId
+            protoId = protocolId,
+            exerciseVideoUrl = videoUrl
         )
 
         findViewById<TextView>(R.id.textView).text = exerciseName
@@ -297,10 +300,10 @@ class ExerciseActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.tfe_pe_device_name, android.R.layout.simple_spinner_item
-        ).also { adaper ->
-            adaper.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-            spnDevice.adapter = adaper
+            spnDevice.adapter = adapter
             spnDevice.onItemSelectedListener = changeDeviceListener
         }
     }

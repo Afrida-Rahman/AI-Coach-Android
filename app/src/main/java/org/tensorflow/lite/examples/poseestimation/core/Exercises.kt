@@ -67,7 +67,8 @@ object Exercises {
             SingleArmAndLegRaiseInProne(context),
             TrunkFlexionInSitting(context),
             DoubleKneeToChestInSupine(context),
-            TrunkLateralBendingInSitting(context)
+            TrunkLateralBendingInSitting(context),
+            SingleLegRaiseWithWeightsInProne(context)
         )
     }
 
