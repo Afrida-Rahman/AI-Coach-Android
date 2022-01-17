@@ -37,9 +37,9 @@ object VisualizationUtils {
         phase?.let {
             for (constraint in it.constraints) {
                 val startPoint = person.keyPoints[constraint.startPointIndex].toCanvasPoint()
-                val middlePoint = person.keyPoints[constraint.middlePointIndex].toCanvasPoint()
                 val endPoint = person.keyPoints[constraint.endPointIndex].toCanvasPoint()
                 if (constraint.type == ConstraintType.ANGLE) {
+                    val middlePoint = person.keyPoints[constraint.middlePointIndex].toCanvasPoint()
                     if (isFrontCamera) {
                         draw.angle(
                             Point(
