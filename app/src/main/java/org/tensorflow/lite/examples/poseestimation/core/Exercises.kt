@@ -74,7 +74,8 @@ object Exercises {
             SingleLegRaiseWithWeightsInProne(context),
             CervicalFlexionStretchInSitting(context),
             CervicalExtensionStretchInSitting(context),
-            CervicalLateralBendingStretchInSitting(context)
+            CervicalLateralBendingStretchInSitting(context),
+            TrunkFlexionStretchingInStanding(context)
         )
     }
 
