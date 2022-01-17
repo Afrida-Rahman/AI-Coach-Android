@@ -186,7 +186,7 @@ class ExerciseActivity : AppCompatActivity() {
         val protocolId = intent.getIntExtra(ProtocolId, 1)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
-        val videoUrl = intent.getStringExtra(VideoUrl)
+        val videoUrl = intent.getStringExtra(VideoUrl) ?: ""
         logInData = loadLogInData()
 
         exercise = Exercises.get(this, exerciseId)
@@ -198,7 +198,7 @@ class ExerciseActivity : AppCompatActivity() {
             repetitionLimit = repetitionLimit,
             setLimit = setLimit,
             protoId = protocolId,
-            exerciseVideoUrl = videoUrl!!
+            exerciseVideoUrl = videoUrl
         )
 
         findViewById<TextView>(R.id.textView).text = exerciseName
