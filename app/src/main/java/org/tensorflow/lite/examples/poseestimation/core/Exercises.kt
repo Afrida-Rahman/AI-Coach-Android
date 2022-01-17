@@ -82,7 +82,8 @@ object Exercises {
             DoubleLegFallOutInSupine(context),
             IsometricCervicalLateralBendingInStanding(context),
             IsometricCervicalLateralBendingInSitting(context),
-            CervicalLateralBendingWithResistanceBandInSitting(context)
+            CervicalLateralBendingWithResistanceBandInSitting(context),
+            TrunkExtensionWithHandsOnHipsInStanding(context)
         )
     }
 
