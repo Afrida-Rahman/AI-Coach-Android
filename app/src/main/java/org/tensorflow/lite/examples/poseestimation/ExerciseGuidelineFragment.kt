@@ -30,6 +30,7 @@ class ExerciseGuidelineFragment(
         val exerciseNameView: TextView = view.findViewById(R.id.exercise_name_guideline)
         val backButton: ImageButton = view.findViewById(R.id.back_button)
         val videoView: VideoView = view.findViewById(R.id.video_view)
+        val playVideo: ImageView = view.findViewById(R.id.play_video)
 
         val exercise = exerciseList[position]
         var instruction = exercise.instruction
@@ -37,20 +38,22 @@ class ExerciseGuidelineFragment(
 
         val mediaController = MediaController(view.context)
 //        mediaController.setMediaPlayer(videoView)
-        mediaController.setAnchorView(videoView)
-        val pd = ProgressDialog(view.context)
-        pd.setMessage("Buffering video please wait...")
-        pd.show()
+        playVideo.setOnClickListener{
+            mediaController.setAnchorView(videoView)
+            val pd = ProgressDialog(view.context)
+            pd.setMessage("Buffering video please wait...")
+            pd.show()
 
-        val uri: Uri =
-            Uri.parse("https://mmhai.s3.us-east-2.amazonaws.com/LearnTherapist/emma/AROM Ankle Dorsiflexion in Sitting/AROM Ankle Dorsiflexion in Sitting_1639970462_raw.mp4")
-        videoView.setMediaController(mediaController)
-        videoView.setVideoURI(uri)
-        videoView.requestFocus()
-        videoView.start()
+            val uri: Uri =
+                Uri.parse("https://mmhai.s3.us-east-2.amazonaws.com/LearnTherapist/emma/AROM Ankle Dorsiflexion in Sitting/AROM Ankle Dorsiflexion in Sitting_1639970462_raw.mp4")
+            videoView.setMediaController(mediaController)
+            videoView.setVideoURI(uri)
+            videoView.requestFocus()
+            videoView.start()
 
-        videoView.setOnPreparedListener { //close the progress dialog when buffering is done
-            pd.dismiss()
+            videoView.setOnPreparedListener { //close the progress dialog when buffering is done
+                pd.dismiss()
+            }
         }
 
         backButton.setOnClickListener {

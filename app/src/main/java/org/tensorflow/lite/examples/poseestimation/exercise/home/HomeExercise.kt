@@ -45,7 +45,6 @@ abstract class HomeExercise(
     private var wrongCounter = 0
     private var repetitionCounter = 0
     private var holdTimeLimitCounter = 0L
-    private var phaseDialogueDisplay = ""
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private var focalLengths: FloatArray? = null
 
@@ -266,7 +265,6 @@ abstract class HomeExercise(
                     if (holdTimeLimitCounter > phase.holdTime * 1000) {
                         phaseIndex++
                         stateStarted = false
-                        audioPlayer.playFromUrl("https://mmhva.s3.amazonaws.com/Audio%2femma%2femma_QUESTION_10000853_637771717022034045.wav")
                     }
                     holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
                 }

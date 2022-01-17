@@ -45,7 +45,7 @@ object VisualizationUtils {
         if (isFrontCamera) {
             canvas.scale(-1f, 1f, canvas.width.toFloat() / 2, canvas.height.toFloat() / 2)
         }
-        val draw = Draw(canvas, Color.rgb(170, 255, 0), LINE_WIDTH)
+        val draw = Draw(canvas, Color.WHITE, LINE_WIDTH)
         val width = draw.canvas.width
         val height = draw.canvas.height
 
@@ -61,10 +61,11 @@ object VisualizationUtils {
                     Point(
                         output.width - endPoint.x,
                         endPoint.y
-                    )
+                    ),
+                    _color = Color.rgb(170, 255, 0)
                 )
             } else {
-                draw.line(startPoint, endPoint)
+                draw.line(startPoint, endPoint, _color = Color.rgb(170, 255, 0))
             }
         }
 

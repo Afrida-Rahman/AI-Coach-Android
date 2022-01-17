@@ -209,6 +209,16 @@ class ExerciseActivity : AppCompatActivity() {
         timeCountDisplay = findViewById(R.id.time_count_display)
         phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
 
+        countDisplay.text = getString(R.string.right_count_text).format(
+            exercise.getRepetitionCount(),
+            exercise.getSetCount()
+        )
+        distanceDisplay.text = getString(R.string.distance_text).format(0f)
+        wrongCountDisplay.text =
+            getString(R.string.wrong_text).format(0)
+
+        phaseDialogueDisplay.visibility = View.GONE
+
         findViewById<TextView>(R.id.textView).text = exerciseName
 
         findViewById<Button>(R.id.done_button).setOnClickListener {
@@ -510,8 +520,11 @@ class ExerciseActivity : AppCompatActivity() {
                         val holdTime = exercise.getHoldTimeLimitCount()
                         it.phaseDialogue?.let { dialogue ->
                             if (dialogue.isNotEmpty()) {
+                                phaseDialogueDisplay.visibility = View.VISIBLE
                                 phaseDialogueDisplay.text =
                                     getString(R.string.phase_dialogue).format(dialogue)
+                            } else {
+                                phaseDialogueDisplay.visibility = View.GONE
                             }
                         }
                         if (holdTime > 0) {
