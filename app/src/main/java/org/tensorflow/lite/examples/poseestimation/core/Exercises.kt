@@ -79,7 +79,8 @@ object Exercises {
             TrunkExtensionStretchingInStanding(context),
             TrunkLateralBendingInStanding(context),
             TrunkRotationInSupine(context),
-            DoubleLegFallOutInSupine(context)
+            DoubleLegFallOutInSupine(context),
+            IsometricCervicalLateralBendingInStanding(context)
         )
     }
 
