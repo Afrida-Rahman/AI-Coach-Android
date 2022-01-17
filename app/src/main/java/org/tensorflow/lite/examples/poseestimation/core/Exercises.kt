@@ -1,7 +1,10 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Context
-import org.tensorflow.lite.examples.poseestimation.exercise.home.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.Crunches
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.TrunkExtensionOnHandInProne
+import org.tensorflow.lite.examples.poseestimation.exercise.home.TrunkLateralBendingInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
@@ -69,7 +72,8 @@ object Exercises {
             DoubleKneeToChestInSupine(context),
             TrunkLateralBendingInSitting(context),
             SingleLegRaiseWithWeightsInProne(context),
-            CervicalFlexionStretchInSitting(context)
+            CervicalFlexionStretchInSitting(context),
+            CervicalExtensionStretchInSitting(context)
         )
     }
 
