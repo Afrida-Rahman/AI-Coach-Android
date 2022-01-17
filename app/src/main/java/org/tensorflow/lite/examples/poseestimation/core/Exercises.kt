@@ -76,7 +76,8 @@ object Exercises {
             CervicalExtensionStretchInSitting(context),
             CervicalLateralBendingStretchInSitting(context),
             TrunkFlexionStretchingInStanding(context),
-            TrunkExtensionStretchingInStanding(context)
+            TrunkExtensionStretchingInStanding(context),
+            TrunkLateralBendingInStanding(context)
         )
     }
 
