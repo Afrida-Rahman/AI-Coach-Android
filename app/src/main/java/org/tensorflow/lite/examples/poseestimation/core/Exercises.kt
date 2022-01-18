@@ -85,7 +85,8 @@ object Exercises {
             CervicalLateralBendingWithResistanceBandInSitting(context),
             TrunkExtensionWithHandsOnHipsInStanding(context),
             AROMCervicalExtensionInSitting(context),
-            AROMCervicalFlexionInSitting(context)
+            AROMCervicalFlexionInSitting(context),
+            AROMCervicalFlexionInSupine(context)
         )
     }
 
