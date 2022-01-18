@@ -37,6 +37,7 @@ class AssessmentListFragment(
                         exerciseName = exercise.ExerciseName,
                         exerciseInstruction = exercise.Instructions,
                         exerciseImageUrls = exercise.ImageURLs,
+                        exerciseVideoUrls =exercise.ExerciseMedia,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
                         protoId = exercise.ProtocolId
@@ -52,6 +53,7 @@ class AssessmentListFragment(
                         exerciseName = exercise.ExerciseName,
                         exerciseInstruction = exercise.Instructions,
                         exerciseImageUrls = exercise.ImageURLs,
+                        exerciseVideoUrls =exercise.ExerciseMedia,
                         repetitionLimit = exercise.RepetitionInCount,
                         setLimit = exercise.SetInCount,
                         protoId = exercise.ProtocolId

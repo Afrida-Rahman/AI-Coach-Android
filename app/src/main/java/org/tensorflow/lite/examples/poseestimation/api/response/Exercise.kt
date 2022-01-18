@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.api.response
 data class Exercise(
     val ExerciseId: Int,
     val ExerciseName: String,
+    val ExerciseMedia: String,
     val FrequencyInDay: Int,
     val HoldInSeconds: Int,
     val ImageURLs: List<String>,

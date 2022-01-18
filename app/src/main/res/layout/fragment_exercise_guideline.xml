@@ -71,14 +71,24 @@
 
             <ImageButton
                 android:id="@+id/play_video"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_play_video"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_play"
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/full_screen"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_full_screen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="12dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -31,6 +31,7 @@ abstract class HomeExercise(
     val active: Boolean = true,
     var protocolId: Int = 0,
     var instruction: String? = "",
+    var videoUrls: String = "",
     var imageUrls: List<String> = listOf(),
     var maxRepCount: Int = 0,
     var maxSetCount: Int = 0
@@ -52,6 +53,7 @@ abstract class HomeExercise(
         exerciseName: String,
         exerciseInstruction: String?,
         exerciseImageUrls: List<String>,
+        exerciseVideoUrls: String,
         repetitionLimit: Int,
         setLimit: Int,
         protoId: Int
@@ -62,6 +64,7 @@ abstract class HomeExercise(
         protocolId = protoId
         instruction = exerciseInstruction
         imageUrls = exerciseImageUrls
+        videoUrls = exerciseVideoUrls
     }
 
     fun initializeConstraint(tenant: String) {

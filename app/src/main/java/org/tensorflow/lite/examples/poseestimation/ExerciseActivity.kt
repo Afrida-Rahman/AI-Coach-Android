@@ -198,9 +198,10 @@ class ExerciseActivity : AppCompatActivity() {
             exerciseName = exerciseName ?: "",
             exerciseInstruction = "",
             exerciseImageUrls = listOf(),
+            exerciseVideoUrls = "",
             repetitionLimit = repetitionLimit,
             setLimit = setLimit,
-            protoId = protocolId
+            protoId = protocolId,
         )
 
         countDisplay = findViewById(R.id.right_count)

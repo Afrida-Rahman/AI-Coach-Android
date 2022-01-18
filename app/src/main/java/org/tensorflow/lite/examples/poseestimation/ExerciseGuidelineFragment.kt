@@ -35,25 +35,26 @@ class ExerciseGuidelineFragment(
         val exercise = exerciseList[position]
         var instruction = exercise.instruction
         val imageUrls = exercise.imageUrls
+        val videoUrls = exercise.videoUrls
 
         val mediaController = MediaController(view.context)
-//        mediaController.setMediaPlayer(videoView)
-        playVideo.setOnClickListener{
+        playVideo.setOnClickListener {
             mediaController.setAnchorView(videoView)
             val pd = ProgressDialog(view.context)
-            pd.setMessage("Buffering video please wait...")
+            pd.setMessage("Loading...")
             pd.show()
 
-            val uri: Uri =
-                Uri.parse("https://mmhai.s3.us-east-2.amazonaws.com/LearnTherapist/emma/AROM Ankle Dorsiflexion in Sitting/AROM Ankle Dorsiflexion in Sitting_1639970462_raw.mp4")
+            val uri: Uri = Uri.parse(videoUrls)
             videoView.setMediaController(mediaController)
             videoView.setVideoURI(uri)
             videoView.requestFocus()
-            videoView.start()
 
-            videoView.setOnPreparedListener { //close the progress dialog when buffering is done
+            videoView.setOnPreparedListener {//close the progress dialog when buffering is done
+                videoView.start()
                 pd.dismiss()
+                playVideo.visibility = View.GONE
             }
+            playVideo.visibility = View.VISIBLE
         }
 
         backButton.setOnClickListener {
@@ -65,6 +66,7 @@ class ExerciseGuidelineFragment(
                 commit()
             }
         }
+
         exerciseNameView.text = exercise.name
         val exerciseInstructionView: TextView =
             view.findViewById(R.id.exercise_instruction_guideline)
@@ -72,6 +74,7 @@ class ExerciseGuidelineFragment(
         instruction = instruction ?: ""
         instruction = instruction.let { htmlTagRegex.replace(it, "").replace("\n", " ") }
         exerciseInstructionView.text = instruction
+
         val adapter = view.findViewById<RecyclerView>(R.id.exercise_guideline_image_list_container)
         if (imageUrls.isEmpty()) {
             Toast.makeText(context, "No image is available now!", Toast.LENGTH_SHORT).show()
