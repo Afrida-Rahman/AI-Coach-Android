@@ -58,6 +58,7 @@ class AssessmentListAdapter(
         if (item.exercises.isNotEmpty()) {
             holder.goToExerciseListButton.setOnClickListener {
                 manager.beginTransaction().apply {
+                    disallowAddToBackStack()
                     replace(
                         R.id.fragment_container,
                         ExerciseListFragment(item.id, item.testDate, item.exercises, patientId, tenant)

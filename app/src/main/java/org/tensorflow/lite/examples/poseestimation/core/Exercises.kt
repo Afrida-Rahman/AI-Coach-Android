@@ -1,7 +1,10 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Context
-import org.tensorflow.lite.examples.poseestimation.exercise.home.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.Crunches
+import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
+import org.tensorflow.lite.examples.poseestimation.exercise.home.TrunkExtensionOnHandInProne
+import org.tensorflow.lite.examples.poseestimation.exercise.home.TrunkLateralBendingInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
@@ -67,7 +70,23 @@ object Exercises {
             SingleArmAndLegRaiseInProne(context),
             TrunkFlexionInSitting(context),
             DoubleKneeToChestInSupine(context),
-            TrunkLateralBendingInSitting(context)
+            TrunkLateralBendingInSitting(context),
+            SingleLegRaiseWithWeightsInProne(context),
+            CervicalFlexionStretchInSitting(context),
+            CervicalExtensionStretchInSitting(context),
+            CervicalLateralBendingStretchInSitting(context),
+            TrunkFlexionStretchingInStanding(context),
+            TrunkExtensionStretchingInStanding(context),
+            TrunkLateralBendingInStanding(context),
+            TrunkRotationInSupine(context),
+            DoubleLegFallOutInSupine(context),
+            IsometricCervicalLateralBendingInStanding(context),
+            IsometricCervicalLateralBendingInSitting(context),
+            CervicalLateralBendingWithResistanceBandInSitting(context),
+            TrunkExtensionWithHandsOnHipsInStanding(context),
+            AROMCervicalExtensionInSitting(context),
+            AROMCervicalFlexionInSitting(context),
+            AROMCervicalFlexionInSupine(context)
         )
     }
 

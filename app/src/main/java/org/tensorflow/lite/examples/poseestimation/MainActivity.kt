@@ -125,6 +125,7 @@ class MainActivity : AppCompatActivity() {
 
     fun changeScreen(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
+            disallowAddToBackStack()
             replace(R.id.fragment_container, fragment)
             commit()
         }
