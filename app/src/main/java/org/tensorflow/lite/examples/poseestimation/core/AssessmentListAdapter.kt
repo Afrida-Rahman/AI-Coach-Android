@@ -41,9 +41,9 @@ class AssessmentListAdapter(
         val item = testList[position]
         holder.apply {
             if (item.isReportReady)
-                reportReadyIcon.setImageResource(R.drawable.check)
+                reportReadyIcon.setImageResource(R.drawable.ic_check)
             else
-                reportReadyIcon.setImageResource(R.drawable.crossed)
+                reportReadyIcon.setImageResource(R.drawable.ic_cross)
             testId.context.apply {
                 testId.text = getString(R.string.test_id).format(item.id)
                 testDate.text = getString(R.string.test_date).format(item.testDate)
@@ -61,7 +61,7 @@ class AssessmentListAdapter(
                     disallowAddToBackStack()
                     replace(
                         R.id.fragment_container,
-                        ExerciseListFragment(item.id, item.exercises, patientId, tenant)
+                        ExerciseListFragment(item.id, item.testDate, item.exercises, patientId, tenant)
                     )
                     commit()
                 }

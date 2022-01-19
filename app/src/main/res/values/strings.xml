@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">EMMA Virtual Therapist</string>
-    <string name="app_version">Version : 0.0.18</string>
+    <string name="app_version">Version : 0.0.20</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="test_id">%s</string>
@@ -14,7 +14,7 @@
     <string name="exercise_name">Exercise Name</string>
     <string name="Description">Description</string>
     <string name="exercise_image">Exercise image</string>
-    <string name="exercise_list">Exercise List</string>
+    <string name="exercise_list">Home Exercises</string>
     <string name="exercise_assistant">I am your personal exercise assistant</string>
     <string name="the_fetched_data">The Fetched Data:</string>
     <string name="flip_camera">Flip Camera</string>
@@ -25,6 +25,7 @@
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="i_m_done">I\'m Done</string>
+    <string name="im_emma">I\'m EMMA</string>
     <string name="hello_patient_name_i_m_emma">Hello %s.\nI\'m EMMA.</string>
     <string name="log_out_button">Log Out button</string>
     <string name="log_out">Log Out</string>
@@ -98,4 +99,16 @@
     <string name="registration_type">Registration Type</string>
     <string name="registration_type_value">%s</string>
     <string name="home_exercise_count">%d</string>
+    <string name="view_assigned_exercises">View Assigned Exercises</string>
+    <string name="right_count_text">%d/%d</string>
+    <string name="distance_text">%.1f</string>
+    <string name="wrong_text">%d</string>
+    <string name="time_count_text">%d</string>
+    <string name="phase_dialogue">%s</string>
+    <string name="rep_set">rep/set</string>
+    <string name="play_video">play_video</string>
+    <string name="max_time_hold">%d</string>
+    <string name="feet">feet</string>
+    <string name="wrong">wrong</string>
+    <string name="second">second</string>
 </resources>

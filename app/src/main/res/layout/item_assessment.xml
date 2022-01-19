@@ -6,7 +6,7 @@
     android:layout_marginHorizontal="4dp"
     android:layout_marginVertical="8dp"
     android:elevation="8dp"
-    app:cardBackgroundColor="@color/light_gray"
+    app:cardBackgroundColor="#F6FCFF"
     app:cardCornerRadius="16dp">
 
     <LinearLayout
@@ -24,7 +24,7 @@
                 android:layout_width="45dp"
                 android:layout_height="50dp"
                 android:contentDescription="@string/report_icon"
-                android:src="@drawable/report"
+                android:src="@drawable/ic_report"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -59,10 +59,10 @@
 
             <ImageView
                 android:id="@+id/report_ready_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:contentDescription="@string/report_icon"
-                android:src="@drawable/crossed"
+                android:src="@drawable/ic_cross"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,10 +77,10 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/circular_background"
+                android:background="@drawable/bg_circular"
                 android:contentDescription="@string/circular_background"
                 android:padding="14dp"
-                android:src="@drawable/medical_doctor" />
+                android:src="@drawable/ic_doctor" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -116,10 +116,10 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/circular_background"
+                android:background="@drawable/bg_circular"
                 android:contentDescription="@string/circular_background"
                 android:padding="14dp"
-                android:src="@drawable/torso" />
+                android:src="@drawable/ic_body_region" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -155,10 +155,10 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/circular_background"
+                android:background="@drawable/bg_circular"
                 android:contentDescription="@string/circular_background"
                 android:padding="14dp"
-                android:src="@drawable/registration" />
+                android:src="@drawable/ic_registration" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -194,10 +194,10 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/circular_background"
+                android:background="@drawable/bg_circular"
                 android:contentDescription="@string/circular_background"
                 android:padding="14dp"
-                android:src="@drawable/dumbbell" />
+                android:src="@drawable/ic_exercise" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -231,7 +231,7 @@
             android:textSize="12sp"
             android:layout_marginTop="6dp"
             android:paddingVertical="10dp"
-            android:text="@string/start_workout" />
+            android:text="@string/view_assigned_exercises" />
 
     </LinearLayout>
 

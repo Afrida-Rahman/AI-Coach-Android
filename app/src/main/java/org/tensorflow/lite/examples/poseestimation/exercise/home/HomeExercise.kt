@@ -29,9 +29,9 @@ abstract class HomeExercise(
     val id: Int,
     var name: String = "",
     val active: Boolean = true,
-    var videoUrl: String = "",
     var protocolId: Int = 0,
     var instruction: String? = "",
+    var videoUrls: String = "",
     var imageUrls: List<String> = listOf(),
     var maxRepCount: Int = 0,
     var maxSetCount: Int = 0
@@ -53,7 +53,7 @@ abstract class HomeExercise(
         exerciseName: String,
         exerciseInstruction: String?,
         exerciseImageUrls: List<String>,
-        exerciseVideoUrl: String,
+        exerciseVideoUrls: String,
         repetitionLimit: Int,
         setLimit: Int,
         protoId: Int
@@ -64,7 +64,7 @@ abstract class HomeExercise(
         protocolId = protoId
         instruction = exerciseInstruction
         imageUrls = exerciseImageUrls
-        videoUrl = exerciseVideoUrl
+        videoUrls = exerciseVideoUrls
     }
 
     fun initializeConstraint(tenant: String) {
@@ -171,6 +171,8 @@ abstract class HomeExercise(
         })
     }
 
+    fun getMaxHoldTime(): Int = rightCountPhases.map { it.holdTime }.maxOrNull() ?: 0
+
     fun getRepetitionCount() = repetitionCounter
 
     fun getWrongCount() = wrongCounter
@@ -268,7 +270,6 @@ abstract class HomeExercise(
                     if (holdTimeLimitCounter > phase.holdTime * 1000) {
                         phaseIndex++
                         stateStarted = false
-                        audioPlayer.playFromUrl("https://mmhva.s3.amazonaws.com/Audio%2femma%2femma_QUESTION_10000853_637771717022034045.wav")
                     }
                     holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
                 }
@@ -285,7 +286,7 @@ abstract class HomeExercise(
         }
     }
 
-    open fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {}
+    abstract fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int)
 
     private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {
         var constraintSatisfied = true

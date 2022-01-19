@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.util.Log
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -18,7 +19,7 @@ class Draw(
         startPoint: Point,
         endPoint: Point,
         lineType: Paint.Style? = Paint.Style.FILL,
-        _color: Int = color,
+        _color: Int = Color.WHITE,
         _thickness: Float = thickness
     ) {
         val lineStyle = Paint().apply {
@@ -26,6 +27,7 @@ class Draw(
             color = _color
             style = lineType
         }
+        Log.d("colorValue","$_color")
         canvas.drawLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y, lineStyle)
         circle(startPoint, 4f, startPoint, 360f, _color = _color)
         circle(endPoint, 4f, endPoint, 360f, _color = _color)
@@ -69,7 +71,7 @@ class Draw(
         val textWidth = textStyle.measureText(text)
         val fontMetrics = Paint.FontMetrics()
         textStyle.getFontMetrics(fontMetrics)
-        val xPosition = position.x
+        val xPosition = position.x - textWidth / 2
         val yPosition = position.y
 
         if (showBackground) {
@@ -109,7 +111,7 @@ class Draw(
             startAngle - angleValue / 2
         }
         midAngle = (midAngle * PI.toFloat()) / 180f
-        val textPositionRadius = radius + 70
+        val textPositionRadius = radius - 10
         val textPosition = Point(
             middlePoint.x + textPositionRadius * cos(midAngle),
             middlePoint.y - textPositionRadius * sin(midAngle)
@@ -124,7 +126,7 @@ class Draw(
         circle(endPoint, 4f, endPoint, 360f, _clockWise = _clockWise)
 
         circle(middlePoint, radius, referenceVector, angleValue.toFloat(), _clockWise = _clockWise)
-        writeText("$angleValue", textPosition)
+        writeText("$angleValue", textPosition, fontSize = 20f)
     }
 
     fun tetragonal(

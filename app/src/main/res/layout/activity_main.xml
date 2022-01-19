@@ -27,7 +27,7 @@
                     android:id="@+id/menu_button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_menu"
+                    android:src="@drawable/ic_nav_menu"
                     android:layout_marginEnd="16dp"
                     android:contentDescription="@string/menu_home"
                     android:background="@android:color/transparent" />
@@ -62,7 +62,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:contentDescription="@string/Description"
-                    android:src="@drawable/logo"
+                    android:src="@drawable/mmh_logo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -120,7 +120,7 @@
                 android:layout_width="174dp"
                 android:layout_height="173dp"
                 android:layout_gravity="center"
-                android:indeterminateDrawable="@drawable/loading_entry" />
+                android:indeterminateDrawable="@drawable/gif_loading_entry" />
 
             <Button
                 android:id="@+id/btn_try_again"

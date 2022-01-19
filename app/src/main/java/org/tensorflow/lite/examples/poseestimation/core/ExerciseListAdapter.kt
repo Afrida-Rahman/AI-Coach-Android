@@ -28,6 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ExerciseListAdapter(
     private val testId: String,
+    private val testDate: String,
     private val exerciseList: List<HomeExercise>,
     private val manager: FragmentManager,
     private val patientId: String,
@@ -53,7 +54,7 @@ class ExerciseListAdapter(
             Glide.with(context)
                 .load(imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
-                .thumbnail(Glide.with(context).load(R.drawable.loading).centerCrop())
+                .thumbnail(Glide.with(context).load(R.drawable.gif_loading).centerCrop())
                 .transition(DrawableTransitionOptions.withCrossFade(500))
                 .override(300, 300)
                 .into(this.exerciseImageView)
@@ -128,16 +129,15 @@ class ExerciseListAdapter(
             }
             guidelineButton.setOnClickListener {
                 manager.beginTransaction().apply {
-                    disallowAddToBackStack()
                     replace(
                         R.id.fragment_container,
                         ExerciseGuidelineFragment(
                             testId = testId,
+                            testDate = testDate,
                             position = position,
                             exerciseList = exerciseList,
-                            patientId,
-                            tenant,
-                            videoUrl = exercise.videoUrl
+                            patientId = patientId,
+                            tenant = tenant
                         )
                     )
                     commit()
