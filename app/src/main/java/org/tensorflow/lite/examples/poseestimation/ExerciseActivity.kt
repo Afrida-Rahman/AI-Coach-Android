@@ -90,6 +90,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var wrongCountDisplay: TextView
     private lateinit var timeCountDisplay: TextView
     private lateinit var phaseDialogueDisplay: TextView
+    private lateinit var maxHoldTimeDisplay: TextView
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -209,6 +210,10 @@ class ExerciseActivity : AppCompatActivity() {
         wrongCountDisplay = findViewById(R.id.wrong_count)
         timeCountDisplay = findViewById(R.id.time_count_display)
         phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
+        maxHoldTimeDisplay = findViewById(R.id.max_hold_time_display)
+
+        maxHoldTimeDisplay.text =
+            getString(R.string.max_time_hold).format(0)
 
         countDisplay.text = getString(R.string.right_count_text).format(
             exercise.getRepetitionCount(),
@@ -220,7 +225,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         phaseDialogueDisplay.visibility = View.GONE
 
-        findViewById<TextView>(R.id.textView).text = exerciseName
+        findViewById<TextView>(R.id.exercise_name).text = exerciseName
 
         findViewById<Button>(R.id.done_button).setOnClickListener {
             saveExerciseData(
@@ -319,10 +324,10 @@ class ExerciseActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.tfe_pe_device_name, android.R.layout.simple_spinner_item
-        ).also { adaper ->
-            adaper.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-            spnDevice.adapter = adaper
+            spnDevice.adapter = adapter
             spnDevice.onItemSelectedListener = changeDeviceListener
         }
     }
@@ -537,6 +542,8 @@ class ExerciseActivity : AppCompatActivity() {
                             timeCountDisplay.text = getString(R.string.time_count_text).format(0)
                         }
                     }
+                    maxHoldTimeDisplay.text =
+                        getString(R.string.max_time_hold).format(exercise.getMaxHoldTime())
                 }
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     input = bitmap,

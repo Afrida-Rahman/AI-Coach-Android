@@ -107,4 +107,8 @@
     <string name="phase_dialogue">%s</string>
     <string name="rep_set">rep/set</string>
     <string name="play_video">play_video</string>
+    <string name="max_time_hold">%d</string>
+    <string name="feet">feet</string>
+    <string name="wrong">wrong</string>
+    <string name="second">second</string>
 </resources>

@@ -171,6 +171,8 @@ abstract class HomeExercise(
         })
     }
 
+    fun getMaxHoldTime(): Int = rightCountPhases.map { it.holdTime }.maxOrNull() ?: 0
+
     fun getRepetitionCount() = repetitionCounter
 
     fun getWrongCount() = wrongCounter

@@ -8,7 +8,7 @@
     tools:context=".ExerciseActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/exercise_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blue"
@@ -16,7 +16,7 @@
         android:text="@string/exercise_name"
         android:textAlignment="center"
         android:textColor="@color/secondary_color"
-        android:textSize="32sp" />
+        android:textSize="30sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,13 +28,29 @@
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/camera_switch_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/camera_switching_button"
+            android:src="@drawable/ic_flip_camera"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/display_holder"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/display_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="45dp"
             android:paddingHorizontal="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -76,7 +92,7 @@
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/count_display"
-                app:layout_constraintEnd_toStartOf="@id/wrong_display"
+                app:layout_constraintEnd_toStartOf="@id/hold_time_display"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
@@ -91,8 +107,36 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ft"
+                    android:text="@string/feet"
                     android:textColor="@color/teal_200"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/hold_time_display"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintStart_toEndOf="@id/distance_display"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/wrong_display">
+
+                <TextView
+                    android:id="@+id/max_hold_time_display"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max_time_hold"
+                    android:textColor="@color/green"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/second"
+                    android:textColor="@color/green"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -103,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                app:layout_constraintStart_toEndOf="@id/distance_display"
+                app:layout_constraintStart_toEndOf="@id/hold_time_display"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -119,7 +163,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="wrong"
+                    android:text="@string/wrong"
                     android:textColor="@color/red"
                     android:textSize="16sp" />
 
@@ -136,18 +180,6 @@
             android:textSize="150sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/camera_switch_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:contentDescription="@string/camera_switching_button"
-            android:src="@drawable/ic_flip_camera"
-            android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
