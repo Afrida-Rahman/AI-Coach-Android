@@ -27,7 +27,7 @@ class IsometricCervicalExtensionInSitting(
     private var rightStateIndex = 0
     override var wrongStateIndex = 0
 
-    override fun rightExerciseCount(
+    fun rightExercise(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int
@@ -108,7 +108,7 @@ class IsometricCervicalExtensionInSitting(
         }
     }
 
-    override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
+    fun wrongExercise(person: Person, canvasHeight: Int, canvasWidth: Int) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y

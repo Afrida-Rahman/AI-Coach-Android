@@ -533,10 +533,11 @@ class ExerciseActivity : AppCompatActivity() {
                                 phaseDialogueDisplay.visibility = View.GONE
                             }
                         }
-                        if (holdTime > 0) {
+                        val timeToDisplay = it.holdTime - holdTime
+                        if (timeToDisplay > 0) {
                             timeCountDisplay.visibility = View.VISIBLE
                             timeCountDisplay.text =
-                                getString(R.string.time_count_text).format(it.holdTime - holdTime)
+                                getString(R.string.time_count_text).format(timeToDisplay)
                         } else {
                             timeCountDisplay.visibility = View.GONE
                             timeCountDisplay.text = getString(R.string.time_count_text).format(0)

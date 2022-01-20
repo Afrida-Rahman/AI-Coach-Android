@@ -21,10 +21,10 @@ object Exercises {
         return listOf(
             ArmRaiseInStanding(context),
             BodyWeightSquats(context),
-            HalfSquat(context),
+//            HalfSquat(context),
             KneeExtensionInSitting(context),
             PelvicBridgeInSupine(context),
-            SitToStand(context),
+//            SitToStand(context),
             IsometricCervicalExtensionInSitting(context),
             LateralBendingStretchInStanding(context),
             TrunkFlexionInStanding(context),

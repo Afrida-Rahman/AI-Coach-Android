@@ -40,7 +40,7 @@ class HalfSquat(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun rightExerciseCount(
+    fun rightExercise(
         person: Person,
         canvasHeight: Int,
         canvasWidth: Int
@@ -118,7 +118,7 @@ class HalfSquat(
         }
     }
 
-    override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
+    fun wrongExercise(person: Person, canvasHeight: Int, canvasWidth: Int) {
         val shoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
