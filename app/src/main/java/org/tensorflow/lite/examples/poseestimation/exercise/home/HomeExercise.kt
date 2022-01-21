@@ -39,13 +39,12 @@ abstract class HomeExercise(
     private var phaseIndex = 0
     open var rightCountPhases = mutableListOf<Phase>()
     open var wrongStateIndex = 0
-    private var stateStarted = false
-    private var lastStateTimestamp = 0L
     private val audioPlayer = AudioPlayer(context)
     private var setCounter = 0
     private var wrongCounter = 0
     private var repetitionCounter = 0
-    private var holdTimeLimitCounter = 0L
+    private var timeCounter = 0
+    private var lastTimeCountedAt = 0L
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private var focalLengths: FloatArray? = null
 
@@ -179,7 +178,7 @@ abstract class HomeExercise(
 
     fun getSetCount() = setCounter
 
-    fun getHoldTimeLimitCount(): Int = (holdTimeLimitCounter / 1000).toInt()
+    fun getHoldTimeLimitCount(): Int = timeCounter
 
     fun getPhase(): Phase? {
         return if (phaseIndex < rightCountPhases.size) {
@@ -249,7 +248,7 @@ abstract class HomeExercise(
             )
             Log.d(
                 "HomeExercise",
-                " $phaseIndex: -> $constraintSatisfied - $holdTimeLimitCounter / ${phase.holdTime}"
+                " $phaseIndex: -> $constraintSatisfied - $timeCounter / ${phase.holdTime}"
             )
 
             if (VisualizationUtils.isInsideBox(
@@ -258,24 +257,29 @@ abstract class HomeExercise(
                     canvasWidth
                 ) && constraintSatisfied
             ) {
-                if (!stateStarted) {
-                    lastStateTimestamp = System.currentTimeMillis()
-                    stateStarted = true
-                }
                 if (phaseIndex == rightCountPhases.size - 1) {
                     phaseIndex = 0
                     wrongStateIndex = 0
                     repetitionCount()
                 } else {
-                    if (holdTimeLimitCounter > phase.holdTime * 1000) {
-                        phaseIndex++
-                        stateStarted = false
+                    if (phase.holdTime > 0) {
+                        if ((System.currentTimeMillis() - lastTimeCountedAt) >= 1000) {
+                            val downTimeCounter = phase.holdTime - timeCounter
+                            if (downTimeCounter > 0 && timeCounter > 0) {
+                                countDownAudio(downTimeCounter)
+                            }
+                            timeCounter++
+                            lastTimeCountedAt = System.currentTimeMillis()
+                        }
+                    } else {
+                        timeCounter = 0
+                        lastTimeCountedAt = System.currentTimeMillis()
                     }
-                    holdTimeLimitCounter = System.currentTimeMillis() - lastStateTimestamp
+                    if (timeCounter >= phase.holdTime) {
+                        phaseIndex++
+                        timeCounter = 0
+                    }
                 }
-            } else {
-                stateStarted = false
-                holdTimeLimitCounter = 0
             }
             commonInstruction(
                 person,
@@ -347,6 +351,33 @@ abstract class HomeExercise(
                 onEvent(CommonInstructionEvent.TooFarFromCamera)
             }
         }
+    }
+
+    private fun countDownAudio(count: Int) {
+        val resourceId = when (count) {
+            1 -> R.raw.one
+            2 -> R.raw.two
+            3 -> R.raw.three
+            4 -> R.raw.four
+            5 -> R.raw.five
+            6 -> R.raw.six
+            7 -> R.raw.seven
+            8 -> R.raw.eight
+            9 -> R.raw.nine
+            10 -> R.raw.ten
+            11 -> R.raw.eleven
+            12 -> R.raw.twelve
+            13 -> R.raw.thirteen
+            14 -> R.raw.fourteen
+            15 -> R.raw.fifteen
+            16 -> R.raw.sixteen
+            17 -> R.raw.seventeen
+            18 -> R.raw.eightteen
+            19 -> R.raw.nineteen
+            20 -> R.raw.twenty
+            else -> R.raw.right_count
+        }
+        audioPlayer.playFromFile(resourceId)
     }
 
     private fun playAudio(@RawRes resource: Int) {
