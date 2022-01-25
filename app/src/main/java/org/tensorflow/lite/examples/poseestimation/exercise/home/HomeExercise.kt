@@ -47,6 +47,8 @@ abstract class HomeExercise(
     private var lastTimeCountedAt = 0L
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private var focalLengths: FloatArray? = null
+    private var previousCountDown = 0
+    private var downTimeCounter = 0
 
     fun setExercise(
         exerciseName: String,
@@ -178,7 +180,7 @@ abstract class HomeExercise(
 
     fun getSetCount() = setCounter
 
-    fun getHoldTimeLimitCount(): Int = timeCounter
+    fun getHoldTimeLimitCount(): Int = downTimeCounter
 
     fun getPhase(): Phase? {
         return if (phaseIndex < rightCountPhases.size) {
@@ -262,24 +264,30 @@ abstract class HomeExercise(
                     wrongStateIndex = 0
                     repetitionCount()
                 } else {
+                    downTimeCounter = phase.holdTime - timeCounter
                     if (phase.holdTime > 0) {
                         if ((System.currentTimeMillis() - lastTimeCountedAt) >= 1000) {
-                            val downTimeCounter = phase.holdTime - timeCounter
-                            if (downTimeCounter > 0 && timeCounter > 0) {
-                                countDownAudio(downTimeCounter)
-                            }
                             timeCounter++
                             lastTimeCountedAt = System.currentTimeMillis()
                         }
                     } else {
                         timeCounter = 0
+                        downTimeCounter = 0
                         lastTimeCountedAt = System.currentTimeMillis()
+                    }
+                    if (previousCountDown != downTimeCounter && downTimeCounter > 0) {
+                        previousCountDown = downTimeCounter
+                        countDownAudio(previousCountDown)
                     }
                     if (timeCounter >= phase.holdTime) {
                         phaseIndex++
                         timeCounter = 0
+                        downTimeCounter = 0
                     }
                 }
+            } else {
+                timeCounter = 0
+                downTimeCounter = 0
             }
             commonInstruction(
                 person,

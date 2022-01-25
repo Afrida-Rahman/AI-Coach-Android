@@ -523,7 +523,7 @@ class ExerciseActivity : AppCompatActivity() {
                     wrongCountDisplay.text =
                         getString(R.string.wrong_text).format(exercise.getWrongCount())
                     phase?.let {
-                        val holdTime = exercise.getHoldTimeLimitCount()
+                        val timeToDisplay = exercise.getHoldTimeLimitCount()
                         it.phaseDialogue?.let { dialogue ->
                             if (dialogue.isNotEmpty()) {
                                 phaseDialogueDisplay.visibility = View.VISIBLE
@@ -533,7 +533,6 @@ class ExerciseActivity : AppCompatActivity() {
                                 phaseDialogueDisplay.visibility = View.GONE
                             }
                         }
-                        val timeToDisplay = it.holdTime - holdTime
                         if (timeToDisplay > 0) {
                             timeCountDisplay.visibility = View.VISIBLE
                             timeCountDisplay.text =

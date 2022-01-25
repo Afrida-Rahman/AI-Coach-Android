@@ -49,7 +49,7 @@ object Exercises {
             PosteriorPelvicTiltInSupine(context),
             HamstringCurlsInStanding(context),
             BirdDogInProne(context),
-            PlankOnHands(context),
+            PlankOnHandsInProne(context),
             HamstringStretchInLongSitting(context),
             SeatedRowsTheraband(context),
             IsometricShoulderAdductionInSitting(context),

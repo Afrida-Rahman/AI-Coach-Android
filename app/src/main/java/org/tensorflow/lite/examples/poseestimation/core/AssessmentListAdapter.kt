@@ -48,7 +48,7 @@ class AssessmentListAdapter(
                 testId.text = getString(R.string.test_id).format(item.id)
                 testDate.text = getString(R.string.test_date).format(item.testDate)
                 providerName.text =
-                    getString(R.string.provider_name_value).format(item.providerName)
+                    getString(R.string.provider_name_value).format(item.providerName?: "Unknown")
                 bodyRegion.text = getString(R.string.body_region_value).format(item.bodyRegionName)
                 registrationType.text =
                     getString(R.string.registration_type_value).format(item.registrationType)
@@ -61,7 +61,13 @@ class AssessmentListAdapter(
                     disallowAddToBackStack()
                     replace(
                         R.id.fragment_container,
-                        ExerciseListFragment(item.id, item.testDate, item.exercises, patientId, tenant)
+                        ExerciseListFragment(
+                            item.id,
+                            item.testDate,
+                            item.exercises,
+                            patientId,
+                            tenant
+                        )
                     )
                     commit()
                 }
