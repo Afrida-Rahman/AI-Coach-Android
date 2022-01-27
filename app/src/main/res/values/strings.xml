@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">EMMA Virtual Therapist</string>
-    <string name="app_version">Version : 0.0.24</string>
+    <string name="app_version">Version : 0.0.25</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="test_id">%s</string>
@@ -78,7 +78,7 @@
     <string name="exercise_name_guideline">Exercise Name Guideline</string>
     <string name="guideline_icon">guideline_icon</string>
     <string name="assigned_set">Assigned set: %d</string>
-    <string name="assigned_repetition">Assigned repetition: %d</string>
+    <string name="assigned_repetition">Assigned repetition: %d per set</string>
     <string name="back_button">Back button</string>
     <string name="start_exercise">Start Exercise</string>
     <string name="hello_i_am_emma">Hello! I am EMMA.</string>
