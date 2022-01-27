@@ -263,6 +263,7 @@ abstract class HomeExercise(
                     phaseIndex = 0
                     wrongStateIndex = 0
                     repetitionCount()
+                    playCongratulationAudio()
                 } else {
                     downTimeCounter = phase.holdTime - timeCounter
                     if (phase.holdTime > 0) {
@@ -289,12 +290,12 @@ abstract class HomeExercise(
                 timeCounter = 0
                 downTimeCounter = 0
             }
-            commonInstruction(
-                person,
-                rightCountPhases[phaseIndex].constraints,
-                canvasHeight,
-                canvasWidth
-            )
+//            commonInstruction(
+//                person,
+//                rightCountPhases[phaseIndex].constraints,
+//                canvasHeight,
+//                canvasWidth
+//            )
         }
     }
 
@@ -393,6 +394,12 @@ abstract class HomeExercise(
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
             audioPlayer.playFromFile(resource)
+        }
+    }
+
+    private fun playCongratulationAudio() {
+        if (setCounter == maxSetCount) {
+            audioPlayer.playFromFile(R.raw.congratulate_patient)
         }
     }
 
