@@ -397,8 +397,8 @@ abstract class HomeExercise(
         }
     }
 
-    private fun playCongratulationAudio(){
-        if (setCounter == maxSetCount){
+    private fun playCongratulationAudio() {
+        if (setCounter == maxSetCount) {
             audioPlayer.playFromFile(R.raw.congratulate_patient)
         }
     }
