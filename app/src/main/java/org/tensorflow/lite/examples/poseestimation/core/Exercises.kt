@@ -86,7 +86,8 @@ object Exercises {
             TrunkExtensionWithHandsOnHipsInStanding(context),
             AROMCervicalExtensionInSitting(context),
             AROMCervicalFlexionInSitting(context),
-            AROMCervicalFlexionInSupine(context)
+            AROMCervicalFlexionInSupine(context),
+            KneeExtensionWithResistanceBandInSitting(context)
         )
     }
 
