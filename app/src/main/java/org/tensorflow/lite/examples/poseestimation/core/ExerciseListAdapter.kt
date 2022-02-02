@@ -2,9 +2,7 @@ package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Context
 import android.content.Intent
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +42,8 @@ class ExerciseListAdapter(
         )
     }
 
+    override fun getItemCount(): Int = exerciseList.size
+
     override fun onBindViewHolder(holder: ExerciseItemViewHolder, position: Int) {
         val exercise = exerciseList[position]
         holder.apply {
@@ -53,41 +53,6 @@ class ExerciseListAdapter(
             } else {
                 R.drawable.exercise
             }
-
-//            searchExercise?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//                override fun onQueryTextSubmit(searchQuery: String): Boolean {
-//                    return true
-//                }
-//
-//                override fun onQueryTextChange(searchQuery: String): Boolean {
-//                    searchExercise.clearFocus()
-//                    if (searchQuery.isNotEmpty()) {
-//                        Log.d("searchData", searchQuery)
-//                        exerciseList.filter {
-//                            it.name.lowercase().startsWith(searchQuery.lowercase())
-//                        }
-//                    }
-//                    return true
-//                }
-//
-//            })
-            searchExercise?.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    // do nothing
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    //do nothing
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    var exercises: List<HomeExercise> = emptyList()
-                    if (p0 != null) {
-                        exercises = exerciseList.filter { it.name.startsWith(p0) }
-                    }
-                }
-
-            })
 
             Glide.with(context)
                 .load(imageUrl)
@@ -195,8 +160,6 @@ class ExerciseListAdapter(
         }
     }
 
-    override fun getItemCount(): Int = exerciseList.size
-
     private fun saveManualTrackingData(
         ExerciseId: Int,
         TestId: String,
@@ -269,6 +232,5 @@ class ExerciseListAdapter(
         val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
         val assignedSet: TextView = view.findViewById(R.id.assigned_set)
         val assignedRepetition: TextView = view.findViewById(R.id.assigned_repetition)
-        val searchExercise: EditText? = view.findViewById(R.id.et_search)
     }
 }
