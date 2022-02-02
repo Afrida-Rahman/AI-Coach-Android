@@ -2,7 +2,9 @@ package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Context
 import android.content.Intent
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ExerciseListAdapter(
     private val testId: String,
     private val testDate: String,
-    private val exerciseList: List<HomeExercise>,
+    private var exerciseList: List<HomeExercise>,
     private val manager: FragmentManager,
     private val patientId: String,
     private val tenant: String
@@ -51,6 +53,42 @@ class ExerciseListAdapter(
             } else {
                 R.drawable.exercise
             }
+
+//            searchExercise?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//                override fun onQueryTextSubmit(searchQuery: String): Boolean {
+//                    return true
+//                }
+//
+//                override fun onQueryTextChange(searchQuery: String): Boolean {
+//                    searchExercise.clearFocus()
+//                    if (searchQuery.isNotEmpty()) {
+//                        Log.d("searchData", searchQuery)
+//                        exerciseList.filter {
+//                            it.name.lowercase().startsWith(searchQuery.lowercase())
+//                        }
+//                    }
+//                    return true
+//                }
+//
+//            })
+            searchExercise?.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    // do nothing
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    //do nothing
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    var exercises: List<HomeExercise> = emptyList()
+                    if (p0 != null) {
+                        exercises = exerciseList.filter { it.name.startsWith(p0) }
+                    }
+                }
+
+            })
+
             Glide.with(context)
                 .load(imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
@@ -58,7 +96,9 @@ class ExerciseListAdapter(
                 .transition(DrawableTransitionOptions.withCrossFade(500))
                 .override(300, 300)
                 .into(this.exerciseImageView)
+
             exerciseNameView.text = exercise.name
+
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
                 startExerciseButton.setOnClickListener {
@@ -78,6 +118,7 @@ class ExerciseListAdapter(
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
             }
+
             manualTrackingButton.setOnClickListener {
                 val alertDialog = AlertDialog.Builder(context)
                 val layout = LinearLayout(context)
@@ -127,6 +168,7 @@ class ExerciseListAdapter(
 
                 alertDialog.show()
             }
+
             guidelineButton.setOnClickListener {
                 manager.beginTransaction().apply {
                     replace(
@@ -143,13 +185,17 @@ class ExerciseListAdapter(
                     commit()
                 }
             }
+
             assignedSet.text =
                 assignedSet.context.getString(R.string.assigned_set).format(exercise.maxSetCount)
+
             assignedRepetition.text =
                 assignedRepetition.context.getString(R.string.assigned_repetition)
                     .format(exercise.maxRepCount)
         }
     }
+
+    override fun getItemCount(): Int = exerciseList.size
 
     private fun saveManualTrackingData(
         ExerciseId: Int,
@@ -214,9 +260,6 @@ class ExerciseListAdapter(
         })
     }
 
-
-    override fun getItemCount(): Int = exerciseList.size
-
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val startExerciseButton: Button = view.findViewById(R.id.btn_start_exercise)
         val manualTrackingButton: Button = view.findViewById(R.id.btn_manual_tracking)
@@ -226,5 +269,6 @@ class ExerciseListAdapter(
         val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
         val assignedSet: TextView = view.findViewById(R.id.assigned_set)
         val assignedRepetition: TextView = view.findViewById(R.id.assigned_repetition)
+        val searchExercise: EditText? = view.findViewById(R.id.et_search)
     }
 }
