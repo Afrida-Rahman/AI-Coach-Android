@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ExerciseListAdapter(
     private val testId: String,
     private val testDate: String,
-    private val exerciseList: List<HomeExercise>,
+    private var exerciseList: List<HomeExercise>,
     private val manager: FragmentManager,
     private val patientId: String,
     private val tenant: String
@@ -42,6 +42,8 @@ class ExerciseListAdapter(
         )
     }
 
+    override fun getItemCount(): Int = exerciseList.size
+
     override fun onBindViewHolder(holder: ExerciseItemViewHolder, position: Int) {
         val exercise = exerciseList[position]
         holder.apply {
@@ -51,6 +53,7 @@ class ExerciseListAdapter(
             } else {
                 R.drawable.exercise
             }
+
             Glide.with(context)
                 .load(imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
@@ -58,7 +61,9 @@ class ExerciseListAdapter(
                 .transition(DrawableTransitionOptions.withCrossFade(500))
                 .override(300, 300)
                 .into(this.exerciseImageView)
+
             exerciseNameView.text = exercise.name
+
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
                 startExerciseButton.setOnClickListener {
@@ -78,6 +83,7 @@ class ExerciseListAdapter(
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
             }
+
             manualTrackingButton.setOnClickListener {
                 val alertDialog = AlertDialog.Builder(context)
                 val layout = LinearLayout(context)
@@ -127,6 +133,7 @@ class ExerciseListAdapter(
 
                 alertDialog.show()
             }
+
             guidelineButton.setOnClickListener {
                 manager.beginTransaction().apply {
                     replace(
@@ -143,8 +150,10 @@ class ExerciseListAdapter(
                     commit()
                 }
             }
+
             assignedSet.text =
                 assignedSet.context.getString(R.string.assigned_set).format(exercise.maxSetCount)
+
             assignedRepetition.text =
                 assignedRepetition.context.getString(R.string.assigned_repetition)
                     .format(exercise.maxRepCount)
@@ -213,9 +222,6 @@ class ExerciseListAdapter(
             }
         })
     }
-
-
-    override fun getItemCount(): Int = exerciseList.size
 
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val startExerciseButton: Button = view.findViewById(R.id.btn_start_exercise)
