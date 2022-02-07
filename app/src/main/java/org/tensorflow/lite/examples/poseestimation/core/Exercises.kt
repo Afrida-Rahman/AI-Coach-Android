@@ -90,7 +90,7 @@ object Exercises {
             KneeFlexionWithResistanceBandInSitting(context),
             KneeFlexionWithResistanceBandInLongSitting(context),
             KneeFlexionWithResistanceBandInStanding(context),
-            kneeExtensionWithResistanceBandInStanding(context)
+            KneeExtensionWithResistanceBandInStanding(context)
         )
     }
 
