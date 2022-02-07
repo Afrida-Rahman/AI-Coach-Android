@@ -14,8 +14,6 @@ import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.Utilities.getIndex
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.*
-import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isLeftHandStraight
-import org.tensorflow.lite.examples.poseestimation.exercise.CommonInstructions.isRightHandStraight
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -290,12 +288,12 @@ abstract class HomeExercise(
                 timeCounter = 0
                 downTimeCounter = 0
             }
-//            commonInstruction(
-//                person,
-//                rightCountPhases[phaseIndex].constraints,
-//                canvasHeight,
-//                canvasWidth
-//            )
+            commonInstruction(
+                person,
+                rightCountPhases[phaseIndex].constraints,
+                canvasHeight,
+                canvasWidth
+            )
         }
     }
 
@@ -337,23 +335,23 @@ abstract class HomeExercise(
         canvasHeight: Int,
         canvasWidth: Int
     ) {
-        constraints.forEach {
+        constraints.forEach { _ ->
             if (!VisualizationUtils.isInsideBox(
                     person,
                     canvasHeight,
                     canvasWidth
                 )
             ) onEvent(CommonInstructionEvent.OutSideOfBox)
-            else if (!isLeftHandStraight(
-                    person = person,
-                    constraint = it
-                )
-            ) onEvent(CommonInstructionEvent.LeftHandIsNotStraight)
-            else if (!isRightHandStraight(
-                    person = person,
-                    constraint = it
-                )
-            ) onEvent(CommonInstructionEvent.RightHandIsNotStraight)
+//            else if (!isLeftHandStraight(
+//                    person = person,
+//                    constraint = it
+//                )
+//            ) onEvent(CommonInstructionEvent.LeftHandIsNotStraight)
+//            else if (!isRightHandStraight(
+//                    person = person,
+//                    constraint = it
+//                )
+//            ) onEvent(CommonInstructionEvent.RightHandIsNotStraight)
         }
         getPersonDistance(person)?.let {
             if (it > 13) {
@@ -390,6 +388,7 @@ abstract class HomeExercise(
     }
 
     private fun playAudio(@RawRes resource: Int) {
+        Log.d("AudioPlayingIssue", "Play audio is being called")
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
