@@ -88,7 +88,8 @@ object Exercises {
             HamstringCurlsWithWeightsInProne(context),
             HamstringCurlsWithResistanceBandInProne(context),
             KneeFlexionWithResistanceBandInSitting(context),
-            KneeFlexionWithResistanceBandInLongSitting(context)
+            KneeFlexionWithResistanceBandInLongSitting(context),
+            KneeFlexionWithResistanceBandInStanding(context)
         )
     }
 
