@@ -8,10 +8,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.TrunkLateralBen
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
-import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringCurlsInProne
-import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringCurlsInStanding
-import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.HamstringStretchInLongSitting
-import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.KneeExtensionInSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.shoulder.*
 
@@ -87,7 +84,8 @@ object Exercises {
             AROMCervicalExtensionInSitting(context),
             AROMCervicalFlexionInSitting(context),
             AROMCervicalFlexionInSupine(context),
-            KneeExtensionWithResistanceBandInSitting(context)
+            KneeExtensionWithResistanceBandInSitting(context),
+            HamstringCurlsWithWeightsInProne(context)
         )
     }
 
