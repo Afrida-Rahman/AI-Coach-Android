@@ -86,7 +86,8 @@ object Exercises {
             AROMCervicalFlexionInSupine(context),
             KneeExtensionWithResistanceBandInSitting(context),
             HamstringCurlsWithWeightsInProne(context),
-            HamstringCurlsWithResistanceBandInProne(context)
+            HamstringCurlsWithResistanceBandInProne(context),
+            KneeFlexionWithResistanceBandInSitting(context)
         )
     }
 
