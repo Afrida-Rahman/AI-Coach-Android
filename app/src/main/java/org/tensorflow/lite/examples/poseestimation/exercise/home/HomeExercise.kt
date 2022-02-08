@@ -225,6 +225,15 @@ abstract class HomeExercise(
         focalLengths = lengths
     }
 
+    fun playAudio(@RawRes resource: Int) {
+        Log.d("AudioPlayingIssue", "Play audio is being called")
+        val timestamp = System.currentTimeMillis().toInt()
+        if (timestamp - lastTimePlayed >= 3500) {
+            lastTimePlayed = timestamp
+            audioPlayer.playFromFile(resource)
+        }
+    }
+
     open fun onEvent(event: CommonInstructionEvent) {
         when (event) {
             is CommonInstructionEvent.OutSideOfBox -> playAudio(R.raw.please_stay_inside_box)
@@ -294,10 +303,13 @@ abstract class HomeExercise(
                 canvasHeight,
                 canvasWidth
             )
+            instruction(person)
         }
     }
 
     open fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {}
+
+    open fun instruction(person: Person) {}
 
     private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {
         var constraintSatisfied = true
@@ -385,15 +397,6 @@ abstract class HomeExercise(
             else -> R.raw.right_count
         }
         audioPlayer.playFromFile(resourceId)
-    }
-
-    private fun playAudio(@RawRes resource: Int) {
-        Log.d("AudioPlayingIssue", "Play audio is being called")
-        val timestamp = System.currentTimeMillis().toInt()
-        if (timestamp - lastTimePlayed >= 3500) {
-            lastTimePlayed = timestamp
-            audioPlayer.playFromFile(resource)
-        }
     }
 
     private fun playCongratulationAudio() {
