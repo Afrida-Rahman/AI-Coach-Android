@@ -14,6 +14,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 object VisualizationUtils {
     private const val LINE_WIDTH = 2.5f
     private const val BORDER_WIDTH = 10f
+    private var lastTimeChecked: Long = 0L
 
     private val MAPPINGS = listOf(
         listOf(BodyPart.LEFT_EAR.position, BodyPart.LEFT_EYE.position),
@@ -70,6 +71,25 @@ object VisualizationUtils {
         }
 
         phase?.let {
+            if (System.currentTimeMillis() - lastTimeChecked > 1000) {
+                for (i in 0 until it.constraints.size) {
+                    val constraint = it.constraints[i]
+                    if (constraint.type == ConstraintType.ANGLE) {
+                        val angle = Utilities.angle(
+                            startPoint = person.keyPoints[constraint.startPointIndex].toRealPoint(),
+                            middlePoint = person.keyPoints[constraint.middlePointIndex].toRealPoint(),
+                            endPoint = person.keyPoints[constraint.endPointIndex].toRealPoint(),
+                            clockWise = constraint.clockWise
+                        )
+                        if (angle >= constraint.minValue && angle <= constraint.maxValue) {
+                            it.constraints[i].color = Color.WHITE
+                        } else {
+                            it.constraints[i].color = Color.RED
+                        }
+                    }
+                }
+                lastTimeChecked = System.currentTimeMillis()
+            }
             for (constraint in it.constraints) {
                 val startPoint = person.keyPoints[constraint.startPointIndex].toCanvasPoint()
                 val endPoint = person.keyPoints[constraint.endPointIndex].toCanvasPoint()
@@ -89,14 +109,16 @@ object VisualizationUtils {
                                 output.width - endPoint.x,
                                 endPoint.y
                             ),
-                            _clockWise = !constraint.clockWise
+                            _clockWise = !constraint.clockWise,
+                            color = constraint.color
                         )
                     } else {
                         draw.angle(
                             startPoint,
                             middlePoint,
                             endPoint,
-                            _clockWise = constraint.clockWise
+                            _clockWise = constraint.clockWise,
+                            color = constraint.color
                         )
                     }
                 } else {

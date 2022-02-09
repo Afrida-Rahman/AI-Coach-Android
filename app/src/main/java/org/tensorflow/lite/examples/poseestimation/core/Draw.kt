@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import android.util.Log
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -27,7 +26,6 @@ class Draw(
             color = _color
             style = lineType
         }
-        Log.d("colorValue","$_color")
         canvas.drawLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y, lineStyle)
         circle(startPoint, 4f, startPoint, 360f, _color = _color)
         circle(endPoint, 4f, endPoint, 360f, _color = _color)
@@ -92,7 +90,8 @@ class Draw(
         endPoint: Point,
         lineType: Paint.Style? = Paint.Style.FILL,
         radius: Float = 50F,
-        _clockWise: Boolean = clockWise
+        _clockWise: Boolean = clockWise,
+        color: Int = Color.WHITE
     ) {
         val pointA = Point(startPoint.x, -startPoint.y)
         val pointB = Point(middlePoint.x, -middlePoint.y)
@@ -118,14 +117,21 @@ class Draw(
         )
         val referenceVector = Point(endPoint.x - middlePoint.x, endPoint.y - middlePoint.y)
 
-        line(startPoint, middlePoint, lineType)
-        line(middlePoint, endPoint, lineType)
+        line(startPoint, middlePoint, lineType, _color = color)
+        line(middlePoint, endPoint, lineType, _color = color)
 
-        circle(startPoint, 4f, startPoint, 360f, _clockWise = _clockWise)
-        circle(middlePoint, 4f, middlePoint, 360f, _clockWise = _clockWise)
-        circle(endPoint, 4f, endPoint, 360f, _clockWise = _clockWise)
+        circle(startPoint, 4f, startPoint, 360f, _clockWise = _clockWise, _color = color)
+        circle(middlePoint, 4f, middlePoint, 360f, _clockWise = _clockWise, _color = color)
+        circle(endPoint, 4f, endPoint, 360f, _clockWise = _clockWise, _color = color)
 
-        circle(middlePoint, radius, referenceVector, angleValue.toFloat(), _clockWise = _clockWise)
+        circle(
+            middlePoint,
+            radius,
+            referenceVector,
+            angleValue.toFloat(),
+            _clockWise = _clockWise,
+            _color = color
+        )
         writeText("$angleValue", textPosition, fontSize = 20f)
     }
 
