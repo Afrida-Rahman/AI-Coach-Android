@@ -33,7 +33,7 @@
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_exercise"
-                android:layout_width="wrap_content"
+                android:layout_width="310dp"
                 android:layout_height="wrap_content"
                 app:queryHint="Enter exercise name"
                 app:iconifiedByDefault="true" />
