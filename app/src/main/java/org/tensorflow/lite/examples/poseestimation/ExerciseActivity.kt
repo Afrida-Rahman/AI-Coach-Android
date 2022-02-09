@@ -595,7 +595,7 @@ class ExerciseActivity : AppCompatActivity() {
     private fun congratsPatient(context: Context) {
         VisualizationUtils.getAlertDialogue(
             context = context,
-            message = "Congratulation! You successfully completed the exercise.",
+            message = "Congratulations! You have successfully completed the exercise.",
             positiveButtonText = "Ok",
             positiveButtonAction = {
                 askQuestions(context)
