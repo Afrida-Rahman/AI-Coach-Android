@@ -17,6 +17,13 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_assessment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:queryHint="Enter Test Id"
+        app:iconifiedByDefault="true" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assessment_list_container"
         android:padding="8dp"
