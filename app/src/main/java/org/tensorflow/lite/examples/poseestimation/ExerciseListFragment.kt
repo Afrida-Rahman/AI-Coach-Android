@@ -39,7 +39,7 @@ class ExerciseListFragment(
                     adapter.adapter = ExerciseListAdapter(
                         assessmentId,
                         assessmentDate,
-                        exerciseList.filter { it.name.lowercase().startsWith(searchQuery) },
+                        exerciseList.filter { it.name.lowercase().startsWith(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
                         tenant
@@ -55,7 +55,7 @@ class ExerciseListFragment(
                     adapter.adapter = ExerciseListAdapter(
                         assessmentId,
                         assessmentDate,
-                        exerciseList.filter { it.name.lowercase().startsWith(searchQuery) },
+                        exerciseList.filter { it.name.lowercase().startsWith(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
                         tenant

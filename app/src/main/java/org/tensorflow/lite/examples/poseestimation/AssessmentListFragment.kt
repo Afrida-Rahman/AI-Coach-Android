@@ -83,7 +83,7 @@ class AssessmentListFragment(
             override fun onQueryTextSubmit(searchQuery: String): Boolean {
                 if (searchQuery.isNotEmpty()) {
                     adapter.adapter = AssessmentListAdapter(
-                        testList.filter { it.id.lowercase().contains(searchQuery) },
+                        testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
                         tenant
@@ -97,7 +97,7 @@ class AssessmentListFragment(
             override fun onQueryTextChange(searchQuery: String): Boolean {
                 if (searchQuery.isNotEmpty()) {
                     adapter.adapter = AssessmentListAdapter(
-                        testList.filter { it.id.lowercase().contains(searchQuery) },
+                        testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
                         tenant
