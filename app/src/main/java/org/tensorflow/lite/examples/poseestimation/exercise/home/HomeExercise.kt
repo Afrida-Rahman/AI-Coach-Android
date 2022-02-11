@@ -1,7 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.exercise.home
 
 import android.content.Context
-import android.util.Log
+import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.annotation.RawRes
 import org.tensorflow.lite.examples.poseestimation.R
@@ -34,19 +34,42 @@ abstract class HomeExercise(
     var maxRepCount: Int = 0,
     var maxSetCount: Int = 0
 ) {
-    private var phaseIndex = 0
+    open var phaseIndex = 0
     open var rightCountPhases = mutableListOf<Phase>()
     open var wrongStateIndex = 0
     private val audioPlayer = AudioPlayer(context)
     private var setCounter = 0
     private var wrongCounter = 0
     private var repetitionCounter = 0
-    private var timeCounter = 0
-    private var lastTimeCountedAt = 0L
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private var focalLengths: FloatArray? = null
     private var previousCountDown = 0
     private var downTimeCounter = 0
+    open var phaseEntered = false
+    private var phaseEnterTime = System.currentTimeMillis()
+
+    // Counting audio
+    private val one = MediaPlayer.create(context, R.raw.one)
+    private val two = MediaPlayer.create(context, R.raw.two)
+    private val three = MediaPlayer.create(context, R.raw.three)
+    private val four = MediaPlayer.create(context, R.raw.four)
+    private val five = MediaPlayer.create(context, R.raw.five)
+    private val six = MediaPlayer.create(context, R.raw.six)
+    private val seven = MediaPlayer.create(context, R.raw.seven)
+    private val eight = MediaPlayer.create(context, R.raw.eight)
+    private val nine = MediaPlayer.create(context, R.raw.nine)
+    private val ten = MediaPlayer.create(context, R.raw.ten)
+    private val eleven = MediaPlayer.create(context, R.raw.eleven)
+    private val twelve = MediaPlayer.create(context, R.raw.twelve)
+    private val thirteen = MediaPlayer.create(context, R.raw.thirteen)
+    private val fourteen = MediaPlayer.create(context, R.raw.fourteen)
+    private val fifteen = MediaPlayer.create(context, R.raw.fifteen)
+    private val sixteen = MediaPlayer.create(context, R.raw.sixteen)
+    private val seventeen = MediaPlayer.create(context, R.raw.seventeen)
+    private val eighteen = MediaPlayer.create(context, R.raw.eightteen)
+    private val nineteen = MediaPlayer.create(context, R.raw.nineteen)
+    private val twenty = MediaPlayer.create(context, R.raw.twenty)
+    private val rightCount = MediaPlayer.create(context, R.raw.right_count)
 
     fun setExercise(
         exerciseName: String,
@@ -226,7 +249,6 @@ abstract class HomeExercise(
     }
 
     fun playAudio(@RawRes resource: Int) {
-        Log.d("AudioPlayingIssue", "Play audio is being called")
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
@@ -255,10 +277,6 @@ abstract class HomeExercise(
                 person,
                 phase.constraints
             )
-            Log.d(
-                "HomeExercise",
-                " $phaseIndex: -> $constraintSatisfied - $timeCounter / ${phase.holdTime}"
-            )
 
             if (VisualizationUtils.isInsideBox(
                     person,
@@ -266,36 +284,28 @@ abstract class HomeExercise(
                     canvasWidth
                 ) && constraintSatisfied
             ) {
-                if (phaseIndex == rightCountPhases.size - 1) {
-                    phaseIndex = 0
-                    wrongStateIndex = 0
-                    repetitionCount()
-                    playCongratulationAudio()
-                } else {
-                    downTimeCounter = phase.holdTime - timeCounter
-                    if (phase.holdTime > 0) {
-                        if ((System.currentTimeMillis() - lastTimeCountedAt) >= 1000) {
-                            timeCounter++
-                            lastTimeCountedAt = System.currentTimeMillis()
-                        }
+                if (!phaseEntered) {
+                    phaseEntered = true
+                    phaseEnterTime = System.currentTimeMillis()
+                }
+                val elapsedTime = ((System.currentTimeMillis() - phaseEnterTime) / 1000).toInt()
+                downTimeCounter = phase.holdTime - elapsedTime
+                if (downTimeCounter <= 0) {
+                    if (phaseIndex == rightCountPhases.size - 1) {
+                        phaseIndex = 0
+                        wrongStateIndex = 0
+                        repetitionCount()
+                        playCongratulationAudio()
                     } else {
-                        timeCounter = 0
-                        downTimeCounter = 0
-                        lastTimeCountedAt = System.currentTimeMillis()
-                    }
-                    if (previousCountDown != downTimeCounter && downTimeCounter > 0) {
-                        previousCountDown = downTimeCounter
-                        countDownAudio(previousCountDown)
-                    }
-                    if (timeCounter >= phase.holdTime) {
                         phaseIndex++
-                        timeCounter = 0
                         downTimeCounter = 0
                     }
+                } else {
+                    countDownAudio(downTimeCounter)
                 }
             } else {
-                timeCounter = 0
                 downTimeCounter = 0
+                phaseEntered = false
             }
             commonInstruction(
                 person,
@@ -373,30 +383,32 @@ abstract class HomeExercise(
     }
 
     private fun countDownAudio(count: Int) {
-        val resourceId = when (count) {
-            1 -> R.raw.one
-            2 -> R.raw.two
-            3 -> R.raw.three
-            4 -> R.raw.four
-            5 -> R.raw.five
-            6 -> R.raw.six
-            7 -> R.raw.seven
-            8 -> R.raw.eight
-            9 -> R.raw.nine
-            10 -> R.raw.ten
-            11 -> R.raw.eleven
-            12 -> R.raw.twelve
-            13 -> R.raw.thirteen
-            14 -> R.raw.fourteen
-            15 -> R.raw.fifteen
-            16 -> R.raw.sixteen
-            17 -> R.raw.seventeen
-            18 -> R.raw.eightteen
-            19 -> R.raw.nineteen
-            20 -> R.raw.twenty
-            else -> R.raw.right_count
+        if (previousCountDown != count && count > 0) {
+            previousCountDown = count
+            when (count) {
+                1 -> one.start()
+                2 -> two.start()
+                3 -> three.start()
+                4 -> four.start()
+                5 -> five.start()
+                6 -> six.start()
+                7 -> seven.start()
+                8 -> eight.start()
+                9 -> nine.start()
+                10 -> ten.start()
+                11 -> eleven.start()
+                12 -> twelve.start()
+                13 -> thirteen.start()
+                14 -> fourteen.start()
+                15 -> fifteen.start()
+                16 -> sixteen.start()
+                17 -> seventeen.start()
+                18 -> eighteen.start()
+                19 -> nineteen.start()
+                20 -> twenty.start()
+                else -> rightCount.start()
+            }
         }
-        audioPlayer.playFromFile(resourceId)
     }
 
     private fun playCongratulationAudio() {

@@ -97,6 +97,8 @@ class BodyWeightSquats(
                 if (wrongStateIndex == wrongCountStates.size) {
                     wrongStateIndex = 0
                     wrongCount()
+                    phaseIndex = 0
+                    phaseEntered = false
                 }
             }
         }
