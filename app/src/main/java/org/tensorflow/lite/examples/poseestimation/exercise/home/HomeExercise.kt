@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation.exercise.home
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RawRes
 import org.tensorflow.lite.examples.poseestimation.R
@@ -10,6 +9,7 @@ import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
+import org.tensorflow.lite.examples.poseestimation.core.CountDownAudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.Utilities.getIndex
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
@@ -34,19 +34,20 @@ abstract class HomeExercise(
     var maxRepCount: Int = 0,
     var maxSetCount: Int = 0
 ) {
-    private var phaseIndex = 0
+    open var phaseIndex = 0
     open var rightCountPhases = mutableListOf<Phase>()
     open var wrongStateIndex = 0
     private val audioPlayer = AudioPlayer(context)
     private var setCounter = 0
     private var wrongCounter = 0
     private var repetitionCounter = 0
-    private var timeCounter = 0
-    private var lastTimeCountedAt = 0L
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
     private var focalLengths: FloatArray? = null
     private var previousCountDown = 0
     private var downTimeCounter = 0
+    open var phaseEntered = false
+    private var phaseEnterTime = System.currentTimeMillis()
+    private lateinit var countDownAudioPlayerPlayer: CountDownAudioPlayer
 
     fun setExercise(
         exerciseName: String,
@@ -168,6 +169,7 @@ abstract class HomeExercise(
                 ).show()
             }
         })
+        countDownAudioPlayerPlayer = CountDownAudioPlayer(context)
     }
 
     fun getMaxHoldTime(): Int = rightCountPhases.map { it.holdTime }.maxOrNull() ?: 0
@@ -226,7 +228,6 @@ abstract class HomeExercise(
     }
 
     fun playAudio(@RawRes resource: Int) {
-        Log.d("AudioPlayingIssue", "Play audio is being called")
         val timestamp = System.currentTimeMillis().toInt()
         if (timestamp - lastTimePlayed >= 3500) {
             lastTimePlayed = timestamp
@@ -255,10 +256,6 @@ abstract class HomeExercise(
                 person,
                 phase.constraints
             )
-            Log.d(
-                "HomeExercise",
-                " $phaseIndex: -> $constraintSatisfied - $timeCounter / ${phase.holdTime}"
-            )
 
             if (VisualizationUtils.isInsideBox(
                     person,
@@ -266,36 +263,28 @@ abstract class HomeExercise(
                     canvasWidth
                 ) && constraintSatisfied
             ) {
-                if (phaseIndex == rightCountPhases.size - 1) {
-                    phaseIndex = 0
-                    wrongStateIndex = 0
-                    repetitionCount()
-                    playCongratulationAudio()
-                } else {
-                    downTimeCounter = phase.holdTime - timeCounter
-                    if (phase.holdTime > 0) {
-                        if ((System.currentTimeMillis() - lastTimeCountedAt) >= 1000) {
-                            timeCounter++
-                            lastTimeCountedAt = System.currentTimeMillis()
-                        }
+                if (!phaseEntered) {
+                    phaseEntered = true
+                    phaseEnterTime = System.currentTimeMillis()
+                }
+                val elapsedTime = ((System.currentTimeMillis() - phaseEnterTime) / 1000).toInt()
+                downTimeCounter = phase.holdTime - elapsedTime
+                if (downTimeCounter <= 0) {
+                    if (phaseIndex == rightCountPhases.size - 1) {
+                        phaseIndex = 0
+                        wrongStateIndex = 0
+                        repetitionCount()
+                        playCongratulationAudio()
                     } else {
-                        timeCounter = 0
-                        downTimeCounter = 0
-                        lastTimeCountedAt = System.currentTimeMillis()
-                    }
-                    if (previousCountDown != downTimeCounter && downTimeCounter > 0) {
-                        previousCountDown = downTimeCounter
-                        countDownAudio(previousCountDown)
-                    }
-                    if (timeCounter >= phase.holdTime) {
                         phaseIndex++
-                        timeCounter = 0
                         downTimeCounter = 0
                     }
+                } else {
+                    countDownAudio(downTimeCounter)
                 }
             } else {
-                timeCounter = 0
                 downTimeCounter = 0
+                phaseEntered = false
             }
             commonInstruction(
                 person,
@@ -373,30 +362,10 @@ abstract class HomeExercise(
     }
 
     private fun countDownAudio(count: Int) {
-        val resourceId = when (count) {
-            1 -> R.raw.one
-            2 -> R.raw.two
-            3 -> R.raw.three
-            4 -> R.raw.four
-            5 -> R.raw.five
-            6 -> R.raw.six
-            7 -> R.raw.seven
-            8 -> R.raw.eight
-            9 -> R.raw.nine
-            10 -> R.raw.ten
-            11 -> R.raw.eleven
-            12 -> R.raw.twelve
-            13 -> R.raw.thirteen
-            14 -> R.raw.fourteen
-            15 -> R.raw.fifteen
-            16 -> R.raw.sixteen
-            17 -> R.raw.seventeen
-            18 -> R.raw.eightteen
-            19 -> R.raw.nineteen
-            20 -> R.raw.twenty
-            else -> R.raw.right_count
+        if (previousCountDown != count && count > 0) {
+            previousCountDown = count
+            countDownAudioPlayerPlayer.play(count)
         }
-        audioPlayer.playFromFile(resourceId)
     }
 
     private fun playCongratulationAudio() {
