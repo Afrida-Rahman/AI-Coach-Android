@@ -1,16 +1,17 @@
 package org.tensorflow.lite.examples.poseestimation
 
-import android.app.ProgressDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
@@ -64,7 +65,7 @@ class ExerciseGuidelineFragment(
 //            }
 //            playVideo.visibility = View.VISIBLE
 //        }
-        val exoplayer: SimpleExoPlayer = SimpleExoPlayer.Builder(view.context).build()
+        val exoplayer: ExoPlayer = ExoPlayer.Builder(view.context).build()
 
 
         playVideo.player = exoplayer
@@ -72,8 +73,10 @@ class ExerciseGuidelineFragment(
         exoplayer.prepare()
         //media source
         exoplayer.seekTo(0)
-        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(view.context, Util.getUserAgent(view.context, ""))
-        mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(Uri.parse(videoUrls)))
+        val dataSourceFactory: DataSource.Factory =
+            DefaultDataSourceFactory(view.context, Util.getUserAgent(view.context, ""))
+        mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(MediaItem.fromUri(Uri.parse(videoUrls)))
         exoplayer.playWhenReady = true
         exoplayer.play()
 
