@@ -12,7 +12,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
 object VisualizationUtils {
-    private const val LINE_WIDTH = 2.5f
+    private const val LINE_WIDTH = 3f
     private const val BORDER_WIDTH = 10f
     private var lastTimeChecked: Long = 0L
 
