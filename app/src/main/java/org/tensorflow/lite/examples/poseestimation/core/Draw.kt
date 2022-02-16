@@ -57,7 +57,7 @@ class Draw(
         text: String,
         position: Point,
         textColor: Int = Color.WHITE,
-        fontSize: Float = 30f,
+        fontSize: Float = 40f,
         showBackground: Boolean = false,
         backgroundColor: Int = Color.rgb(0, 0, 0),
     ) {

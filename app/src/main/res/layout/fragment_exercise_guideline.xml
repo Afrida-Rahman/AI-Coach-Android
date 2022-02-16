@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="16dp"
+    android:layout_marginTop="5dp"
     android:layout_marginBottom="30dp"
     android:paddingHorizontal="16dp"
     tools:context=".ExerciseGuidelineFragment">
@@ -42,7 +42,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/instructions"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -51,19 +51,29 @@
             android:id="@+id/exercise_instruction_guideline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/instruction_details" />
-
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/video_view"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="@string/images"
+            android:layout_marginBottom="16dp"
+            android:text="@string/exercise_video"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/video_view"
+            android:layout_gravity="center"
+            android:layout_width="260dp"
+            android:layout_height="480dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/exercise_images"
             android:textSize="20sp"
             android:textStyle="bold" />
 
