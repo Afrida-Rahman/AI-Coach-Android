@@ -29,6 +29,7 @@ class ExerciseGuidelineFragment(
     private val tenant: String
 ) : Fragment() {
     private lateinit var mediaSource: MediaSource
+    private lateinit var exoplayer: ExoPlayer
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +44,7 @@ class ExerciseGuidelineFragment(
         val imageUrls = exercise.imageUrls
         val videoUrls = exercise.videoUrls
 
-        val exoplayer: ExoPlayer = ExoPlayer.Builder(view.context).build()
+        exoplayer = ExoPlayer.Builder(requireContext()).build()
         playVideo.player = exoplayer
         exoplayer.setMediaSource(buildMediaSource(videoUrls))
         exoplayer.prepare()
@@ -59,6 +60,7 @@ class ExerciseGuidelineFragment(
                 )
                 commit()
             }
+            exoplayer.pause()
         }
 
         exerciseNameView.text = exercise.name
@@ -75,6 +77,16 @@ class ExerciseGuidelineFragment(
         }
         adapter.adapter = ExerciseGuidelineImageListAdapter(view.context, imageUrls)
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoplayer.pause()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        exoplayer.pause()
     }
 
     private fun buildMediaSource(videoURL: String): MediaSource {
