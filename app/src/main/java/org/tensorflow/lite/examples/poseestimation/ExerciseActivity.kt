@@ -31,7 +31,8 @@ import org.tensorflow.lite.examples.poseestimation.core.Exercises
 import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
-import org.tensorflow.lite.examples.poseestimation.domain.model.*
+import org.tensorflow.lite.examples.poseestimation.domain.model.Device
+import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
@@ -84,6 +85,10 @@ class ExerciseActivity : AppCompatActivity() {
     private var isFrontCamera = true
     private var showCongrats = false
     private lateinit var logInData: LogInData
+
+    private var testId: String? = ""
+    private var exerciseId: Int = 0
+    private var protocolId: Int = 0
 
     private lateinit var countDisplay: TextView
     private lateinit var distanceDisplay: TextView
@@ -185,10 +190,10 @@ class ExerciseActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        val testId = intent.getStringExtra(TestId)
-        val exerciseId = intent.getIntExtra(ExerciseId, 122)
+        testId = intent.getStringExtra(TestId)
+        exerciseId = intent.getIntExtra(ExerciseId, 122)
+        protocolId = intent.getIntExtra(ProtocolId, 1)
         val exerciseName = intent.getStringExtra(Name)
-        val protocolId = intent.getIntExtra(ProtocolId, 1)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
         logInData = loadLogInData()
@@ -593,6 +598,19 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     private fun congratsPatient(context: Context) {
+        saveExerciseData(
+            ExerciseId = exerciseId,
+            TestId = testId!!,
+            ProtocolId = protocolId,
+            PatientId = logInData.patientId,
+            ExerciseDate = Utilities.currentDate(),
+            NoOfReps = exercise.getRepetitionCount(),
+            NoOfSets = exercise.getSetCount(),
+            NoOfWrongCount = exercise.getWrongCount(),
+            Tenant = logInData.tenant
+        )
+
+        Log.d("getExercise", "$ExerciseId, $testId, $protocolId")
         VisualizationUtils.getAlertDialogue(
             context = context,
             message = "Congratulations! You have successfully completed the exercise.",
