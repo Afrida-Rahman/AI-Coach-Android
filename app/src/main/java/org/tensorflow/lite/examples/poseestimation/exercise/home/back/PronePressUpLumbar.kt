@@ -3,8 +3,8 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.back
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class PronePressUpLumbar(
@@ -31,8 +31,7 @@ class PronePressUpLumbar(
     override fun rightExerciseCount(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftWristPoint = Point(
             person.keyPoints[9].coordinate.x,
@@ -54,21 +53,21 @@ class PronePressUpLumbar(
             person.keyPoints[13].coordinate.x,
             -person.keyPoints[13].coordinate.y
         )
-        if (phases.size >= 2) {
-            if (phases[0].constraints.size > 1) {
-                downElbowAngleMin = phases[0].constraints[0].minValue.toFloat()
-                downElbowAngleMax = phases[0].constraints[0].maxValue.toFloat()
-                downHipAngleMin = phases[0].constraints[1].minValue.toFloat()
-                downHipAngleMax = phases[0].constraints[1].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            if (rightCountPhases[0].constraints.size > 1) {
+                downElbowAngleMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+                downElbowAngleMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+                downHipAngleMin = rightCountPhases[0].constraints[1].minValue.toFloat()
+                downHipAngleMax = rightCountPhases[0].constraints[1].maxValue.toFloat()
 
-                upElbowAngleMin = phases[1].constraints[0].minValue.toFloat()
-                upElbowAngleMax = phases[1].constraints[0].maxValue.toFloat()
-                upHipAngleMin = phases[1].constraints[1].minValue.toFloat()
-                upHipAngleMax = phases[1].constraints[1].maxValue.toFloat()
+                upElbowAngleMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+                upElbowAngleMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
+                upHipAngleMin = rightCountPhases[1].constraints[1].minValue.toFloat()
+                upHipAngleMax = rightCountPhases[1].constraints[1].maxValue.toFloat()
             }
         }
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val elbowAngle = Utilities.angle(leftWristPoint, leftElbowPoint, leftShoulderPoint, false)
         val hipAngle = Utilities.angle(leftShoulderPoint, leftHipPoint, leftKneePoint, false)
         val rightCountStates: Array<FloatArray> = arrayOf(

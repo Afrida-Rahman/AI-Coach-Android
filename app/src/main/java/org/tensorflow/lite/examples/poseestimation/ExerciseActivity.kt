@@ -20,23 +20,22 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
-import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
-import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
-import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
+import org.tensorflow.lite.examples.poseestimation.core.Exercises
 import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
-import org.tensorflow.lite.examples.poseestimation.domain.model.*
+import org.tensorflow.lite.examples.poseestimation.domain.model.Device
+import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
-import org.tensorflow.lite.examples.poseestimation.shared.Exercises
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,7 +50,6 @@ class ExerciseActivity : AppCompatActivity() {
         const val ProtocolId = "ProtocolId"
         const val RepetitionLimit = "RepetitionLimit"
         const val SetLimit = "SetLimit"
-        const val HoldTimeLimit = "HoldTimeLimit"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
@@ -80,14 +78,24 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var spnDevice: Spinner
     private lateinit var spnModel: Spinner
 
-    private lateinit var getPatientExerciseURL: String
     private lateinit var saveExerciseTrackingURL: String
-    private lateinit var exerciseConstraintURL: String
 
     private lateinit var exercise: HomeExercise
-    private var exerciseConstraints: List<Phase> = listOf()
 
     private var isFrontCamera = true
+    private var showCongrats = false
+    private lateinit var logInData: LogInData
+
+    private var testId: String? = ""
+    private var exerciseId: Int = 0
+    private var protocolId: Int = 0
+
+    private lateinit var countDisplay: TextView
+    private lateinit var distanceDisplay: TextView
+    private lateinit var wrongCountDisplay: TextView
+    private lateinit var timeCountDisplay: TextView
+    private lateinit var phaseDialogueDisplay: TextView
+    private lateinit var maxHoldTimeDisplay: TextView
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -182,30 +190,47 @@ class ExerciseActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-
-        val testId = intent.getStringExtra(TestId)
-        val exerciseId = intent.getIntExtra(ExerciseId, 122)
+        testId = intent.getStringExtra(TestId)
+        exerciseId = intent.getIntExtra(ExerciseId, 122)
+        protocolId = intent.getIntExtra(ProtocolId, 1)
         val exerciseName = intent.getStringExtra(Name)
-        val protocolId = intent.getIntExtra(ProtocolId, 1)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
-        val logInData = loadLogInData()
-
-        getPatientExerciseURL = Utilities.getUrl(logInData.tenant).getPatientExerciseURL
-
-        getExerciseConstraints(logInData.tenant, exerciseId)
+        logInData = loadLogInData()
 
         exercise = Exercises.get(this, exerciseId)
+        exercise.initializeConstraint(logInData.tenant)
         exercise.setExercise(
             exerciseName = exerciseName ?: "",
             exerciseInstruction = "",
             exerciseImageUrls = listOf(),
+            exerciseVideoUrls = "",
             repetitionLimit = repetitionLimit,
             setLimit = setLimit,
-            protoId = protocolId
+            protoId = protocolId,
         )
 
-        findViewById<TextView>(R.id.textView).text = exerciseName
+        countDisplay = findViewById(R.id.right_count)
+        distanceDisplay = findViewById(R.id.distance)
+        wrongCountDisplay = findViewById(R.id.wrong_count)
+        timeCountDisplay = findViewById(R.id.time_count_display)
+        phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
+        maxHoldTimeDisplay = findViewById(R.id.max_hold_time_display)
+
+        maxHoldTimeDisplay.text =
+            getString(R.string.max_time_hold).format(0)
+
+        countDisplay.text = getString(R.string.right_count_text).format(
+            exercise.getRepetitionCount(),
+            exercise.getSetCount()
+        )
+        distanceDisplay.text = getString(R.string.distance_text).format(0f)
+        wrongCountDisplay.text =
+            getString(R.string.wrong_text).format(0)
+
+        phaseDialogueDisplay.visibility = View.GONE
+
+        findViewById<TextView>(R.id.exercise_name).text = exerciseName
 
         findViewById<Button>(R.id.done_button).setOnClickListener {
             saveExerciseData(
@@ -219,28 +244,7 @@ class ExerciseActivity : AppCompatActivity() {
                 NoOfWrongCount = exercise.getWrongCount(),
                 Tenant = logInData.tenant
             )
-            val alertDialog = AlertDialog.Builder(this)
-            alertDialog.setMessage("Do you feel any pain while performing this exercise?")
-            alertDialog.setPositiveButton("Yes") { _, _ ->
-                val alertDialog2 = AlertDialog.Builder(this)
-                alertDialog2.setMessage("Do you want to track your pain with EMMA?")
-                alertDialog2.setPositiveButton("Yes") { _, _ ->
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
-                    )
-                    startActivity(intent)
-                    finish()
-                }
-                alertDialog2.setNegativeButton("No") { _, _ ->
-                    finish()
-                }
-                alertDialog2.show()
-            }
-            alertDialog.setNegativeButton("No") { _, _ ->
-                finish()
-            }
-            alertDialog.show()
+            askQuestions(this)
         }
 
         findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
@@ -325,10 +329,10 @@ class ExerciseActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.tfe_pe_device_name, android.R.layout.simple_spinner_item
-        ).also { adaper ->
-            adaper.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-            spnDevice.adapter = adaper
+            spnDevice.adapter = adapter
             spnDevice.onItemSelectedListener = changeDeviceListener
         }
     }
@@ -381,6 +385,8 @@ class ExerciseActivity : AppCompatActivity() {
             for (cameraId in manager.cameraIdList) {
                 val characteristics = manager.getCameraCharacteristics(cameraId)
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
+
+                exercise.setFocalLength(characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS))
 
                 if (isFrontCamera) {
                     if (cameraDirection != null && cameraDirection != CameraCharacteristics.LENS_FACING_FRONT) {
@@ -476,7 +482,7 @@ class ExerciseActivity : AppCompatActivity() {
                     }
 
                     override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
-                        Toast.makeText(this@ExerciseActivity, "Failed", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@ExerciseActivity, "Failed", Toast.LENGTH_SHORT).show()
                     }
                 },
                 null
@@ -486,30 +492,68 @@ class ExerciseActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     private fun processImage(bitmap: Bitmap) {
         var score = 0f
         var outputBitmap = bitmap
 
-        // run detect pose
-        // draw points and lines on original image
+        if ((exercise.getSetCount() >= exercise.maxSetCount) && !showCongrats) {
+            showCongrats = true
+            MainScope().launch {
+                congratsPatient(context = this@ExerciseActivity)
+            }
+        }
+
         poseDetector?.estimateSinglePose(bitmap)?.let { person ->
             score = person.score
             if (score > minConfidence) {
                 val height = bitmap.height
                 val width = bitmap.width
-                exercise.rightExerciseCount(person, height, width, phases = exerciseConstraints)
-                exercise.wrongExerciseCount(person, height, width)
-
+                if (!showCongrats) {
+                    exercise.rightExerciseCount(person, height, width)
+                    exercise.wrongExerciseCount(person, height, width)
+                }
+                val phase = exercise.getPhase()
+                MainScope().launch {
+                    countDisplay.text = getString(R.string.right_count_text).format(
+                        exercise.getRepetitionCount(),
+                        exercise.getSetCount()
+                    )
+                    exercise.getPersonDistance(person)?.let {
+                        distanceDisplay.text = getString(R.string.distance_text).format(it)
+                    }
+                    wrongCountDisplay.text =
+                        getString(R.string.wrong_text).format(exercise.getWrongCount())
+                    phase?.let {
+                        val timeToDisplay = exercise.getHoldTimeLimitCount()
+                        it.phaseDialogue?.let { dialogue ->
+                            if (dialogue.isNotEmpty()) {
+                                phaseDialogueDisplay.visibility = View.VISIBLE
+                                phaseDialogueDisplay.text =
+                                    getString(R.string.phase_dialogue).format(dialogue)
+                            } else {
+                                phaseDialogueDisplay.visibility = View.GONE
+                            }
+                        }
+                        if (timeToDisplay > 0) {
+                            timeCountDisplay.visibility = View.VISIBLE
+                            timeCountDisplay.text =
+                                getString(R.string.time_count_text).format(timeToDisplay)
+                        } else {
+                            timeCountDisplay.visibility = View.GONE
+                            timeCountDisplay.text = getString(R.string.time_count_text).format(0)
+                        }
+                    }
+                    maxHoldTimeDisplay.text =
+                        getString(R.string.max_time_hold).format(exercise.getMaxHoldTime())
+                }
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     input = bitmap,
                     person = person,
-                    drawingRules = exercise.drawingRules(phases = exerciseConstraints),
-                    repCount = exercise.getRepetitionCount(),
-                    setCount = exercise.getSetCount(),
-                    wrongCount = exercise.getWrongCount(),
-                    holdTime = exercise.getHoldTimeLimitCount(),
-                    maxHoldTime = exercise.getMaxHoldTime(),
-                    borderColor = exercise.getBorderColor(person, height, width),
+                    phase = phase,
                     isFrontCamera = isFrontCamera
                 )
             }
@@ -551,6 +595,64 @@ class ExerciseActivity : AppCompatActivity() {
             tvTime.text =
                 getString(R.string.tfe_pe_tv_time).format(it * 1.0f / 1_000_000)
         }
+    }
+
+    private fun congratsPatient(context: Context) {
+        saveExerciseData(
+            ExerciseId = exerciseId,
+            TestId = testId!!,
+            ProtocolId = protocolId,
+            PatientId = logInData.patientId,
+            ExerciseDate = Utilities.currentDate(),
+            NoOfReps = exercise.getRepetitionCount(),
+            NoOfSets = exercise.getSetCount(),
+            NoOfWrongCount = exercise.getWrongCount(),
+            Tenant = logInData.tenant
+        )
+
+        Log.d("getExercise", "$ExerciseId, $testId, $protocolId")
+        VisualizationUtils.getAlertDialogue(
+            context = context,
+            message = "Congratulations! You have successfully completed the exercise.",
+            positiveButtonText = "Ok",
+            positiveButtonAction = {
+                askQuestions(context)
+            },
+            negativeButtonText = null,
+            negativeButtonAction = {}
+        ).show()
+    }
+
+    private fun askQuestions(context: Context) {
+        val askForTracking = VisualizationUtils.getAlertDialogue(
+            context = context,
+            message = "Do you want to track your pain with EMMA?",
+            positiveButtonText = "Yes",
+            positiveButtonAction = {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
+                )
+                startActivity(intent)
+                finish()
+            },
+            negativeButtonText = "No",
+            negativeButtonAction = {
+                finish()
+            }
+        )
+        VisualizationUtils.getAlertDialogue(
+            context = context,
+            message = "Do you feel any pain while performing this exercise?",
+            positiveButtonText = "Yes",
+            positiveButtonAction = {
+                askForTracking.show()
+            },
+            negativeButtonText = "No",
+            negativeButtonAction = {
+                finish()
+            }
+        ).show()
     }
 
     private fun saveExerciseData(
@@ -622,135 +724,6 @@ class ExerciseActivity : AppCompatActivity() {
                 ).show()
             }
         })
-    }
-
-    private fun getExerciseConstraints(tenant: String, exerciseId: Int) {
-        exerciseConstraintURL = Utilities.getUrl(tenant).getKeyPointRestrictionURL
-        val phases = mutableListOf<Phase>()
-        val service = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(exerciseConstraintURL)
-            .build()
-            .create(IExerciseService::class.java)
-        val requestPayload = ExerciseRequestPayload(
-            Tenant = tenant,
-            KeyPointsRestrictions = listOf(
-                ExerciseData(exerciseId)
-            )
-        )
-        val response = service.getExerciseConstraint(requestPayload)
-        response.enqueue(object : Callback<KeyPointRestrictions> {
-            override fun onResponse(
-                call: Call<KeyPointRestrictions>,
-                response: Response<KeyPointRestrictions>
-            ) {
-                val responseBody = response.body()
-                if (responseBody == null) {
-                    Toast.makeText(
-                        this@ExerciseActivity,
-                        "Failed to get necessary constraints for this exercise and got empty response. So, this exercise can't be performed now!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    finish()
-                } else {
-                    if (responseBody[0].KeyPointsRestrictionGroup.isNotEmpty()) {
-                        responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
-                            val constraints = mutableListOf<Constraint>()
-                            group.KeyPointsRestriction.sortedByDescending { it.Id }
-                                .forEach { restriction ->
-                                    val constraintType = if (restriction.Scale == "degree") {
-                                        ConstraintType.ANGLE
-                                    } else {
-                                        ConstraintType.LINE
-                                    }
-                                    val startPointIndex = getIndex(restriction.StartKeyPosition)
-                                    val middlePointIndex = getIndex(restriction.MiddleKeyPosition)
-                                    val endPointIndex = getIndex(restriction.EndKeyPosition)
-                                    when (constraintType) {
-                                        ConstraintType.LINE -> {
-                                            if (startPointIndex >= 0 && endPointIndex >= 0) {
-                                                constraints.add(
-                                                    Constraint(
-                                                        minValue = restriction.MinValidationValue,
-                                                        maxValue = restriction.MaxValidationValue,
-                                                        uniqueId = restriction.Id,
-                                                        type = constraintType,
-                                                        startPointIndex = startPointIndex,
-                                                        middlePointIndex = middlePointIndex,
-                                                        endPointIndex = endPointIndex,
-                                                        clockWise = false
-                                                    )
-                                                )
-                                            }
-                                        }
-                                        ConstraintType.ANGLE -> {
-                                            if (startPointIndex >= 0 && middlePointIndex >= 0 && endPointIndex >= 0) {
-                                                constraints.add(
-                                                    Constraint(
-                                                        minValue = restriction.MinValidationValue,
-                                                        maxValue = restriction.MaxValidationValue,
-                                                        uniqueId = restriction.Id,
-                                                        type = constraintType,
-                                                        startPointIndex = startPointIndex,
-                                                        middlePointIndex = middlePointIndex,
-                                                        endPointIndex = endPointIndex,
-                                                        clockWise = restriction.AngleArea == "clockwise"
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            phases.add(
-                                Phase(
-                                    phaseNumber = group.Phase,
-                                    constraints = constraints,
-                                    holdTime = group.HoldInSeconds
-                                )
-                            )
-                        }
-                    } else {
-                        Toast.makeText(
-                            this@ExerciseActivity,
-                            "Don't have enough data to perform this exercise. Please provide details of this exercise using EMMA LPT app!",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-                exerciseConstraints = phases.sortedBy { it.phaseNumber }
-            }
-
-            override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
-                Toast.makeText(
-                    this@ExerciseActivity,
-                    "Failed to get exercise response from API !!!",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        })
-    }
-
-    private fun getIndex(name: String): Int {
-        return when (name) {
-            "NOSE".lowercase() -> BodyPart.NOSE.position
-            "LEFT_EYE".lowercase() -> BodyPart.LEFT_EYE.position
-            "RIGHT_EYE".lowercase() -> BodyPart.RIGHT_EYE.position
-            "LEFT_EAR".lowercase() -> BodyPart.LEFT_EAR.position
-            "RIGHT_EAR".lowercase() -> BodyPart.RIGHT_EAR.position
-            "LEFT_SHOULDER".lowercase() -> BodyPart.LEFT_SHOULDER.position
-            "RIGHT_SHOULDER".lowercase() -> BodyPart.RIGHT_SHOULDER.position
-            "LEFT_ELBOW".lowercase() -> BodyPart.LEFT_ELBOW.position
-            "RIGHT_ELBOW".lowercase() -> BodyPart.RIGHT_ELBOW.position
-            "LEFT_WRIST".lowercase() -> BodyPart.LEFT_WRIST.position
-            "RIGHT_WRIST".lowercase() -> BodyPart.RIGHT_WRIST.position
-            "LEFT_HIP".lowercase() -> BodyPart.LEFT_HIP.position
-            "RIGHT_HIP".lowercase() -> BodyPart.RIGHT_HIP.position
-            "LEFT_KNEE".lowercase() -> BodyPart.LEFT_KNEE.position
-            "RIGHT_KNEE".lowercase() -> BodyPart.RIGHT_KNEE.position
-            "LEFT_ANKLE".lowercase() -> BodyPart.LEFT_ANKLE.position
-            "RIGHT_ANKLE".lowercase() -> BodyPart.RIGHT_ANKLE.position
-            else -> -1
-        }
     }
 
     private fun loadLogInData(): LogInData {

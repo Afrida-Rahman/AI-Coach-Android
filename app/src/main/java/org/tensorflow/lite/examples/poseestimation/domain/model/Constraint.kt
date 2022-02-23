@@ -8,7 +8,7 @@ data class Constraint(
     val middlePointIndex: Int,
     val endPointIndex: Int,
     val clockWise: Boolean = false,
-    val color: Int = Color.WHITE,
+    var color: Int = Color.WHITE,
     val minValue: Int,
     val maxValue: Int,
     val uniqueId: Int

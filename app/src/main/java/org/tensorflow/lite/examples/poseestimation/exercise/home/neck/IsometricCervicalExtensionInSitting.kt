@@ -3,8 +3,8 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.neck
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class IsometricCervicalExtensionInSitting(
@@ -27,11 +27,10 @@ class IsometricCervicalExtensionInSitting(
     private var rightStateIndex = 0
     override var wrongStateIndex = 0
 
-    override fun rightExerciseCount(
+    fun rightExercise(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
@@ -57,11 +56,11 @@ class IsometricCervicalExtensionInSitting(
             person.keyPoints[12].coordinate.x,
             -person.keyPoints[12].coordinate.y
         )
-        if (phases.size >= 2) {
-            shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
-            shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
-            shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
-            shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            shoulderAngleDownMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            shoulderAngleDownMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            shoulderAngleUpMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            shoulderAngleUpMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         }
 
         val rightCountStates: Array<FloatArray> = arrayOf(
@@ -89,7 +88,7 @@ class IsometricCervicalExtensionInSitting(
             Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint, false)
         val rightShoulderAngle =
             Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
 
         if (leftShoulderAngle > rightCountStates[rightStateIndex][0]
             && leftShoulderAngle < rightCountStates[rightStateIndex][1]
@@ -109,7 +108,7 @@ class IsometricCervicalExtensionInSitting(
         }
     }
 
-    override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
+    fun wrongExercise(person: Person, canvasHeight: Int, canvasWidth: Int) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -184,7 +183,7 @@ class IsometricCervicalExtensionInSitting(
         val leftShoulderAngle = Utilities.angle(leftElbowPoint, leftShoulderPoint, leftHipPoint)
         val rightShoulderAngle =
             Utilities.angle(rightElbowPoint, rightShoulderPoint, rightHipPoint, true)
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         if (
             (leftShoulderAngle > wrongCountStates1[wrongStateIndex][0]
                     && leftShoulderAngle < wrongCountStates1[wrongStateIndex][1]
