@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.hip
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -82,7 +83,7 @@ class BodyWeightSquats(
             )
         )
 
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val hipAngle = Utilities.angle(shoulderPoint, hipPoint, kneePoint, true)
         val kneeAngle = Utilities.angle(hipPoint, kneePoint, anklePoint)
 
@@ -96,6 +97,8 @@ class BodyWeightSquats(
                 if (wrongStateIndex == wrongCountStates.size) {
                     wrongStateIndex = 0
                     wrongCount()
+                    phaseIndex = 0
+                    phaseEntered = false
                 }
             }
         }

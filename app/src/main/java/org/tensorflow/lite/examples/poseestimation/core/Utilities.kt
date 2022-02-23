@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
 import org.tensorflow.lite.examples.poseestimation.domain.model.APiUrl
+import org.tensorflow.lite.examples.poseestimation.domain.model.BodyPart
 import java.util.*
 import kotlin.math.acos
 import kotlin.math.sqrt
@@ -75,6 +76,29 @@ object Utilities {
                 )
             }
 
+        }
+    }
+
+    fun getIndex(name: String): Int {
+        return when (name) {
+            "NOSE".lowercase() -> BodyPart.NOSE.position
+            "LEFT_EYE".lowercase() -> BodyPart.LEFT_EYE.position
+            "RIGHT_EYE".lowercase() -> BodyPart.RIGHT_EYE.position
+            "LEFT_EAR".lowercase() -> BodyPart.LEFT_EAR.position
+            "RIGHT_EAR".lowercase() -> BodyPart.RIGHT_EAR.position
+            "LEFT_SHOULDER".lowercase() -> BodyPart.LEFT_SHOULDER.position
+            "RIGHT_SHOULDER".lowercase() -> BodyPart.RIGHT_SHOULDER.position
+            "LEFT_ELBOW".lowercase() -> BodyPart.LEFT_ELBOW.position
+            "RIGHT_ELBOW".lowercase() -> BodyPart.RIGHT_ELBOW.position
+            "LEFT_WRIST".lowercase() -> BodyPart.LEFT_WRIST.position
+            "RIGHT_WRIST".lowercase() -> BodyPart.RIGHT_WRIST.position
+            "LEFT_HIP".lowercase() -> BodyPart.LEFT_HIP.position
+            "RIGHT_HIP".lowercase() -> BodyPart.RIGHT_HIP.position
+            "LEFT_KNEE".lowercase() -> BodyPart.LEFT_KNEE.position
+            "RIGHT_KNEE".lowercase() -> BodyPart.RIGHT_KNEE.position
+            "LEFT_ANKLE".lowercase() -> BodyPart.LEFT_ANKLE.position
+            "RIGHT_ANKLE".lowercase() -> BodyPart.RIGHT_ANKLE.position
+            else -> -1
         }
     }
 }

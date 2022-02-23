@@ -3,8 +3,8 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.shoulder
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.core.Point
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
+import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Person
-import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class ArmRaiseInStanding(
@@ -33,11 +33,10 @@ class ArmRaiseInStanding(
     private var wrongFrameCount = 0
     private val maxWrongCountFrame = 3
 
-    override fun rightExerciseCount(
+    fun rightExercise(
         person: Person,
         canvasHeight: Int,
-        canvasWidth: Int,
-        phases: List<Phase>
+        canvasWidth: Int
     ) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
@@ -71,11 +70,11 @@ class ArmRaiseInStanding(
             person.keyPoints[8].coordinate.x,
             -person.keyPoints[8].coordinate.y
         )
-        if (phases.size >= 2) {
-            shoulderAngleDownMin = phases[0].constraints[0].minValue.toFloat()
-            shoulderAngleDownMax = phases[0].constraints[0].maxValue.toFloat()
-            shoulderAngleUpMin = phases[1].constraints[0].minValue.toFloat()
-            shoulderAngleUpMax = phases[1].constraints[0].maxValue.toFloat()
+        if (rightCountPhases.size >= 2) {
+            shoulderAngleDownMin = rightCountPhases[0].constraints[0].minValue.toFloat()
+            shoulderAngleDownMax = rightCountPhases[0].constraints[0].maxValue.toFloat()
+            shoulderAngleUpMin = rightCountPhases[1].constraints[0].minValue.toFloat()
+            shoulderAngleUpMax = rightCountPhases[1].constraints[0].maxValue.toFloat()
         } else {
             shoulderAngleDownMin = 0f
             shoulderAngleDownMax = 30f
@@ -96,7 +95,7 @@ class ArmRaiseInStanding(
             rightStraightHandAngle > straightHandAngleMin && rightStraightHandAngle < straightHandAngleMax
         val leftHandStraight =
             leftStraightHandAngle > straightHandAngleMin && leftStraightHandAngle < straightHandAngleMax
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         val rightCountStates: Array<FloatArray> = arrayOf(
             floatArrayOf(
                 shoulderAngleDownMin,
@@ -157,7 +156,7 @@ class ArmRaiseInStanding(
         }
     }
 
-    override fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {
+    fun wrongExercise(person: Person, canvasHeight: Int, canvasWidth: Int) {
         val leftShoulderPoint = Point(
             person.keyPoints[5].coordinate.x,
             -person.keyPoints[5].coordinate.y
@@ -211,7 +210,7 @@ class ArmRaiseInStanding(
         val leftShoulderAngle = Utilities.angle(leftWristPoint, leftShoulderPoint, leftHipPoint)
         val rightShoulderAngle =
             Utilities.angle(rightWristPoint, rightShoulderPoint, rightHipPoint, true)
-        val insideBox = isInsideBox(person, canvasHeight, canvasWidth)
+        val insideBox = VisualizationUtils.isInsideBox(person, canvasHeight, canvasWidth)
         if (
             leftShoulderAngle > wrongCountStates[wrongStateIndex][0] && leftShoulderAngle < wrongCountStates[wrongStateIndex][1] &&
             rightShoulderAngle > wrongCountStates[wrongStateIndex][2] && rightShoulderAngle < wrongCountStates[wrongStateIndex][3]

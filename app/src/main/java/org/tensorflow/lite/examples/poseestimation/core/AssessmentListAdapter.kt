@@ -3,7 +3,8 @@ package org.tensorflow.lite.examples.poseestimation.core
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
@@ -20,37 +21,60 @@ class AssessmentListAdapter(
 ) : RecyclerView.Adapter<AssessmentListAdapter.AssessmentItemViewHolder>() {
 
     class AssessmentItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val itemHolder: LinearLayout = view.findViewById(R.id.item_holder)
         val testId: TextView = view.findViewById(R.id.test_id)
+        val testDate: TextView = view.findViewById(R.id.test_date)
+        val reportReadyIcon: ImageView = view.findViewById(R.id.report_ready_icon)
+        val providerName: TextView = view.findViewById(R.id.provider_name)
+        val bodyRegion: TextView = view.findViewById(R.id.body_region)
+        val registrationType: TextView = view.findViewById(R.id.registration_type)
         val exerciseCount: TextView = view.findViewById(R.id.exercise_count)
+        val goToExerciseListButton: Button = view.findViewById(R.id.go_to_exercise_list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssessmentItemViewHolder {
         return AssessmentItemViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_test, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_assessment, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: AssessmentItemViewHolder, position: Int) {
         val item = testList[position]
         holder.apply {
-            testId.text = testId.context.getString(R.string.test_id).format(item.id)
-            exerciseCount.text =
-                exerciseCount.context.getString(R.string.exercise_count).format(item.exercises.size)
+            if (item.isReportReady)
+                reportReadyIcon.setImageResource(R.drawable.ic_check)
+            else
+                reportReadyIcon.setImageResource(R.drawable.ic_cross)
+            testId.context.apply {
+                testId.text = getString(R.string.test_id).format(item.id)
+                testDate.text = getString(R.string.test_date).format(item.testDate)
+                providerName.text =
+                    getString(R.string.provider_name_value).format(item.providerName?: "Unknown")
+                bodyRegion.text = getString(R.string.body_region_value).format(item.bodyRegionName)
+                registrationType.text =
+                    getString(R.string.registration_type_value).format(item.registrationType)
+                exerciseCount.text = getString(R.string.exercise_count).format(item.exercises.size)
+            }
         }
         if (item.exercises.isNotEmpty()) {
-            holder.itemHolder.setOnClickListener {
+            holder.goToExerciseListButton.setOnClickListener {
                 manager.beginTransaction().apply {
+                    disallowAddToBackStack()
                     replace(
                         R.id.fragment_container,
-                        ExerciseListFragment(item.id, item.exercises, patientId, tenant)
+                        ExerciseListFragment(
+                            item.id,
+                            item.testDate,
+                            item.exercises,
+                            patientId,
+                            tenant
+                        )
                     )
                     commit()
                 }
             }
         } else {
             Toast.makeText(
-                holder.itemHolder.context,
+                holder.goToExerciseListButton.context,
                 "There is no exercise assigned for this test ID",
                 Toast.LENGTH_SHORT
             ).show()
