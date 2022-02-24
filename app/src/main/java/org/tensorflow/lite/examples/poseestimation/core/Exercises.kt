@@ -1,10 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
 import android.content.Context
-import org.tensorflow.lite.examples.poseestimation.exercise.home.Crunches
-import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
-import org.tensorflow.lite.examples.poseestimation.exercise.home.TrunkExtensionOnHandInProne
-import org.tensorflow.lite.examples.poseestimation.exercise.home.TrunkLateralBendingInSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
@@ -90,7 +87,19 @@ object Exercises {
             KneeFlexionWithResistanceBandInSitting(context),
             KneeFlexionWithResistanceBandInLongSitting(context),
             KneeFlexionWithResistanceBandInStanding(context),
-            KneeExtensionWithResistanceBandInStanding(context)
+            KneeExtensionWithResistanceBandInStanding(context),
+            LungesWithWeights(context),
+            PelvicBridgeWithStraightLegRaiseInSupine(context),
+            SingleArmRaiseWithWeightsInQuadruped(context),
+            HipAbductionWithWeightsInStanding(context),
+            HipExtensionWithWeightsInStanding(context),
+            HipFlexionWithWeightsInSitting(context),
+            HipFlexionWithWeightsInStanding(context),
+            WallSquats(context),
+            ShoulderOverheadPressWithWeightsInSitting(context),
+            ShoulderFlexionWithResistanceBandInStanding(context),
+            SeatedRowsWithResistanceBandInLongSitting(context),
+            PelvicBridgeWithBallSqueezeInSupine(context)
         )
     }
 

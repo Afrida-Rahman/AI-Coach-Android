@@ -176,6 +176,8 @@ class MainActivity : AppCompatActivity() {
                         "Failed to get assessment list from API and got empty response!",
                         Toast.LENGTH_LONG
                     ).show()
+                    binding.progressIndicator.visibility = View.GONE
+                    binding.btnTryAgain.visibility = View.VISIBLE
                 }
             }
 

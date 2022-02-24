@@ -1,14 +1,21 @@
 package org.tensorflow.lite.examples.poseestimation
 
-import android.app.ProgressDialog
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import org.tensorflow.lite.examples.poseestimation.core.ExerciseGuidelineImageListAdapter
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -21,7 +28,8 @@ class ExerciseGuidelineFragment(
     private val patientId: String,
     private val tenant: String
 ) : Fragment() {
-
+    private lateinit var mediaSource: MediaSource
+    private lateinit var exoplayer: ExoPlayer
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,33 +37,20 @@ class ExerciseGuidelineFragment(
         val view = inflater.inflate(R.layout.fragment_exercise_guideline, container, false)
         val exerciseNameView: TextView = view.findViewById(R.id.exercise_name_guideline)
         val backButton: ImageButton = view.findViewById(R.id.back_button)
-        val videoView: VideoView = view.findViewById(R.id.video_view)
-        val playVideo: ImageView = view.findViewById(R.id.play_video)
+        val playVideo: PlayerView = view.findViewById(R.id.video_view)
 
         val exercise = exerciseList[position]
         var instruction = exercise.instruction
         val imageUrls = exercise.imageUrls
         val videoUrls = exercise.videoUrls
 
-        val mediaController = MediaController(view.context)
-        playVideo.setOnClickListener {
-            mediaController.setAnchorView(videoView)
-            val pd = ProgressDialog(view.context)
-            pd.setMessage("Loading...")
-            pd.show()
-
-            val uri: Uri = Uri.parse(videoUrls)
-            videoView.setMediaController(mediaController)
-            videoView.setVideoURI(uri)
-            videoView.requestFocus()
-
-            videoView.setOnPreparedListener {//close the progress dialog when buffering is done
-                videoView.start()
-                pd.dismiss()
-                playVideo.visibility = View.GONE
-            }
-            playVideo.visibility = View.VISIBLE
-        }
+        exoplayer = ExoPlayer.Builder(requireContext()).build()
+        playVideo.player = exoplayer
+        exoplayer.setMediaSource(buildMediaSource(videoUrls))
+        exoplayer.prepare()
+        exoplayer.volume = 0f
+        exoplayer.playWhenReady = false
+        exoplayer.play()
 
         backButton.setOnClickListener {
             parentFragmentManager.beginTransaction().apply {
@@ -65,6 +60,7 @@ class ExerciseGuidelineFragment(
                 )
                 commit()
             }
+            exoplayer.pause()
         }
 
         exerciseNameView.text = exercise.name
@@ -81,5 +77,23 @@ class ExerciseGuidelineFragment(
         }
         adapter.adapter = ExerciseGuidelineImageListAdapter(view.context, imageUrls)
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoplayer.pause()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        exoplayer.pause()
+    }
+
+    private fun buildMediaSource(videoURL: String): MediaSource {
+        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+        mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(MediaItem.fromUri(videoURL))
+
+        return mediaSource
     }
 }
