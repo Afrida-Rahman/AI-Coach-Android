@@ -112,4 +112,6 @@
     <string name="wrong">wrong</string>
     <string name="second">second</string>
     <string name="exercise_video">Exercise Video</string>
+    <string name="back">Back</string>
+    <string name="forward">Forward</string>
 </resources>
