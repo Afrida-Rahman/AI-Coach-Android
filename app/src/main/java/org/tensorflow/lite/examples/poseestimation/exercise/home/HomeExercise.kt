@@ -8,8 +8,8 @@ import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
+import org.tensorflow.lite.examples.poseestimation.core.AsyncAudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
-import org.tensorflow.lite.examples.poseestimation.core.CountDownAudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.Utilities.getIndex
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
@@ -47,7 +47,7 @@ abstract class HomeExercise(
     private var downTimeCounter = 0
     open var phaseEntered = false
     private var phaseEnterTime = System.currentTimeMillis()
-    private lateinit var countDownAudioPlayerPlayer: CountDownAudioPlayer
+    private lateinit var asyncAudioPlayer: AsyncAudioPlayer
 
     fun setExercise(
         exerciseName: String,
@@ -169,7 +169,7 @@ abstract class HomeExercise(
                 ).show()
             }
         })
-        countDownAudioPlayerPlayer = CountDownAudioPlayer(context)
+        asyncAudioPlayer = AsyncAudioPlayer(context)
     }
 
     fun getMaxHoldTime(): Int = rightCountPhases.map { it.holdTime }.maxOrNull() ?: 0
@@ -196,6 +196,9 @@ abstract class HomeExercise(
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
+            if (setCounter == maxSetCount) {
+                asyncAudioPlayer.play("finish")
+            }
         }
     }
 
@@ -277,6 +280,9 @@ abstract class HomeExercise(
                         playCongratulationAudio()
                     } else {
                         phaseIndex++
+                        rightCountPhases[phaseIndex].phaseDialogue?.let {
+                            asyncAudioPlayer.play(it)
+                        }
                         downTimeCounter = 0
                     }
                 } else {
@@ -364,7 +370,7 @@ abstract class HomeExercise(
     private fun countDownAudio(count: Int) {
         if (previousCountDown != count && count > 0) {
             previousCountDown = count
-            countDownAudioPlayerPlayer.play(count)
+            asyncAudioPlayer.play(count.toString())
         }
     }
 
