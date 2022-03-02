@@ -38,6 +38,11 @@ abstract class HomeExercise(
     var maxRepCount: Int = 0,
     var maxSetCount: Int = 0
 ) {
+
+    companion object {
+        private const val SET_INTERVAL = 7000L
+    }
+
     open var phaseIndex = 0
     open var rightCountPhases = mutableListOf<Phase>()
     open var wrongStateIndex = 0
@@ -52,6 +57,7 @@ abstract class HomeExercise(
     open var phaseEntered = false
     private var phaseEnterTime = System.currentTimeMillis()
     private lateinit var asyncAudioPlayer: AsyncAudioPlayer
+    private var takingRest = false
 
     fun setExercise(
         exerciseName: String,
@@ -201,9 +207,15 @@ abstract class HomeExercise(
             repetitionCounter = 0
             setCounter++
             if (setCounter == maxSetCount) {
-                asyncAudioPlayer.playText("finish")
+                asyncAudioPlayer.playText(AsyncAudioPlayer.FINISH)
                 CoroutineScope(Dispatchers.Main).launch {
                     congratsPatient()
+                }
+            } else {
+                asyncAudioPlayer.playText(setCountText(setCounter))
+                takingRest = true
+                CoroutineScope(Dispatchers.Main).launch {
+                    restTimeUpAfter(SET_INTERVAL)
                 }
             }
         }
@@ -260,7 +272,7 @@ abstract class HomeExercise(
         canvasHeight: Int,
         canvasWidth: Int
     ) {
-        if (rightCountPhases.isNotEmpty() && phaseIndex < rightCountPhases.size) {
+        if (rightCountPhases.isNotEmpty() && phaseIndex < rightCountPhases.size && !takingRest) {
             val phase = rightCountPhases[phaseIndex]
             val constraintSatisfied = isConstraintSatisfied(
                 person,
@@ -315,6 +327,26 @@ abstract class HomeExercise(
     private suspend fun congratsPatient() {
         delay(1000)
         asyncAudioPlayer.playText(AsyncAudioPlayer.CONGRATS)
+    }
+
+    private suspend fun restTimeUpAfter(time: Long) {
+        delay(time)
+        takingRest = false
+        asyncAudioPlayer.playText(AsyncAudioPlayer.START)
+    }
+
+    private fun setCountText(count: Int): String = when (count) {
+        1 -> AsyncAudioPlayer.SET_1
+        2 -> AsyncAudioPlayer.SET_2
+        3 -> AsyncAudioPlayer.SET_3
+        4 -> AsyncAudioPlayer.SET_4
+        5 -> AsyncAudioPlayer.SET_5
+        6 -> AsyncAudioPlayer.SET_6
+        7 -> AsyncAudioPlayer.SET_7
+        8 -> AsyncAudioPlayer.SET_8
+        9 -> AsyncAudioPlayer.SET_9
+        10 -> AsyncAudioPlayer.SET_10
+        else -> AsyncAudioPlayer.SET_COMPLETED
     }
 
     private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {

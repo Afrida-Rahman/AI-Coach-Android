@@ -12,6 +12,19 @@ class AsyncAudioPlayer(context: Context) {
         const val RETURN = "return"
         const val FINISH = "finish"
         const val CONGRATS = "congrats"
+        const val TAKE_REST = "take rest"
+        const val START = "start"
+        const val SET_1 = "set 1"
+        const val SET_2 = "set 2"
+        const val SET_3 = "set 3"
+        const val SET_4 = "set 4"
+        const val SET_5 = "set 5"
+        const val SET_6 = "set 6"
+        const val SET_7 = "set 7"
+        const val SET_8 = "set 8"
+        const val SET_9 = "set 9"
+        const val SET_10 = "set 10"
+        const val SET_COMPLETED = "set completed"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -40,6 +53,19 @@ class AsyncAudioPlayer(context: Context) {
     private val returnAudio = MediaPlayer.create(context, R.raw.return_audio)
     private val finishAudio = MediaPlayer.create(context, R.raw.finish_audio)
     private val congrats = MediaPlayer.create(context, R.raw.congratulate_patient)
+    private val takeRest = MediaPlayer.create(context, R.raw.take_rest)
+    private val startAudio = MediaPlayer.create(context, R.raw.start)
+    private val firstSet = MediaPlayer.create(context, R.raw.first_set)
+    private val secondSet = MediaPlayer.create(context, R.raw.second_set)
+    private val thirdSet = MediaPlayer.create(context, R.raw.third_set)
+    private val fourthSet = MediaPlayer.create(context, R.raw.fourth_set)
+    private val fifthSet = MediaPlayer.create(context, R.raw.fifth_set)
+    private val sixthSet = MediaPlayer.create(context, R.raw.sixth_set)
+    private val seventhSet = MediaPlayer.create(context, R.raw.seventh_set)
+    private val eighthSet = MediaPlayer.create(context, R.raw.eighth_set)
+    private val ninthSet = MediaPlayer.create(context, R.raw.ninth_set)
+    private val tenthSet = MediaPlayer.create(context, R.raw.tenth_set)
+    private val setCompleted = MediaPlayer.create(context, R.raw.set_complete)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -48,6 +74,19 @@ class AsyncAudioPlayer(context: Context) {
             RETURN -> returnAudio.start()
             FINISH -> finishAudio.start()
             CONGRATS -> congrats.start()
+            TAKE_REST -> takeRest.start()
+            START -> startAudio.start()
+            SET_1 -> firstSet.start()
+            SET_2 -> secondSet.start()
+            SET_3 -> thirdSet.start()
+            SET_4 -> fourthSet.start()
+            SET_5 -> fifthSet.start()
+            SET_6 -> sixthSet.start()
+            SET_7 -> seventhSet.start()
+            SET_8 -> eighthSet.start()
+            SET_9 -> ninthSet.start()
+            SET_10 -> tenthSet.start()
+            SET_COMPLETED -> setCompleted.start()
             else -> {}
         }
     }
