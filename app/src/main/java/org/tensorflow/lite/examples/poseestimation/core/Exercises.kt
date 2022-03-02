@@ -4,6 +4,8 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.ResistedElbowFlexionWithResistanceBandInSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.ResistedElbowFlexionWithWeightsInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
@@ -18,7 +20,6 @@ object Exercises {
 //            HalfSquat(context),
             KneeExtensionInSitting(context),
             PelvicBridgeInSupine(context),
-//            SitToStand(context),
             IsometricCervicalExtensionInSitting(context),
             LateralBendingStretchInStanding(context),
             TrunkFlexionInStanding(context),
@@ -99,7 +100,22 @@ object Exercises {
             ShoulderOverheadPressWithWeightsInSitting(context),
             ShoulderFlexionWithResistanceBandInStanding(context),
             SeatedRowsWithResistanceBandInLongSitting(context),
-            PelvicBridgeWithBallSqueezeInSupine(context)
+            PelvicBridgeWithBallSqueezeInSupine(context),
+            SitToStand(context),
+            SingleArmRaiseWithWeightsInProne(context),
+            AROMCervicalLateralBendingInSitting(context),
+            WallAngelsInStanding(context),
+            ShoulderAbductionWithWeightsInStanding(context),
+            ResistedElbowFlexionWithResistanceBandInSitting(context),
+            ResistedElbowFlexionWithWeightsInSitting(context),
+            AROMHipFlexionInSitting(context),
+            SquatsWithWeights(context),
+            ButterflyStretchInSitting(context),
+            ModifiedFencerStretch(context),
+            ActiveKneeFlexionInLongSitting(context),
+            HamstringCurlsWithWeightsInStanding(context),
+            ShortArcQuadsInLongSitting(context),
+            JumpingForwardAndBackward(context)
         )
     }
 
