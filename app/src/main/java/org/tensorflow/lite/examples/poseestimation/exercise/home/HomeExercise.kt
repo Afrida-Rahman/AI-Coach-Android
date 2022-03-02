@@ -3,6 +3,10 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.RawRes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
@@ -197,7 +201,10 @@ abstract class HomeExercise(
             repetitionCounter = 0
             setCounter++
             if (setCounter == maxSetCount) {
-                asyncAudioPlayer.play("finish")
+                asyncAudioPlayer.playText("finish")
+                CoroutineScope(Dispatchers.Main).launch {
+                    congratsPatient()
+                }
             }
         }
     }
@@ -277,11 +284,10 @@ abstract class HomeExercise(
                         phaseIndex = 0
                         wrongStateIndex = 0
                         repetitionCount()
-                        playCongratulationAudio()
                     } else {
                         phaseIndex++
                         rightCountPhases[phaseIndex].phaseDialogue?.let {
-                            asyncAudioPlayer.play(it)
+                            asyncAudioPlayer.playText(it)
                         }
                         downTimeCounter = 0
                     }
@@ -305,6 +311,11 @@ abstract class HomeExercise(
     open fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {}
 
     open fun instruction(person: Person) {}
+
+    private suspend fun congratsPatient() {
+        delay(1000)
+        asyncAudioPlayer.playText(AsyncAudioPlayer.CONGRATS)
+    }
 
     private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {
         var constraintSatisfied = true
@@ -349,16 +360,6 @@ abstract class HomeExercise(
                     canvasWidth
                 )
             ) onEvent(CommonInstructionEvent.OutSideOfBox)
-//            else if (!isLeftHandStraight(
-//                    person = person,
-//                    constraint = it
-//                )
-//            ) onEvent(CommonInstructionEvent.LeftHandIsNotStraight)
-//            else if (!isRightHandStraight(
-//                    person = person,
-//                    constraint = it
-//                )
-//            ) onEvent(CommonInstructionEvent.RightHandIsNotStraight)
         }
         getPersonDistance(person)?.let {
             if (it > 13) {
@@ -370,13 +371,7 @@ abstract class HomeExercise(
     private fun countDownAudio(count: Int) {
         if (previousCountDown != count && count > 0) {
             previousCountDown = count
-            asyncAudioPlayer.play(count.toString())
-        }
-    }
-
-    private fun playCongratulationAudio() {
-        if (setCounter == maxSetCount) {
-            audioPlayer.playFromFile(R.raw.congratulate_patient)
+            asyncAudioPlayer.playNumber(count)
         }
     }
 

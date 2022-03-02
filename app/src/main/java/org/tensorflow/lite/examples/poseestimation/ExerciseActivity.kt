@@ -96,6 +96,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var timeCountDisplay: TextView
     private lateinit var phaseDialogueDisplay: TextView
     private lateinit var maxHoldTimeDisplay: TextView
+    private lateinit var exerciseProgressBar: ProgressBar
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -216,6 +217,9 @@ class ExerciseActivity : AppCompatActivity() {
         timeCountDisplay = findViewById(R.id.time_count_display)
         phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
         maxHoldTimeDisplay = findViewById(R.id.max_hold_time_display)
+        exerciseProgressBar = findViewById(R.id.exercise_progress)
+
+        exerciseProgressBar.max = exercise.maxSetCount * exercise.maxRepCount
 
         maxHoldTimeDisplay.text =
             getString(R.string.max_time_hold).format(0)
@@ -549,6 +553,8 @@ class ExerciseActivity : AppCompatActivity() {
                     }
                     maxHoldTimeDisplay.text =
                         getString(R.string.max_time_hold).format(exercise.getMaxHoldTime())
+                    exerciseProgressBar.progress =
+                        exercise.getSetCount() * exercise.maxRepCount + exercise.getRepetitionCount()
                 }
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     input = bitmap,

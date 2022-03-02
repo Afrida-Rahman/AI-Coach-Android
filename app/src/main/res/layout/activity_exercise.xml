@@ -44,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/display_holder"/>
+            app:layout_constraintBottom_toTopOf="@id/display_holder" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/display_holder"
@@ -170,6 +170,16 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/exercise_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="8dp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressTint="@color/nion_green"
+            app:layout_constraintTop_toBottomOf="@id/display_holder" />
 
         <TextView
             android:id="@+id/time_count_display"
