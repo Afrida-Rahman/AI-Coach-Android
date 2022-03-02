@@ -14,6 +14,7 @@ class AsyncAudioPlayer(context: Context) {
         const val CONGRATS = "congrats"
         const val TAKE_REST = "take rest"
         const val START = "start"
+        const val START_AGAIN = "start again"
         const val SET_1 = "set 1"
         const val SET_2 = "set 2"
         const val SET_3 = "set 3"
@@ -56,6 +57,7 @@ class AsyncAudioPlayer(context: Context) {
     private val congrats = MediaPlayer.create(context, R.raw.congratulate_patient)
     private val takeRest = MediaPlayer.create(context, R.raw.take_rest)
     private val startAudio = MediaPlayer.create(context, R.raw.start)
+    private val startAgain = MediaPlayer.create(context, R.raw.start_again)
     private val firstSet = MediaPlayer.create(context, R.raw.first_set)
     private val secondSet = MediaPlayer.create(context, R.raw.second_set)
     private val thirdSet = MediaPlayer.create(context, R.raw.third_set)
@@ -90,6 +92,7 @@ class AsyncAudioPlayer(context: Context) {
             SET_10 -> tenthSet.start()
             SET_COMPLETED -> setCompleted.start()
             GET_READY -> getReady.start()
+            START_AGAIN -> startAgain.start()
             else -> {}
         }
     }

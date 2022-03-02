@@ -185,8 +185,9 @@ abstract class HomeExercise(
 
     fun initialInstruction(instruction: String, time: Long = GET_READY_TIME) {
         takingRest = true
-        asyncAudioPlayer.playText(instruction)
         CoroutineScope(Dispatchers.Main).launch {
+            delay(time)
+            asyncAudioPlayer.playText(instruction)
             restTimeUpAfter(time, AsyncAudioPlayer.START)
         }
     }
@@ -224,7 +225,7 @@ abstract class HomeExercise(
                 asyncAudioPlayer.playText(setCountText(setCounter))
                 takingRest = true
                 CoroutineScope(Dispatchers.Main).launch {
-                    restTimeUpAfter(SET_INTERVAL, AsyncAudioPlayer.START)
+                    restTimeUpAfter(SET_INTERVAL, AsyncAudioPlayer.START_AGAIN)
                 }
             }
         }
