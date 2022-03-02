@@ -41,6 +41,7 @@ abstract class HomeExercise(
 
     companion object {
         private const val SET_INTERVAL = 7000L
+        private const val GET_READY_TIME = 5000L
     }
 
     open var phaseIndex = 0
@@ -182,6 +183,14 @@ abstract class HomeExercise(
         asyncAudioPlayer = AsyncAudioPlayer(context)
     }
 
+    fun initialInstruction(instruction: String, time: Long = GET_READY_TIME) {
+        takingRest = true
+        asyncAudioPlayer.playText(instruction)
+        CoroutineScope(Dispatchers.Main).launch {
+            restTimeUpAfter(time, AsyncAudioPlayer.START)
+        }
+    }
+
     fun getMaxHoldTime(): Int = rightCountPhases.map { it.holdTime }.maxOrNull() ?: 0
 
     fun getRepetitionCount() = repetitionCounter
@@ -215,7 +224,7 @@ abstract class HomeExercise(
                 asyncAudioPlayer.playText(setCountText(setCounter))
                 takingRest = true
                 CoroutineScope(Dispatchers.Main).launch {
-                    restTimeUpAfter(SET_INTERVAL)
+                    restTimeUpAfter(SET_INTERVAL, AsyncAudioPlayer.START)
                 }
             }
         }
@@ -329,10 +338,10 @@ abstract class HomeExercise(
         asyncAudioPlayer.playText(AsyncAudioPlayer.CONGRATS)
     }
 
-    private suspend fun restTimeUpAfter(time: Long) {
+    private suspend fun restTimeUpAfter(time: Long, instruction: String) {
         delay(time)
         takingRest = false
-        asyncAudioPlayer.playText(AsyncAudioPlayer.START)
+        asyncAudioPlayer.playText(instruction)
     }
 
     private fun setCountText(count: Int): String = when (count) {

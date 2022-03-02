@@ -27,10 +27,7 @@ import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
-import org.tensorflow.lite.examples.poseestimation.core.Exercises
-import org.tensorflow.lite.examples.poseestimation.core.ImageUtils
-import org.tensorflow.lite.examples.poseestimation.core.Utilities
-import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
+import org.tensorflow.lite.examples.poseestimation.core.*
 import org.tensorflow.lite.examples.poseestimation.domain.model.Device
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
@@ -270,6 +267,8 @@ class ExerciseActivity : AppCompatActivity() {
         requestPermission()
         closeCamera()
         openCamera()
+
+        exercise.initialInstruction(AsyncAudioPlayer.GET_READY)
     }
 
     override fun onStart() {

@@ -25,6 +25,7 @@ class AsyncAudioPlayer(context: Context) {
         const val SET_9 = "set 9"
         const val SET_10 = "set 10"
         const val SET_COMPLETED = "set completed"
+        const val GET_READY = "get ready"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -66,6 +67,7 @@ class AsyncAudioPlayer(context: Context) {
     private val ninthSet = MediaPlayer.create(context, R.raw.ninth_set)
     private val tenthSet = MediaPlayer.create(context, R.raw.tenth_set)
     private val setCompleted = MediaPlayer.create(context, R.raw.set_complete)
+    private val getReady = MediaPlayer.create(context, R.raw.get_ready)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -87,6 +89,7 @@ class AsyncAudioPlayer(context: Context) {
             SET_9 -> ninthSet.start()
             SET_10 -> tenthSet.start()
             SET_COMPLETED -> setCompleted.start()
+            GET_READY -> getReady.start()
             else -> {}
         }
     }
