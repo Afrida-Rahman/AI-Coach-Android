@@ -41,7 +41,6 @@ abstract class HomeExercise(
 
     companion object {
         private const val SET_INTERVAL = 7000L
-        private const val GET_READY_TIME = 5000L
     }
 
     open var phaseIndex = 0
@@ -183,15 +182,6 @@ abstract class HomeExercise(
         asyncAudioPlayer = AsyncAudioPlayer(context)
     }
 
-    fun initialInstruction(instruction: String, time: Long = GET_READY_TIME) {
-        takingRest = true
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(time)
-            asyncAudioPlayer.playText(instruction)
-            restTimeUpAfter(time, AsyncAudioPlayer.START)
-        }
-    }
-
     fun getMaxHoldTime(): Int = rightCountPhases.map { it.holdTime }.maxOrNull() ?: 0
 
     fun getRepetitionCount() = repetitionCounter
@@ -210,6 +200,25 @@ abstract class HomeExercise(
         }
     }
 
+    fun playInstruction(
+        firstDelay: Long,
+        firstInstruction: String,
+        secondDelay: Long = 0L,
+        secondInstruction: String? = null,
+        shouldTakeRest: Boolean = false
+    ) {
+        if (shouldTakeRest) takingRest = true
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(firstDelay)
+            asyncAudioPlayer.playText(firstInstruction)
+            delay(secondDelay)
+            secondInstruction?.let {
+                asyncAudioPlayer.playText(it)
+            }
+            if (shouldTakeRest) takingRest = false
+        }
+    }
+
     fun repetitionCount() {
         repetitionCounter++
         audioPlayer.playFromFile(R.raw.right_count)
@@ -219,14 +228,19 @@ abstract class HomeExercise(
             if (setCounter == maxSetCount) {
                 asyncAudioPlayer.playText(AsyncAudioPlayer.FINISH)
                 CoroutineScope(Dispatchers.Main).launch {
-                    congratsPatient()
+                    playInstruction(
+                        firstDelay = 1000L,
+                        firstInstruction = AsyncAudioPlayer.CONGRATS
+                    )
                 }
             } else {
-                asyncAudioPlayer.playText(setCountText(setCounter))
-                takingRest = true
-                CoroutineScope(Dispatchers.Main).launch {
-                    restTimeUpAfter(SET_INTERVAL, AsyncAudioPlayer.START_AGAIN)
-                }
+                playInstruction(
+                    firstDelay = 0L,
+                    firstInstruction = setCountText(setCounter),
+                    secondDelay = SET_INTERVAL,
+                    secondInstruction = AsyncAudioPlayer.START_AGAIN,
+                    shouldTakeRest = true
+                )
             }
         }
     }
@@ -309,7 +323,7 @@ abstract class HomeExercise(
                     } else {
                         phaseIndex++
                         rightCountPhases[phaseIndex].phaseDialogue?.let {
-                            asyncAudioPlayer.playText(it)
+                            playInstruction(firstDelay = 500L, firstInstruction = it)
                         }
                         downTimeCounter = 0
                     }
@@ -333,17 +347,6 @@ abstract class HomeExercise(
     open fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {}
 
     open fun instruction(person: Person) {}
-
-    private suspend fun congratsPatient() {
-        delay(1000)
-        asyncAudioPlayer.playText(AsyncAudioPlayer.CONGRATS)
-    }
-
-    private suspend fun restTimeUpAfter(time: Long, instruction: String) {
-        delay(time)
-        takingRest = false
-        asyncAudioPlayer.playText(instruction)
-    }
 
     private fun setCountText(count: Int): String = when (count) {
         1 -> AsyncAudioPlayer.SET_1
@@ -424,5 +427,4 @@ abstract class HomeExercise(
         object RightHandIsNotStraight : CommonInstructionEvent()
         object TooFarFromCamera : CommonInstructionEvent()
     }
-
 }

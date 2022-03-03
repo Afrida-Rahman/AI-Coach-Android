@@ -268,7 +268,13 @@ class ExerciseActivity : AppCompatActivity() {
         closeCamera()
         openCamera()
 
-        exercise.initialInstruction(AsyncAudioPlayer.GET_READY)
+        exercise.playInstruction(
+            firstDelay = 5000L,
+            firstInstruction = AsyncAudioPlayer.GET_READY,
+            secondDelay = 5000L,
+            secondInstruction = AsyncAudioPlayer.START,
+            shouldTakeRest = true
+        )
     }
 
     override fun onStart() {
