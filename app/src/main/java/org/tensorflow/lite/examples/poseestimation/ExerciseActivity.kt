@@ -624,7 +624,7 @@ class ExerciseActivity : AppCompatActivity() {
         Log.d("getExercise", "$ExerciseId, $testId, $protocolId")
         VisualizationUtils.getAlertDialogue(
             context = context,
-            message = "Congratulations! You have successfully completed the exercise.",
+            message = "Congratulations! You have successfully completed the exercise. Please be prepared for the next one.",
             positiveButtonText = "Ok",
             positiveButtonAction = {
                 askQuestions(context)
