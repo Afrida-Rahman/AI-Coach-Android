@@ -27,6 +27,33 @@ class AsyncAudioPlayer(context: Context) {
         const val SET_10 = "set 10"
         const val SET_COMPLETED = "set completed"
         const val GET_READY = "get ready"
+        const val SQUAT_DOWN = "squat down"
+        const val BEND_LEFT_KNEE = "bend left knee"
+        const val BEND_RIGHT_KNEE = "bend right knee"
+        const val BEND_BOTH_KNEES = "bend both knees"
+        const val RELAX = "relax"
+        const val PUSH = "push"
+        const val PULL_YOUR_ELBOWS_BACK = "pull your elbows back"
+        const val CRUNCH_UP = "crunch up"
+        const val BACK_DOWN = "back down"
+        const val PLANK_UP = "plank up"
+        const val ARM_RAISE = "arm raise"
+        const val RIGHT_LEG_KICK_BACKWARD = "right leg kick backward"
+        const val LEFT_LEG_KICK_BACKWARD = "left leg kick backward"
+        const val RIGHT_LEG_KICK_LATERAL = "right leg kick lateral"
+        const val LEFT_LEG_KICK_LATERAL = "left leg kick lateral"
+        const val LEAN_FORWARD = "lean forward"
+        const val LEAN_BACKWARD = "lean backward"
+        const val BOTH_LEGS_FALL_OUT = "both legs fall out"
+        const val EXTEND_RIGHT_KNEE = "extend right knee"
+        const val EXTEND_LEFT_KNEE = "extend left knee"
+        const val LIFT_HIP = "lift hip"
+        const val LIFT_RIGHT_ARM = "lift right arm"
+        const val LIFT_LEFT_ARM = "lift left arm"
+        const val LIFT_RIGHT_LEG = "lift right leg"
+        const val LIFT_LEFT_LEG = "lift left leg"
+        const val LIFT_RIGHT_KNEE = "lift right knee"
+        const val LIFT_LEFT_KNEE = "lift left knee"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -70,6 +97,33 @@ class AsyncAudioPlayer(context: Context) {
     private val tenthSet = MediaPlayer.create(context, R.raw.tenth_set)
     private val setCompleted = MediaPlayer.create(context, R.raw.set_complete)
     private val getReady = MediaPlayer.create(context, R.raw.get_ready)
+    private val squatDown = MediaPlayer.create(context, R.raw.squat_down)
+    private val bendLeftKnee = MediaPlayer.create(context, R.raw.bend_left_knee)
+    private val bendRightKnee = MediaPlayer.create(context, R.raw.bend_right_knee)
+    private val bendBothKnees = MediaPlayer.create(context, R.raw.bend_both_knees)
+    private val relax = MediaPlayer.create(context, R.raw.relax)
+    private val push = MediaPlayer.create(context, R.raw.push)
+    private val pullYourElbowsBack = MediaPlayer.create(context, R.raw.pull_your_elbows_back)
+    private val crunchUp = MediaPlayer.create(context, R.raw.crunch_up)
+    private val backDown = MediaPlayer.create(context, R.raw.back_down)
+    private val plankUp = MediaPlayer.create(context, R.raw.plank_up)
+    private val armRaise = MediaPlayer.create(context, R.raw.arm_raise)
+    private val rightLegKickBackward = MediaPlayer.create(context, R.raw.right_leg_kick_backward)
+    private val leftLegKickBackward = MediaPlayer.create(context, R.raw.left_leg_kick_backward)
+    private val rightLegKickLateral = MediaPlayer.create(context, R.raw.right_leg_kick_lateral)
+    private val leftLegKickLateral = MediaPlayer.create(context, R.raw.left_leg_kick_lateral)
+    private val leanForward = MediaPlayer.create(context, R.raw.lean_forward)
+    private val leanBackward = MediaPlayer.create(context, R.raw.lean_backward)
+    private val bothLegsFallOut = MediaPlayer.create(context, R.raw.both_legs_fall_out)
+    private val extendRightKnee = MediaPlayer.create(context, R.raw.extend_right_knee)
+    private val extendLeftKnee = MediaPlayer.create(context, R.raw.extend_left_knee)
+    private val liftHip = MediaPlayer.create(context, R.raw.lift_hip)
+    private val liftRightArm = MediaPlayer.create(context, R.raw.lift_right_arm)
+    private val liftLeftArm = MediaPlayer.create(context, R.raw.lift_left_arm)
+    private val liftRightLeg = MediaPlayer.create(context, R.raw.lift_right_leg)
+    private val liftLeftLeg = MediaPlayer.create(context, R.raw.lift_left_leg)
+    private val liftRightKnee = MediaPlayer.create(context, R.raw.lift_right_knee)
+    private val liftLeftKnee = MediaPlayer.create(context, R.raw.lift_left_knee)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -93,6 +147,33 @@ class AsyncAudioPlayer(context: Context) {
             SET_COMPLETED -> setCompleted.start()
             GET_READY -> getReady.start()
             START_AGAIN -> startAgain.start()
+            SQUAT_DOWN -> squatDown.start()
+            BEND_LEFT_KNEE -> bendLeftKnee.start()
+            BEND_RIGHT_KNEE -> bendRightKnee.start()
+            BEND_BOTH_KNEES -> bendBothKnees.start()
+            RELAX -> relax.start()
+            PUSH -> push.start()
+            PULL_YOUR_ELBOWS_BACK -> pullYourElbowsBack.start()
+            CRUNCH_UP -> crunchUp.start()
+            BACK_DOWN -> backDown.start()
+            PLANK_UP -> plankUp.start()
+            ARM_RAISE -> armRaise.start()
+            RIGHT_LEG_KICK_BACKWARD -> rightLegKickBackward.start()
+            LEFT_LEG_KICK_BACKWARD -> leftLegKickBackward.start()
+            RIGHT_LEG_KICK_LATERAL -> rightLegKickLateral.start()
+            LEFT_LEG_KICK_LATERAL -> leftLegKickLateral.start()
+            LEAN_FORWARD -> leanForward.start()
+            LEAN_BACKWARD -> leanBackward.start()
+            BOTH_LEGS_FALL_OUT -> bothLegsFallOut.start()
+            EXTEND_RIGHT_KNEE -> extendRightKnee.start()
+            EXTEND_LEFT_KNEE -> extendLeftKnee.start()
+            LIFT_HIP -> liftHip.start()
+            LIFT_RIGHT_ARM -> liftRightArm.start()
+            LIFT_LEFT_ARM -> liftLeftArm.start()
+            LIFT_RIGHT_LEG -> liftRightLeg.start()
+            LIFT_LEFT_LEG -> liftLeftLeg.start()
+            LIFT_RIGHT_KNEE -> liftRightKnee.start()
+            LIFT_LEFT_KNEE -> liftLeftKnee.start()
             else -> {}
         }
     }
