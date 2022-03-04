@@ -54,6 +54,17 @@ class AsyncAudioPlayer(context: Context) {
         const val LIFT_LEFT_LEG = "lift left leg"
         const val LIFT_RIGHT_KNEE = "lift right knee"
         const val LIFT_LEFT_KNEE = "lift left knee"
+        const val LEAN_BACKWARD_HOLD = "lean backward hold"
+        const val LEAN_FORWARD_HOLD = "lean forward hold"
+        const val LEAN_LEFT_HOLD = "lean left hold"
+        const val LEAN_RIGHT_HOLD = "lean right hold"
+        const val SQUAT_DOWN_HOLD = "squat down hold"
+        const val PLANK_UP_HOLD = "plank up hold"
+        const val QUADRUPED_HOLD = "quadruped hold"
+        const val LIFT_HIP_HOLD = "lift hip hold"
+        const val LIFT_RIGHT_LEG_HOLD = "lift right leg hold"
+        const val LIFT_LEFT_LEG_HOLD = "lift left leg hold"
+        const val BEND_BOTH_KNEES_HOLD = "bend both knees hold"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -124,6 +135,17 @@ class AsyncAudioPlayer(context: Context) {
     private val liftLeftLeg = MediaPlayer.create(context, R.raw.lift_left_leg)
     private val liftRightKnee = MediaPlayer.create(context, R.raw.lift_right_knee)
     private val liftLeftKnee = MediaPlayer.create(context, R.raw.lift_left_knee)
+    private val leanBackwardHold = MediaPlayer.create(context, R.raw.lean_backward_hold)
+    private val leanForwardHold = MediaPlayer.create(context, R.raw.lean_forward_hold)
+    private val leanLeftHold = MediaPlayer.create(context, R.raw.lean_left_hold)
+    private val leanRightHold = MediaPlayer.create(context, R.raw.lean_right_hold)
+    private val squatDownHold = MediaPlayer.create(context, R.raw.squat_down_hold)
+    private val plankUpHold = MediaPlayer.create(context, R.raw.plank_up_hold)
+    private val quadrupedHold = MediaPlayer.create(context, R.raw.quadruped_hold)
+    private val liftHipHold = MediaPlayer.create(context, R.raw.lift_hip_hold)
+    private val liftRightLegHold = MediaPlayer.create(context, R.raw.lift_right_leg_hold)
+    private val liftLeftLegHold = MediaPlayer.create(context, R.raw.lift_left_leg_hold)
+    private val bendBothKneesHold = MediaPlayer.create(context, R.raw.bend_both_knees_hold)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -174,6 +196,17 @@ class AsyncAudioPlayer(context: Context) {
             LIFT_LEFT_LEG -> liftLeftLeg.start()
             LIFT_RIGHT_KNEE -> liftRightKnee.start()
             LIFT_LEFT_KNEE -> liftLeftKnee.start()
+            LEAN_BACKWARD_HOLD -> leanBackwardHold.start()
+            LEAN_FORWARD_HOLD -> leanForwardHold.start()
+            LEAN_LEFT_HOLD -> leanLeftHold.start()
+            LEAN_RIGHT_HOLD -> leanRightHold.start()
+            SQUAT_DOWN_HOLD -> squatDownHold.start()
+            PLANK_UP_HOLD -> plankUpHold.start()
+            QUADRUPED_HOLD -> quadrupedHold.start()
+            LIFT_HIP_HOLD -> liftHipHold.start()
+            LIFT_RIGHT_LEG_HOLD -> liftRightLegHold.start()
+            LIFT_LEFT_LEG_HOLD -> liftLeftLegHold.start()
+            BEND_BOTH_KNEES_HOLD -> bendBothKneesHold.start()
             else -> {}
         }
     }
