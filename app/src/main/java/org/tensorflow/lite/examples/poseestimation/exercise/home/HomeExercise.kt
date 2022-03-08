@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.exercise.home
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RawRes
 import kotlinx.coroutines.CoroutineScope
@@ -96,7 +97,7 @@ abstract class HomeExercise(
                 response: Response<KeyPointRestrictions>
             ) {
                 val responseBody = response.body()
-                if (responseBody == null) {
+                if (responseBody == null || responseBody.isEmpty()) {
                     Toast.makeText(
                         context,
                         "Failed to get necessary constraints for this exercise and got empty response. So, this exercise can't be performed now!",
@@ -104,6 +105,13 @@ abstract class HomeExercise(
                     ).show()
                 } else {
                     if (responseBody[0].KeyPointsRestrictionGroup.isNotEmpty()) {
+                        playInstruction(
+                            firstDelay = 5000L,
+                            firstInstruction = AsyncAudioPlayer.GET_READY,
+                            secondDelay = 5000L,
+                            secondInstruction = AsyncAudioPlayer.START,
+                            shouldTakeRest = true
+                        )
                         responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
                             val constraints = mutableListOf<Constraint>()
                             group.KeyPointsRestriction.sortedByDescending { it.Id }
@@ -302,7 +310,7 @@ abstract class HomeExercise(
                 person,
                 phase.constraints
             )
-
+            Log.d("CountingIssue", "$phaseIndex -- $constraintSatisfied")
             if (VisualizationUtils.isInsideBox(
                     person,
                     canvasHeight,
@@ -374,6 +382,7 @@ abstract class HomeExercise(
                         clockWise = it.clockWise
                     )
                     if (angle < it.minValue || angle > it.maxValue) {
+                        Log.d("CountingIssue", "${it.minValue}< $angle < ${it.maxValue}")
                         constraintSatisfied = false
                     }
                 }
