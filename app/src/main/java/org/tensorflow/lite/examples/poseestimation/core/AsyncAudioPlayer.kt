@@ -65,6 +65,44 @@ class AsyncAudioPlayer(context: Context) {
         const val LIFT_RIGHT_LEG_HOLD = "lift right leg hold"
         const val LIFT_LEFT_LEG_HOLD = "lift left leg hold"
         const val BEND_BOTH_KNEES_HOLD = "bend both knees hold"
+        const val PRESS_UP = "press up"
+        const val PRESS_UP_HOLD = "press up hold"
+        const val CURL_UP_RIGHT_ELBOW = "curl up right elbow"
+        const val CURL_UP_LEFT_ELBOW = "curl up left elbow"
+        const val CURL_UP = "curl up"
+        const val LUNGE_LEFT_LEG = "lunge left leg"
+        const val LUNGE_RIGHT_LEG = "lunge right leg"
+        const val ARMS_UP = "arms up"
+        const val ARMS_DOWN = "arms down"
+        const val LUNGE_LEFT_LEG_HOLD = "lunge left leg hold"
+        const val LUNGE_RIGHT_LEG_HOLD = "lunge right leg hold"
+        const val REACH_ANKLE_HOLD = "reach ankle hold"
+        const val LEAN_FORWARD_RIGHT_HOLD = "lean forward right hold"
+        const val LEAN_FORWARD_LEFT_HOLD = "lean forward left hold"
+        const val STAND_UP = "stand up"
+        const val SIT_DOWN = "sit down"
+        const val SLIGHTLY_BEND_BOTH_KNEES = "slightly bend both knees"
+        const val PULL_UP = "pull up"
+        const val PUSH_UP = "push up"
+        const val PULL_DOWN = "pull down"
+        const val LEFT_ARM_RIGHT_LEG_UP = "left arm right leg up"
+        const val RIGHT_ARM_LEFT_LEG_UP = "right arm left leg up"
+        const val LEFT_ARM_RIGHT_LEG_UP_HOLD = "left arm right leg up hold"
+        const val RIGHT_ARM_LEFT_LEG_UP_HOLD = "right arm left leg up hold"
+        const val PRONE_ON_ELBOWS = "prone on elbows"
+        const val PRONE_ON_ELBOWS_HOLD = "prone on elbows hold"
+        const val EXTEND_BOTH_KNEES = "extend both knees"
+        const val LIFT_LEFT_ARM_FORWARD = "lift left arm forward"
+        const val LIFT_RIGHT_ARM_FORWARD = "lift right arm forward"
+        const val LIFT_LEFT_ARM_BACKWARD = "lift left arm backward"
+        const val LIFT_RIGHT_ARM_BACKWARD = "lift right arm backward"
+        const val LIFT_RIGHT_KNEE_TO_CHEST_HOLD = "lift right knee to chest hold"
+        const val LIFT_LEFT_KNEE_TO_CHEST_HOLD = "lift left knee to chest hold"
+        const val LIFT_BOTH_KNEES_TO_CHEST_HOLD = "lift both knees to chest hold"
+        const val THUMB_UP_LIFT_RIGHT_ARM_FORWARD = "thumb up lift right arm forward"
+        const val THUMB_UP_LIFT_LEFT_ARM_FORWARD = "thumb up lift left arm forward"
+        const val THUMBS_UP_ARMS_RAISE = "thumbs up arms raise"
+        const val STAND_AGAINST_THE_WALL = "stand against the wall"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -146,6 +184,51 @@ class AsyncAudioPlayer(context: Context) {
     private val liftRightLegHold = MediaPlayer.create(context, R.raw.lift_right_leg_hold)
     private val liftLeftLegHold = MediaPlayer.create(context, R.raw.lift_left_leg_hold)
     private val bendBothKneesHold = MediaPlayer.create(context, R.raw.bend_both_knees_hold)
+    private val pressUp = MediaPlayer.create(context, R.raw.press_up)
+    private val pressUpHold = MediaPlayer.create(context, R.raw.press_up_hold)
+    private val curlUpRightElbow = MediaPlayer.create(context, R.raw.curl_up_right_elbow)
+    private val curlUpLeftElbow = MediaPlayer.create(context, R.raw.curl_up_left_elbow)
+    private val curlUp = MediaPlayer.create(context, R.raw.curl_up)
+    private val lungeLeftLeg = MediaPlayer.create(context, R.raw.lunge_left_leg)
+    private val lungeRightLeg = MediaPlayer.create(context, R.raw.lunge_right_leg)
+    private val armsUp = MediaPlayer.create(context, R.raw.arms_up)
+    private val armsDown = MediaPlayer.create(context, R.raw.arms_down)
+    private val lungeLeftLegHold = MediaPlayer.create(context, R.raw.lunge_left_leg_hold)
+    private val lungeRightLegHold = MediaPlayer.create(context, R.raw.lunge_right_leg_hold)
+    private val reachAnkleHold = MediaPlayer.create(context, R.raw.reach_ankle_hold)
+    private val leanForwardRightHold = MediaPlayer.create(context, R.raw.lean_forward_right_hold)
+    private val leanForwardLeftHold = MediaPlayer.create(context, R.raw.lean_forward_left_hold)
+    private val standUp = MediaPlayer.create(context, R.raw.stand_up)
+    private val sitDown = MediaPlayer.create(context, R.raw.sit_down)
+    private val slightlyBendBothKnees = MediaPlayer.create(context, R.raw.slightly_bend_both_knees)
+    private val pullUp = MediaPlayer.create(context, R.raw.pull_up)
+    private val pushUp = MediaPlayer.create(context, R.raw.push_up)
+    private val pullDown = MediaPlayer.create(context, R.raw.pull_down)
+    private val leftArmRightLegUp = MediaPlayer.create(context, R.raw.left_arm_right_leg_up)
+    private val rightArmLeftLegUp = MediaPlayer.create(context, R.raw.right_arm_left_leg_up)
+    private val leftArmRightLegUpHold =
+        MediaPlayer.create(context, R.raw.left_arm_right_leg_up_hold)
+    private val rightArmLeftLegUpHold =
+        MediaPlayer.create(context, R.raw.right_arm_left_leg_up_hold)
+    private val proneOnElbows = MediaPlayer.create(context, R.raw.prone_on_elbows)
+    private val proneOnElbowsHold = MediaPlayer.create(context, R.raw.prone_on_elbows_hold)
+    private val extendBothKnees = MediaPlayer.create(context, R.raw.extend_both_knees)
+    private val liftLeftArmForward = MediaPlayer.create(context, R.raw.lift_left_arm_forward)
+    private val liftRightArmForward = MediaPlayer.create(context, R.raw.lift_right_arm_forward)
+    private val liftLeftArmBackward = MediaPlayer.create(context, R.raw.lift_left_arm_backward)
+    private val liftRightArmBackward = MediaPlayer.create(context, R.raw.lift_right_arm_backward)
+    private val liftRightKneeToChestHold =
+        MediaPlayer.create(context, R.raw.lift_right_knee_to_chest_hold)
+    private val liftLeftKneeToChestHold =
+        MediaPlayer.create(context, R.raw.lift_left_knee_to_chest_hold)
+    private val liftBothKneesToChestHold =
+        MediaPlayer.create(context, R.raw.lift_both_knees_to_chest_hold)
+    private val thumbUpLiftRightArmForward =
+        MediaPlayer.create(context, R.raw.thumb_up_lift_right_arm_forward)
+    private val thumbUpLiftLeftArmForward =
+        MediaPlayer.create(context, R.raw.thumb_up_lift_left_arm_forward)
+    private val thumbsUpArmsRaise = MediaPlayer.create(context, R.raw.thumbs_up_arms_raise)
+    private val standAgainstTheWall = MediaPlayer.create(context, R.raw.stand_against_the_wall)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -207,6 +290,44 @@ class AsyncAudioPlayer(context: Context) {
             LIFT_RIGHT_LEG_HOLD -> liftRightLegHold.start()
             LIFT_LEFT_LEG_HOLD -> liftLeftLegHold.start()
             BEND_BOTH_KNEES_HOLD -> bendBothKneesHold.start()
+            PRESS_UP -> pressUp.start()
+            PRESS_UP_HOLD -> pressUpHold.start()
+            CURL_UP_RIGHT_ELBOW -> curlUpRightElbow.start()
+            CURL_UP_LEFT_ELBOW -> curlUpLeftElbow.start()
+            CURL_UP -> curlUp.start()
+            LUNGE_LEFT_LEG -> lungeLeftLeg.start()
+            LUNGE_RIGHT_LEG -> lungeRightLeg.start()
+            ARMS_UP -> armsUp.start()
+            ARMS_DOWN -> armsDown.start()
+            LUNGE_LEFT_LEG_HOLD -> lungeLeftLegHold.start()
+            LUNGE_RIGHT_LEG_HOLD -> lungeRightLegHold.start()
+            REACH_ANKLE_HOLD -> reachAnkleHold.start()
+            LEAN_FORWARD_RIGHT_HOLD -> leanForwardRightHold.start()
+            LEAN_FORWARD_LEFT_HOLD -> leanForwardLeftHold.start()
+            STAND_UP -> standUp.start()
+            SIT_DOWN -> sitDown.start()
+            SLIGHTLY_BEND_BOTH_KNEES -> slightlyBendBothKnees.start()
+            PULL_UP -> pullUp.start()
+            PUSH_UP -> pushUp.start()
+            PULL_DOWN -> pullDown.start()
+            LEFT_ARM_RIGHT_LEG_UP -> leftArmRightLegUp.start()
+            RIGHT_ARM_LEFT_LEG_UP -> rightArmLeftLegUp.start()
+            LEFT_ARM_RIGHT_LEG_UP_HOLD -> leftArmRightLegUpHold.start()
+            RIGHT_ARM_LEFT_LEG_UP_HOLD -> rightArmLeftLegUpHold.start()
+            PRONE_ON_ELBOWS -> proneOnElbows.start()
+            PRONE_ON_ELBOWS_HOLD -> proneOnElbowsHold.start()
+            EXTEND_BOTH_KNEES -> extendBothKnees.start()
+            LIFT_LEFT_ARM_FORWARD -> liftLeftArmForward.start()
+            LIFT_RIGHT_ARM_FORWARD -> liftRightArmForward.start()
+            LIFT_LEFT_ARM_BACKWARD -> liftLeftArmBackward.start()
+            LIFT_RIGHT_ARM_BACKWARD -> liftRightArmBackward.start()
+            LIFT_RIGHT_KNEE_TO_CHEST_HOLD -> liftRightKneeToChestHold.start()
+            LIFT_LEFT_KNEE_TO_CHEST_HOLD -> liftLeftKneeToChestHold.start()
+            LIFT_BOTH_KNEES_TO_CHEST_HOLD -> liftBothKneesToChestHold.start()
+            THUMB_UP_LIFT_RIGHT_ARM_FORWARD -> thumbUpLiftRightArmForward.start()
+            THUMB_UP_LIFT_LEFT_ARM_FORWARD -> thumbUpLiftLeftArmForward.start()
+            THUMBS_UP_ARMS_RAISE -> thumbsUpArmsRaise.start()
+            STAND_AGAINST_THE_WALL -> standAgainstTheWall.start()
             else -> {}
         }
     }
