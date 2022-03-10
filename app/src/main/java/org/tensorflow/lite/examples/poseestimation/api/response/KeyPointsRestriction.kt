@@ -1,19 +1,17 @@
 package org.tensorflow.lite.examples.poseestimation.api.response
 
 data class KeyPointsRestriction(
-    val ResistanceId: Int,
-    val AngleArea: String,
-    val CapturedImage: String,
-    val Direction: String,
-    val EndKeyPosition: String,
     val ExerciseId: Int,
     val Id: Int,
-    val LineType: String,
-    val MaxValidationValue: Int,
-    val MiddleKeyPosition: String,
-    val MinValidationValue: Int,
-    val NoOfKeyPoints: Int,
-    val Phase: Int,
     val Scale: String,
-    val StartKeyPosition: String
+    val LineType: String,
+    val NoOfKeyPoints: Int,
+    val Direction: String,
+    val StartKeyPosition: String,
+    val EndKeyPosition: String,
+    val MinValidationValue: Int,
+    val MaxValidationValue: Int,
+    val AngleArea: String,
+    val MiddleKeyPosition: String,
+    val DrawExtensionFlexion: Boolean
 )

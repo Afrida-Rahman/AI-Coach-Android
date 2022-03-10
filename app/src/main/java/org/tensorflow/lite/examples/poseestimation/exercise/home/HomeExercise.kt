@@ -177,6 +177,7 @@ abstract class HomeExercise(
                     }
                 }
                 rightCountPhases = sortedPhaseList(rightCountPhases.toList()).toMutableList()
+                Log.d("countedPhases", "${rightCountPhases}")
             }
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
@@ -310,7 +311,7 @@ abstract class HomeExercise(
                 person,
                 phase.constraints
             )
-            Log.d("CountingIssue", "$phaseIndex -- $constraintSatisfied")
+//            Log.d("CountingIssue", "$phaseIndex -- $constraintSatisfied")
             if (VisualizationUtils.isInsideBox(
                     person,
                     canvasHeight,
@@ -382,7 +383,7 @@ abstract class HomeExercise(
                         clockWise = it.clockWise
                     )
                     if (angle < it.minValue || angle > it.maxValue) {
-                        Log.d("CountingIssue", "${it.minValue}< $angle < ${it.maxValue}")
+//                        Log.d("CountingIssue", "${it.minValue}< $angle < ${it.maxValue}")
                         constraintSatisfied = false
                     }
                 }
