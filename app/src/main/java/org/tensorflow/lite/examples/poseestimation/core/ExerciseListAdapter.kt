@@ -52,10 +52,17 @@ class ExerciseListAdapter(
         val exercise = exerciseList[position]
         holder.apply {
             val context = this.exerciseImageView.context
-            val imageUrl = if (exercise.imageUrls.isNotEmpty()) {
-                exercise.imageUrls[0]
+            var imageUrl = ""
+            if (exercise.imageUrls.isNotEmpty()) {
+                exercise.imageUrls.forEach { url ->
+                    imageUrl = if (url.endsWith(".gif")) {
+                        url
+                    } else {
+                        exercise.imageUrls[0]
+                    }
+                }
             } else {
-                R.drawable.exercise
+                imageUrl = R.drawable.exercise.toString()
             }
 
             Glide.with(context)
