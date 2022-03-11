@@ -186,7 +186,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time_count_text"
-            android:textColor="@color/green"
+            android:textColor="@color/green_60"
             android:textSize="150sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
