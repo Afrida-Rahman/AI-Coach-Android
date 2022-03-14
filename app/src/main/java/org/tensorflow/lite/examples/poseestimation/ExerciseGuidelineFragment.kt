@@ -72,7 +72,6 @@ class ExerciseGuidelineFragment(
             exoplayer.pause()
         }
         startWorkoutButton.setOnClickListener {
-//            showExerciseInformation(it.context, exercise)
             val dialogView = LayoutInflater
                 .from(context)
                 .inflate(R.layout.exercise_info_modal, container, false)
