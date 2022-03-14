@@ -131,7 +131,7 @@ class AsyncAudioPlayer(context: Context) {
     private val returnAudio = MediaPlayer.create(context, R.raw.return_audio)
     private val finishAudio = MediaPlayer.create(context, R.raw.finish_audio)
     private val congrats = MediaPlayer.create(context, R.raw.congratulate_patient)
-    private val takeRest = MediaPlayer.create(context, R.raw.take_rest)
+    private val takeRest = MediaPlayer.create(context, R.raw.take_some_time_to_rest)
     private val startAudio = MediaPlayer.create(context, R.raw.start)
     private val startAgain = MediaPlayer.create(context, R.raw.start_again)
     private val firstSet = MediaPlayer.create(context, R.raw.first_set)
