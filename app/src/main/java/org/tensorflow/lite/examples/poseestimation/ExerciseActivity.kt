@@ -637,7 +637,7 @@ class ExerciseActivity : AppCompatActivity() {
             positiveButtonAction = {
                 val intent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
+                    Uri.parse("https://emma.mypainlog.ai/#/new-screenings?patientid=${logInData.patientId}&type=refer&refertype=painlog&autologin=true")
                 )
                 startActivity(intent)
                 finish()

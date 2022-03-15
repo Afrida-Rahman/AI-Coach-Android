@@ -1,6 +1,5 @@
 package org.tensorflow.lite.examples.poseestimation
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -36,7 +35,6 @@ class ExerciseGuidelineFragment(
 ) : Fragment() {
     private lateinit var mediaSource: MediaSource
     private lateinit var exoplayer: ExoPlayer
-    private lateinit var viewGroup1: ViewGroup
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,28 +115,6 @@ class ExerciseGuidelineFragment(
     override fun onPause() {
         super.onPause()
         exoplayer.pause()
-    }
-
-    private fun showExerciseInformation(context: Context, exercise: HomeExercise) {
-        val dialogView = LayoutInflater
-            .from(context)
-            .inflate(R.layout.exercise_info_modal, viewGroup1, false)
-        val alertDialog = AlertDialog.Builder(context).setView(dialogView)
-        val imageSlider: ViewPager2 = dialogView.findViewById(R.id.exercise_image_slide)
-        imageSlider.adapter = ExerciseInfoAdapter(exercise.imageUrls)
-        alertDialog.setPositiveButton("Let's Start") { _, _ ->
-            val intent = Intent(context, ExerciseActivity::class.java).apply {
-                putExtra(ExerciseActivity.ExerciseId, exercise.id)
-                putExtra(ExerciseActivity.TestId, testId)
-                putExtra(ExerciseActivity.Name, exercise.name)
-                putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
-                putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
-                putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
-            }
-            context.startActivity(intent)
-        }
-        alertDialog.setNegativeButton("Cancel") { _, _ -> }
-        alertDialog.show()
     }
 
     private fun buildMediaSource(videoURL: String): MediaSource {

@@ -134,8 +134,8 @@ class MainActivity : AppCompatActivity() {
     private fun getAssignedExercises(patientId: String, tenant: String) {
         getPatientExerciseUrl = Utilities.getUrl(loadLogInData().tenant).getPatientExerciseURL
         val client = OkHttpClient.Builder()
-            .connectTimeout(2, TimeUnit.MINUTES)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(4, TimeUnit.MINUTES)
+            .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
         val service = Retrofit.Builder()
