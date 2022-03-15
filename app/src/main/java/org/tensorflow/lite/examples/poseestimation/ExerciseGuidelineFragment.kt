@@ -1,5 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -20,8 +20,8 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
-import org.tensorflow.lite.examples.poseestimation.core.ExerciseGuidelineImageListAdapter
 import org.tensorflow.lite.examples.poseestimation.core.ExerciseInfoAdapter
+import org.tensorflow.lite.examples.poseestimation.core.ImageSliderAdapter
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 
@@ -50,6 +50,7 @@ class ExerciseGuidelineFragment(
         var instruction = exercise.instruction
         val imageUrls = exercise.imageUrls
         val videoUrls = exercise.videoUrls
+
 
         exoplayer = ExoPlayer.Builder(requireContext()).build()
         playVideo.player = exoplayer
@@ -99,11 +100,22 @@ class ExerciseGuidelineFragment(
         instruction = instruction.let { htmlTagRegex.replace(it, "").replace("\n", " ") }
         exerciseInstructionView.text = instruction
 
-        val adapter = view.findViewById<RecyclerView>(R.id.exercise_guideline_image_list_container)
+
         if (imageUrls.isEmpty()) {
             Toast.makeText(context, "No image is available now!", Toast.LENGTH_SHORT).show()
         }
-        adapter.adapter = ExerciseGuidelineImageListAdapter(view.context, imageUrls)
+
+        val imageAdapter = view.findViewById<ViewPager2>(R.id.image_slide_guideline)
+//        val indicator = view.findViewById<CircleIndicator3>(R.id.slide_indicator)
+
+        imageAdapter.adapter = ImageSliderAdapter(
+            view.context, listOf("Phase 1", "Phase 2", "Phase 3"),
+            listOf("phase 1 Description", "phase 2 Description", "phase 3 Description"),
+            imageUrls
+        )
+
+//        indicator.setViewPager(imageAdapter)
+
         return view
     }
 
@@ -123,5 +135,14 @@ class ExerciseGuidelineFragment(
             .createMediaSource(MediaItem.fromUri(videoURL))
 
         return mediaSource
+    }
+
+    private fun addToList(number: String, description: String, image: Int) {
+    }
+
+    private fun postToList() {
+        for (i in 0..2) {
+            addToList("1", "Hello", R.id.action_image)
+        }
     }
 }

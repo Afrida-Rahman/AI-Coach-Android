@@ -102,7 +102,13 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:foregroundGravity="center"
+                    android:layout_marginBottom="16dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/image_slide_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
