@@ -52,6 +52,8 @@ abstract class HomeExercise(
     private var wrongCounter = 0
     private var repetitionCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
+    private var nextConstraintCheckTime = System.currentTimeMillis() + 1000L
+    private var allConstraintSatisfied = false
     private var focalLengths: FloatArray? = null
     private var previousCountDown = 0
     private var downTimeCounter = 0
@@ -306,10 +308,22 @@ abstract class HomeExercise(
     ) {
         if (rightCountPhases.isNotEmpty() && phaseIndex < rightCountPhases.size && !takingRest) {
             val phase = rightCountPhases[phaseIndex]
-            val constraintSatisfied = isConstraintSatisfied(
-                person,
-                phase.constraints
-            )
+            val constraintSatisfied =
+                if (phase.holdTime > 0 && System.currentTimeMillis() < nextConstraintCheckTime) {
+                    allConstraintSatisfied
+                } else if (phase.holdTime > 0) {
+                    allConstraintSatisfied = isConstraintSatisfied(
+                        person,
+                        phase.constraints
+                    )
+                    nextConstraintCheckTime = System.currentTimeMillis() + 1000L
+                    allConstraintSatisfied
+                } else {
+                    isConstraintSatisfied(
+                        person,
+                        phase.constraints
+                    )
+                }
             Log.d("CountingIssue", "$phaseIndex -- $constraintSatisfied")
             if (VisualizationUtils.isInsideBox(
                     person,
