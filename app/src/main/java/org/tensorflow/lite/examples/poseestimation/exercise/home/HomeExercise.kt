@@ -42,6 +42,7 @@ abstract class HomeExercise(
 
     companion object {
         private const val SET_INTERVAL = 7000L
+        private const val PHASE_EASE_TIME = 3000L
     }
 
     open var phaseIndex = 0
@@ -316,7 +317,7 @@ abstract class HomeExercise(
                         person,
                         phase.constraints
                     )
-                    nextConstraintCheckTime = System.currentTimeMillis() + 1000L
+                    nextConstraintCheckTime = System.currentTimeMillis() + PHASE_EASE_TIME
                     allConstraintSatisfied
                 } else {
                     isConstraintSatisfied(
