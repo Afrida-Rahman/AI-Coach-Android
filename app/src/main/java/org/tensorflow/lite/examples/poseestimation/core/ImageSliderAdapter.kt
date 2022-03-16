@@ -15,8 +15,8 @@ import org.tensorflow.lite.examples.poseestimation.R
 
 class ImageSliderAdapter(
     private val context: Context,
-    private var phaseNumber: List<String>,
-    private var phaseDescription: List<String>,
+//    private var phaseNumber: List<String>,
+//    private var phaseDescription: List<String>,
     private var phaseImages: List<String>
 ) : RecyclerView.Adapter<ImageSliderAdapter.ImageSliderViewHolder>() {
 
@@ -47,8 +47,8 @@ class ImageSliderAdapter(
     }
 
     override fun onBindViewHolder(holder: ImageSliderViewHolder, position: Int) {
-        holder.phaseNumber.text = phaseNumber[position]
-        holder.phaseDescription.text = phaseDescription[position]
+//        holder.phaseNumber.text = phaseNumber[position]
+//        holder.phaseDescription.text = phaseDescription[position]
         val image = phaseImages[position]
         Glide.with(context)
             .load(image)
@@ -60,6 +60,6 @@ class ImageSliderAdapter(
     }
 
     override fun getItemCount(): Int {
-        return phaseNumber.size
+        return phaseImages.size
     }
 }

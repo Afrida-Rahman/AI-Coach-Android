@@ -109,8 +109,9 @@ class ExerciseGuidelineFragment(
 //        val indicator = view.findViewById<CircleIndicator3>(R.id.slide_indicator)
 
         imageAdapter.adapter = ImageSliderAdapter(
-            view.context, listOf("Phase 1", "Phase 2", "Phase 3"),
-            listOf("phase 1 Description", "phase 2 Description", "phase 3 Description"),
+            view.context,
+//            listOf("Phase 1", "Phase 2", "Phase 3"),
+//            listOf("phase 1 Description", "phase 2 Description", "phase 3 Description"),
             imageUrls
         )
 

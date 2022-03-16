@@ -42,6 +42,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class ExerciseActivity : AppCompatActivity() {
     companion object {
         const val ExerciseId = "ExerciseId"
@@ -528,7 +529,15 @@ class ExerciseActivity : AppCompatActivity() {
                     )
                     exercise.getPersonDistance(person)?.let {
                         distanceDisplay.text = getString(R.string.distance_text).format(it)
+                        if (it <= 5f) {
+                            phaseDialogueDisplay.textSize = 30f
+                        } else if (5f < it && it <= 10f) {
+                            phaseDialogueDisplay.textSize = 50f
+                        } else {
+                            phaseDialogueDisplay.textSize = 70f
+                        }
                     }
+
                     wrongCountDisplay.text =
                         getString(R.string.wrong_text).format(exercise.getWrongCount())
                     phase?.let {
