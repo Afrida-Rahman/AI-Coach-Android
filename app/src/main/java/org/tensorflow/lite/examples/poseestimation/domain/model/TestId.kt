@@ -1,7 +1,5 @@
 package org.tensorflow.lite.examples.poseestimation.domain.model
 
-import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
-
 data class TestId(
     val id: String,
     val bodyRegionId: Int,
@@ -11,5 +9,5 @@ data class TestId(
     val testDate: String,
     val isReportReady: Boolean,
     val registrationType: String,
-    val exercises: List<HomeExercise>
+    val totalExercises: Int
 )

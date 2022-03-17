@@ -14,9 +14,9 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
-import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
+import org.tensorflow.lite.examples.poseestimation.api.request.AssessmentListRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.Assessment
-import org.tensorflow.lite.examples.poseestimation.api.response.PatientExerciseKeypointResponse
+import org.tensorflow.lite.examples.poseestimation.api.response.AssessmentListResponse
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
@@ -144,15 +144,15 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IExerciseService::class.java)
-        val requestPayload = PatientDataPayload(
+        val requestPayload = AssessmentListRequestPayload(
             PatientId = patientId,
             Tenant = tenant
         )
-        val response = service.getPatientExercise(requestPayload)
-        response.enqueue(object : Callback<PatientExerciseKeypointResponse> {
+        val response = service.getAssessmentList(requestPayload)
+        response.enqueue(object : Callback<AssessmentListResponse> {
             override fun onResponse(
-                call: Call<PatientExerciseKeypointResponse>,
-                response: Response<PatientExerciseKeypointResponse>
+                call: Call<AssessmentListResponse>,
+                response: Response<AssessmentListResponse>
             ) {
                 val responseBody = response.body()
                 if (responseBody != null) {
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
+            override fun onFailure(call: Call<AssessmentListResponse>, t: Throwable) {
                 Toast.makeText(
                     this@MainActivity,
                     "Failed to get assessment list from API.",
