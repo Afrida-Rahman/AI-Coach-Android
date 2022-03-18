@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,8 +50,7 @@ class AssessmentListFragment(
                         testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
-                        tenant,
-                        width
+                        tenant
                     )
                     adapter.adapter?.notifyDataSetChanged()
                 }
@@ -64,8 +64,7 @@ class AssessmentListFragment(
                         testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
-                        tenant,
-                        width
+                        tenant
                     )
                     adapter.adapter?.notifyDataSetChanged()
                 }
@@ -78,22 +77,21 @@ class AssessmentListFragment(
                 testList,
                 parentFragmentManager,
                 patientId,
-                tenant,
-                width
+                tenant
             )
             adapter.adapter?.notifyDataSetChanged()
             searchAssessment.clearFocus()
             true
         }
-        if (width > 480) {
+        Log.d("WidthOfScreen", "$width")
+        if (width > 1300) {
             adapter.layoutManager = GridLayoutManager(context, 2)
         }
         adapter.adapter = AssessmentListAdapter(
             testList,
             parentFragmentManager,
             patientId,
-            tenant,
-            width
+            tenant
         )
         return view
     }

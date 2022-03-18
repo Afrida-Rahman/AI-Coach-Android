@@ -16,8 +16,7 @@ class AssessmentListAdapter(
     private val testList: List<TestId>,
     private val manager: FragmentManager,
     private val patientId: String,
-    private val tenant: String,
-    private val width: Int = 0
+    private val tenant: String
 ) : RecyclerView.Adapter<AssessmentListAdapter.AssessmentItemViewHolder>() {
 
     class AssessmentItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -53,20 +52,26 @@ class AssessmentListAdapter(
                 registrationType.text =
                     getString(R.string.registration_type_value).format(item.registrationType)
                 exerciseCount.text = getString(R.string.exercise_count).format(item.totalExercises)
+                if (item.totalExercises <= 0) {
+                    goToExerciseList.isEnabled = false
+                } else {
 
-                goToExerciseList.setOnClickListener {
-                    manager.beginTransaction().apply {
-                        replace(
-                            R.id.fragment_container,
-                            ExerciseListFragment(
-                                assessmentId = item.id,
-                                assessmentDate = item.testDate,
-                                patientId = patientId,
-                                tenant = tenant
+                    goToExerciseList.isEnabled = true
+                    goToExerciseList.setOnClickListener {
+                        manager.beginTransaction().apply {
+                            replace(
+                                R.id.fragment_container,
+                                ExerciseListFragment(
+                                    assessmentId = item.id,
+                                    assessmentDate = item.testDate,
+                                    patientId = patientId,
+                                    tenant = tenant
+                                )
                             )
-                        )
-                        commit()
+                            commit()
+                        }
                     }
+
                 }
             }
         }
