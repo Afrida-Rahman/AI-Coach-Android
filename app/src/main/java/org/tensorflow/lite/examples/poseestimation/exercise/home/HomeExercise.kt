@@ -309,22 +309,10 @@ abstract class HomeExercise(
     ) {
         if (rightCountPhases.isNotEmpty() && phaseIndex < rightCountPhases.size && !takingRest) {
             val phase = rightCountPhases[phaseIndex]
-            val constraintSatisfied =
-                if (phase.holdTime > 0 && System.currentTimeMillis() < nextConstraintCheckTime) {
-                    allConstraintSatisfied
-                } else if (phase.holdTime > 0) {
-                    allConstraintSatisfied = isConstraintSatisfied(
-                        person,
-                        phase.constraints
-                    )
-                    nextConstraintCheckTime = System.currentTimeMillis() + PHASE_EASE_TIME
-                    allConstraintSatisfied
-                } else {
-                    isConstraintSatisfied(
-                        person,
-                        phase.constraints
-                    )
-                }
+            val constraintSatisfied = isConstraintSatisfied(
+                person,
+                phase.constraints
+            )
             Log.d("CountingIssue", "$phaseIndex -- $constraintSatisfied")
             if (VisualizationUtils.isInsideBox(
                     person,
