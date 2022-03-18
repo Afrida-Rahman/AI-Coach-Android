@@ -84,7 +84,7 @@ abstract class HomeExercise(
     fun initializeConstraint(tenant: String) {
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(Utilities.getUrl(tenant).getKeyPointRestrictionURL)
+            .baseUrl(Utilities.getUrl(tenant).getExerciseConstraintsURL)
             .build()
             .create(IExerciseService::class.java)
         val requestPayload = ExerciseRequestPayload(

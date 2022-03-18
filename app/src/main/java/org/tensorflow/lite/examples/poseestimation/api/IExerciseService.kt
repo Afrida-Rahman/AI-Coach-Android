@@ -1,9 +1,11 @@
 package org.tensorflow.lite.examples.poseestimation.api
 
 import org.tensorflow.lite.examples.poseestimation.api.request.AssessmentListRequestPayload
+import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseListRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseTrackingPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.AssessmentListResponse
+import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseListResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseTrackingResponse
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import retrofit2.Call
@@ -15,6 +17,9 @@ interface IExerciseService {
 
     @POST("/api/exercisekeypoint/GetPatientAssessments")
     fun getAssessmentList(@Body requestPayload: AssessmentListRequestPayload): Call<AssessmentListResponse>
+
+    @POST("/api/exercisekeypoint/GetPatientExercises")
+    fun getExerciseList(@Body requestPayload: ExerciseListRequestPayload): Call<ExerciseListResponse>
 
     @POST("/api/exercisekeypoint/GetKeyPointsRestriction")
     fun getExerciseConstraint(@Body requestPayload: ExerciseRequestPayload): Call<KeyPointRestrictions>

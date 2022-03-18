@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var menuToggle: ActionBarDrawerToggle
-    private lateinit var getPatientExerciseUrl: String
+    private lateinit var getAssessmentListUrl: String
     private var assessmentListFragment: AssessmentListFragment? = null
     private var assignedAssessments: List<Assessment> = emptyList()
     private lateinit var logInData: LogInData
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.hello_patient_name_i_m_emma).format("${logInData.firstName} ${logInData.lastName}")
 
         CoroutineScope(IO).launch {
-            getAssignedExercises(logInData.patientId, logInData.tenant)
+            getAssessmentDetails(logInData.patientId, logInData.tenant)
         }
         menuToggle = ActionBarDrawerToggle(
             this,
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnTryAgain.setOnClickListener {
-            getAssignedExercises(patientId = logInData.patientId, tenant = logInData.tenant)
+            getAssessmentDetails(patientId = logInData.patientId, tenant = logInData.tenant)
             it.visibility = View.GONE
             binding.progressIndicator.visibility = View.VISIBLE
         }
@@ -131,15 +131,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAssignedExercises(patientId: String, tenant: String) {
-        getPatientExerciseUrl = Utilities.getUrl(loadLogInData().tenant).getPatientExerciseURL
+    private fun getAssessmentDetails(patientId: String, tenant: String) {
+        getAssessmentListUrl = Utilities.getUrl(loadLogInData().tenant).getAssessmentUrl
         val client = OkHttpClient.Builder()
             .connectTimeout(4, TimeUnit.MINUTES)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
         val service = Retrofit.Builder()
-            .baseUrl(getPatientExerciseUrl)
+            .baseUrl(getAssessmentListUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

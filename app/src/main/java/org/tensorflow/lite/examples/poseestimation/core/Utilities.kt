@@ -56,23 +56,26 @@ object Utilities {
         return when (tenant.lowercase()) {
             "dev" -> {
                 APiUrl(
-                    getPatientExerciseURL="https://devvaapi.injurycloud.com",
-                    getKeyPointRestrictionURL="https://devvaapi.injurycloud.com",
-                    saveExerciseTrackingURL="https://devapi.injurycloud.com"
+                    getAssessmentUrl = "https://devvaapi.injurycloud.com",
+                    getExerciseUrl = "https://devvaapi.injurycloud.com",
+                    getExerciseConstraintsURL = "https://devvaapi.injurycloud.com",
+                    saveExerciseTrackingURL = "https://devapi.injurycloud.com"
                 )
             }
             "stg" -> {
                 APiUrl(
-                    getPatientExerciseURL="https://stgvaapi.injurycloud.com",
-                    getKeyPointRestrictionURL="https://stgvaapi.injurycloud.com",
-                    saveExerciseTrackingURL="https://stgapi.injurycloud.com"
+                    getAssessmentUrl = "https://stgvaapi.injurycloud.com",
+                    getExerciseUrl = "https://stgvaapi.injurycloud.com",
+                    getExerciseConstraintsURL = "https://stgvaapi.injurycloud.com",
+                    saveExerciseTrackingURL = "https://stgapi.injurycloud.com"
                 )
             }
             else -> {
                 APiUrl(
-                    getPatientExerciseURL="https://vaapi.injurycloud.com",
-                    getKeyPointRestrictionURL="https://vaapi.injurycloud.com",
-                    saveExerciseTrackingURL="https://api.injurycloud.com"
+                    getAssessmentUrl = "https://vaapi.injurycloud.com",
+                    getExerciseUrl = "https://vaapi.injurycloud.com",
+                    getExerciseConstraintsURL = "https://vaapi.injurycloud.com",
+                    saveExerciseTrackingURL = "https://api.injurycloud.com"
                 )
             }
 

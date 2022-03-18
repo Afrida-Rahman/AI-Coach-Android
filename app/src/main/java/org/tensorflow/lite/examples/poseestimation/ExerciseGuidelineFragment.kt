@@ -64,7 +64,7 @@ class ExerciseGuidelineFragment(
             parentFragmentManager.beginTransaction().apply {
                 replace(
                     R.id.fragment_container,
-                    ExerciseListFragment(testId, testDate, exerciseList, patientId, tenant)
+                    ExerciseListFragment(testId, testDate, patientId, tenant)
                 )
                 commit()
             }

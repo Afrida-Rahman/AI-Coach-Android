@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import org.tensorflow.lite.examples.poseestimation.ExerciseListFragment
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 
@@ -26,7 +27,7 @@ class AssessmentListAdapter(
         val bodyRegion: TextView = view.findViewById(R.id.body_region)
         val registrationType: TextView = view.findViewById(R.id.registration_type)
         val exerciseCount: TextView = view.findViewById(R.id.exercise_count)
-        val goToExerciseListButton: Button = view.findViewById(R.id.go_to_exercise_list)
+        val goToExerciseList: Button = view.findViewById(R.id.go_to_exercise_list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssessmentItemViewHolder {
@@ -51,8 +52,24 @@ class AssessmentListAdapter(
                 registrationType.text =
                     getString(R.string.registration_type_value).format(item.registrationType)
                 exerciseCount.text = getString(R.string.exercise_count).format(item.totalExercises)
+
+                goToExerciseList.setOnClickListener {
+                    manager.beginTransaction().apply {
+                        replace(
+                            R.id.fragment_container,
+                            ExerciseListFragment(
+                                assessmentId = item.id,
+                                assessmentDate = item.testDate,
+                                patientId = patientId,
+                                tenant = tenant
+                            )
+                        )
+                        commit()
+                    }
+                }
             }
         }
+
 //        if (item.exercises.isNotEmpty()) {
 //            holder.goToExerciseListButton.setOnClickListener {
 //                manager.beginTransaction().apply {
