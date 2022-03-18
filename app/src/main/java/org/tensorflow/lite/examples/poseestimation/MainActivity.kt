@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -35,11 +36,17 @@ class MainActivity : AppCompatActivity() {
     private var assessmentListFragment: AssessmentListFragment? = null
     private var assignedAssessments: List<Assessment> = emptyList()
     private lateinit var logInData: LogInData
+    private var width: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        width = displayMetrics.widthPixels
 
         logInData = loadLogInData()
         binding.patientName.text =
@@ -101,7 +108,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         assessmentListFragment =
-            AssessmentListFragment(assignedAssessments, logInData.patientId, logInData.tenant)
+            AssessmentListFragment(
+                assignedAssessments,
+                logInData.patientId,
+                logInData.tenant,
+                width = width
+            )
         assessmentListFragment?.let { changeScreen(it) }
     }
 
@@ -160,7 +172,12 @@ class MainActivity : AppCompatActivity() {
                         binding.progressIndicator.visibility = View.GONE
                         assignedAssessments = responseBody.Assessments
                         assessmentListFragment =
-                            AssessmentListFragment(assignedAssessments, patientId, tenant)
+                            AssessmentListFragment(
+                                assignedAssessments,
+                                patientId,
+                                tenant,
+                                width = width
+                            )
                         assessmentListFragment?.let { changeScreen(it) }
                     } else {
                         Toast.makeText(

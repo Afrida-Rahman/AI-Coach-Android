@@ -16,7 +16,8 @@ class AssessmentListAdapter(
     private val testList: List<TestId>,
     private val manager: FragmentManager,
     private val patientId: String,
-    private val tenant: String
+    private val tenant: String,
+    private val width: Int = 0
 ) : RecyclerView.Adapter<AssessmentListAdapter.AssessmentItemViewHolder>() {
 
     class AssessmentItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -69,31 +70,6 @@ class AssessmentListAdapter(
                 }
             }
         }
-
-//        if (item.exercises.isNotEmpty()) {
-//            holder.goToExerciseListButton.setOnClickListener {
-//                manager.beginTransaction().apply {
-//                    disallowAddToBackStack()
-//                    replace(
-//                        R.id.fragment_container,
-//                        ExerciseListFragment(
-//                            item.id,
-//                            item.testDate,
-//                            item.exercises,
-//                            patientId,
-//                            tenant
-//                        )
-//                    )
-//                    commit()
-//                }
-//            }
-//        } else {
-//            Toast.makeText(
-//                holder.goToExerciseListButton.context,
-//                "There is no exercise assigned for this test ID",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        }
     }
 
     override fun getItemCount() = testList.size

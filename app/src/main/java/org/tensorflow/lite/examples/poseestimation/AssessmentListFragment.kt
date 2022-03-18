@@ -1,12 +1,12 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.api.response.Assessment
 import org.tensorflow.lite.examples.poseestimation.core.AssessmentListAdapter
@@ -15,7 +15,8 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 class AssessmentListFragment(
     private val assessments: List<Assessment>,
     private val patientId: String,
-    private val tenant: String
+    private val tenant: String,
+    private val width: Int = 0
 ) : Fragment() {
 
     override fun onCreateView(
@@ -27,40 +28,6 @@ class AssessmentListFragment(
         val searchAssessment: SearchView = view.findViewById(R.id.search_assessment)
         val testList = mutableListOf<TestId>()
         assessments.forEach { assessment ->
-//            val implementedExerciseList = Exercises.get(view.context)
-//            val parsedExercises = mutableListOf<HomeExercise>()
-//            assessment.Exercises.forEach { exercise ->
-//                val implementedExercise =
-//                    implementedExerciseList.find { it.id == exercise.ExerciseId }
-//                if (implementedExercise != null) {
-//                    implementedExercise.setExercise(
-//                        exerciseName = exercise.ExerciseName,
-//                        exerciseInstruction = exercise.Instructions,
-//                        exerciseImageUrls = exercise.ImageURLs,
-//                        exerciseVideoUrls =exercise.ExerciseMedia,
-//                        repetitionLimit = exercise.RepetitionInCount,
-//                        setLimit = exercise.SetInCount,
-//                        protoId = exercise.ProtocolId
-//                    )
-//                    parsedExercises.add(implementedExercise)
-//                } else {
-//                    val notImplementedExercise = GeneralExercise(
-//                        context = view.context,
-//                        exerciseId = exercise.ExerciseId,
-//                        active = false
-//                    )
-//                    notImplementedExercise.setExercise(
-//                        exerciseName = exercise.ExerciseName,
-//                        exerciseInstruction = exercise.Instructions,
-//                        exerciseImageUrls = exercise.ImageURLs,
-//                        exerciseVideoUrls =exercise.ExerciseMedia,
-//                        repetitionLimit = exercise.RepetitionInCount,
-//                        setLimit = exercise.SetInCount,
-//                        protoId = exercise.ProtocolId
-//                    )
-//                    parsedExercises.add(notImplementedExercise)
-//                }
-//            }
             testList.add(
                 TestId(
                     id = assessment.TestId,
@@ -71,7 +38,7 @@ class AssessmentListFragment(
                     testDate = assessment.CreatedOnUtc.split("T")[0],
                     isReportReady = assessment.IsReportReady,
                     registrationType = assessment.RegistrationType,
-                    totalExercises = assessment.TotalExercise //parsedExercises.sortedBy { it.active }.reversed()
+                    totalExercises = assessment.TotalExercise
                 )
             )
         }
@@ -82,7 +49,8 @@ class AssessmentListFragment(
                         testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
-                        tenant
+                        tenant,
+                        width
                     )
                     adapter.adapter?.notifyDataSetChanged()
                 }
@@ -96,7 +64,8 @@ class AssessmentListFragment(
                         testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
                         parentFragmentManager,
                         patientId,
-                        tenant
+                        tenant,
+                        width
                     )
                     adapter.adapter?.notifyDataSetChanged()
                 }
@@ -105,18 +74,27 @@ class AssessmentListFragment(
         })
 
         searchAssessment.setOnCloseListener {
-            Log.d("CheckCloseListener", "I am being called")
             adapter.adapter = AssessmentListAdapter(
                 testList,
                 parentFragmentManager,
                 patientId,
-                tenant
+                tenant,
+                width
             )
             adapter.adapter?.notifyDataSetChanged()
             searchAssessment.clearFocus()
             true
         }
-        adapter.adapter = AssessmentListAdapter(testList, parentFragmentManager, patientId, tenant)
+        if (width > 480) {
+            adapter.layoutManager = GridLayoutManager(context, 2)
+        }
+        adapter.adapter = AssessmentListAdapter(
+            testList,
+            parentFragmentManager,
+            patientId,
+            tenant,
+            width
+        )
         return view
     }
 
