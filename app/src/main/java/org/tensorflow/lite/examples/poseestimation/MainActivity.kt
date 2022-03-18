@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -14,9 +15,9 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
-import org.tensorflow.lite.examples.poseestimation.api.request.PatientDataPayload
+import org.tensorflow.lite.examples.poseestimation.api.request.AssessmentListRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.Assessment
-import org.tensorflow.lite.examples.poseestimation.api.response.PatientExerciseKeypointResponse
+import org.tensorflow.lite.examples.poseestimation.api.response.AssessmentListResponse
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityMainBinding
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
@@ -31,22 +32,28 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var menuToggle: ActionBarDrawerToggle
-    private lateinit var getPatientExerciseUrl: String
+    private lateinit var getAssessmentListUrl: String
     private var assessmentListFragment: AssessmentListFragment? = null
     private var assignedAssessments: List<Assessment> = emptyList()
     private lateinit var logInData: LogInData
+    private var width: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        width = displayMetrics.widthPixels
+
         logInData = loadLogInData()
         binding.patientName.text =
             getString(R.string.hello_patient_name_i_m_emma).format("${logInData.firstName} ${logInData.lastName}")
 
         CoroutineScope(IO).launch {
-            getAssignedExercises(logInData.patientId, logInData.tenant)
+            getAssessmentDetails(logInData.patientId, logInData.tenant)
         }
         menuToggle = ActionBarDrawerToggle(
             this,
@@ -69,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnTryAgain.setOnClickListener {
-            getAssignedExercises(patientId = logInData.patientId, tenant = logInData.tenant)
+            getAssessmentDetails(patientId = logInData.patientId, tenant = logInData.tenant)
             it.visibility = View.GONE
             binding.progressIndicator.visibility = View.VISIBLE
         }
@@ -101,7 +108,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         assessmentListFragment =
-            AssessmentListFragment(assignedAssessments, logInData.patientId, logInData.tenant)
+            AssessmentListFragment(
+                assignedAssessments,
+                logInData.patientId,
+                logInData.tenant,
+                width = width
+            )
         assessmentListFragment?.let { changeScreen(it) }
     }
 
@@ -131,28 +143,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAssignedExercises(patientId: String, tenant: String) {
-        getPatientExerciseUrl = Utilities.getUrl(loadLogInData().tenant).getPatientExerciseURL
+    private fun getAssessmentDetails(patientId: String, tenant: String) {
+        getAssessmentListUrl = Utilities.getUrl(loadLogInData().tenant).getAssessmentUrl
         val client = OkHttpClient.Builder()
             .connectTimeout(4, TimeUnit.MINUTES)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
         val service = Retrofit.Builder()
-            .baseUrl(getPatientExerciseUrl)
+            .baseUrl(getAssessmentListUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IExerciseService::class.java)
-        val requestPayload = PatientDataPayload(
+        val requestPayload = AssessmentListRequestPayload(
             PatientId = patientId,
             Tenant = tenant
         )
-        val response = service.getPatientExercise(requestPayload)
-        response.enqueue(object : Callback<PatientExerciseKeypointResponse> {
+        val response = service.getAssessmentList(requestPayload)
+        response.enqueue(object : Callback<AssessmentListResponse> {
             override fun onResponse(
-                call: Call<PatientExerciseKeypointResponse>,
-                response: Response<PatientExerciseKeypointResponse>
+                call: Call<AssessmentListResponse>,
+                response: Response<AssessmentListResponse>
             ) {
                 val responseBody = response.body()
                 if (responseBody != null) {
@@ -160,7 +172,12 @@ class MainActivity : AppCompatActivity() {
                         binding.progressIndicator.visibility = View.GONE
                         assignedAssessments = responseBody.Assessments
                         assessmentListFragment =
-                            AssessmentListFragment(assignedAssessments, patientId, tenant)
+                            AssessmentListFragment(
+                                assignedAssessments,
+                                patientId,
+                                tenant,
+                                width = width
+                            )
                         assessmentListFragment?.let { changeScreen(it) }
                     } else {
                         Toast.makeText(
@@ -181,7 +198,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<PatientExerciseKeypointResponse>, t: Throwable) {
+            override fun onFailure(call: Call<AssessmentListResponse>, t: Throwable) {
                 Toast.makeText(
                     this@MainActivity,
                     "Failed to get assessment list from API.",

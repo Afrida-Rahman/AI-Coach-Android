@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import org.tensorflow.lite.examples.poseestimation.ExerciseListFragment
@@ -28,7 +27,7 @@ class AssessmentListAdapter(
         val bodyRegion: TextView = view.findViewById(R.id.body_region)
         val registrationType: TextView = view.findViewById(R.id.registration_type)
         val exerciseCount: TextView = view.findViewById(R.id.exercise_count)
-        val goToExerciseListButton: Button = view.findViewById(R.id.go_to_exercise_list)
+        val goToExerciseList: Button = view.findViewById(R.id.go_to_exercise_list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssessmentItemViewHolder {
@@ -48,36 +47,33 @@ class AssessmentListAdapter(
                 testId.text = getString(R.string.test_id).format(item.id)
                 testDate.text = getString(R.string.test_date).format(item.testDate)
                 providerName.text =
-                    getString(R.string.provider_name_value).format(item.providerName?: "Unknown")
+                    getString(R.string.provider_name_value).format(item.providerName ?: "Unknown")
                 bodyRegion.text = getString(R.string.body_region_value).format(item.bodyRegionName)
                 registrationType.text =
                     getString(R.string.registration_type_value).format(item.registrationType)
-                exerciseCount.text = getString(R.string.exercise_count).format(item.exercises.size)
-            }
-        }
-        if (item.exercises.isNotEmpty()) {
-            holder.goToExerciseListButton.setOnClickListener {
-                manager.beginTransaction().apply {
-                    disallowAddToBackStack()
-                    replace(
-                        R.id.fragment_container,
-                        ExerciseListFragment(
-                            item.id,
-                            item.testDate,
-                            item.exercises,
-                            patientId,
-                            tenant
-                        )
-                    )
-                    commit()
+                exerciseCount.text = getString(R.string.exercise_count).format(item.totalExercises)
+                if (item.totalExercises <= 0) {
+                    goToExerciseList.isEnabled = false
+                } else {
+
+                    goToExerciseList.isEnabled = true
+                    goToExerciseList.setOnClickListener {
+                        manager.beginTransaction().apply {
+                            replace(
+                                R.id.fragment_container,
+                                ExerciseListFragment(
+                                    assessmentId = item.id,
+                                    assessmentDate = item.testDate,
+                                    patientId = patientId,
+                                    tenant = tenant
+                                )
+                            )
+                            commit()
+                        }
+                    }
+
                 }
             }
-        } else {
-            Toast.makeText(
-                holder.goToExerciseListButton.context,
-                "There is no exercise assigned for this test ID",
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 

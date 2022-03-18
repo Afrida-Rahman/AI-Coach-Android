@@ -31,7 +31,8 @@ class ExerciseGuidelineFragment(
     private val position: Int,
     private val exerciseList: List<HomeExercise>,
     private val patientId: String,
-    private val tenant: String
+    private val tenant: String,
+    private val width: Int = 0
 ) : Fragment() {
     private lateinit var mediaSource: MediaSource
     private lateinit var exoplayer: ExoPlayer
@@ -64,7 +65,7 @@ class ExerciseGuidelineFragment(
             parentFragmentManager.beginTransaction().apply {
                 replace(
                     R.id.fragment_container,
-                    ExerciseListFragment(testId, testDate, exerciseList, patientId, tenant)
+                    ExerciseListFragment(testId, testDate, patientId, tenant)
                 )
                 commit()
             }

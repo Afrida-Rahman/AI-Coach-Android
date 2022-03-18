@@ -41,8 +41,10 @@ class SignInActivity : AppCompatActivity() {
 
         if (logInData.patientId.isNotEmpty()) gotoMainActivity()
 
-        val adapter = ArrayAdapter.createFromResource(this,
-            R.array.tenant_name, android.R.layout.simple_spinner_item)
+        val adapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.tenant_name, android.R.layout.simple_spinner_item
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinner.adapter = adapter
 
@@ -59,7 +61,8 @@ class SignInActivity : AppCompatActivity() {
                 tenant
             )
             else {
-                Toast.makeText(this, "Tenant, email or password cannot be empty", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Tenant, email or password cannot be empty", Toast.LENGTH_LONG)
+                    .show()
                 binding.progressBar.visibility = View.GONE
                 it.isClickable = true
             }
@@ -72,7 +75,7 @@ class SignInActivity : AppCompatActivity() {
         val url = Utilities.getUrl(tenant)
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(url.getPatientExerciseURL)
+            .baseUrl(url.getAssessmentUrl)
             .build()
             .create(ILogInService::class.java)
         val requestPayload = LogInRequest(
