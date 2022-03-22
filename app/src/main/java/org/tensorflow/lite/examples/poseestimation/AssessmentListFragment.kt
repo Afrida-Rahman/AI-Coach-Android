@@ -27,7 +27,7 @@ class AssessmentListFragment(
         val view = inflater.inflate(R.layout.fragment_assessment_list, container, false)
         val adapter = view.findViewById<RecyclerView>(R.id.assessment_list_container)
         val searchAssessment: SearchView = view.findViewById(R.id.search_assessment)
-        val testList = mutableListOf<TestId>()
+        var testList = mutableListOf<TestId>()
         assessments.forEach { assessment ->
             testList.add(
                 TestId(
@@ -43,6 +43,8 @@ class AssessmentListFragment(
                 )
             )
         }
+        testList.sortBy { it.totalExercises }
+        testList.reverse()
         searchAssessment.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(searchQuery: String): Boolean {
                 if (searchQuery.isNotEmpty()) {
