@@ -2,9 +2,12 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseListRequestPayload
@@ -12,6 +15,7 @@ import org.tensorflow.lite.examples.poseestimation.api.response.ExerciseListResp
 import org.tensorflow.lite.examples.poseestimation.core.Exercises
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.databinding.ActivityExerciseListBinding
+import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import org.tensorflow.lite.examples.poseestimation.exercise.home.GeneralExercise
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 import retrofit2.Call
@@ -23,20 +27,70 @@ import java.util.concurrent.TimeUnit
 
 class ExerciseListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseListBinding
-    private lateinit var adapter: RecyclerView
-    private var assignedExercises: List<HomeExercise> = emptyList()
+    private var assessmentDate: String? = null
+    private lateinit var logInData: LogInData
+    private lateinit var patientNameDisplay: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tryAgainButton: Button
+    private lateinit var fragmentContainer: FrameLayout
+
+    companion object {
+        const val TEST_ID = "testId"
+        const val TEST_DATE = "testDate"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExerciseListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val testId = intent.getStringExtra(TEST_ID)
+        assessmentDate = intent.getStringExtra(TEST_DATE)
+
+        patientNameDisplay = findViewById(R.id.patient_name)
+        progressBar = findViewById(R.id.progress_indicator)
+        tryAgainButton = findViewById(R.id.btn_try_again)
+        fragmentContainer = findViewById(R.id.fragment_container)
+
+        logInData = Utilities.loadLogInData(this)
+
+        patientNameDisplay.text = getString(
+            R.string.hello_patient_name_i_m_emma,
+            "${logInData.firstName} ${logInData.lastName}"
+        )
+
+        if (testId == null) {
+            Toast.makeText(this, "You have to pass a test ID", Toast.LENGTH_LONG).show()
+            finish()
+        } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                getExerciseList(tenant = logInData.tenant, testId = testId)
+            }
+        }
+
+        tryAgainButton.setOnClickListener {
+            it.visibility = View.GONE
+            testId?.let { id ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    getExerciseList(tenant = logInData.tenant, testId = id)
+                }
+            }
+        }
     }
 
-    private suspend fun getExerciseList(tenant: String, testId: String) {
+    private fun changeScreen(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            disallowAddToBackStack()
+            replace(R.id.fragment_container, fragment)
+            commit()
+        }
+    }
+
+    private fun getExerciseList(tenant: String, testId: String) {
         val client = OkHttpClient.Builder()
             .connectTimeout(4, TimeUnit.MINUTES)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(4, TimeUnit.MINUTES)
+            .writeTimeout(60, TimeUnit.SECONDS)
             .build()
         val service = Retrofit.Builder()
             .baseUrl(Utilities.getUrl(tenant).getExerciseUrl)
@@ -54,11 +108,12 @@ class ExerciseListActivity : AppCompatActivity() {
                 call: Call<ExerciseListResponse>,
                 response: Response<ExerciseListResponse>
             ) {
+                progressBar.visibility = View.GONE
                 val responseBody = response.body()
                 if (responseBody != null) {
                     if (responseBody.Exercises.isNotEmpty()) {
                         val implementedExerciseList = Exercises.get(this@ExerciseListActivity)
-                        val parsedExercises = mutableListOf<HomeExercise>()
+                        var parsedExercises = mutableListOf<HomeExercise>()
                         responseBody.Exercises.forEach { exercise ->
                             val implementedExercise =
                                 implementedExerciseList.find { it.id == exercise.ExerciseId }
@@ -92,31 +147,44 @@ class ExerciseListActivity : AppCompatActivity() {
                                 parsedExercises.add(notImplementedExercise)
                             }
                         }
-                        assignedExercises = parsedExercises
+                        parsedExercises =
+                            parsedExercises.sortedBy { it.active }.reversed().toMutableList()
+                        changeScreen(
+                            ExerciseListFragment(
+                                assessmentId = testId,
+                                assessmentDate = assessmentDate ?: "",
+                                patientId = logInData.patientId,
+                                tenant = tenant,
+                                exerciseList = parsedExercises
+                            )
+                        )
                     } else {
+                        tryAgainButton.visibility = View.VISIBLE
                         Toast.makeText(
                             this@ExerciseListActivity,
-                            "Got empty response!",
+                            "No exercise is assigned!",
                             Toast.LENGTH_LONG
                         ).show()
                     }
                 } else {
+                    tryAgainButton.visibility = View.VISIBLE
                     Toast.makeText(
                         this@ExerciseListActivity,
-                        "Failed to get exercise list from API and got nothing!",
+                        "Got empty response",
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                binding.progressIndicator.visibility = View.GONE
             }
 
             override fun onFailure(call: Call<ExerciseListResponse>, t: Throwable) {
+                progressBar.visibility = View.GONE
+                tryAgainButton.visibility = View.VISIBLE
                 Toast.makeText(
                     this@ExerciseListActivity,
-                    "Failed to get assessment list from API.",
+                    t.message
+                        ?: "Unknown error",// "Failed to get exercise list from API. Try again later.",
                     Toast.LENGTH_LONG
                 ).show()
-                binding.progressIndicator.visibility = View.GONE
             }
         })
     }

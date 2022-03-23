@@ -1,22 +1,19 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import org.tensorflow.lite.examples.poseestimation.ExerciseListFragment
+import org.tensorflow.lite.examples.poseestimation.ExerciseListActivity
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 
 class AssessmentListAdapter(
-    private val testList: List<TestId>,
-    private val manager: FragmentManager,
-    private val patientId: String,
-    private val tenant: String
+    private val testList: List<TestId>
 ) : RecyclerView.Adapter<AssessmentListAdapter.AssessmentItemViewHolder>() {
 
     class AssessmentItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -38,40 +35,30 @@ class AssessmentListAdapter(
 
     override fun onBindViewHolder(holder: AssessmentItemViewHolder, position: Int) {
         val item = testList[position]
+        val context = holder.testId.context
         holder.apply {
-            if (item.isReportReady)
-                reportReadyIcon.setImageResource(R.drawable.ic_check)
-            else
-                reportReadyIcon.setImageResource(R.drawable.ic_cross)
-            testId.context.apply {
-                testId.text = getString(R.string.test_id).format(item.id)
-                testDate.text = getString(R.string.test_date).format(item.testDate)
+            reportReadyIcon.setImageResource(if (item.isReportReady) R.drawable.ic_check else R.drawable.ic_cross)
+            context.apply {
+                testId.text = getString(R.string.test_id, item.id)
+                testDate.text = getString(R.string.test_date, item.testDate)
                 providerName.text =
-                    getString(R.string.provider_name_value).format(item.providerName ?: "Unknown")
-                bodyRegion.text = getString(R.string.body_region_value).format(item.bodyRegionName)
+                    getString(R.string.provider_name_value, item.providerName ?: "Unknown")
+                bodyRegion.text = getString(R.string.body_region_value, item.bodyRegionName)
                 registrationType.text =
-                    getString(R.string.registration_type_value).format(item.registrationType)
-                exerciseCount.text = getString(R.string.exercise_count).format(item.totalExercises)
+                    getString(R.string.registration_type_value, item.registrationType)
+                exerciseCount.text = getString(R.string.exercise_count, item.totalExercises)
                 if (item.totalExercises <= 0) {
                     goToExerciseList.isEnabled = false
                 } else {
-
                     goToExerciseList.isEnabled = true
                     goToExerciseList.setOnClickListener {
-                        manager.beginTransaction().apply {
-                            replace(
-                                R.id.fragment_container,
-                                ExerciseListFragment(
-                                    assessmentId = item.id,
-                                    assessmentDate = item.testDate,
-                                    patientId = patientId,
-                                    tenant = tenant
-                                )
-                            )
-                            commit()
+                        val intent = Intent(context, ExerciseListActivity::class.java)
+                        intent.apply {
+                            putExtra(ExerciseListActivity.TEST_ID, item.id)
+                            putExtra(ExerciseListActivity.TEST_DATE, item.testDate)
                         }
+                        startActivity(intent)
                     }
-
                 }
             }
         }

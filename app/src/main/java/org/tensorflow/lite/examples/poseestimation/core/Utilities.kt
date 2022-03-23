@@ -1,7 +1,10 @@
 package org.tensorflow.lite.examples.poseestimation.core
 
+import android.content.Context
+import org.tensorflow.lite.examples.poseestimation.SignInActivity
 import org.tensorflow.lite.examples.poseestimation.domain.model.APiUrl
 import org.tensorflow.lite.examples.poseestimation.domain.model.BodyPart
+import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
 import java.util.*
 import kotlin.math.acos
 import kotlin.math.sqrt
@@ -103,5 +106,32 @@ object Utilities {
             "RIGHT_ANKLE".lowercase() -> BodyPart.RIGHT_ANKLE.position
             else -> -1
         }
+    }
+
+    fun saveLogInData(context: Context, logInData: LogInData) {
+        val preferences = context.getSharedPreferences(
+            SignInActivity.LOGIN_PREFERENCE,
+            SignInActivity.PREFERENCE_MODE
+        )
+        preferences.edit().apply {
+            putString(SignInActivity.FIRST_NAME, logInData.firstName)
+            putString(SignInActivity.LAST_NAME, logInData.lastName)
+            putString(SignInActivity.PATIENT_ID, logInData.patientId)
+            putString(SignInActivity.TENANT, logInData.tenant)
+            apply()
+        }
+    }
+
+    fun loadLogInData(context: Context): LogInData {
+        val preferences = context.getSharedPreferences(
+            SignInActivity.LOGIN_PREFERENCE,
+            SignInActivity.PREFERENCE_MODE
+        )
+        return LogInData(
+            firstName = preferences.getString(SignInActivity.FIRST_NAME, "") ?: "",
+            lastName = preferences.getString(SignInActivity.LAST_NAME, "") ?: "",
+            patientId = preferences.getString(SignInActivity.PATIENT_ID, "") ?: "",
+            tenant = preferences.getString(SignInActivity.TENANT, "") ?: ""
+        )
     }
 }

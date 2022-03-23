@@ -1,7 +1,6 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.TestId
 
 class AssessmentListFragment(
     private val assessments: List<Assessment>,
-    private val patientId: String,
-    private val tenant: String,
     private val width: Int = 0
 ) : Fragment() {
 
@@ -27,7 +24,7 @@ class AssessmentListFragment(
         val view = inflater.inflate(R.layout.fragment_assessment_list, container, false)
         val adapter = view.findViewById<RecyclerView>(R.id.assessment_list_container)
         val searchAssessment: SearchView = view.findViewById(R.id.search_assessment)
-        var testList = mutableListOf<TestId>()
+        val testList = mutableListOf<TestId>()
         assessments.forEach { assessment ->
             testList.add(
                 TestId(
@@ -49,10 +46,7 @@ class AssessmentListFragment(
             override fun onQueryTextSubmit(searchQuery: String): Boolean {
                 if (searchQuery.isNotEmpty()) {
                     adapter.adapter = AssessmentListAdapter(
-                        testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
-                        parentFragmentManager,
-                        patientId,
-                        tenant
+                        testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) }
                     )
                     adapter.adapter?.notifyDataSetChanged()
                 }
@@ -63,10 +57,7 @@ class AssessmentListFragment(
             override fun onQueryTextChange(searchQuery: String): Boolean {
                 if (searchQuery.isNotEmpty()) {
                     adapter.adapter = AssessmentListAdapter(
-                        testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) },
-                        parentFragmentManager,
-                        patientId,
-                        tenant
+                        testList.filter { it.id.lowercase().contains(searchQuery.lowercase()) }
                     )
                     adapter.adapter?.notifyDataSetChanged()
                 }
@@ -75,26 +66,15 @@ class AssessmentListFragment(
         })
 
         searchAssessment.setOnCloseListener {
-            adapter.adapter = AssessmentListAdapter(
-                testList,
-                parentFragmentManager,
-                patientId,
-                tenant
-            )
+            adapter.adapter = AssessmentListAdapter(testList)
             adapter.adapter?.notifyDataSetChanged()
             searchAssessment.clearFocus()
             true
         }
-        Log.d("WidthOfScreen", "$width")
         if (width > 1300) {
             adapter.layoutManager = GridLayoutManager(context, 2)
         }
-        adapter.adapter = AssessmentListAdapter(
-            testList,
-            parentFragmentManager,
-            patientId,
-            tenant
-        )
+        adapter.adapter = AssessmentListAdapter(testList)
         return view
     }
 

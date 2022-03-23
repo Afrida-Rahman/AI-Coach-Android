@@ -32,11 +32,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var menuToggle: ActionBarDrawerToggle
-    private lateinit var getAssessmentListUrl: String
     private var assessmentListFragment: AssessmentListFragment? = null
     private var assignedAssessments: List<Assessment> = emptyList()
     private lateinit var logInData: LogInData
     private var width: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         width = displayMetrics.widthPixels
 
-        logInData = loadLogInData()
+        logInData = Utilities.loadLogInData(this)
         binding.patientName.text =
             getString(R.string.hello_patient_name_i_m_emma).format("${logInData.firstName} ${logInData.lastName}")
 
@@ -84,7 +84,8 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.log_out_button -> {
-                    saveLogInData(
+                    Utilities.saveLogInData(
+                        this,
                         LogInData(
                             firstName = "",
                             lastName = "",
@@ -110,8 +111,6 @@ class MainActivity : AppCompatActivity() {
         assessmentListFragment =
             AssessmentListFragment(
                 assignedAssessments,
-                logInData.patientId,
-                logInData.tenant,
                 width = width
             )
         assessmentListFragment?.let { changeScreen(it) }
@@ -135,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun changeScreen(fragment: Fragment) {
+    private fun changeScreen(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             disallowAddToBackStack()
             replace(R.id.fragment_container, fragment)
@@ -144,14 +143,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAssessmentDetails(patientId: String, tenant: String) {
-        getAssessmentListUrl = Utilities.getUrl(loadLogInData().tenant).getAssessmentUrl
         val client = OkHttpClient.Builder()
             .connectTimeout(4, TimeUnit.MINUTES)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
         val service = Retrofit.Builder()
-            .baseUrl(getAssessmentListUrl)
+            .baseUrl(Utilities.getUrl(Utilities.loadLogInData(this).tenant).getAssessmentUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -174,8 +172,6 @@ class MainActivity : AppCompatActivity() {
                         assessmentListFragment =
                             AssessmentListFragment(
                                 assignedAssessments,
-                                patientId,
-                                tenant,
                                 width = width
                             )
                         assessmentListFragment?.let { changeScreen(it) }
@@ -208,32 +204,5 @@ class MainActivity : AppCompatActivity() {
                 binding.btnTryAgain.visibility = View.VISIBLE
             }
         })
-    }
-
-    private fun saveLogInData(logInData: LogInData) {
-        val preferences = getSharedPreferences(
-            SignInActivity.LOGIN_PREFERENCE,
-            SignInActivity.PREFERENCE_MODE
-        )
-        preferences.edit().apply {
-            putString(SignInActivity.FIRST_NAME, logInData.firstName)
-            putString(SignInActivity.LAST_NAME, logInData.lastName)
-            putString(SignInActivity.PATIENT_ID, logInData.patientId)
-            putString(SignInActivity.TENANT, logInData.tenant)
-            apply()
-        }
-    }
-
-    private fun loadLogInData(): LogInData {
-        val preferences = getSharedPreferences(
-            SignInActivity.LOGIN_PREFERENCE,
-            SignInActivity.PREFERENCE_MODE
-        )
-        return LogInData(
-            firstName = preferences.getString(SignInActivity.FIRST_NAME, "") ?: "",
-            lastName = preferences.getString(SignInActivity.LAST_NAME, "") ?: "",
-            patientId = preferences.getString(SignInActivity.PATIENT_ID, "") ?: "",
-            tenant = preferences.getString(SignInActivity.TENANT, "") ?: ""
-        )
     }
 }
