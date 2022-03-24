@@ -103,6 +103,50 @@ class AsyncAudioPlayer(context: Context) {
         const val THUMB_UP_LIFT_LEFT_ARM_FORWARD = "thumb up lift left arm forward"
         const val THUMBS_UP_ARMS_RAISE = "thumbs up arms raise"
         const val STAND_AGAINST_THE_WALL = "stand against the wall"
+        const val LIFT_LEFT_HAND_HOLD = "lift left hand hold"
+        const val LIFT_RIGHT_HAND_HOLD = "lift right hand hold"
+        const val STEP_RIGHT_LEG_FORWARD_HOLD = "step right leg forward hold"
+        const val STEP_LEFT_LEG_FORWARD_HOLD = "step left leg forward hold"
+        const val STEP_LEFT_LEG_FORWARD = "step left leg forward"
+        const val STEP_RIGHT_LEG_FORWARD = "step right leg forward"
+        const val BEND_NECK_FORWARD = "bend neck forward"
+        const val BEND_NECK_BACKWARD = "bend neck backward"
+        const val JUMP_FORWARD = "jump forward"
+        const val JUMP_BACKWARD = "jump backward"
+        const val STEP_LEFT_LEG_BACKWARD_HOLD = "step left leg backward hold"
+        const val STEP_RIGHT_LEG_BACKWARD_HOLD = "step right leg backward hold"
+        const val STEP_LEFT_LEG_BACKWARD = "step left leg backward"
+        const val STEP_RIGHT_LEG_BACKWARD = "step right leg backward"
+        const val ROTATE_TO_LEFT = "rotate to left"
+        const val ROTATE_TO_RIGHT = "rotate to right"
+        const val ROTATE_TO_LEFT_HOLD = "rotate to left hold"
+        const val ROTATE_TO_RIGHT_HOLD = "rotate to right hold"
+        const val MOVE_HEAD_FORWARD = "move head forward"
+        const val MOVE_HEAD_BACKWARD = "move head backward"
+        const val BEND_FORWARD = "bend forward"
+        const val BEND_BACKWARD = "bend backward"
+        const val BEND_FORWARD_RESIST_HOLD = "bend forward resist hold"
+        const val BEND_BACKWARD_RESIST_HOLD = "bend backward resist hold"
+        const val BEND_LEFT_RESIST_HOLD = "bend left resist hold"
+        const val BEND_RIGHT_RESIST_HOLD = "bend right resist hold"
+        const val LEFT_HAND_ON_RIGHT_ARM_PUSH_HOLD = "left hand on right arm push hold"
+        const val RIGHT_HAND_ON_LEFT_ARM_PUSH_HOLD = "right hand on left arm push hold"
+        const val THUMBS_OUT_ARMS_RAISE = "thumbs out arms raise"
+        const val THUMBS_OUT_ARMS_RAISE_HOLD = "thumbs out arms raise hold"
+        const val THUMB_OUT_MOVE_RIGHT_ARM_UP_LATERAL = "thumb out move right arm up lateral"
+        const val THUMB_OUT_MOVE_LEFT_ARM_LATERAL = "thumb out move left arm lateral"
+        const val LEFT_HAND_PUSH_HEAD_BACKWARD_RESIST_HOLD =
+            "left hand push head backward resist hold"
+        const val BOTH_HANDS_PUSH_HEAD_FOWARD_RESIST_HOLD =
+            "both hands push head foward resist hold"
+        const val LEFT_HAND_PUSH_HEAD_TO_THE_RIGHT_RESIST_HOLD =
+            "left hand push head to the right resist hold"
+        const val RIGHT_HAND_PUSH_HEAD_TO_THE_LEFT_RESIST_HOLD =
+            "right hand push head to the left resist hold"
+        const val BEND_RIGHT = "bend right"
+        const val BEND_LEFT = "bend left"
+        const val HANDS_BACK_ON_HEAD_HOLD = "hands back on head hold"
+        const val HANDS_BACK_ON_HEAD_RESIST_HOLD = "hands back on head resist hold"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -229,6 +273,61 @@ class AsyncAudioPlayer(context: Context) {
         MediaPlayer.create(context, R.raw.thumb_up_lift_left_arm_forward)
     private val thumbsUpArmsRaise = MediaPlayer.create(context, R.raw.thumbs_up_arms_raise)
     private val standAgainstTheWall = MediaPlayer.create(context, R.raw.stand_against_the_wall)
+    private val liftLeftHandHold = MediaPlayer.create(context, R.raw.lift_left_hand_hold)
+    private val liftRightHandHold = MediaPlayer.create(context, R.raw.lift_right_hand_hold)
+    private val stepRightLegForwardHold =
+        MediaPlayer.create(context, R.raw.step_right_leg_forward_hold)
+    private val stepLeftLegForwardHold =
+        MediaPlayer.create(context, R.raw.step_left_leg_forward_hold)
+    private val stepLeftLegForward = MediaPlayer.create(context, R.raw.step_left_leg_forward)
+    private val stepRightLegForward = MediaPlayer.create(context, R.raw.step_right_leg_forward)
+    private val bendNeckForward = MediaPlayer.create(context, R.raw.bend_neck_forward)
+    private val bendNeckBackward = MediaPlayer.create(context, R.raw.bend_neck_backward)
+    private val jumpForward = MediaPlayer.create(context, R.raw.jump_forward)
+    private val jumpBackward = MediaPlayer.create(context, R.raw.jump_backward)
+    private val stepLeftLegBackwardHold =
+        MediaPlayer.create(context, R.raw.step_left_leg_backward_hold)
+    private val stepRightLegBackwardHold =
+        MediaPlayer.create(context, R.raw.step_right_leg_backward_hold)
+    private val stepLeftLegBackward = MediaPlayer.create(context, R.raw.step_left_leg_backward)
+    private val stepRightLegBackward = MediaPlayer.create(context, R.raw.step_right_leg_backward)
+    private val rotateToLeft = MediaPlayer.create(context, R.raw.rotate_to_left)
+    private val rotateToRight = MediaPlayer.create(context, R.raw.rotate_to_right)
+    private val rotateToLeftHold = MediaPlayer.create(context, R.raw.rotate_to_left_hold)
+    private val rotateToRightHold = MediaPlayer.create(context, R.raw.rotate_to_right_hold)
+    private val moveHeadForward = MediaPlayer.create(context, R.raw.move_head_forward)
+    private val moveHeadBackward = MediaPlayer.create(context, R.raw.move_head_backward)
+    private val bendForward = MediaPlayer.create(context, R.raw.bend_forward)
+    private val bendBackward = MediaPlayer.create(context, R.raw.bend_backward)
+    private val bendForwardResistHold = MediaPlayer.create(context, R.raw.bend_forward_resist_hold)
+    private val bendBackwardResistHold =
+        MediaPlayer.create(context, R.raw.bend_backward_resist_hold)
+    private val bendLeftResistHold = MediaPlayer.create(context, R.raw.bend_left_resist_hold)
+    private val bendRightResistHold = MediaPlayer.create(context, R.raw.bend_right_resist_hold)
+    private val leftHandOnRightArmPushHold =
+        MediaPlayer.create(context, R.raw.left_hand_on_right_arm_push_hold)
+    private val rightHandOnLeftArmPushHold =
+        MediaPlayer.create(context, R.raw.right_hand_on_left_arm_push_hold)
+    private val thumbsOutArmsRaise = MediaPlayer.create(context, R.raw.thumbs_out_arms_raise)
+    private val thumbsOutArmsRaiseHold =
+        MediaPlayer.create(context, R.raw.thumbs_out_arms_raise_hold)
+    private val thumbOutMoveRightArmUpLateral =
+        MediaPlayer.create(context, R.raw.thumb_out_move_right_arm_up_lateral)
+    private val thumbOutMoveLeftArmLateral =
+        MediaPlayer.create(context, R.raw.thumb_out_move_left_arm_lateral)
+    private val leftHandPushHeadBackwardResistHold =
+        MediaPlayer.create(context, R.raw.left_hand_push_head_backward_resist_hold)
+    private val bothHandsPushHeadFowardResistHold =
+        MediaPlayer.create(context, R.raw.both_hands_push_head_foward_resist_hold)
+    private val leftHandPushHeadToTheRightResistHold =
+        MediaPlayer.create(context, R.raw.left_hand_push_head_to_the_right_resist_hold)
+    private val rightHandPushHeadToTheLeftResistHold =
+        MediaPlayer.create(context, R.raw.right_hand_push_head_to_the_left_resist_hold)
+    private val bendRight = MediaPlayer.create(context, R.raw.bend_right)
+    private val bendLeft = MediaPlayer.create(context, R.raw.bend_left)
+    private val handsBackOnHeadHold = MediaPlayer.create(context, R.raw.hands_back_on_head_hold)
+    private val handsBackOnHeadResistHold =
+        MediaPlayer.create(context, R.raw.hands_back_on_head_resist_hold)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -328,6 +427,46 @@ class AsyncAudioPlayer(context: Context) {
             THUMB_UP_LIFT_LEFT_ARM_FORWARD -> thumbUpLiftLeftArmForward.start()
             THUMBS_UP_ARMS_RAISE -> thumbsUpArmsRaise.start()
             STAND_AGAINST_THE_WALL -> standAgainstTheWall.start()
+            LIFT_LEFT_HAND_HOLD -> liftLeftHandHold.start()
+            LIFT_RIGHT_HAND_HOLD -> liftRightHandHold.start()
+            STEP_RIGHT_LEG_FORWARD_HOLD -> stepRightLegForwardHold.start()
+            STEP_LEFT_LEG_FORWARD_HOLD -> stepLeftLegForwardHold.start()
+            STEP_LEFT_LEG_FORWARD -> stepLeftLegForward.start()
+            STEP_RIGHT_LEG_FORWARD -> stepRightLegForward.start()
+            BEND_NECK_FORWARD -> bendNeckForward.start()
+            BEND_NECK_BACKWARD -> bendNeckBackward.start()
+            JUMP_FORWARD -> jumpForward.start()
+            JUMP_BACKWARD -> jumpBackward.start()
+            STEP_LEFT_LEG_BACKWARD_HOLD -> stepLeftLegBackwardHold.start()
+            STEP_RIGHT_LEG_BACKWARD_HOLD -> stepRightLegBackwardHold.start()
+            STEP_LEFT_LEG_BACKWARD -> stepLeftLegBackward.start()
+            STEP_RIGHT_LEG_BACKWARD -> stepRightLegBackward.start()
+            ROTATE_TO_LEFT -> rotateToLeft.start()
+            ROTATE_TO_RIGHT -> rotateToRight.start()
+            ROTATE_TO_LEFT_HOLD -> rotateToLeftHold.start()
+            ROTATE_TO_RIGHT_HOLD -> rotateToRightHold.start()
+            MOVE_HEAD_FORWARD -> moveHeadForward.start()
+            MOVE_HEAD_BACKWARD -> moveHeadBackward.start()
+            BEND_FORWARD -> bendForward.start()
+            BEND_BACKWARD -> bendBackward.start()
+            BEND_FORWARD_RESIST_HOLD -> bendForwardResistHold.start()
+            BEND_BACKWARD_RESIST_HOLD -> bendBackwardResistHold.start()
+            BEND_LEFT_RESIST_HOLD -> bendLeftResistHold.start()
+            BEND_RIGHT_RESIST_HOLD -> bendRightResistHold.start()
+            LEFT_HAND_ON_RIGHT_ARM_PUSH_HOLD -> leftHandOnRightArmPushHold.start()
+            RIGHT_HAND_ON_LEFT_ARM_PUSH_HOLD -> rightHandOnLeftArmPushHold.start()
+            THUMBS_OUT_ARMS_RAISE -> thumbsOutArmsRaise.start()
+            THUMBS_OUT_ARMS_RAISE_HOLD -> thumbsOutArmsRaiseHold.start()
+            THUMB_OUT_MOVE_RIGHT_ARM_UP_LATERAL -> thumbOutMoveRightArmUpLateral.start()
+            THUMB_OUT_MOVE_LEFT_ARM_LATERAL -> thumbOutMoveLeftArmLateral.start()
+            LEFT_HAND_PUSH_HEAD_BACKWARD_RESIST_HOLD -> leftHandPushHeadBackwardResistHold.start()
+            BOTH_HANDS_PUSH_HEAD_FOWARD_RESIST_HOLD -> bothHandsPushHeadFowardResistHold.start()
+            LEFT_HAND_PUSH_HEAD_TO_THE_RIGHT_RESIST_HOLD -> leftHandPushHeadToTheRightResistHold.start()
+            RIGHT_HAND_PUSH_HEAD_TO_THE_LEFT_RESIST_HOLD -> rightHandPushHeadToTheLeftResistHold.start()
+            BEND_RIGHT -> bendRight.start()
+            BEND_LEFT -> bendLeft.start()
+            HANDS_BACK_ON_HEAD_HOLD -> handsBackOnHeadHold.start()
+            HANDS_BACK_ON_HEAD_RESIST_HOLD -> handsBackOnHeadResistHold.start()
             else -> {}
         }
     }
