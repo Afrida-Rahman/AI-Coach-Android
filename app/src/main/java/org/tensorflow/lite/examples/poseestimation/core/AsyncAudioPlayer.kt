@@ -147,6 +147,10 @@ class AsyncAudioPlayer(context: Context) {
         const val BEND_LEFT = "bend left"
         const val HANDS_BACK_ON_HEAD_HOLD = "hands back on head hold"
         const val HANDS_BACK_ON_HEAD_RESIST_HOLD = "hands back on head resist hold"
+        const val BOTH_KNEES_FALL_OUT_TO_THE_LEFT = "both knees fall out to the left"
+        const val BOTH_KNEES_FALL_OUT_TO_THE_RIGHT = "both knees fall out to the right"
+        const val LOOK_DOWN = "look down"
+        const val LOOK_UP = "look up"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -328,6 +332,12 @@ class AsyncAudioPlayer(context: Context) {
     private val handsBackOnHeadHold = MediaPlayer.create(context, R.raw.hands_back_on_head_hold)
     private val handsBackOnHeadResistHold =
         MediaPlayer.create(context, R.raw.hands_back_on_head_resist_hold)
+    private val bothKneesFallOutToTheLeft =
+        MediaPlayer.create(context, R.raw.both_knees_fall_out_to_the_left)
+    private val bothKneesFallOutToTheRight =
+        MediaPlayer.create(context, R.raw.both_knees_fall_out_to_the_right)
+    private val lookDown = MediaPlayer.create(context, R.raw.look_down)
+    private val lookUp = MediaPlayer.create(context, R.raw.look_up)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -467,6 +477,10 @@ class AsyncAudioPlayer(context: Context) {
             BEND_LEFT -> bendLeft.start()
             HANDS_BACK_ON_HEAD_HOLD -> handsBackOnHeadHold.start()
             HANDS_BACK_ON_HEAD_RESIST_HOLD -> handsBackOnHeadResistHold.start()
+            BOTH_KNEES_FALL_OUT_TO_THE_LEFT -> bothKneesFallOutToTheLeft.start()
+            BOTH_KNEES_FALL_OUT_TO_THE_RIGHT -> bothKneesFallOutToTheRight.start()
+            LOOK_DOWN -> lookDown.start()
+            LOOK_UP -> lookUp.start()
             else -> {}
         }
     }
