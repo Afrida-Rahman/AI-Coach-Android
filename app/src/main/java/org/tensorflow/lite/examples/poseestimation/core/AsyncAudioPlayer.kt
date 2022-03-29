@@ -151,6 +151,22 @@ class AsyncAudioPlayer(context: Context) {
         const val BOTH_KNEES_FALL_OUT_TO_THE_RIGHT = "both knees fall out to the right"
         const val LOOK_DOWN = "look down"
         const val LOOK_UP = "look up"
+        const val BEND_NECK_BACKWARD_HOLD = "bend neck backward hold"
+        const val BEND_NECK_FORWARD_HOLD = "bend neck forward hold"
+        const val BEND_NECK_TO_THE_LEFT = "bend neck to the left"
+        const val BEND_NECK_TO_THE_LEFT_HOLD = "bend neck to the left hold"
+        const val BEND_NECK_TO_THE_RIGHT = "bend neck to the right"
+        const val BEND_NECK_TO_THE_RIGHT_HOLD = "bend neck to the right hold"
+        const val BOTH_HANDS_ON_BACK_OF_HEAD_HOLD = "both hands on back of head hold"
+        const val LEFT_LEG_KICK_TO_YOUR_SIDE = "left leg kick to your side"
+        const val LOOK_DOWN_HOLD = "look down hold"
+        const val LOOK_TO_THE_LEFT = "look to the left"
+        const val LOOK_TO_THE_LEFT_HOLD = "look to the left hold"
+        const val LOOK_TO_THE_RIGHT = "look to the right"
+        const val LOOK_TO_THE_RIGHT_HOLD = "look to the right hold"
+        const val LOOK_UP_HOLD = "look up hold"
+        const val PUSH_FORWARD_HOLD = "push forward hold"
+        const val RIGHT_LEG_KICK_TO_YOUR_SIDE = "right leg kick to your side"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -338,6 +354,27 @@ class AsyncAudioPlayer(context: Context) {
         MediaPlayer.create(context, R.raw.both_knees_fall_out_to_the_right)
     private val lookDown = MediaPlayer.create(context, R.raw.look_down)
     private val lookUp = MediaPlayer.create(context, R.raw.look_up)
+    private val bendNeckBackwardHold = MediaPlayer.create(context, R.raw.bend_neck_backward_hold)
+    private val bendNeckForwardHold = MediaPlayer.create(context, R.raw.bend_neck_forward_hold)
+    private val bendNeckToTheLeft = MediaPlayer.create(context, R.raw.bend_neck_to_the_left)
+    private val bendNeckToTheLeftHold =
+        MediaPlayer.create(context, R.raw.bend_neck_to_the_left_hold)
+    private val bendNeckToTheRight = MediaPlayer.create(context, R.raw.bend_neck_to_the_right)
+    private val bendNeckToTheRightHold =
+        MediaPlayer.create(context, R.raw.bend_neck_to_the_right_hold)
+    private val bothHandsOnBackOfHeadHold =
+        MediaPlayer.create(context, R.raw.both_hands_on_back_of_head_hold)
+    private val leftLegKickToYourSide =
+        MediaPlayer.create(context, R.raw.left_leg_kick_to_your_side)
+    private val lookDownHold = MediaPlayer.create(context, R.raw.look_down_hold)
+    private val lookToTheLeft = MediaPlayer.create(context, R.raw.look_to_the_left)
+    private val lookToTheLeftHold = MediaPlayer.create(context, R.raw.look_to_the_left_hold)
+    private val lookToTheRight = MediaPlayer.create(context, R.raw.look_to_the_right)
+    private val lookToTheRightHold = MediaPlayer.create(context, R.raw.look_to_the_right_hold)
+    private val lookUpHold = MediaPlayer.create(context, R.raw.look_up_hold)
+    private val pushForwardHold = MediaPlayer.create(context, R.raw.push_forward_hold)
+    private val rightLegKickToYourSide =
+        MediaPlayer.create(context, R.raw.right_leg_kick_to_your_side)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -481,6 +518,22 @@ class AsyncAudioPlayer(context: Context) {
             BOTH_KNEES_FALL_OUT_TO_THE_RIGHT -> bothKneesFallOutToTheRight.start()
             LOOK_DOWN -> lookDown.start()
             LOOK_UP -> lookUp.start()
+            BEND_NECK_BACKWARD_HOLD -> bendNeckBackwardHold.start()
+            BEND_NECK_FORWARD_HOLD -> bendNeckForwardHold.start()
+            BEND_NECK_TO_THE_LEFT -> bendNeckToTheLeft.start()
+            BEND_NECK_TO_THE_LEFT_HOLD -> bendNeckToTheLeftHold.start()
+            BEND_NECK_TO_THE_RIGHT -> bendNeckToTheRight.start()
+            BEND_NECK_TO_THE_RIGHT_HOLD -> bendNeckToTheRightHold.start()
+            BOTH_HANDS_ON_BACK_OF_HEAD_HOLD -> bothHandsOnBackOfHeadHold.start()
+            LEFT_LEG_KICK_TO_YOUR_SIDE -> leftLegKickToYourSide.start()
+            LOOK_DOWN_HOLD -> lookDownHold.start()
+            LOOK_TO_THE_LEFT -> lookToTheLeft.start()
+            LOOK_TO_THE_LEFT_HOLD -> lookToTheLeftHold.start()
+            LOOK_TO_THE_RIGHT -> lookToTheRight.start()
+            LOOK_TO_THE_RIGHT_HOLD -> lookToTheRightHold.start()
+            LOOK_UP_HOLD -> lookUpHold.start()
+            PUSH_FORWARD_HOLD -> pushForwardHold.start()
+            RIGHT_LEG_KICK_TO_YOUR_SIDE -> rightLegKickToYourSide.start()
             else -> {}
         }
     }
