@@ -4,8 +4,7 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
-import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.ResistedElbowFlexionWithResistanceBandInSitting
-import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.ResistedElbowFlexionWithWeightsInSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
@@ -115,7 +114,37 @@ object Exercises {
             ActiveKneeFlexionInLongSitting(context),
             HamstringCurlsWithWeightsInStanding(context),
             ShortArcQuadsInLongSitting(context),
-            JumpingForwardAndBackward(context)
+            JumpingForwardAndBackward(context),
+            ShoulderFlexionWithDowelAndWeightsInSitting(context),
+            ElbowIRWithResistanceBandInStanding(context),
+            ElbowERWithResistanceBandInStanding(context),
+            ElbowExtensionWithResistanceBandInSitting(context),
+            SitToStandAdvance(context),
+            StraightLegRaiseInSupine(context),
+//            ElbowFlexionWithResistanceBandInSitting(context),
+            HipFlexionWithWeightsInSupine(context),
+            HamstringStretchWithChairInSitting(context),
+            HamstringStretchWithChairInStanding(context),
+            HamstringStretchInSitting(context),
+            DeadBugInSupine(context),
+            QuadSetsWithTowelInSupine(context),
+            IsometricShoulderExtensionInStanding(context),
+            IsometricShoulderFlexionInStanding(context),
+            AROMShoulderAbductionInStanding(context),
+            IsometricShoulderAbductionInStanding(context),
+            AAROMShoulderFlexionWithStickInStanding(context),
+            MedianNerveGlideInSitting(context),
+            SingleKneeToChestHandsFrontKneeInSupine(context),
+            RadialNerveGlideInSitting(context),
+            ThoracicRotationWithStickInStanding(context),
+            PushUpsInProne(context),
+            PushUpsFromKnees(context),
+            IsometricElbowExtensionInSitting(context),
+            IsometricElbowFlexionInSitting(context),
+            AROMHipExtensionInStanding(context),
+            AROMHipFlexionInStanding(context),
+            AROMHipFlexionInSupine(context),
+            PassiveHamstringStretchInSitting(context)
         )
     }
 
