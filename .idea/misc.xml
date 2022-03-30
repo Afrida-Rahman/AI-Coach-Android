@@ -21,8 +21,8 @@
         <entry key="app/src/main/res/drawable/rounded_edge.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout/activity_camera.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_exercise_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_exercise_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.2" />
@@ -30,17 +30,20 @@
         <entry key="app/src/main/res/layout/bottom_sheet_layout.xml" value="0.2796875" />
         <entry key="app/src/main/res/layout/content_dashboard.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/demo_fetch_data.xml" value="0.37395833333333334" />
+        <entry key="app/src/main/res/layout/exercise_info_modal.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/exercise_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fetch_retrofit_data.xml" value="0.28229166666666666" />
-        <entry key="app/src/main/res/layout/fragment_assessment_list.xml" value="0.3859375" />
+        <entry key="app/src/main/res/layout/fragment_assessment_list.xml" value="0.1757852077001013" />
         <entry key="app/src/main/res/layout/fragment_exercise_guide_lines.xml" value="0.35989583333333336" />
-        <entry key="app/src/main/res/layout/fragment_exercise_guideline.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_exercise_list.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_exercise_guideline.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_exercise_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_assessment.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_exercise.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_exercise.xml" value="0.3614583333333333" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_list.xml" value="0.2" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_image_url_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_exercise_guideline_imageurl_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_exercise_image_slide_list.xml" value="0.2682291666666667" />
+        <entry key="app/src/main/res/layout/item_image_slider.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_test.xml" value="0.33" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.25" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.37395833333333334" />

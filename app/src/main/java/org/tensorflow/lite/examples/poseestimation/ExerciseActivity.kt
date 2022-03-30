@@ -42,6 +42,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class ExerciseActivity : AppCompatActivity() {
     companion object {
         const val ExerciseId = "ExerciseId"
@@ -96,6 +97,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var timeCountDisplay: TextView
     private lateinit var phaseDialogueDisplay: TextView
     private lateinit var maxHoldTimeDisplay: TextView
+    private lateinit var exerciseProgressBar: ProgressBar
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -216,6 +218,9 @@ class ExerciseActivity : AppCompatActivity() {
         timeCountDisplay = findViewById(R.id.time_count_display)
         phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
         maxHoldTimeDisplay = findViewById(R.id.max_hold_time_display)
+        exerciseProgressBar = findViewById(R.id.exercise_progress)
+
+        exerciseProgressBar.max = exercise.maxSetCount * exercise.maxRepCount
 
         maxHoldTimeDisplay.text =
             getString(R.string.max_time_hold).format(0)
@@ -524,7 +529,15 @@ class ExerciseActivity : AppCompatActivity() {
                     )
                     exercise.getPersonDistance(person)?.let {
                         distanceDisplay.text = getString(R.string.distance_text).format(it)
+                        if (it <= 5f) {
+                            phaseDialogueDisplay.textSize = 30f
+                        } else if (5f < it && it <= 10f) {
+                            phaseDialogueDisplay.textSize = 50f
+                        } else {
+                            phaseDialogueDisplay.textSize = 70f
+                        }
                     }
+
                     wrongCountDisplay.text =
                         getString(R.string.wrong_text).format(exercise.getWrongCount())
                     phase?.let {
@@ -549,6 +562,8 @@ class ExerciseActivity : AppCompatActivity() {
                     }
                     maxHoldTimeDisplay.text =
                         getString(R.string.max_time_hold).format(exercise.getMaxHoldTime())
+                    exerciseProgressBar.progress =
+                        exercise.getSetCount() * exercise.maxRepCount + exercise.getRepetitionCount()
                 }
                 outputBitmap = VisualizationUtils.drawBodyKeyPoints(
                     input = bitmap,
@@ -613,7 +628,7 @@ class ExerciseActivity : AppCompatActivity() {
         Log.d("getExercise", "$ExerciseId, $testId, $protocolId")
         VisualizationUtils.getAlertDialogue(
             context = context,
-            message = "Congratulations! You have successfully completed the exercise.",
+            message = "Congratulations! You have successfully completed the exercise. Please be prepared for the next one.",
             positiveButtonText = "Ok",
             positiveButtonAction = {
                 askQuestions(context)
@@ -631,7 +646,7 @@ class ExerciseActivity : AppCompatActivity() {
             positiveButtonAction = {
                 val intent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://emma.injurycloud.com/account/painemmalogin?patientId=${logInData.patientId}&redirecturl=journal")
+                    Uri.parse("https://emma.mypainlog.ai/#/new-screenings?patientid=${logInData.patientId}&type=refer&refertype=painlog&autologin=true")
                 )
                 startActivity(intent)
                 finish()

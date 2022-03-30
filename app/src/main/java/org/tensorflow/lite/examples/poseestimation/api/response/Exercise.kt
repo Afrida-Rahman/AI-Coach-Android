@@ -2,15 +2,14 @@ package org.tensorflow.lite.examples.poseestimation.api.response
 
 data class Exercise(
     val ExerciseId: Int,
-    val ExerciseName: String,
     val ExerciseMedia: String,
-    val FrequencyInDay: Int,
-    val HoldInSeconds: Int,
-    val ImageURLs: List<String>,
+    val ProtocolId: Int,
+    val ExerciseName: String,
     val Instructions: String,
-    val IsPhaseFinished: Boolean,
-    val KeyPointsRestrictionGroup: List<KeyPointsRestrictionGroup>,
-    val RepetitionInCount: Int,
+    val ImageURLs: List<String>,
     val SetInCount: Int,
-    val ProtocolId: Int
+    val RepetitionInCount: Int,
+    val FrequencyInDay: Int,
+    val Phases: List<PhaseInfo1>,
+    val active: Boolean = true
 )

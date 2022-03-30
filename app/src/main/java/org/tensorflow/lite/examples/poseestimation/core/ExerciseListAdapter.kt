@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -35,7 +36,10 @@ class ExerciseListAdapter(
     private val tenant: String
 ) : RecyclerView.Adapter<ExerciseListAdapter.ExerciseItemViewHolder>() {
 
+    private lateinit var viewGroup: ViewGroup
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseItemViewHolder {
+        viewGroup = parent
         return ExerciseItemViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_exercise, parent, false)
@@ -48,10 +52,17 @@ class ExerciseListAdapter(
         val exercise = exerciseList[position]
         holder.apply {
             val context = this.exerciseImageView.context
-            val imageUrl = if (exercise.imageUrls.isNotEmpty()) {
-                exercise.imageUrls[0]
+            var imageUrl = ""
+            if (exercise.imageUrls.isNotEmpty()) {
+                exercise.imageUrls.forEach { url ->
+                    imageUrl = if (url.endsWith(".gif")) {
+                        url
+                    } else {
+                        exercise.imageUrls[0]
+                    }
+                }
             } else {
-                R.drawable.exercise
+                imageUrl = R.drawable.exercise.toString()
             }
 
             Glide.with(context)
@@ -59,7 +70,6 @@ class ExerciseListAdapter(
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .thumbnail(Glide.with(context).load(R.drawable.gif_loading).centerCrop())
                 .transition(DrawableTransitionOptions.withCrossFade(500))
-                .override(300, 300)
                 .into(this.exerciseImageView)
 
             exerciseNameView.text = exercise.name
@@ -67,15 +77,7 @@ class ExerciseListAdapter(
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
                 startExerciseButton.setOnClickListener {
-                    val intent = Intent(it.context, ExerciseActivity::class.java).apply {
-                        putExtra(ExerciseActivity.ExerciseId, exercise.id)
-                        putExtra(ExerciseActivity.TestId, testId)
-                        putExtra(ExerciseActivity.Name, exercise.name)
-                        putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
-                        putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
-                        putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
-                    }
-                    it.context.startActivity(intent)
+                    showExerciseInformation(it.context, exercise)
                 }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_inactive)
@@ -221,6 +223,28 @@ class ExerciseListAdapter(
                 ).show()
             }
         })
+    }
+
+    private fun showExerciseInformation(context: Context, exercise: HomeExercise) {
+        val dialogView = LayoutInflater
+            .from(context)
+            .inflate(R.layout.exercise_info_modal, viewGroup, false)
+        val alertDialog = AlertDialog.Builder(context).setView(dialogView)
+        val imageSlider: ViewPager2 = dialogView.findViewById(R.id.exercise_image_slide)
+        imageSlider.adapter = ExerciseInfoAdapter(exercise.imageUrls)
+        alertDialog.setPositiveButton("Let's Start") { _, _ ->
+            val intent = Intent(context, ExerciseActivity::class.java).apply {
+                putExtra(ExerciseActivity.ExerciseId, exercise.id)
+                putExtra(ExerciseActivity.TestId, testId)
+                putExtra(ExerciseActivity.Name, exercise.name)
+                putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
+                putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
+                putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
+            }
+            context.startActivity(intent)
+        }
+        alertDialog.setNegativeButton("Cancel") { _, _ -> }
+        alertDialog.show()
     }
 
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
