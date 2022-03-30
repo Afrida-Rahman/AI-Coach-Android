@@ -11,7 +11,7 @@ android {
         minSdk 23
         targetSdk 30
         versionCode 1
-        versionName "0.0.28"
+        versionName "0.0.39"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -79,4 +79,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.16.1'
     implementation "com.google.android.exoplayer:exoplayer-dash:2.16.1"
     implementation "com.google.android.exoplayer:exoplayer-hls:2.16.1"
+
+    //CircularIndicator
+    implementation 'me.relex:circleindicator:2.1.6'
 }

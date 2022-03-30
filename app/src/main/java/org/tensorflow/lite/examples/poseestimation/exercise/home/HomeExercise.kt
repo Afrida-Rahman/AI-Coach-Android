@@ -1,15 +1,20 @@
 package org.tensorflow.lite.examples.poseestimation.exercise.home
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RawRes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
+import org.tensorflow.lite.examples.poseestimation.core.AsyncAudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
-import org.tensorflow.lite.examples.poseestimation.core.CountDownAudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.Utilities.getIndex
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
@@ -34,6 +39,12 @@ abstract class HomeExercise(
     var maxRepCount: Int = 0,
     var maxSetCount: Int = 0
 ) {
+
+    companion object {
+        private const val SET_INTERVAL = 7000L
+        private const val PHASE_EASE_TIME = 3000L
+    }
+
     open var phaseIndex = 0
     open var rightCountPhases = mutableListOf<Phase>()
     open var wrongStateIndex = 0
@@ -42,12 +53,15 @@ abstract class HomeExercise(
     private var wrongCounter = 0
     private var repetitionCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
+    private var nextConstraintCheckTime = System.currentTimeMillis() + 1000L
+    private var allConstraintSatisfied = false
     private var focalLengths: FloatArray? = null
     private var previousCountDown = 0
     private var downTimeCounter = 0
     open var phaseEntered = false
     private var phaseEnterTime = System.currentTimeMillis()
-    private lateinit var countDownAudioPlayerPlayer: CountDownAudioPlayer
+    private lateinit var asyncAudioPlayer: AsyncAudioPlayer
+    private var takingRest = false
 
     fun setExercise(
         exerciseName: String,
@@ -70,7 +84,7 @@ abstract class HomeExercise(
     fun initializeConstraint(tenant: String) {
         val service = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(Utilities.getUrl(tenant).getKeyPointRestrictionURL)
+            .baseUrl(Utilities.getUrl(tenant).getExerciseConstraintsURL)
             .build()
             .create(IExerciseService::class.java)
         val requestPayload = ExerciseRequestPayload(
@@ -86,7 +100,7 @@ abstract class HomeExercise(
                 response: Response<KeyPointRestrictions>
             ) {
                 val responseBody = response.body()
-                if (responseBody == null) {
+                if (responseBody == null || responseBody.isEmpty()) {
                     Toast.makeText(
                         context,
                         "Failed to get necessary constraints for this exercise and got empty response. So, this exercise can't be performed now!",
@@ -94,6 +108,13 @@ abstract class HomeExercise(
                     ).show()
                 } else {
                     if (responseBody[0].KeyPointsRestrictionGroup.isNotEmpty()) {
+                        playInstruction(
+                            firstDelay = 5000L,
+                            firstInstruction = AsyncAudioPlayer.GET_READY,
+                            secondDelay = 5000L,
+                            secondInstruction = AsyncAudioPlayer.START,
+                            shouldTakeRest = true
+                        )
                         responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
                             val constraints = mutableListOf<Constraint>()
                             group.KeyPointsRestriction.sortedByDescending { it.Id }
@@ -169,7 +190,7 @@ abstract class HomeExercise(
                 ).show()
             }
         })
-        countDownAudioPlayerPlayer = CountDownAudioPlayer(context)
+        asyncAudioPlayer = AsyncAudioPlayer(context)
     }
 
     fun getMaxHoldTime(): Int = rightCountPhases.map { it.holdTime }.maxOrNull() ?: 0
@@ -190,12 +211,48 @@ abstract class HomeExercise(
         }
     }
 
+    fun playInstruction(
+        firstDelay: Long,
+        firstInstruction: String,
+        secondDelay: Long = 0L,
+        secondInstruction: String? = null,
+        shouldTakeRest: Boolean = false
+    ) {
+        if (shouldTakeRest) takingRest = true
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(firstDelay)
+            asyncAudioPlayer.playText(firstInstruction)
+            delay(secondDelay)
+            secondInstruction?.let {
+                asyncAudioPlayer.playText(it)
+            }
+            if (shouldTakeRest) takingRest = false
+        }
+    }
+
     fun repetitionCount() {
         repetitionCounter++
         audioPlayer.playFromFile(R.raw.right_count)
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
+            if (setCounter == maxSetCount) {
+                asyncAudioPlayer.playText(AsyncAudioPlayer.FINISH)
+                CoroutineScope(Dispatchers.Main).launch {
+                    playInstruction(
+                        firstDelay = 1000L,
+                        firstInstruction = AsyncAudioPlayer.CONGRATS
+                    )
+                }
+            } else {
+                playInstruction(
+                    firstDelay = 0L,
+                    firstInstruction = setCountText(setCounter),
+                    secondDelay = SET_INTERVAL,
+                    secondInstruction = AsyncAudioPlayer.START_AGAIN,
+                    shouldTakeRest = true
+                )
+            }
         }
     }
 
@@ -250,13 +307,13 @@ abstract class HomeExercise(
         canvasHeight: Int,
         canvasWidth: Int
     ) {
-        if (rightCountPhases.isNotEmpty() && phaseIndex < rightCountPhases.size) {
+        if (rightCountPhases.isNotEmpty() && phaseIndex < rightCountPhases.size && !takingRest) {
             val phase = rightCountPhases[phaseIndex]
             val constraintSatisfied = isConstraintSatisfied(
                 person,
                 phase.constraints
             )
-
+            Log.d("CountingIssue", "$phaseIndex -- $constraintSatisfied")
             if (VisualizationUtils.isInsideBox(
                     person,
                     canvasHeight,
@@ -274,9 +331,11 @@ abstract class HomeExercise(
                         phaseIndex = 0
                         wrongStateIndex = 0
                         repetitionCount()
-                        playCongratulationAudio()
                     } else {
                         phaseIndex++
+                        rightCountPhases[phaseIndex].phaseDialogue?.let {
+                            playInstruction(firstDelay = 500L, firstInstruction = it)
+                        }
                         downTimeCounter = 0
                     }
                 } else {
@@ -300,6 +359,20 @@ abstract class HomeExercise(
 
     open fun instruction(person: Person) {}
 
+    private fun setCountText(count: Int): String = when (count) {
+        1 -> AsyncAudioPlayer.SET_1
+        2 -> AsyncAudioPlayer.SET_2
+        3 -> AsyncAudioPlayer.SET_3
+        4 -> AsyncAudioPlayer.SET_4
+        5 -> AsyncAudioPlayer.SET_5
+        6 -> AsyncAudioPlayer.SET_6
+        7 -> AsyncAudioPlayer.SET_7
+        8 -> AsyncAudioPlayer.SET_8
+        9 -> AsyncAudioPlayer.SET_9
+        10 -> AsyncAudioPlayer.SET_10
+        else -> AsyncAudioPlayer.SET_COMPLETED
+    }
+
     private fun isConstraintSatisfied(person: Person, constraints: List<Constraint>): Boolean {
         var constraintSatisfied = true
         constraints.forEach {
@@ -312,6 +385,7 @@ abstract class HomeExercise(
                         clockWise = it.clockWise
                     )
                     if (angle < it.minValue || angle > it.maxValue) {
+                        Log.d("CountingIssue", "${it.minValue}< $angle < ${it.maxValue}")
                         constraintSatisfied = false
                     }
                 }
@@ -343,16 +417,6 @@ abstract class HomeExercise(
                     canvasWidth
                 )
             ) onEvent(CommonInstructionEvent.OutSideOfBox)
-//            else if (!isLeftHandStraight(
-//                    person = person,
-//                    constraint = it
-//                )
-//            ) onEvent(CommonInstructionEvent.LeftHandIsNotStraight)
-//            else if (!isRightHandStraight(
-//                    person = person,
-//                    constraint = it
-//                )
-//            ) onEvent(CommonInstructionEvent.RightHandIsNotStraight)
         }
         getPersonDistance(person)?.let {
             if (it > 13) {
@@ -364,13 +428,7 @@ abstract class HomeExercise(
     private fun countDownAudio(count: Int) {
         if (previousCountDown != count && count > 0) {
             previousCountDown = count
-            countDownAudioPlayerPlayer.play(count)
-        }
-    }
-
-    private fun playCongratulationAudio() {
-        if (setCounter == maxSetCount) {
-            audioPlayer.playFromFile(R.raw.congratulate_patient)
+            asyncAudioPlayer.playNumber(count)
         }
     }
 
@@ -381,5 +439,4 @@ abstract class HomeExercise(
         object RightHandIsNotStraight : CommonInstructionEvent()
         object TooFarFromCamera : CommonInstructionEvent()
     }
-
 }
