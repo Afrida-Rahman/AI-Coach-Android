@@ -121,7 +121,6 @@ object Exercises {
             ElbowExtensionWithResistanceBandInSitting(context),
             SitToStandAdvance(context),
             StraightLegRaiseInSupine(context),
-//            ElbowFlexionWithResistanceBandInSitting(context),
             HipFlexionWithWeightsInSupine(context),
             HamstringStretchWithChairInSitting(context),
             HamstringStretchWithChairInStanding(context),
