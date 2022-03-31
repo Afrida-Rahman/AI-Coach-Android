@@ -205,11 +205,11 @@
             android:text="@string/time_count_text"
             android:textColor="@color/green_60"
             android:textSize="150sp"
+            android:layout_marginBottom="10dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/btn_done" />
 
         <TextView
             android:id="@+id/phase_dialogue"
@@ -218,16 +218,15 @@
             android:text="@string/phase_dialogue"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/bg_instruction"
-            android:layout_marginBottom="40dp"
             android:padding="2dp"
-            app:layout_constraintBottom_toTopOf="@+id/done_button"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exercise_progress"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/done_button"
+            android:id="@+id/btn_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/i_m_done"
