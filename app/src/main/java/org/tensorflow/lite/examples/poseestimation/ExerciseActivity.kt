@@ -237,7 +237,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.exercise_name).text = exerciseName
 
-        findViewById<Button>(R.id.done_button).setOnClickListener {
+        findViewById<Button>(R.id.btn_done).setOnClickListener {
             saveExerciseData(
                 ExerciseId = exerciseId,
                 TestId = testId!!,
@@ -314,6 +314,7 @@ class ExerciseActivity : AppCompatActivity() {
         poseDetector?.close()
         poseDetector = null
         poseDetector = MoveNet.create(this, device)
+
         openCamera()
         startBackgroundThread()
     }
