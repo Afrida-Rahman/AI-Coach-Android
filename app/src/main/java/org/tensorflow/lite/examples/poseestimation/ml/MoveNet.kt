@@ -98,12 +98,6 @@ class MoveNet(private val interpreter: Interpreter) : PoseDetector {
                 for (idx in 0 until numKeyPoints) {
                     val x = output[idx * 3 + 1] * inputWidth * widthRatio
                     val y = output[idx * 3 + 0] * inputHeight * heightRatio
-
-                    Log.d(
-                        "output",
-                        "1st ::($x, $y) -- ${output[idx * 3 + 1]}--${output[idx * 3 + 0]}"
-                    )
-                    Log.d("output", "2nd ::$inputWidth, $inputHeight ::: $widthRatio, $heightRatio")
                     positions.add(x)
                     positions.add(y)
                     val score = output[idx * 3 + 2]
