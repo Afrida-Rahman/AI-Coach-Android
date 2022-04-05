@@ -50,19 +50,14 @@ class ExerciseListAdapter(
 
     override fun onBindViewHolder(holder: ExerciseItemViewHolder, position: Int) {
         val exercise = exerciseList[position]
+        var gifUrl: String? = null
         holder.apply {
             val context = this.exerciseImageView.context
-            var imageUrl = ""
-            if (exercise.imageUrls.isNotEmpty()) {
-                exercise.imageUrls.forEach { url ->
-                    imageUrl = if (url.endsWith(".gif")) {
-                        url
-                    } else {
-                        exercise.imageUrls[0]
-                    }
-                }
+            val imageUrl = if (exercise.imageUrls.isNotEmpty()) {
+                gifUrl = exercise.imageUrls.find { it.endsWith(".gif") }
+                gifUrl ?: exercise.imageUrls[0]
             } else {
-                imageUrl = R.drawable.exercise.toString()
+                R.drawable.exercise.toString()
             }
 
             Glide.with(context)
@@ -77,7 +72,7 @@ class ExerciseListAdapter(
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
                 startExerciseButton.setOnClickListener {
-                    showExerciseInformation(it.context, exercise)
+                    showExerciseInformation(it.context, exercise, gifUrl)
                 }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_exercise_inactive)
@@ -225,7 +220,7 @@ class ExerciseListAdapter(
         })
     }
 
-    private fun showExerciseInformation(context: Context, exercise: HomeExercise) {
+    private fun showExerciseInformation(context: Context, exercise: HomeExercise, gifUrl: String?) {
         val dialogView = LayoutInflater
             .from(context)
             .inflate(R.layout.exercise_info_modal, viewGroup, false)
@@ -239,6 +234,7 @@ class ExerciseListAdapter(
                 putExtra(ExerciseActivity.Name, exercise.name)
                 putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
                 putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
+                putExtra(ExerciseActivity.ImageUrl, gifUrl)
                 putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
             }
             context.startActivity(intent)
