@@ -52,7 +52,7 @@ class ExerciseActivity : AppCompatActivity() {
         const val ProtocolId = "ProtocolId"
         const val RepetitionLimit = "RepetitionLimit"
         const val SetLimit = "SetLimit"
-        const val ImageUrls = "ImageUrls"
+        const val ImageUrl = "ImageUrl"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
@@ -201,7 +201,7 @@ class ExerciseActivity : AppCompatActivity() {
         val exerciseName = intent.getStringExtra(Name)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
-        val imageUrl = intent.getStringExtra(ImageUrls)
+        val imageUrl = intent.getStringExtra(ImageUrl)
         logInData = loadLogInData()
 
         exercise = Exercises.get(this, exerciseId)
@@ -770,7 +770,7 @@ class ExerciseActivity : AppCompatActivity() {
     private fun showExerciseInformation(context: Context, url: String) {
         val dialogView = LayoutInflater
             .from(context)
-            .inflate(R.layout.exercise_info_modal, null)
+            .inflate(R.layout.image_popup_modal, null, false)
         val alertDialog = AlertDialog.Builder(context).setView(dialogView)
         val imageContainer: ImageView = dialogView.findViewById(R.id.gif_container)
         Glide.with(context)
@@ -784,5 +784,4 @@ class ExerciseActivity : AppCompatActivity() {
         }
         alertDialog.show()
     }
-
 }

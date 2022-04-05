@@ -96,7 +96,7 @@ class ExerciseGuidelineFragment(
                     putExtra(ExerciseActivity.Name, exercise.name)
                     putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
                     putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
-                    putExtra(ExerciseActivity.ImageUrls, gifUrl)
+                    putExtra(ExerciseActivity.ImageUrl, gifUrl)
                     putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
                 }
                 view.context.startActivity(intent)
