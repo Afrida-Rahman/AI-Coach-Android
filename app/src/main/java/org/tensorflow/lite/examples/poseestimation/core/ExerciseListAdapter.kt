@@ -37,6 +37,7 @@ class ExerciseListAdapter(
 ) : RecyclerView.Adapter<ExerciseListAdapter.ExerciseItemViewHolder>() {
 
     private lateinit var viewGroup: ViewGroup
+    private lateinit var gifUrl: String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseItemViewHolder {
         viewGroup = parent
@@ -55,11 +56,13 @@ class ExerciseListAdapter(
             var imageUrl = ""
             if (exercise.imageUrls.isNotEmpty()) {
                 exercise.imageUrls.forEach { url ->
-                    imageUrl = if (url.endsWith(".gif")) {
-                        url
+                    if (url.endsWith(".gif")) {
+                        imageUrl = url
+                        gifUrl = imageUrl
                     } else {
-                        exercise.imageUrls[0]
+                        imageUrl = exercise.imageUrls[0]
                     }
+
                 }
             } else {
                 imageUrl = R.drawable.exercise.toString()
@@ -239,6 +242,7 @@ class ExerciseListAdapter(
                 putExtra(ExerciseActivity.Name, exercise.name)
                 putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
                 putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
+                putExtra(ExerciseActivity.ImageUrls, gifUrl)
                 putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
             }
             context.startActivity(intent)
