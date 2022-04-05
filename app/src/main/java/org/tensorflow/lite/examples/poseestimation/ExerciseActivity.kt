@@ -100,7 +100,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var phaseDialogueDisplay: TextView
     private lateinit var maxHoldTimeDisplay: TextView
     private lateinit var exerciseProgressBar: ProgressBar
-//    private lateinit var imageContainer: ImageView
+    private lateinit var gifButton: ImageButton
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -223,7 +223,7 @@ class ExerciseActivity : AppCompatActivity() {
         phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
         maxHoldTimeDisplay = findViewById(R.id.max_hold_time_display)
         exerciseProgressBar = findViewById(R.id.exercise_progress)
-//        imageContainer = findViewById(R.id.gif_container)
+        gifButton = findViewById(R.id.btn_gif_display)
 
         exerciseProgressBar.max = exercise.maxSetCount * exercise.maxRepCount
 
@@ -263,12 +263,14 @@ class ExerciseActivity : AppCompatActivity() {
             openCamera()
         }
 
-        findViewById<ImageButton>(R.id.btn_gif_display).setOnClickListener {
-            if (imageUrl != null) {
-                Log.d("imageUrl", "$imageUrl")
+        if (imageUrl != null) {
+            findViewById<ImageButton>(R.id.btn_gif_display).setOnClickListener {
                 showExerciseInformation(this, imageUrl)
             }
+        } else {
+            gifButton.visibility = View.GONE
         }
+
 
         createPoseEstimator()
 
