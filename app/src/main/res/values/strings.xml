@@ -114,4 +114,5 @@
     <string name="exercise_video">Exercise Video</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
+    <string name="exercise_gif">Exercise gif</string>
 </resources>

@@ -5,6 +5,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.functional.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
@@ -143,7 +144,15 @@ object Exercises {
             AROMHipExtensionInStanding(context),
             AROMHipFlexionInStanding(context),
             AROMHipFlexionInSupine(context),
-            PassiveHamstringStretchInSitting(context)
+            PassiveHamstringStretchInSitting(context),
+            QuadrupedToHalfKneeling(context),
+            KneelingToSquatKneeling(context),
+            KneelingToHalfKneelingSupported(context),
+            KneelingToHalfKneelingUnsupported(context),
+            HalfKneelingToStandingSupported(context),
+            HalfKneelingToStandingUnsupported(context),
+            StandingToHalfKneelingSupported(context),
+            StandingToHalfKneelingUnsupported(context),
         )
     }
 
