@@ -167,6 +167,13 @@ class AsyncAudioPlayer(context: Context) {
         const val LOOK_UP_HOLD = "look up hold"
         const val PUSH_FORWARD_HOLD = "push forward hold"
         const val RIGHT_LEG_KICK_TO_YOUR_SIDE = "right leg kick to your side"
+        const val EXTEND_LEFT_ARM = "extend left arm"
+        const val EXTEND_LEFT_ARM_HOLD = "extend left arm hold"
+        const val EXTEND_RIGHT_ARM = "extend right arm"
+        const val EXTEND_RIGHT_ARM_HOLD = "extend right arm hold"
+        const val HALF_KNEELING_ON_LEFT = "half kneeling on left"
+        const val HALF_KNEELING_ON_RIGHT = "half kneeling on right"
+        const val KNEEL_UPRIGHT = "kneel upright"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -375,6 +382,13 @@ class AsyncAudioPlayer(context: Context) {
     private val pushForwardHold = MediaPlayer.create(context, R.raw.push_forward_hold)
     private val rightLegKickToYourSide =
         MediaPlayer.create(context, R.raw.right_leg_kick_to_your_side)
+    private val extendLeftArm = MediaPlayer.create(context, R.raw.extend_left_arm)
+    private val extendLeftArmHold = MediaPlayer.create(context, R.raw.extend_left_arm_hold)
+    private val extendRightArm = MediaPlayer.create(context, R.raw.extend_right_arm)
+    private val extendRightArmHold = MediaPlayer.create(context, R.raw.extend_right_arm_hold)
+    private val halfKneelingOnLeft = MediaPlayer.create(context, R.raw.half_kneeling_on_left)
+    private val halfKneelingOnRight = MediaPlayer.create(context, R.raw.half_kneeling_on_right)
+    private val kneelUpright = MediaPlayer.create(context, R.raw.kneel_upright)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -534,6 +548,13 @@ class AsyncAudioPlayer(context: Context) {
             LOOK_UP_HOLD -> lookUpHold.start()
             PUSH_FORWARD_HOLD -> pushForwardHold.start()
             RIGHT_LEG_KICK_TO_YOUR_SIDE -> rightLegKickToYourSide.start()
+            EXTEND_LEFT_ARM -> extendLeftArm.start()
+            EXTEND_LEFT_ARM_HOLD -> extendLeftArmHold.start()
+            EXTEND_RIGHT_ARM -> extendRightArm.start()
+            EXTEND_RIGHT_ARM_HOLD -> extendRightArmHold.start()
+            HALF_KNEELING_ON_LEFT -> halfKneelingOnLeft.start()
+            HALF_KNEELING_ON_RIGHT -> halfKneelingOnRight.start()
+            KNEEL_UPRIGHT -> kneelUpright.start()
             else -> {}
         }
     }
