@@ -61,6 +61,17 @@ class ExerciseGuidelineFragment(
         exoplayer.playWhenReady = false
         exoplayer.play()
 
+        var gifUrl = ""
+        if (imageUrls.isNotEmpty()) {
+            imageUrls.forEach { url ->
+                gifUrl = if (url.endsWith(".gif")) {
+                    url
+                } else {
+                    ""
+                }
+            }
+        }
+
         backButton.setOnClickListener {
             parentFragmentManager.beginTransaction().apply {
                 replace(
@@ -85,6 +96,7 @@ class ExerciseGuidelineFragment(
                     putExtra(ExerciseActivity.Name, exercise.name)
                     putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
                     putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
+                    putExtra(ExerciseActivity.ImageUrl, gifUrl)
                     putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
                 }
                 view.context.startActivity(intent)

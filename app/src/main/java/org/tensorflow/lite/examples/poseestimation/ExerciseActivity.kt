@@ -14,14 +14,15 @@ import android.os.HandlerThread
 import android.os.Process
 import android.util.Log
 import android.util.Size
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
@@ -51,6 +52,7 @@ class ExerciseActivity : AppCompatActivity() {
         const val ProtocolId = "ProtocolId"
         const val RepetitionLimit = "RepetitionLimit"
         const val SetLimit = "SetLimit"
+        const val ImageUrl = "ImageUrl"
         const val TAG = "ExerciseActivityTag"
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
@@ -98,6 +100,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var phaseDialogueDisplay: TextView
     private lateinit var maxHoldTimeDisplay: TextView
     private lateinit var exerciseProgressBar: ProgressBar
+    private lateinit var gifButton: ImageButton
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -198,6 +201,7 @@ class ExerciseActivity : AppCompatActivity() {
         val exerciseName = intent.getStringExtra(Name)
         val repetitionLimit = intent.getIntExtra(RepetitionLimit, 5)
         val setLimit = intent.getIntExtra(SetLimit, 1)
+        val imageUrl = intent.getStringExtra(ImageUrl)
         logInData = loadLogInData()
 
         exercise = Exercises.get(this, exerciseId)
@@ -219,6 +223,7 @@ class ExerciseActivity : AppCompatActivity() {
         phaseDialogueDisplay = findViewById(R.id.phase_dialogue)
         maxHoldTimeDisplay = findViewById(R.id.max_hold_time_display)
         exerciseProgressBar = findViewById(R.id.exercise_progress)
+        gifButton = findViewById(R.id.btn_gif_display)
 
         exerciseProgressBar.max = exercise.maxSetCount * exercise.maxRepCount
 
@@ -237,7 +242,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.exercise_name).text = exerciseName
 
-        findViewById<Button>(R.id.done_button).setOnClickListener {
+        findViewById<Button>(R.id.btn_done).setOnClickListener {
             saveExerciseData(
                 ExerciseId = exerciseId,
                 TestId = testId!!,
@@ -257,6 +262,15 @@ class ExerciseActivity : AppCompatActivity() {
             closeCamera()
             openCamera()
         }
+
+        if (imageUrl != null) {
+            findViewById<ImageButton>(R.id.btn_gif_display).setOnClickListener {
+                showExerciseInformation(this, imageUrl)
+            }
+        } else {
+            gifButton.visibility = View.GONE
+        }
+
 
         createPoseEstimator()
 
@@ -314,6 +328,7 @@ class ExerciseActivity : AppCompatActivity() {
         poseDetector?.close()
         poseDetector = null
         poseDetector = MoveNet.create(this, device)
+
         openCamera()
         startBackgroundThread()
     }
@@ -752,5 +767,23 @@ class ExerciseActivity : AppCompatActivity() {
             patientId = preferences.getString(SignInActivity.PATIENT_ID, "") ?: "",
             tenant = preferences.getString(SignInActivity.TENANT, "") ?: ""
         )
+    }
+
+    private fun showExerciseInformation(context: Context, url: String) {
+        val dialogView = LayoutInflater
+            .from(context)
+            .inflate(R.layout.image_popup_modal, null, false)
+        val alertDialog = AlertDialog.Builder(context).setView(dialogView)
+        val imageContainer: ImageView = dialogView.findViewById(R.id.gif_container)
+        Glide.with(context)
+            .load(url)
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .thumbnail(Glide.with(context).load(R.drawable.gif_loading).centerCrop())
+            .transition(DrawableTransitionOptions.withCrossFade(500))
+            .override(600)
+            .into(imageContainer)
+        alertDialog.setPositiveButton("Okay") { _, _ ->
+        }
+        alertDialog.show()
     }
 }
