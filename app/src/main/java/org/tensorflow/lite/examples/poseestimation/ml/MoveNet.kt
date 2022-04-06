@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.ml
 import android.content.Context
 import android.graphics.*
 import android.os.SystemClock
+import android.util.Log
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.examples.poseestimation.domain.model.*
@@ -83,6 +84,7 @@ class MoveNet(private val interpreter: Interpreter) : PoseDetector {
                 rect.top,
                 Paint()
             )
+            Log.d("output", "new : ${detectBitmap.width} - ${detectBitmap.height}")
             val inputTensor = processInputImage(detectBitmap, inputWidth, inputHeight)
             val outputTensor = TensorBuffer.createFixedSize(outputShape, DataType.FLOAT32)
             val widthRatio = detectBitmap.width.toFloat() / inputWidth
@@ -96,7 +98,6 @@ class MoveNet(private val interpreter: Interpreter) : PoseDetector {
                 for (idx in 0 until numKeyPoints) {
                     val x = output[idx * 3 + 1] * inputWidth * widthRatio
                     val y = output[idx * 3 + 0] * inputHeight * heightRatio
-
                     positions.add(x)
                     positions.add(y)
                     val score = output[idx * 3 + 2]
