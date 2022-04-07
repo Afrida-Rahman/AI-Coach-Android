@@ -82,17 +82,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageButton
-                        android:id="@+id/btn_guideline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/guideline_icon"
-                        android:src="@drawable/ic_guideline"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
@@ -126,12 +115,12 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/btn_start_exercise"
+                android:id="@+id/btn_guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="4dp"
-                android:text="@string/start_workout"
+                android:text="@string/guidelines"
                 android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_manual_tracking"
@@ -146,7 +135,7 @@
                 android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btn_start_exercise"
+                app:layout_constraintStart_toEndOf="@id/btn_guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginEnd="6dp" />
 
