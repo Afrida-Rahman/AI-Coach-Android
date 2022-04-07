@@ -45,10 +45,9 @@
                     android:id="@+id/exercise_status"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:paddingStart="4dp"
-                    android:layout_margin="8dp"
+                    android:layout_marginStart="10dp"
                     android:contentDescription="@string/active"
-                    android:src="@drawable/ic_exercise_active"
+                    android:src="@drawable/ic_check1"
                     app:layout_constraintStart_toStartOf="@id/item_exercise_image"
                     app:layout_constraintTop_toTopOf="@id/item_exercise_image" />
 

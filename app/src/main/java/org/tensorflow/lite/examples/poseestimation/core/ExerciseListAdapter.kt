@@ -70,12 +70,12 @@ class ExerciseListAdapter(
             exerciseNameView.text = exercise.name
 
             if (exercise.active) {
-                exerciseStatus.setImageResource(R.drawable.ic_exercise_active)
+                exerciseStatus.setImageResource(R.drawable.ic_check1)
                 startExerciseButton.setOnClickListener {
                     showExerciseInformation(it.context, exercise, gifUrl)
                 }
             } else {
-                exerciseStatus.setImageResource(R.drawable.ic_exercise_inactive)
+                exerciseStatus.setImageResource(R.drawable.ic_cross)
                 startExerciseButton.setOnClickListener {
                     Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
                 }
