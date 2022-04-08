@@ -59,7 +59,5 @@ class ImageSliderAdapter(
             .into(holder.phaseImage)
     }
 
-    override fun getItemCount(): Int {
-        return phaseImages.size
-    }
+    override fun getItemCount(): Int = phaseImages.size
 }

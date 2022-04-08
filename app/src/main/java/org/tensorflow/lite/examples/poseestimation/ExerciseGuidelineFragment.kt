@@ -44,11 +44,16 @@ class ExerciseGuidelineFragment(
         val backButton: ImageButton = view.findViewById(R.id.back_button)
         val playVideo: PlayerView = view.findViewById(R.id.video_view)
         val startWorkoutButton: Button = view.findViewById(R.id.btn_start_workout_guideline)
+        val imageAdapter = view.findViewById<ViewPager2>(R.id.image_slide_guideline)
+        val exerciseInstructionView: TextView =
+            view.findViewById(R.id.exercise_instruction_guideline)
 
+        val htmlTagRegex = Regex("<[^>]*>|&nbsp|;")
         val exercise = exerciseList[position]
         var instruction = exercise.instruction
         val imageUrls = exercise.imageUrls
         val videoUrls = exercise.videoUrls
+        val gifUrl = imageUrls.find { it.endsWith(".gif") }
 
         exoplayer = ExoPlayer.Builder(requireContext()).build()
         playVideo.player = exoplayer
@@ -58,7 +63,19 @@ class ExerciseGuidelineFragment(
         exoplayer.playWhenReady = false
         exoplayer.play()
 
-        val gifUrl = imageUrls.find { it.endsWith(".gif") }
+        exerciseNameView.text = exercise.name
+        instruction = instruction ?: ""
+        instruction = instruction.let { htmlTagRegex.replace(it, "").replace("\n", " ") }
+        exerciseInstructionView.text = instruction
+
+        if (imageUrls.isEmpty()) {
+            Toast.makeText(context, "No image is available now!", Toast.LENGTH_SHORT).show()
+        } else {
+            imageAdapter.adapter = ImageSliderAdapter(
+                view.context,
+                imageUrls
+            )
+        }
 
         backButton.setOnClickListener {
             parentFragmentManager.beginTransaction().apply {
@@ -88,26 +105,6 @@ class ExerciseGuidelineFragment(
                 Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
             }
         }
-
-        exerciseNameView.text = exercise.name
-        val exerciseInstructionView: TextView =
-            view.findViewById(R.id.exercise_instruction_guideline)
-        val htmlTagRegex = Regex("<[^>]*>|&nbsp|;")
-        instruction = instruction ?: ""
-        instruction = instruction.let { htmlTagRegex.replace(it, "").replace("\n", " ") }
-        exerciseInstructionView.text = instruction
-
-
-        if (imageUrls.isEmpty()) {
-            Toast.makeText(context, "No image is available now!", Toast.LENGTH_SHORT).show()
-        }
-
-        val imageAdapter = view.findViewById<ViewPager2>(R.id.image_slide_guideline)
-
-        imageAdapter.adapter = ImageSliderAdapter(
-            view.context,
-            imageUrls
-        )
         return view
     }
 
