@@ -42,7 +42,6 @@ abstract class HomeExercise(
 
     companion object {
         private const val SET_INTERVAL = 7000L
-        private const val PHASE_EASE_TIME = 3000L
     }
 
     open var phaseIndex = 0
@@ -53,8 +52,6 @@ abstract class HomeExercise(
     private var wrongCounter = 0
     private var repetitionCounter = 0
     private var lastTimePlayed: Int = System.currentTimeMillis().toInt()
-    private var nextConstraintCheckTime = System.currentTimeMillis() + 1000L
-    private var allConstraintSatisfied = false
     private var focalLengths: FloatArray? = null
     private var previousCountDown = 0
     private var downTimeCounter = 0

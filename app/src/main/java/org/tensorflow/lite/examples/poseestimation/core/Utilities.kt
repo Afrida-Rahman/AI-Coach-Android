@@ -104,6 +104,8 @@ object Utilities {
             "RIGHT_KNEE".lowercase() -> BodyPart.RIGHT_KNEE.position
             "LEFT_ANKLE".lowercase() -> BodyPart.LEFT_ANKLE.position
             "RIGHT_ANKLE".lowercase() -> BodyPart.RIGHT_ANKLE.position
+            "MID_SHOULDER".lowercase() -> BodyPart.MID_SHOULDER.position
+            "MID_HIP".lowercase() -> BodyPart.MID_HIP.position
             else -> -1
         }
     }
