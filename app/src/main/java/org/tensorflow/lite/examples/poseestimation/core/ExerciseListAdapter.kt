@@ -31,6 +31,7 @@ class ExerciseListAdapter(
     private val testId: String,
     private val testDate: String,
     private var exerciseList: List<HomeExercise>,
+    private var fullExerciseList: List<HomeExercise>,
     private val manager: FragmentManager,
     private val patientId: String,
     private val tenant: String
@@ -133,7 +134,7 @@ class ExerciseListAdapter(
                             testId = testId,
                             testDate = testDate,
                             position = position,
-                            exerciseList = exerciseList,
+                            exerciseList = fullExerciseList,
                             patientId = patientId,
                             tenant = tenant,
                             active = exercise.active
