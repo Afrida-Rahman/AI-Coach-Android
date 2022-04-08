@@ -174,6 +174,11 @@ class AsyncAudioPlayer(context: Context) {
         const val HALF_KNEELING_ON_LEFT = "half kneeling on left"
         const val HALF_KNEELING_ON_RIGHT = "half kneeling on right"
         const val KNEEL_UPRIGHT = "kneel upright"
+        const val LEFT_KNEE_DOWN = "left knee down"
+        const val PLACE_LEFT_FOOT_ON_FLOOR = "place left foot on floor"
+        const val PLACE_RIGHT_FOOT_ON_FLOOR = "place right foot on floor"
+        const val RIGHT_KNEE_DOWN = "right knee down"
+        const val SQUAT_KNEELING = "squat kneeling"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -389,6 +394,11 @@ class AsyncAudioPlayer(context: Context) {
     private val halfKneelingOnLeft = MediaPlayer.create(context, R.raw.half_kneeling_on_left)
     private val halfKneelingOnRight = MediaPlayer.create(context, R.raw.half_kneeling_on_right)
     private val kneelUpright = MediaPlayer.create(context, R.raw.kneel_upright)
+    private val leftKneeDown = MediaPlayer.create(context, R.raw.left_knee_down)
+    private val placeLeftFootOnFloor = MediaPlayer.create(context, R.raw.place_left_foot_on_floor)
+    private val placeRightFootOnFloor = MediaPlayer.create(context, R.raw.place_right_foot_on_floor)
+    private val rightKneeDown = MediaPlayer.create(context, R.raw.right_knee_down)
+    private val squatKneeling = MediaPlayer.create(context, R.raw.squat_kneeling)
 
     fun playText(text: String) {
         when (text.lowercase()) {
@@ -555,6 +565,11 @@ class AsyncAudioPlayer(context: Context) {
             HALF_KNEELING_ON_LEFT -> halfKneelingOnLeft.start()
             HALF_KNEELING_ON_RIGHT -> halfKneelingOnRight.start()
             KNEEL_UPRIGHT -> kneelUpright.start()
+            LEFT_KNEE_DOWN -> leftKneeDown.start()
+            PLACE_LEFT_FOOT_ON_FLOOR -> placeLeftFootOnFloor.start()
+            PLACE_RIGHT_FOOT_ON_FLOOR -> placeRightFootOnFloor.start()
+            RIGHT_KNEE_DOWN -> rightKneeDown.start()
+            SQUAT_KNEELING -> squatKneeling.start()
             else -> {}
         }
     }
