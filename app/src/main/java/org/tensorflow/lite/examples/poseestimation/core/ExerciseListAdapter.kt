@@ -50,7 +50,7 @@ class ExerciseListAdapter(
 
     override fun onBindViewHolder(holder: ExerciseItemViewHolder, position: Int) {
         val exercise = exerciseList[position]
-        var gifUrl: String? = null
+        var gifUrl: String?
         holder.apply {
             val context = this.exerciseImageView.context
             val imageUrl = if (exercise.imageUrls.isNotEmpty()) {
@@ -71,14 +71,8 @@ class ExerciseListAdapter(
 
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_check1)
-                startExerciseButton.setOnClickListener {
-                    showExerciseInformation(it.context, exercise, gifUrl)
-                }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_cross)
-                startExerciseButton.setOnClickListener {
-                    Toast.makeText(it.context, "Coming soon", Toast.LENGTH_LONG).show()
-                }
             }
 
             manualTrackingButton.setOnClickListener {
@@ -141,7 +135,8 @@ class ExerciseListAdapter(
                             position = position,
                             exerciseList = exerciseList,
                             patientId = patientId,
-                            tenant = tenant
+                            tenant = tenant,
+                            active = exercise.active
                         )
                     )
                     commit()
@@ -244,12 +239,11 @@ class ExerciseListAdapter(
     }
 
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val startExerciseButton: Button = view.findViewById(R.id.btn_start_exercise)
         val manualTrackingButton: Button = view.findViewById(R.id.btn_manual_tracking)
         val exerciseImageView: ImageView = view.findViewById(R.id.item_exercise_image)
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
-        val guidelineButton: ImageView = view.findViewById(R.id.btn_guideline)
+        val guidelineButton: Button = view.findViewById(R.id.btn_guideline)
         val assignedSet: TextView = view.findViewById(R.id.assigned_set)
         val assignedRepetition: TextView = view.findViewById(R.id.assigned_repetition)
     }
