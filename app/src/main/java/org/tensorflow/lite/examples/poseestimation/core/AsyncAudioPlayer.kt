@@ -180,6 +180,9 @@ class AsyncAudioPlayer(private val context: Context) {
         const val PLACE_RIGHT_FOOT_ON_FLOOR = "place right foot on floor"
         const val RIGHT_KNEE_DOWN = "right knee down"
         const val SQUAT_KNEELING = "squat kneeling"
+        const val BOTH_KNEES_ON_FLOOR = "both knees on floor"
+        const val LEFT_SIDE_KICK = "left side kick"
+        const val RIGHT_SIDE_KICK = "right side kick"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -781,6 +784,17 @@ class AsyncAudioPlayer(private val context: Context) {
         SQUAT_KNEELING -> Instruction(
             text = text,
             player = MediaPlayer.create(context, R.raw.squat_kneeling)
+        )
+        BOTH_KNEES_ON_FLOOR -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.both_knees_on_floor)
+        )
+        LEFT_SIDE_KICK -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_side_kick)
+        )
+        RIGHT_SIDE_KICK -> Instruction(
+            text = text, player = MediaPlayer.create(context, R.raw.right_side_kick)
         )
         else -> Instruction(text = text, player = null)
     }
