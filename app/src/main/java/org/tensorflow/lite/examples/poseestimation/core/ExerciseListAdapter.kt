@@ -133,7 +133,7 @@ class ExerciseListAdapter(
                         ExerciseGuidelineFragment(
                             testId = testId,
                             testDate = testDate,
-                            position = position,
+                            exercise = exercise,
                             exerciseList = fullExerciseList,
                             patientId = patientId,
                             tenant = tenant,

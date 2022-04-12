@@ -26,7 +26,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 class ExerciseGuidelineFragment(
     private val testId: String,
     private val testDate: String,
-    private val position: Int,
+    private val exercise: HomeExercise,
     private val exerciseList: List<HomeExercise>,
     private val patientId: String,
     private val tenant: String,
@@ -49,7 +49,6 @@ class ExerciseGuidelineFragment(
             view.findViewById(R.id.exercise_instruction_guideline)
 
         val htmlTagRegex = Regex("<[^>]*>|&nbsp|;")
-        val exercise = exerciseList[position]
         var instruction = exercise.instruction
         val imageUrls = exercise.imageUrls
         val videoUrls = exercise.videoUrls
