@@ -4,5 +4,5 @@ import android.media.MediaPlayer
 
 data class Instruction(
     val text: String,
-    val player: MediaPlayer
+    val player: MediaPlayer?
 )

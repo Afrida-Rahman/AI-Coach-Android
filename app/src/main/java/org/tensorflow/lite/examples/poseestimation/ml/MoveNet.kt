@@ -140,7 +140,7 @@ class MoveNet(private val interpreter: Interpreter) : PoseDetector {
             )
             keyPoints.add(
                 KeyPoint(
-                    BodyPart.fromInt(17),
+                    BodyPart.fromInt(18),
                     PointF(
                         (leftHip.coordinate.x + rightHip.coordinate.x) / 2f,
                         (leftHip.coordinate.y + rightHip.coordinate.y) / 2f

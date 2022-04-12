@@ -5,4 +5,4 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class SingleLegRaiseInQuadruped(context: Context) : HomeExercise(
     context = context, id = 502
-) {}
+)

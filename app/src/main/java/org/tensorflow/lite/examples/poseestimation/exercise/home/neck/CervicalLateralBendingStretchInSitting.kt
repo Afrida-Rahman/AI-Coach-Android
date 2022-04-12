@@ -4,5 +4,4 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class CervicalLateralBendingStretchInSitting(context: Context) :
-    HomeExercise(context = context, id = 86) {
-}
+    HomeExercise(context = context, id = 86)

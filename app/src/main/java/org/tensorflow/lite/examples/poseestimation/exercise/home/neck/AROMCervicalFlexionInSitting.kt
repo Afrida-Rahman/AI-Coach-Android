@@ -4,5 +4,4 @@ import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
 class AROMCervicalFlexionInSitting(context: Context) :
-    HomeExercise(context = context, id = 66) {
-}
+    HomeExercise(context = context, id = 66)

@@ -3,8 +3,9 @@ package org.tensorflow.lite.examples.poseestimation.core
 import android.content.Context
 import android.media.MediaPlayer
 import org.tensorflow.lite.examples.poseestimation.R
+import org.tensorflow.lite.examples.poseestimation.domain.model.Instruction
 
-class AsyncAudioPlayer(context: Context) {
+class AsyncAudioPlayer(private val context: Context) {
 
     companion object {
         const val LEAN_LEFT = "lean left"
@@ -202,376 +203,586 @@ class AsyncAudioPlayer(context: Context) {
     private val nineteen = MediaPlayer.create(context, R.raw.nineteen)
     private val twenty = MediaPlayer.create(context, R.raw.twenty)
     private val rightCount = MediaPlayer.create(context, R.raw.right_count)
-    private val leanLeft = MediaPlayer.create(context, R.raw.lean_left)
-    private val leanRight = MediaPlayer.create(context, R.raw.lean_right)
-    private val returnAudio = MediaPlayer.create(context, R.raw.return_audio)
-    private val finishAudio = MediaPlayer.create(context, R.raw.finish_audio)
-    private val congrats = MediaPlayer.create(context, R.raw.congratulate_patient)
-    private val takeRest = MediaPlayer.create(context, R.raw.take_some_time_to_rest)
-    private val startAudio = MediaPlayer.create(context, R.raw.start)
-    private val startAgain = MediaPlayer.create(context, R.raw.start_again)
-    private val firstSet = MediaPlayer.create(context, R.raw.first_set)
-    private val secondSet = MediaPlayer.create(context, R.raw.second_set)
-    private val thirdSet = MediaPlayer.create(context, R.raw.third_set)
-    private val fourthSet = MediaPlayer.create(context, R.raw.fourth_set)
-    private val fifthSet = MediaPlayer.create(context, R.raw.fifth_set)
-    private val sixthSet = MediaPlayer.create(context, R.raw.sixth_set)
-    private val seventhSet = MediaPlayer.create(context, R.raw.seventh_set)
-    private val eighthSet = MediaPlayer.create(context, R.raw.eighth_set)
-    private val ninthSet = MediaPlayer.create(context, R.raw.ninth_set)
-    private val tenthSet = MediaPlayer.create(context, R.raw.tenth_set)
-    private val setCompleted = MediaPlayer.create(context, R.raw.set_complete)
-    private val getReady = MediaPlayer.create(context, R.raw.get_ready)
-    private val squatDown = MediaPlayer.create(context, R.raw.squat_down)
-    private val bendLeftKnee = MediaPlayer.create(context, R.raw.bend_left_knee)
-    private val bendRightKnee = MediaPlayer.create(context, R.raw.bend_right_knee)
-    private val bendBothKnees = MediaPlayer.create(context, R.raw.bend_both_knees)
-    private val relax = MediaPlayer.create(context, R.raw.relax)
-    private val push = MediaPlayer.create(context, R.raw.push)
-    private val pullYourElbowsBack = MediaPlayer.create(context, R.raw.pull_your_elbows_back)
-    private val crunchUp = MediaPlayer.create(context, R.raw.crunch_up)
-    private val backDown = MediaPlayer.create(context, R.raw.back_down)
-    private val plankUp = MediaPlayer.create(context, R.raw.plank_up)
-    private val armRaise = MediaPlayer.create(context, R.raw.arm_raise)
-    private val rightLegKickBackward = MediaPlayer.create(context, R.raw.right_leg_kick_backward)
-    private val leftLegKickBackward = MediaPlayer.create(context, R.raw.left_leg_kick_backward)
-    private val rightLegKickLateral = MediaPlayer.create(context, R.raw.right_leg_kick_lateral)
-    private val leftLegKickLateral = MediaPlayer.create(context, R.raw.left_leg_kick_lateral)
-    private val leanForward = MediaPlayer.create(context, R.raw.lean_forward)
-    private val leanBackward = MediaPlayer.create(context, R.raw.lean_backward)
-    private val bothLegsFallOut = MediaPlayer.create(context, R.raw.both_legs_fall_out)
-    private val extendRightKnee = MediaPlayer.create(context, R.raw.extend_right_knee)
-    private val extendLeftKnee = MediaPlayer.create(context, R.raw.extend_left_knee)
-    private val liftHip = MediaPlayer.create(context, R.raw.lift_hip)
-    private val liftRightArm = MediaPlayer.create(context, R.raw.lift_right_arm)
-    private val liftLeftArm = MediaPlayer.create(context, R.raw.lift_left_arm)
-    private val liftRightLeg = MediaPlayer.create(context, R.raw.lift_right_leg)
-    private val liftLeftLeg = MediaPlayer.create(context, R.raw.lift_left_leg)
-    private val liftRightKnee = MediaPlayer.create(context, R.raw.lift_right_knee)
-    private val liftLeftKnee = MediaPlayer.create(context, R.raw.lift_left_knee)
-    private val leanBackwardHold = MediaPlayer.create(context, R.raw.lean_backward_hold)
-    private val leanForwardHold = MediaPlayer.create(context, R.raw.lean_forward_hold)
-    private val leanLeftHold = MediaPlayer.create(context, R.raw.lean_left_hold)
-    private val leanRightHold = MediaPlayer.create(context, R.raw.lean_right_hold)
-    private val squatDownHold = MediaPlayer.create(context, R.raw.squat_down_hold)
-    private val plankUpHold = MediaPlayer.create(context, R.raw.plank_up_hold)
-    private val quadrupedHold = MediaPlayer.create(context, R.raw.quadruped_hold)
-    private val liftHipHold = MediaPlayer.create(context, R.raw.lift_hip_hold)
-    private val liftRightLegHold = MediaPlayer.create(context, R.raw.lift_right_leg_hold)
-    private val liftLeftLegHold = MediaPlayer.create(context, R.raw.lift_left_leg_hold)
-    private val bendBothKneesHold = MediaPlayer.create(context, R.raw.bend_both_knees_hold)
-    private val pressUp = MediaPlayer.create(context, R.raw.press_up)
-    private val pressUpHold = MediaPlayer.create(context, R.raw.press_up_hold)
-    private val curlUpRightElbow = MediaPlayer.create(context, R.raw.curl_up_right_elbow)
-    private val curlUpLeftElbow = MediaPlayer.create(context, R.raw.curl_up_left_elbow)
-    private val curlUp = MediaPlayer.create(context, R.raw.curl_up)
-    private val lungeLeftLeg = MediaPlayer.create(context, R.raw.lunge_left_leg)
-    private val lungeRightLeg = MediaPlayer.create(context, R.raw.lunge_right_leg)
-    private val armsUp = MediaPlayer.create(context, R.raw.arms_up)
-    private val armsDown = MediaPlayer.create(context, R.raw.arms_down)
-    private val lungeLeftLegHold = MediaPlayer.create(context, R.raw.lunge_left_leg_hold)
-    private val lungeRightLegHold = MediaPlayer.create(context, R.raw.lunge_right_leg_hold)
-    private val reachAnkleHold = MediaPlayer.create(context, R.raw.reach_ankle_hold)
-    private val leanForwardRightHold = MediaPlayer.create(context, R.raw.lean_forward_right_hold)
-    private val leanForwardLeftHold = MediaPlayer.create(context, R.raw.lean_forward_left_hold)
-    private val standUp = MediaPlayer.create(context, R.raw.stand_up)
-    private val sitDown = MediaPlayer.create(context, R.raw.sit_down)
-    private val slightlyBendBothKnees = MediaPlayer.create(context, R.raw.slightly_bend_both_knees)
-    private val pullUp = MediaPlayer.create(context, R.raw.pull_up)
-    private val pushUp = MediaPlayer.create(context, R.raw.push_up)
-    private val pullDown = MediaPlayer.create(context, R.raw.pull_down)
-    private val leftArmRightLegUp = MediaPlayer.create(context, R.raw.left_arm_right_leg_up)
-    private val rightArmLeftLegUp = MediaPlayer.create(context, R.raw.right_arm_left_leg_up)
-    private val leftArmRightLegUpHold =
-        MediaPlayer.create(context, R.raw.left_arm_right_leg_up_hold)
-    private val rightArmLeftLegUpHold =
-        MediaPlayer.create(context, R.raw.right_arm_left_leg_up_hold)
-    private val proneOnElbows = MediaPlayer.create(context, R.raw.prone_on_elbows)
-    private val proneOnElbowsHold = MediaPlayer.create(context, R.raw.prone_on_elbows_hold)
-    private val extendBothKnees = MediaPlayer.create(context, R.raw.extend_both_knees)
-    private val liftLeftArmForward = MediaPlayer.create(context, R.raw.lift_left_arm_forward)
-    private val liftRightArmForward = MediaPlayer.create(context, R.raw.lift_right_arm_forward)
-    private val liftLeftArmBackward = MediaPlayer.create(context, R.raw.lift_left_arm_backward)
-    private val liftRightArmBackward = MediaPlayer.create(context, R.raw.lift_right_arm_backward)
-    private val liftRightKneeToChestHold =
-        MediaPlayer.create(context, R.raw.lift_right_knee_to_chest_hold)
-    private val liftLeftKneeToChestHold =
-        MediaPlayer.create(context, R.raw.lift_left_knee_to_chest_hold)
-    private val liftBothKneesToChestHold =
-        MediaPlayer.create(context, R.raw.lift_both_knees_to_chest_hold)
-    private val thumbUpLiftRightArmForward =
-        MediaPlayer.create(context, R.raw.thumb_up_lift_right_arm_forward)
-    private val thumbUpLiftLeftArmForward =
-        MediaPlayer.create(context, R.raw.thumb_up_lift_left_arm_forward)
-    private val thumbsUpArmsRaise = MediaPlayer.create(context, R.raw.thumbs_up_arms_raise)
-    private val standAgainstTheWall = MediaPlayer.create(context, R.raw.stand_against_the_wall)
-    private val liftLeftHandHold = MediaPlayer.create(context, R.raw.lift_left_hand_hold)
-    private val liftRightHandHold = MediaPlayer.create(context, R.raw.lift_right_hand_hold)
-    private val stepRightLegForwardHold =
-        MediaPlayer.create(context, R.raw.step_right_leg_forward_hold)
-    private val stepLeftLegForwardHold =
-        MediaPlayer.create(context, R.raw.step_left_leg_forward_hold)
-    private val stepLeftLegForward = MediaPlayer.create(context, R.raw.step_left_leg_forward)
-    private val stepRightLegForward = MediaPlayer.create(context, R.raw.step_right_leg_forward)
-    private val bendNeckForward = MediaPlayer.create(context, R.raw.bend_neck_forward)
-    private val bendNeckBackward = MediaPlayer.create(context, R.raw.bend_neck_backward)
-    private val jumpForward = MediaPlayer.create(context, R.raw.jump_forward)
-    private val jumpBackward = MediaPlayer.create(context, R.raw.jump_backward)
-    private val stepLeftLegBackwardHold =
-        MediaPlayer.create(context, R.raw.step_left_leg_backward_hold)
-    private val stepRightLegBackwardHold =
-        MediaPlayer.create(context, R.raw.step_right_leg_backward_hold)
-    private val stepLeftLegBackward = MediaPlayer.create(context, R.raw.step_left_leg_backward)
-    private val stepRightLegBackward = MediaPlayer.create(context, R.raw.step_right_leg_backward)
-    private val rotateToLeft = MediaPlayer.create(context, R.raw.rotate_to_left)
-    private val rotateToRight = MediaPlayer.create(context, R.raw.rotate_to_right)
-    private val rotateToLeftHold = MediaPlayer.create(context, R.raw.rotate_to_left_hold)
-    private val rotateToRightHold = MediaPlayer.create(context, R.raw.rotate_to_right_hold)
-    private val moveHeadForward = MediaPlayer.create(context, R.raw.move_head_forward)
-    private val moveHeadBackward = MediaPlayer.create(context, R.raw.move_head_backward)
-    private val bendForward = MediaPlayer.create(context, R.raw.bend_forward)
-    private val bendBackward = MediaPlayer.create(context, R.raw.bend_backward)
-    private val bendForwardResistHold = MediaPlayer.create(context, R.raw.bend_forward_resist_hold)
-    private val bendBackwardResistHold =
-        MediaPlayer.create(context, R.raw.bend_backward_resist_hold)
-    private val bendLeftResistHold = MediaPlayer.create(context, R.raw.bend_left_resist_hold)
-    private val bendRightResistHold = MediaPlayer.create(context, R.raw.bend_right_resist_hold)
-    private val leftHandOnRightArmPushHold =
-        MediaPlayer.create(context, R.raw.left_hand_on_right_arm_push_hold)
-    private val rightHandOnLeftArmPushHold =
-        MediaPlayer.create(context, R.raw.right_hand_on_left_arm_push_hold)
-    private val thumbsOutArmsRaise = MediaPlayer.create(context, R.raw.thumbs_out_arms_raise)
-    private val thumbsOutArmsRaiseHold =
-        MediaPlayer.create(context, R.raw.thumbs_out_arms_raise_hold)
-    private val thumbOutMoveRightArmUpLateral =
-        MediaPlayer.create(context, R.raw.thumb_out_move_right_arm_up_lateral)
-    private val thumbOutMoveLeftArmLateral =
-        MediaPlayer.create(context, R.raw.thumb_out_move_left_arm_lateral)
-    private val leftHandPushHeadBackwardResistHold =
-        MediaPlayer.create(context, R.raw.left_hand_push_head_backward_resist_hold)
-    private val bothHandsPushHeadFowardResistHold =
-        MediaPlayer.create(context, R.raw.both_hands_push_head_foward_resist_hold)
-    private val leftHandPushHeadToTheRightResistHold =
-        MediaPlayer.create(context, R.raw.left_hand_push_head_to_the_right_resist_hold)
-    private val rightHandPushHeadToTheLeftResistHold =
-        MediaPlayer.create(context, R.raw.right_hand_push_head_to_the_left_resist_hold)
-    private val bendRight = MediaPlayer.create(context, R.raw.bend_right)
-    private val bendLeft = MediaPlayer.create(context, R.raw.bend_left)
-    private val handsBackOnHeadHold = MediaPlayer.create(context, R.raw.hands_back_on_head_hold)
-    private val handsBackOnHeadResistHold =
-        MediaPlayer.create(context, R.raw.hands_back_on_head_resist_hold)
-    private val bothKneesFallOutToTheLeft =
-        MediaPlayer.create(context, R.raw.both_knees_fall_out_to_the_left)
-    private val bothKneesFallOutToTheRight =
-        MediaPlayer.create(context, R.raw.both_knees_fall_out_to_the_right)
-    private val lookDown = MediaPlayer.create(context, R.raw.look_down)
-    private val lookUp = MediaPlayer.create(context, R.raw.look_up)
-    private val bendNeckBackwardHold = MediaPlayer.create(context, R.raw.bend_neck_backward_hold)
-    private val bendNeckForwardHold = MediaPlayer.create(context, R.raw.bend_neck_forward_hold)
-    private val bendNeckToTheLeft = MediaPlayer.create(context, R.raw.bend_neck_to_the_left)
-    private val bendNeckToTheLeftHold =
-        MediaPlayer.create(context, R.raw.bend_neck_to_the_left_hold)
-    private val bendNeckToTheRight = MediaPlayer.create(context, R.raw.bend_neck_to_the_right)
-    private val bendNeckToTheRightHold =
-        MediaPlayer.create(context, R.raw.bend_neck_to_the_right_hold)
-    private val bothHandsOnBackOfHeadHold =
-        MediaPlayer.create(context, R.raw.both_hands_on_back_of_head_hold)
-    private val leftLegKickToYourSide =
-        MediaPlayer.create(context, R.raw.left_leg_kick_to_your_side)
-    private val lookDownHold = MediaPlayer.create(context, R.raw.look_down_hold)
-    private val lookToTheLeft = MediaPlayer.create(context, R.raw.look_to_the_left)
-    private val lookToTheLeftHold = MediaPlayer.create(context, R.raw.look_to_the_left_hold)
-    private val lookToTheRight = MediaPlayer.create(context, R.raw.look_to_the_right)
-    private val lookToTheRightHold = MediaPlayer.create(context, R.raw.look_to_the_right_hold)
-    private val lookUpHold = MediaPlayer.create(context, R.raw.look_up_hold)
-    private val pushForwardHold = MediaPlayer.create(context, R.raw.push_forward_hold)
-    private val rightLegKickToYourSide =
-        MediaPlayer.create(context, R.raw.right_leg_kick_to_your_side)
-    private val extendLeftArm = MediaPlayer.create(context, R.raw.extend_left_arm)
-    private val extendLeftArmHold = MediaPlayer.create(context, R.raw.extend_left_arm_hold)
-    private val extendRightArm = MediaPlayer.create(context, R.raw.extend_right_arm)
-    private val extendRightArmHold = MediaPlayer.create(context, R.raw.extend_right_arm_hold)
-    private val halfKneelingOnLeft = MediaPlayer.create(context, R.raw.half_kneeling_on_left)
-    private val halfKneelingOnRight = MediaPlayer.create(context, R.raw.half_kneeling_on_right)
-    private val kneelUpright = MediaPlayer.create(context, R.raw.kneel_upright)
-    private val leftKneeDown = MediaPlayer.create(context, R.raw.left_knee_down)
-    private val placeLeftFootOnFloor = MediaPlayer.create(context, R.raw.place_left_foot_on_floor)
-    private val placeRightFootOnFloor = MediaPlayer.create(context, R.raw.place_right_foot_on_floor)
-    private val rightKneeDown = MediaPlayer.create(context, R.raw.right_knee_down)
-    private val squatKneeling = MediaPlayer.create(context, R.raw.squat_kneeling)
 
-    fun playText(text: String) {
-        when (text.lowercase()) {
-            LEAN_LEFT -> leanLeft.start()
-            LEAN_RIGHT -> leanRight.start()
-            RETURN -> returnAudio.start()
-            FINISH -> finishAudio.start()
-            CONGRATS -> congrats.start()
-            TAKE_REST -> takeRest.start()
-            START -> startAudio.start()
-            SET_1 -> firstSet.start()
-            SET_2 -> secondSet.start()
-            SET_3 -> thirdSet.start()
-            SET_4 -> fourthSet.start()
-            SET_5 -> fifthSet.start()
-            SET_6 -> sixthSet.start()
-            SET_7 -> seventhSet.start()
-            SET_8 -> eighthSet.start()
-            SET_9 -> ninthSet.start()
-            SET_10 -> tenthSet.start()
-            SET_COMPLETED -> setCompleted.start()
-            GET_READY -> getReady.start()
-            START_AGAIN -> startAgain.start()
-            SQUAT_DOWN -> squatDown.start()
-            BEND_LEFT_KNEE -> bendLeftKnee.start()
-            BEND_RIGHT_KNEE -> bendRightKnee.start()
-            BEND_BOTH_KNEES -> bendBothKnees.start()
-            RELAX -> relax.start()
-            PUSH -> push.start()
-            PULL_YOUR_ELBOWS_BACK -> pullYourElbowsBack.start()
-            CRUNCH_UP -> crunchUp.start()
-            BACK_DOWN -> backDown.start()
-            PLANK_UP -> plankUp.start()
-            ARM_RAISE -> armRaise.start()
-            RIGHT_LEG_KICK_BACKWARD -> rightLegKickBackward.start()
-            LEFT_LEG_KICK_BACKWARD -> leftLegKickBackward.start()
-            RIGHT_LEG_KICK_LATERAL -> rightLegKickLateral.start()
-            LEFT_LEG_KICK_LATERAL -> leftLegKickLateral.start()
-            LEAN_FORWARD -> leanForward.start()
-            LEAN_BACKWARD -> leanBackward.start()
-            BOTH_LEGS_FALL_OUT -> bothLegsFallOut.start()
-            EXTEND_RIGHT_KNEE -> extendRightKnee.start()
-            EXTEND_LEFT_KNEE -> extendLeftKnee.start()
-            LIFT_HIP -> liftHip.start()
-            LIFT_RIGHT_ARM -> liftRightArm.start()
-            LIFT_LEFT_ARM -> liftLeftArm.start()
-            LIFT_RIGHT_LEG -> liftRightLeg.start()
-            LIFT_LEFT_LEG -> liftLeftLeg.start()
-            LIFT_RIGHT_KNEE -> liftRightKnee.start()
-            LIFT_LEFT_KNEE -> liftLeftKnee.start()
-            LEAN_BACKWARD_HOLD -> leanBackwardHold.start()
-            LEAN_FORWARD_HOLD -> leanForwardHold.start()
-            LEAN_LEFT_HOLD -> leanLeftHold.start()
-            LEAN_RIGHT_HOLD -> leanRightHold.start()
-            SQUAT_DOWN_HOLD -> squatDownHold.start()
-            PLANK_UP_HOLD -> plankUpHold.start()
-            QUADRUPED_HOLD -> quadrupedHold.start()
-            LIFT_HIP_HOLD -> liftHipHold.start()
-            LIFT_RIGHT_LEG_HOLD -> liftRightLegHold.start()
-            LIFT_LEFT_LEG_HOLD -> liftLeftLegHold.start()
-            BEND_BOTH_KNEES_HOLD -> bendBothKneesHold.start()
-            PRESS_UP -> pressUp.start()
-            PRESS_UP_HOLD -> pressUpHold.start()
-            CURL_UP_RIGHT_ELBOW -> curlUpRightElbow.start()
-            CURL_UP_LEFT_ELBOW -> curlUpLeftElbow.start()
-            CURL_UP -> curlUp.start()
-            LUNGE_LEFT_LEG -> lungeLeftLeg.start()
-            LUNGE_RIGHT_LEG -> lungeRightLeg.start()
-            ARMS_UP -> armsUp.start()
-            ARMS_DOWN -> armsDown.start()
-            LUNGE_LEFT_LEG_HOLD -> lungeLeftLegHold.start()
-            LUNGE_RIGHT_LEG_HOLD -> lungeRightLegHold.start()
-            REACH_ANKLE_HOLD -> reachAnkleHold.start()
-            LEAN_FORWARD_RIGHT_HOLD -> leanForwardRightHold.start()
-            LEAN_FORWARD_LEFT_HOLD -> leanForwardLeftHold.start()
-            STAND_UP -> standUp.start()
-            SIT_DOWN -> sitDown.start()
-            SLIGHTLY_BEND_BOTH_KNEES -> slightlyBendBothKnees.start()
-            PULL_UP -> pullUp.start()
-            PUSH_UP -> pushUp.start()
-            PULL_DOWN -> pullDown.start()
-            LEFT_ARM_RIGHT_LEG_UP -> leftArmRightLegUp.start()
-            RIGHT_ARM_LEFT_LEG_UP -> rightArmLeftLegUp.start()
-            LEFT_ARM_RIGHT_LEG_UP_HOLD -> leftArmRightLegUpHold.start()
-            RIGHT_ARM_LEFT_LEG_UP_HOLD -> rightArmLeftLegUpHold.start()
-            PRONE_ON_ELBOWS -> proneOnElbows.start()
-            PRONE_ON_ELBOWS_HOLD -> proneOnElbowsHold.start()
-            EXTEND_BOTH_KNEES -> extendBothKnees.start()
-            LIFT_LEFT_ARM_FORWARD -> liftLeftArmForward.start()
-            LIFT_RIGHT_ARM_FORWARD -> liftRightArmForward.start()
-            LIFT_LEFT_ARM_BACKWARD -> liftLeftArmBackward.start()
-            LIFT_RIGHT_ARM_BACKWARD -> liftRightArmBackward.start()
-            LIFT_RIGHT_KNEE_TO_CHEST_HOLD -> liftRightKneeToChestHold.start()
-            LIFT_LEFT_KNEE_TO_CHEST_HOLD -> liftLeftKneeToChestHold.start()
-            LIFT_BOTH_KNEES_TO_CHEST_HOLD -> liftBothKneesToChestHold.start()
-            THUMB_UP_LIFT_RIGHT_ARM_FORWARD -> thumbUpLiftRightArmForward.start()
-            THUMB_UP_LIFT_LEFT_ARM_FORWARD -> thumbUpLiftLeftArmForward.start()
-            THUMBS_UP_ARMS_RAISE -> thumbsUpArmsRaise.start()
-            STAND_AGAINST_THE_WALL -> standAgainstTheWall.start()
-            LIFT_LEFT_HAND_HOLD -> liftLeftHandHold.start()
-            LIFT_RIGHT_HAND_HOLD -> liftRightHandHold.start()
-            STEP_RIGHT_LEG_FORWARD_HOLD -> stepRightLegForwardHold.start()
-            STEP_LEFT_LEG_FORWARD_HOLD -> stepLeftLegForwardHold.start()
-            STEP_LEFT_LEG_FORWARD -> stepLeftLegForward.start()
-            STEP_RIGHT_LEG_FORWARD -> stepRightLegForward.start()
-            BEND_NECK_FORWARD -> bendNeckForward.start()
-            BEND_NECK_BACKWARD -> bendNeckBackward.start()
-            JUMP_FORWARD -> jumpForward.start()
-            JUMP_BACKWARD -> jumpBackward.start()
-            STEP_LEFT_LEG_BACKWARD_HOLD -> stepLeftLegBackwardHold.start()
-            STEP_RIGHT_LEG_BACKWARD_HOLD -> stepRightLegBackwardHold.start()
-            STEP_LEFT_LEG_BACKWARD -> stepLeftLegBackward.start()
-            STEP_RIGHT_LEG_BACKWARD -> stepRightLegBackward.start()
-            ROTATE_TO_LEFT -> rotateToLeft.start()
-            ROTATE_TO_RIGHT -> rotateToRight.start()
-            ROTATE_TO_LEFT_HOLD -> rotateToLeftHold.start()
-            ROTATE_TO_RIGHT_HOLD -> rotateToRightHold.start()
-            MOVE_HEAD_FORWARD -> moveHeadForward.start()
-            MOVE_HEAD_BACKWARD -> moveHeadBackward.start()
-            BEND_FORWARD -> bendForward.start()
-            BEND_BACKWARD -> bendBackward.start()
-            BEND_FORWARD_RESIST_HOLD -> bendForwardResistHold.start()
-            BEND_BACKWARD_RESIST_HOLD -> bendBackwardResistHold.start()
-            BEND_LEFT_RESIST_HOLD -> bendLeftResistHold.start()
-            BEND_RIGHT_RESIST_HOLD -> bendRightResistHold.start()
-            LEFT_HAND_ON_RIGHT_ARM_PUSH_HOLD -> leftHandOnRightArmPushHold.start()
-            RIGHT_HAND_ON_LEFT_ARM_PUSH_HOLD -> rightHandOnLeftArmPushHold.start()
-            THUMBS_OUT_ARMS_RAISE -> thumbsOutArmsRaise.start()
-            THUMBS_OUT_ARMS_RAISE_HOLD -> thumbsOutArmsRaiseHold.start()
-            THUMB_OUT_MOVE_RIGHT_ARM_UP_LATERAL -> thumbOutMoveRightArmUpLateral.start()
-            THUMB_OUT_MOVE_LEFT_ARM_LATERAL -> thumbOutMoveLeftArmLateral.start()
-            LEFT_HAND_PUSH_HEAD_BACKWARD_RESIST_HOLD -> leftHandPushHeadBackwardResistHold.start()
-            BOTH_HANDS_PUSH_HEAD_FOWARD_RESIST_HOLD -> bothHandsPushHeadFowardResistHold.start()
-            LEFT_HAND_PUSH_HEAD_TO_THE_RIGHT_RESIST_HOLD -> leftHandPushHeadToTheRightResistHold.start()
-            RIGHT_HAND_PUSH_HEAD_TO_THE_LEFT_RESIST_HOLD -> rightHandPushHeadToTheLeftResistHold.start()
-            BEND_RIGHT -> bendRight.start()
-            BEND_LEFT -> bendLeft.start()
-            HANDS_BACK_ON_HEAD_HOLD -> handsBackOnHeadHold.start()
-            HANDS_BACK_ON_HEAD_RESIST_HOLD -> handsBackOnHeadResistHold.start()
-            BOTH_KNEES_FALL_OUT_TO_THE_LEFT -> bothKneesFallOutToTheLeft.start()
-            BOTH_KNEES_FALL_OUT_TO_THE_RIGHT -> bothKneesFallOutToTheRight.start()
-            LOOK_DOWN -> lookDown.start()
-            LOOK_UP -> lookUp.start()
-            BEND_NECK_BACKWARD_HOLD -> bendNeckBackwardHold.start()
-            BEND_NECK_FORWARD_HOLD -> bendNeckForwardHold.start()
-            BEND_NECK_TO_THE_LEFT -> bendNeckToTheLeft.start()
-            BEND_NECK_TO_THE_LEFT_HOLD -> bendNeckToTheLeftHold.start()
-            BEND_NECK_TO_THE_RIGHT -> bendNeckToTheRight.start()
-            BEND_NECK_TO_THE_RIGHT_HOLD -> bendNeckToTheRightHold.start()
-            BOTH_HANDS_ON_BACK_OF_HEAD_HOLD -> bothHandsOnBackOfHeadHold.start()
-            LEFT_LEG_KICK_TO_YOUR_SIDE -> leftLegKickToYourSide.start()
-            LOOK_DOWN_HOLD -> lookDownHold.start()
-            LOOK_TO_THE_LEFT -> lookToTheLeft.start()
-            LOOK_TO_THE_LEFT_HOLD -> lookToTheLeftHold.start()
-            LOOK_TO_THE_RIGHT -> lookToTheRight.start()
-            LOOK_TO_THE_RIGHT_HOLD -> lookToTheRightHold.start()
-            LOOK_UP_HOLD -> lookUpHold.start()
-            PUSH_FORWARD_HOLD -> pushForwardHold.start()
-            RIGHT_LEG_KICK_TO_YOUR_SIDE -> rightLegKickToYourSide.start()
-            EXTEND_LEFT_ARM -> extendLeftArm.start()
-            EXTEND_LEFT_ARM_HOLD -> extendLeftArmHold.start()
-            EXTEND_RIGHT_ARM -> extendRightArm.start()
-            EXTEND_RIGHT_ARM_HOLD -> extendRightArmHold.start()
-            HALF_KNEELING_ON_LEFT -> halfKneelingOnLeft.start()
-            HALF_KNEELING_ON_RIGHT -> halfKneelingOnRight.start()
-            KNEEL_UPRIGHT -> kneelUpright.start()
-            LEFT_KNEE_DOWN -> leftKneeDown.start()
-            PLACE_LEFT_FOOT_ON_FLOOR -> placeLeftFootOnFloor.start()
-            PLACE_RIGHT_FOOT_ON_FLOOR -> placeRightFootOnFloor.start()
-            RIGHT_KNEE_DOWN -> rightKneeDown.start()
-            SQUAT_KNEELING -> squatKneeling.start()
-            else -> {}
-        }
+    fun playText(instruction: Instruction) {
+        instruction.player?.start()
+    }
+
+    fun generateInstruction(text: String): Instruction = when (text.lowercase()) {
+        LEAN_LEFT -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.lean_left))
+        LEAN_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_right)
+        )
+        RETURN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.return_audio))
+        FINISH -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.finish_audio))
+        CONGRATS -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.congratulate_patient)
+        )
+        TAKE_REST -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.take_some_time_to_rest)
+        )
+        START -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.start))
+        START_AGAIN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.start_again)
+        )
+        SET_1 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.first_set))
+        SET_2 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.second_set))
+        SET_3 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.third_set))
+        SET_4 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.fourth_set))
+        SET_5 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.fifth_set))
+        SET_6 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.sixth_set))
+        SET_7 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.seventh_set))
+        SET_8 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.eighth_set))
+        SET_9 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.ninth_set))
+        SET_10 -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.tenth_set))
+        SET_COMPLETED -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.set_complete)
+        )
+        GET_READY -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.get_ready)
+        )
+        SQUAT_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.squat_down)
+        )
+        BEND_LEFT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_left_knee)
+        )
+        BEND_RIGHT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_right_knee)
+        )
+        BEND_BOTH_KNEES -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_both_knees)
+        )
+        RELAX -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.relax))
+        PUSH -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.push))
+        PULL_YOUR_ELBOWS_BACK -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.pull_your_elbows_back)
+        )
+        CRUNCH_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.crunch_up))
+        BACK_DOWN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.back_down))
+        PLANK_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.plank_up))
+        ARM_RAISE -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.arm_raise))
+        RIGHT_LEG_KICK_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_leg_kick_backward)
+        )
+        LEFT_LEG_KICK_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_leg_kick_backward)
+        )
+        RIGHT_LEG_KICK_LATERAL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_leg_kick_lateral)
+        )
+        LEFT_LEG_KICK_LATERAL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_leg_kick_lateral)
+        )
+        LEAN_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_forward)
+        )
+        LEAN_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_backward)
+        )
+        BOTH_LEGS_FALL_OUT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.both_legs_fall_out)
+        )
+        EXTEND_RIGHT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_right_knee)
+        )
+        EXTEND_LEFT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_left_knee)
+        )
+        LIFT_HIP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.lift_hip))
+        LIFT_RIGHT_ARM -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_arm)
+        )
+        LIFT_LEFT_ARM -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_arm)
+        )
+        LIFT_RIGHT_LEG -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_leg)
+        )
+        LIFT_LEFT_LEG -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_leg)
+        )
+        LIFT_RIGHT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_knee)
+        )
+        LIFT_LEFT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_knee)
+        )
+        LEAN_BACKWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_backward_hold)
+        )
+        LEAN_FORWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_forward_hold)
+        )
+        LEAN_LEFT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_left_hold)
+        )
+        LEAN_RIGHT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_right_hold)
+        )
+        SQUAT_DOWN_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.squat_down_hold)
+        )
+        PLANK_UP_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.plank_up_hold)
+        )
+        QUADRUPED_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.quadruped_hold)
+        )
+        LIFT_HIP_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_hip_hold)
+        )
+        LIFT_RIGHT_LEG_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_leg_hold)
+        )
+        LIFT_LEFT_LEG_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_leg_hold)
+        )
+        BEND_BOTH_KNEES_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_both_knees_hold)
+        )
+        PRESS_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.press_up))
+        PRESS_UP_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.press_up_hold)
+        )
+        CURL_UP_RIGHT_ELBOW -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.curl_up_right_elbow)
+        )
+        CURL_UP_LEFT_ELBOW -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.curl_up_left_elbow)
+        )
+        CURL_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.curl_up))
+        LUNGE_LEFT_LEG -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lunge_left_leg)
+        )
+        LUNGE_RIGHT_LEG -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lunge_right_leg)
+        )
+        ARMS_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.arms_up))
+        ARMS_DOWN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.arms_down))
+        LUNGE_LEFT_LEG_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lunge_left_leg_hold)
+        )
+        LUNGE_RIGHT_LEG_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lunge_right_leg_hold)
+        )
+        REACH_ANKLE_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.reach_ankle_hold)
+        )
+        LEAN_FORWARD_RIGHT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_forward_right_hold)
+        )
+        LEAN_FORWARD_LEFT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lean_forward_left_hold)
+        )
+        STAND_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.stand_up))
+        SIT_DOWN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.sit_down))
+        SLIGHTLY_BEND_BOTH_KNEES -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.slightly_bend_both_knees)
+        )
+        PULL_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.pull_up))
+        PUSH_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.push_up))
+        PULL_DOWN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.pull_down))
+        LEFT_ARM_RIGHT_LEG_UP -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_arm_right_leg_up)
+        )
+        RIGHT_ARM_LEFT_LEG_UP -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_arm_left_leg_up)
+        )
+        LEFT_ARM_RIGHT_LEG_UP_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_arm_right_leg_up_hold)
+        )
+        RIGHT_ARM_LEFT_LEG_UP_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_arm_left_leg_up_hold)
+        )
+        PRONE_ON_ELBOWS -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.prone_on_elbows)
+        )
+        PRONE_ON_ELBOWS_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.prone_on_elbows_hold)
+        )
+        EXTEND_BOTH_KNEES -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_both_knees)
+        )
+        LIFT_LEFT_ARM_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_arm_forward)
+        )
+        LIFT_RIGHT_ARM_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_arm_forward)
+        )
+        LIFT_LEFT_ARM_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_arm_backward)
+        )
+        LIFT_RIGHT_ARM_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_arm_backward)
+        )
+        LIFT_RIGHT_KNEE_TO_CHEST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_knee_to_chest_hold)
+        )
+        LIFT_LEFT_KNEE_TO_CHEST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_knee_to_chest_hold)
+        )
+        LIFT_BOTH_KNEES_TO_CHEST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_both_knees_to_chest_hold)
+        )
+        THUMB_UP_LIFT_RIGHT_ARM_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.thumb_up_lift_right_arm_forward)
+        )
+        THUMB_UP_LIFT_LEFT_ARM_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.thumb_up_lift_left_arm_forward)
+        )
+        THUMBS_UP_ARMS_RAISE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.thumbs_up_arms_raise)
+        )
+        STAND_AGAINST_THE_WALL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.stand_against_the_wall)
+        )
+        LIFT_LEFT_HAND_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_hand_hold)
+        )
+        LIFT_RIGHT_HAND_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_hand_hold)
+        )
+        STEP_RIGHT_LEG_FORWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_right_leg_forward_hold)
+        )
+        STEP_LEFT_LEG_FORWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_left_leg_forward_hold)
+        )
+        STEP_LEFT_LEG_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_left_leg_forward)
+        )
+        STEP_RIGHT_LEG_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_right_leg_forward)
+        )
+        BEND_NECK_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_forward)
+        )
+        BEND_NECK_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_backward)
+        )
+        JUMP_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.jump_forward)
+        )
+        JUMP_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.jump_backward)
+        )
+        STEP_LEFT_LEG_BACKWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_left_leg_backward_hold)
+        )
+        STEP_RIGHT_LEG_BACKWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_right_leg_backward_hold)
+        )
+        STEP_LEFT_LEG_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_left_leg_backward)
+        )
+        STEP_RIGHT_LEG_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.step_right_leg_backward)
+        )
+        ROTATE_TO_LEFT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.rotate_to_left)
+        )
+        ROTATE_TO_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.rotate_to_right)
+        )
+        ROTATE_TO_LEFT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.rotate_to_left_hold)
+        )
+        ROTATE_TO_RIGHT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.rotate_to_right_hold)
+        )
+        MOVE_HEAD_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.move_head_forward)
+        )
+        MOVE_HEAD_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.move_head_backward)
+        )
+        BEND_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_forward)
+        )
+        BEND_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_backward)
+        )
+        BEND_FORWARD_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_forward_resist_hold)
+        )
+        BEND_BACKWARD_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_backward_resist_hold)
+        )
+        BEND_LEFT_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_left_resist_hold)
+        )
+        BEND_RIGHT_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_right_resist_hold)
+        )
+        LEFT_HAND_ON_RIGHT_ARM_PUSH_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_hand_on_right_arm_push_hold)
+        )
+        RIGHT_HAND_ON_LEFT_ARM_PUSH_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_hand_on_left_arm_push_hold)
+        )
+        THUMBS_OUT_ARMS_RAISE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.thumbs_out_arms_raise)
+        )
+        THUMBS_OUT_ARMS_RAISE_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.thumbs_out_arms_raise_hold)
+        )
+        THUMB_OUT_MOVE_RIGHT_ARM_UP_LATERAL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.thumb_out_move_right_arm_up_lateral)
+        )
+        THUMB_OUT_MOVE_LEFT_ARM_LATERAL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.thumb_out_move_left_arm_lateral)
+        )
+        LEFT_HAND_PUSH_HEAD_BACKWARD_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_hand_push_head_backward_resist_hold)
+        )
+        BOTH_HANDS_PUSH_HEAD_FOWARD_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.both_hands_push_head_foward_resist_hold)
+        )
+        LEFT_HAND_PUSH_HEAD_TO_THE_RIGHT_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_hand_push_head_to_the_right_resist_hold)
+        )
+        RIGHT_HAND_PUSH_HEAD_TO_THE_LEFT_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_hand_push_head_to_the_left_resist_hold)
+        )
+        BEND_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_right)
+        )
+        BEND_LEFT -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.bend_left))
+        HANDS_BACK_ON_HEAD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.hands_back_on_head_hold)
+        )
+        HANDS_BACK_ON_HEAD_RESIST_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.hands_back_on_head_resist_hold)
+        )
+        BOTH_KNEES_FALL_OUT_TO_THE_LEFT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.both_knees_fall_out_to_the_left)
+        )
+        BOTH_KNEES_FALL_OUT_TO_THE_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.both_knees_fall_out_to_the_right)
+        )
+        LOOK_DOWN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.look_down))
+        LOOK_UP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.look_up))
+        BEND_NECK_BACKWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_backward_hold)
+        )
+        BEND_NECK_FORWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_forward_hold)
+        )
+        BEND_NECK_TO_THE_LEFT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_to_the_left)
+        )
+        BEND_NECK_TO_THE_LEFT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_to_the_left_hold)
+        )
+        BEND_NECK_TO_THE_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_to_the_right)
+        )
+        BEND_NECK_TO_THE_RIGHT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_neck_to_the_right_hold)
+        )
+        BOTH_HANDS_ON_BACK_OF_HEAD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.both_hands_on_back_of_head_hold)
+        )
+        LEFT_LEG_KICK_TO_YOUR_SIDE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_leg_kick_to_your_side)
+        )
+        LOOK_DOWN_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.look_down_hold)
+        )
+        LOOK_TO_THE_LEFT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.look_to_the_left)
+        )
+        LOOK_TO_THE_LEFT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.look_to_the_left_hold)
+        )
+        LOOK_TO_THE_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.look_to_the_right)
+        )
+        LOOK_TO_THE_RIGHT_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.look_to_the_right_hold)
+        )
+        LOOK_UP_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.look_up_hold)
+        )
+        PUSH_FORWARD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.push_forward_hold)
+        )
+        RIGHT_LEG_KICK_TO_YOUR_SIDE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_leg_kick_to_your_side)
+        )
+        EXTEND_LEFT_ARM -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_left_arm)
+        )
+        EXTEND_LEFT_ARM_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_left_arm_hold)
+        )
+        EXTEND_RIGHT_ARM -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_right_arm)
+        )
+        EXTEND_RIGHT_ARM_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_right_arm_hold)
+        )
+        HALF_KNEELING_ON_LEFT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.half_kneeling_on_left)
+        )
+        HALF_KNEELING_ON_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.half_kneeling_on_right)
+        )
+        KNEEL_UPRIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.kneel_upright)
+        )
+        LEFT_KNEE_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_knee_down)
+        )
+        PLACE_LEFT_FOOT_ON_FLOOR -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.place_left_foot_on_floor)
+        )
+        PLACE_RIGHT_FOOT_ON_FLOOR -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.place_right_foot_on_floor)
+        )
+        RIGHT_KNEE_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_knee_down)
+        )
+        SQUAT_KNEELING -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.squat_kneeling)
+        )
+        else -> Instruction(text = text, player = null)
     }
 
     fun playNumber(number: Int) {
