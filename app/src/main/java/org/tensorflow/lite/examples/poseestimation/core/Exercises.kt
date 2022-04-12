@@ -6,6 +6,8 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkle
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.functional.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.AdvancedBirdDog
+import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeInStanding
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
@@ -153,11 +155,15 @@ object Exercises {
             HalfKneelingToStandingUnsupported(context),
             StandingToHalfKneelingSupported(context),
             StandingToHalfKneelingUnsupported(context),
+            OneLeggedHingeInStanding(context),
+            AdvancedBirdDog(context),
+            BeginnerWallSquats(context),
+            IntermediateWallSquats(context),
+            KneelingSideKick(context)
         )
     }
 
     fun get(context: Context, exerciseId: Int): HomeExercise {
-        return get(context).filter { it.id == exerciseId }[0]
+        return get(context).find { it.id == exerciseId }!!
     }
-
 }
