@@ -51,7 +51,7 @@ class ExerciseListAdapter(
 
     override fun onBindViewHolder(holder: ExerciseItemViewHolder, position: Int) {
         val exercise = exerciseList[position]
-        var gifUrl: String?
+        var gifUrl: String? = null
         holder.apply {
             val context = this.exerciseImageView.context
             val imageUrl = if (exercise.imageUrls.isNotEmpty()) {
@@ -72,8 +72,14 @@ class ExerciseListAdapter(
 
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_check1)
+                startWorkoutButton.setOnClickListener {
+                    askForGuidelines(context, exercise, gifUrl)
+                }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_cross)
+                startWorkoutButton.setOnClickListener {
+                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
+                }
             }
 
             manualTrackingButton.setOnClickListener {
@@ -127,21 +133,7 @@ class ExerciseListAdapter(
             }
 
             guidelineButton.setOnClickListener {
-                manager.beginTransaction().apply {
-                    replace(
-                        R.id.fragment_container,
-                        ExerciseGuidelineFragment(
-                            testId = testId,
-                            testDate = testDate,
-                            exercise = exercise,
-                            exerciseList = fullExerciseList,
-                            patientId = patientId,
-                            tenant = tenant,
-                            active = exercise.active
-                        )
-                    )
-                    commit()
-                }
+                gotoGuidelineScreen(exercise)
             }
 
             assignedSet.text =
@@ -239,12 +231,56 @@ class ExerciseListAdapter(
         alertDialog.show()
     }
 
+    private fun askForGuidelines(context: Context, exercise: HomeExercise, gifUrl: String?) {
+        val alertDialog = AlertDialog.Builder(context)
+        alertDialog.setMessage("Do you want to see the guideline?")
+        alertDialog.setPositiveButton("Yes") { _, _ ->
+            gotoGuidelineScreen(exercise)
+        }
+        alertDialog.setNegativeButton("No") { _, _ ->
+            gotoExerciseScreen(context, exercise, gifUrl)
+        }
+        alertDialog.show()
+    }
+
+    private fun gotoGuidelineScreen(exercise: HomeExercise) {
+        manager.beginTransaction().apply {
+            replace(
+                R.id.fragment_container,
+                ExerciseGuidelineFragment(
+                    testId = testId,
+                    testDate = testDate,
+                    exercise = exercise,
+                    exerciseList = fullExerciseList,
+                    patientId = patientId,
+                    tenant = tenant,
+                    active = exercise.active
+                )
+            )
+            commit()
+        }
+    }
+
+    private fun gotoExerciseScreen(context: Context, exercise: HomeExercise, gifUrl: String?) {
+        val intent = Intent(context, ExerciseActivity::class.java).apply {
+            putExtra(ExerciseActivity.ExerciseId, exercise.id)
+            putExtra(ExerciseActivity.TestId, testId)
+            putExtra(ExerciseActivity.Name, exercise.name)
+            putExtra(ExerciseActivity.RepetitionLimit, exercise.maxRepCount)
+            putExtra(ExerciseActivity.SetLimit, exercise.maxSetCount)
+            putExtra(ExerciseActivity.ImageUrl, gifUrl)
+            putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
+        }
+        context.startActivity(intent)
+    }
+
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val manualTrackingButton: Button = view.findViewById(R.id.btn_manual_tracking)
         val exerciseImageView: ImageView = view.findViewById(R.id.item_exercise_image)
         val exerciseNameView: TextView = view.findViewById(R.id.item_exercise_name)
         var exerciseStatus: ImageView = view.findViewById(R.id.exercise_status)
-        val guidelineButton: Button = view.findViewById(R.id.btn_guideline)
+        val guidelineButton: ImageButton = view.findViewById(R.id.btn_guideline)
+        val startWorkoutButton: Button = view.findViewById(R.id.btn_start_workout)
         val assignedSet: TextView = view.findViewById(R.id.assigned_set)
         val assignedRepetition: TextView = view.findViewById(R.id.assigned_repetition)
     }
