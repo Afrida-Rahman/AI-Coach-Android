@@ -62,14 +62,15 @@ abstract class HomeExercise(
     val commonInstructions = listOf(
         AsyncAudioPlayer.GET_READY,
         AsyncAudioPlayer.START,
-        AsyncAudioPlayer.START_AGAIN
+        AsyncAudioPlayer.START_AGAIN,
+        AsyncAudioPlayer.FINISH
     )
 
     fun addInstruction(dialogue: String) {
-        val alreadyExist = instructions.find {
+        val doesNotExist = instructions.find {
             it.text.lowercase() == dialogue.lowercase()
         } == null
-        if (!alreadyExist) {
+        if (doesNotExist) {
             instructions.add(asyncAudioPlayer.generateInstruction(dialogue))
         }
     }
@@ -345,7 +346,7 @@ abstract class HomeExercise(
 
     private fun getInstruction(text: String): Instruction {
         var instruction = instructions.find {
-            it.text.lowercase() == text
+            it.text.lowercase() == text.lowercase()
         }
         if (instruction == null) {
             instruction = asyncAudioPlayer.generateInstruction(text)
@@ -361,7 +362,7 @@ abstract class HomeExercise(
             repetitionCounter = 0
             setCounter++
             if (setCounter == maxSetCount) {
-                asyncAudioPlayer.playText(asyncAudioPlayer.generateInstruction(AsyncAudioPlayer.FINISH))
+                asyncAudioPlayer.playText(getInstruction(AsyncAudioPlayer.FINISH))
                 CoroutineScope(Dispatchers.Main).launch {
                     playInstruction(
                         firstDelay = 1000L,
