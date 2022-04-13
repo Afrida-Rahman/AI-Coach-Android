@@ -357,7 +357,7 @@ abstract class HomeExercise(
 
     private fun repetitionCount() {
         repetitionCounter++
-        audioPlayer.playFromFile(R.raw.right_count)
+        asyncAudioPlayer.playNumber(repetitionCounter)
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
