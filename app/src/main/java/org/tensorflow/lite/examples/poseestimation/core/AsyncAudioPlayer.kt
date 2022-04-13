@@ -183,6 +183,14 @@ class AsyncAudioPlayer(private val context: Context) {
         const val BOTH_KNEES_ON_FLOOR = "both knees on floor"
         const val LEFT_SIDE_KICK = "left side kick"
         const val RIGHT_SIDE_KICK = "right side kick"
+        const val LEFT_ARM_STEP_BACKWARD = "left arm step backward"
+        const val LEFT_ARM_STEP_FORWARD = "left arm step forward"
+        const val LEFT_KNEE_STEP_BACKWARD = "left knee step backward"
+        const val LEFT_KNEE_STEP_FORWARD = "left knee step forward"
+        const val RIGHT_ARM_STEP_BACKWARD = "right arm step backward"
+        const val RIGHT_ARM_STEP_FORWARD = "right arm step forward"
+        const val RIGHT_KNEE_STEP_BACKWARD = "right knee step backward"
+        const val RIGHT_KNEE_STEP_FORWARD = "right knee step forward"
     }
 
     private val one = MediaPlayer.create(context, R.raw.one)
@@ -795,6 +803,38 @@ class AsyncAudioPlayer(private val context: Context) {
         )
         RIGHT_SIDE_KICK -> Instruction(
             text = text, player = MediaPlayer.create(context, R.raw.right_side_kick)
+        )
+        LEFT_ARM_STEP_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_arm_step_backward)
+        )
+        LEFT_ARM_STEP_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_arm_step_forward)
+        )
+        LEFT_KNEE_STEP_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_knee_step_backward)
+        )
+        LEFT_KNEE_STEP_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_knee_step_forward)
+        )
+        RIGHT_ARM_STEP_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_arm_step_backward)
+        )
+        RIGHT_ARM_STEP_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_arm_step_forward)
+        )
+        RIGHT_KNEE_STEP_BACKWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_knee_step_backward)
+        )
+        RIGHT_KNEE_STEP_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_knee_step_forward)
         )
         else -> Instruction(text = text, player = null)
     }

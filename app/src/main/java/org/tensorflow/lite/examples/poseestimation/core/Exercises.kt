@@ -5,6 +5,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.KneelingSideKick
 import org.tensorflow.lite.examples.poseestimation.exercise.home.functional.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.AdvancedBirdDog
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeInStanding
