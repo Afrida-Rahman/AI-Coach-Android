@@ -8,6 +8,27 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Instruction
 class AsyncAudioPlayer(private val context: Context) {
 
     companion object {
+        const val ONE = "1"
+        const val TWO = "2"
+        const val THREE = "3"
+        const val FOUR = "4"
+        const val FIVE = "5"
+        const val SIX = "6"
+        const val SEVEN = "7"
+        const val EIGHT = "8"
+        const val NINE = "9"
+        const val TEN = "10"
+        const val ELEVEN = "11"
+        const val TWELVE = "12"
+        const val THIRTEEN = "13"
+        const val FOURTEEN = "14"
+        const val FIFTEEN = "15"
+        const val SIXTEEN = "16"
+        const val SEVENTEEN = "17"
+        const val EIGHTEEN = "18"
+        const val NINETEEN = "19"
+        const val TWENTY = "20"
+        const val BEEP = "beep"
         const val LEAN_LEFT = "lean left"
         const val LEAN_RIGHT = "lean right"
         const val RETURN = "return"
@@ -191,35 +212,34 @@ class AsyncAudioPlayer(private val context: Context) {
         const val RIGHT_ARM_STEP_FORWARD = "right arm step forward"
         const val RIGHT_KNEE_STEP_BACKWARD = "right knee step backward"
         const val RIGHT_KNEE_STEP_FORWARD = "right knee step forward"
+        const val PAUSE = "pause"
     }
-
-    private val one = MediaPlayer.create(context, R.raw.one)
-    private val two = MediaPlayer.create(context, R.raw.two)
-    private val three = MediaPlayer.create(context, R.raw.three)
-    private val four = MediaPlayer.create(context, R.raw.four)
-    private val five = MediaPlayer.create(context, R.raw.five)
-    private val six = MediaPlayer.create(context, R.raw.six)
-    private val seven = MediaPlayer.create(context, R.raw.seven)
-    private val eight = MediaPlayer.create(context, R.raw.eight)
-    private val nine = MediaPlayer.create(context, R.raw.nine)
-    private val ten = MediaPlayer.create(context, R.raw.ten)
-    private val eleven = MediaPlayer.create(context, R.raw.eleven)
-    private val twelve = MediaPlayer.create(context, R.raw.twelve)
-    private val thirteen = MediaPlayer.create(context, R.raw.thirteen)
-    private val fourteen = MediaPlayer.create(context, R.raw.fourteen)
-    private val fifteen = MediaPlayer.create(context, R.raw.fifteen)
-    private val sixteen = MediaPlayer.create(context, R.raw.sixteen)
-    private val seventeen = MediaPlayer.create(context, R.raw.seventeen)
-    private val eighteen = MediaPlayer.create(context, R.raw.eightteen)
-    private val nineteen = MediaPlayer.create(context, R.raw.nineteen)
-    private val twenty = MediaPlayer.create(context, R.raw.twenty)
-    private val rightCount = MediaPlayer.create(context, R.raw.right_count)
 
     fun playText(instruction: Instruction) {
         instruction.player?.start()
     }
 
     fun generateInstruction(text: String): Instruction = when (text.lowercase()) {
+        ONE -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.one))
+        TWO -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.two))
+        THREE -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.three))
+        FOUR -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.four))
+        FIVE -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.five))
+        SIX -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.six))
+        SEVEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.seven))
+        EIGHT -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.eight))
+        NINE -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.nine))
+        TEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.ten))
+        ELEVEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.eleven))
+        TWELVE -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.twelve))
+        THIRTEEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.thirteen))
+        FOURTEEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.fourteen))
+        FIFTEEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.fifteen))
+        SIXTEEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.sixteen))
+        SEVENTEEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.seventeen))
+        EIGHTEEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.eightteen))
+        NINETEEN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.nineteen))
+        TWENTY -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.twenty))
         LEAN_LEFT -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.lean_left))
         LEAN_RIGHT -> Instruction(
             text = text,
@@ -836,32 +856,8 @@ class AsyncAudioPlayer(private val context: Context) {
             text = text,
             player = MediaPlayer.create(context, R.raw.right_knee_step_forward)
         )
+        BEEP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.right_count))
+        PAUSE -> Instruction(text = text, MediaPlayer.create(context, R.raw.pause))
         else -> Instruction(text = text, player = null)
-    }
-
-    fun playNumber(number: Int) {
-        when (number) {
-            1 -> one.start()
-            2 -> two.start()
-            3 -> three.start()
-            4 -> four.start()
-            5 -> five.start()
-            6 -> six.start()
-            7 -> seven.start()
-            8 -> eight.start()
-            9 -> nine.start()
-            10 -> ten.start()
-            11 -> eleven.start()
-            12 -> twelve.start()
-            13 -> thirteen.start()
-            14 -> fourteen.start()
-            15 -> fifteen.start()
-            16 -> sixteen.start()
-            17 -> seventeen.start()
-            18 -> eighteen.start()
-            19 -> nineteen.start()
-            20 -> twenty.start()
-            else -> rightCount.start()
-        }
     }
 }

@@ -59,11 +59,33 @@ abstract class HomeExercise(
     private var takingRest = false
     private lateinit var asyncAudioPlayer: AsyncAudioPlayer
     private val instructions: MutableList<Instruction> = mutableListOf()
-    val commonInstructions = listOf(
+    private val commonExerciseInstructions = listOf(
         AsyncAudioPlayer.GET_READY,
         AsyncAudioPlayer.START,
         AsyncAudioPlayer.START_AGAIN,
-        AsyncAudioPlayer.FINISH
+        AsyncAudioPlayer.FINISH,
+        AsyncAudioPlayer.ONE,
+        AsyncAudioPlayer.TWO,
+        AsyncAudioPlayer.THREE,
+        AsyncAudioPlayer.FOUR,
+        AsyncAudioPlayer.FIVE,
+        AsyncAudioPlayer.SIX,
+        AsyncAudioPlayer.SEVEN,
+        AsyncAudioPlayer.EIGHT,
+        AsyncAudioPlayer.NINE,
+        AsyncAudioPlayer.TEN,
+        AsyncAudioPlayer.ELEVEN,
+        AsyncAudioPlayer.TWELVE,
+        AsyncAudioPlayer.THIRTEEN,
+        AsyncAudioPlayer.FOURTEEN,
+        AsyncAudioPlayer.FIFTEEN,
+        AsyncAudioPlayer.SIXTEEN,
+        AsyncAudioPlayer.SEVENTEEN,
+        AsyncAudioPlayer.EIGHTEEN,
+        AsyncAudioPlayer.NINETEEN,
+        AsyncAudioPlayer.TWENTY,
+        AsyncAudioPlayer.BEEP,
+        AsyncAudioPlayer.PAUSE,
     )
 
     fun addInstruction(dialogue: String) {
@@ -128,7 +150,7 @@ abstract class HomeExercise(
                             shouldTakeRest = true
                         )
                         asyncAudioPlayer = AsyncAudioPlayer(context)
-                        commonInstructions.forEach {
+                        commonExerciseInstructions.forEach {
                             addInstruction(it)
                         }
                         responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
@@ -324,7 +346,7 @@ abstract class HomeExercise(
                         downTimeCounter = 0
                     }
                 } else {
-                    countDownAudio(downTimeCounter)
+                    if (phaseIndex != 0) countDownAudio(downTimeCounter)
                 }
             } else {
                 downTimeCounter = 0
@@ -357,7 +379,6 @@ abstract class HomeExercise(
 
     private fun repetitionCount() {
         repetitionCounter++
-        asyncAudioPlayer.playNumber(repetitionCounter)
         if (repetitionCounter >= maxRepCount) {
             repetitionCounter = 0
             setCounter++
@@ -376,6 +397,23 @@ abstract class HomeExercise(
                     secondDelay = SET_INTERVAL,
                     secondInstruction = AsyncAudioPlayer.START_AGAIN,
                     shouldTakeRest = true
+                )
+            }
+        } else {
+            val phase = rightCountPhases[0]
+            if (phase.holdTime > 0) {
+                val repetitionInstruction = getInstruction(repetitionCounter.toString())
+                playInstruction(
+                    firstDelay = 0L,
+                    firstInstruction = repetitionCounter.toString(),
+                    secondDelay = repetitionInstruction.player?.duration?.toLong() ?: 500L,
+                    secondInstruction = AsyncAudioPlayer.PAUSE,
+                    shouldTakeRest = true
+                )
+            } else {
+                playInstruction(
+                    firstDelay = 0L,
+                    firstInstruction = repetitionCounter.toString()
                 )
             }
         }
@@ -449,7 +487,11 @@ abstract class HomeExercise(
     private fun countDownAudio(count: Int) {
         if (previousCountDown != count && count > 0) {
             previousCountDown = count
-            asyncAudioPlayer.playNumber(count)
+            if (count > 20) {
+                asyncAudioPlayer.playText(getInstruction(AsyncAudioPlayer.BEEP))
+            } else {
+                asyncAudioPlayer.playText(getInstruction(count.toString()))
+            }
         }
     }
 
