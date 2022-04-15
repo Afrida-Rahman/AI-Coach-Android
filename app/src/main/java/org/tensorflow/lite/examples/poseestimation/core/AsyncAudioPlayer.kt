@@ -213,6 +213,11 @@ class AsyncAudioPlayer(private val context: Context) {
         const val RIGHT_KNEE_STEP_BACKWARD = "right knee step backward"
         const val RIGHT_KNEE_STEP_FORWARD = "right knee step forward"
         const val PAUSE = "pause"
+        const val BOTH_HEEL_SLIDE = "both heel slide"
+        const val LEFT_ARM_RIGHT_LEG_DOWN = "left arm right leg down"
+        const val LEFT_HEEL_SLIDE = "left heel slide"
+        const val RIGHT_ARM_LEFT_LEG_DOWN = "right arm left leg down"
+        const val RIGHT_HEEL_SLIDE = "right heel slide"
     }
 
     fun playText(instruction: Instruction) {
@@ -858,6 +863,26 @@ class AsyncAudioPlayer(private val context: Context) {
         )
         BEEP -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.right_count))
         PAUSE -> Instruction(text = text, MediaPlayer.create(context, R.raw.pause))
+        BOTH_HEEL_SLIDE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.both_heel_slide)
+        )
+        LEFT_ARM_RIGHT_LEG_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_arm_right_leg_down)
+        )
+        LEFT_HEEL_SLIDE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_heel_slide)
+        )
+        RIGHT_ARM_LEFT_LEG_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_arm_left_leg_down)
+        )
+        RIGHT_HEEL_SLIDE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_heel_slide)
+        )
         else -> Instruction(text = text, player = null)
     }
 }
