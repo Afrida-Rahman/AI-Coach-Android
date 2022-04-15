@@ -3,9 +3,12 @@ package org.tensorflow.lite.examples.poseestimation.core
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AROMAnkleDorsiflexionInSitting
+import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AnklePumpInSupine
+import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.HeelSlides
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.KneelingSideKick
+import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.WallPushUps
 import org.tensorflow.lite.examples.poseestimation.exercise.home.functional.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.AdvancedBirdDog
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeInStanding
@@ -160,7 +163,13 @@ object Exercises {
             AdvancedBirdDog(context),
             BeginnerWallSquats(context),
             IntermediateWallSquats(context),
-            KneelingSideKick(context)
+            KneelingSideKick(context),
+            Crawling(context),
+            AnklePumpInSupine(context),
+            HeelSlides(context),
+            CrawlingStepThroughInQuadruped(context),
+            BilateralHeelSlides(context),
+            WallPushUps(context),
         )
     }
 
