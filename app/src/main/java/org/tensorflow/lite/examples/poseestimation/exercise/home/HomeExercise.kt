@@ -88,12 +88,14 @@ abstract class HomeExercise(
         AsyncAudioPlayer.PAUSE,
     )
 
-    fun addInstruction(dialogue: String) {
-        val doesNotExist = instructions.find {
-            it.text.lowercase() == dialogue.lowercase()
-        } == null
-        if (doesNotExist) {
-            instructions.add(asyncAudioPlayer.generateInstruction(dialogue))
+    fun addInstruction(dialogue: String?) {
+        dialogue?.let { text ->
+            val doesNotExist = instructions.find {
+                it.text.lowercase() == text.lowercase()
+            } == null
+            if (doesNotExist) {
+                instructions.add(asyncAudioPlayer.generateInstruction(dialogue))
+            }
         }
     }
 
