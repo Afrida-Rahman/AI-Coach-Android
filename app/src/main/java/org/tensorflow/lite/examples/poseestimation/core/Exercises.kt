@@ -170,6 +170,7 @@ object Exercises {
             CrawlingStepThroughInQuadruped(context),
             BilateralHeelSlides(context),
             WallPushUps(context),
+            KneelingToHalfKneelingWithNormalSupport(context),
         )
     }
 
