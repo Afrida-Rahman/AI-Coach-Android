@@ -3,6 +3,7 @@ package org.tensorflow.lite.examples.poseestimation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import me.relex.circleindicator.CircleIndicator3
 import org.tensorflow.lite.examples.poseestimation.core.ImageSliderAdapter
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
@@ -45,8 +47,11 @@ class ExerciseGuidelineFragment(
         val playVideo: PlayerView = view.findViewById(R.id.video_view)
         val startWorkoutButton: Button = view.findViewById(R.id.btn_start_workout_guideline)
         val imageAdapter = view.findViewById<ViewPager2>(R.id.image_slide_guideline)
+        val sliderIndicator = view.findViewById<CircleIndicator3>(R.id.slide_indicator)
         val exerciseInstructionView: TextView =
             view.findViewById(R.id.exercise_instruction_guideline)
+
+        Log.d("SliderIndicatorIssue", "Indicator: $sliderIndicator")
 
         val htmlTagRegex = Regex("<[^>]*>|&nbsp|;")
         var instruction = exercise.instruction
@@ -72,8 +77,9 @@ class ExerciseGuidelineFragment(
         } else {
             imageAdapter.adapter = ImageSliderAdapter(
                 view.context,
-                imageUrls
+                exercise.phaseList.sortedBy { it.PhaseNumber }
             )
+            sliderIndicator.setViewPager(imageAdapter)
         }
 
         backButton.setOnClickListener {

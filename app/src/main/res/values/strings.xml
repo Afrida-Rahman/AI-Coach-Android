@@ -115,4 +115,9 @@
     <string name="back">Back</string>
     <string name="forward">Forward</string>
     <string name="exercise_gif">Exercise gif</string>
+    <string name="phase_description">Phase description</string>
+    <string name="indicator">Indicator</string>
+    <string name="phase_number">Phase number</string>
+    <string name="phase_image">Phase Image</string>
+    <string name="_1">1</string>
 </resources>

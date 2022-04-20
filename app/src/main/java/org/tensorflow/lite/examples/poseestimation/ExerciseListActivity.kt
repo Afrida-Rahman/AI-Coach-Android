@@ -126,7 +126,8 @@ class ExerciseListActivity : AppCompatActivity() {
                                     exerciseVideoUrls = exercise.ExerciseMedia,
                                     repetitionLimit = exercise.RepetitionInCount,
                                     setLimit = exercise.SetInCount,
-                                    protoId = exercise.ProtocolId
+                                    protoId = exercise.ProtocolId,
+                                    phases = exercise.Phases
                                 )
                                 parsedExercises.add(implementedExercise)
                             } else {
@@ -142,7 +143,8 @@ class ExerciseListActivity : AppCompatActivity() {
                                     exerciseVideoUrls = exercise.ExerciseMedia,
                                     repetitionLimit = exercise.RepetitionInCount,
                                     setLimit = exercise.SetInCount,
-                                    protoId = exercise.ProtocolId
+                                    protoId = exercise.ProtocolId,
+                                    phases = exercise.Phases
                                 )
                                 parsedExercises.add(notImplementedExercise)
                             }

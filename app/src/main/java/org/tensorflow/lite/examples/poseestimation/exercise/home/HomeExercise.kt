@@ -12,6 +12,7 @@ import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
+import org.tensorflow.lite.examples.poseestimation.api.response.PhaseInfo1
 import org.tensorflow.lite.examples.poseestimation.core.AsyncAudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.AudioPlayer
 import org.tensorflow.lite.examples.poseestimation.core.Utilities
@@ -36,7 +37,8 @@ abstract class HomeExercise(
     var videoUrls: String = "",
     var imageUrls: List<String> = listOf(),
     var maxRepCount: Int = 0,
-    var maxSetCount: Int = 0
+    var maxSetCount: Int = 0,
+    var phaseList: List<PhaseInfo1> = listOf()
 ) {
 
     companion object {
@@ -106,7 +108,8 @@ abstract class HomeExercise(
         exerciseVideoUrls: String,
         repetitionLimit: Int,
         setLimit: Int,
-        protoId: Int
+        protoId: Int,
+        phases: List<PhaseInfo1> = emptyList()
     ) {
         name = exerciseName
         maxRepCount = repetitionLimit
@@ -115,6 +118,7 @@ abstract class HomeExercise(
         instruction = exerciseInstruction
         imageUrls = exerciseImageUrls
         videoUrls = exerciseVideoUrls
+        phaseList = phases
     }
 
     fun initializeConstraint(tenant: String) {
