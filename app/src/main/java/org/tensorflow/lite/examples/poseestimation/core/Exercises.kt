@@ -171,6 +171,14 @@ object Exercises {
             BilateralHeelSlides(context),
             WallPushUps(context),
             KneelingToHalfKneelingWithNormalSupport(context),
+            HipAbductionInSideLying(context),
+            HipAbductionWithWeightsInSideLying(context),
+            IsometricHipAbductionInSitting(context),
+            SquatsWithChair(context),
+            ScapularRetractionElbowStraightWeightsStanding(context),
+            ScapularRetractionElbowFlexed90DegreeWithWeightsStanding(context),
+            ScapularStabilizationKneelingStabilityBallSingleHand(context),
+            RightShoulderInternalRotationWithResistanceBand(context),
         )
     }
 

@@ -218,6 +218,9 @@ class AsyncAudioPlayer(private val context: Context) {
         const val LEFT_HEEL_SLIDE = "left heel slide"
         const val RIGHT_ARM_LEFT_LEG_DOWN = "right arm left leg down"
         const val RIGHT_HEEL_SLIDE = "right heel slide"
+        const val PULL_IN = "pull in"
+        const val PULL_OUT = "pull out"
+        const val TURN_TO_THE_OTHER_SIDE = "turn to the other side"
     }
 
     fun playText(instruction: Instruction) {
@@ -882,6 +885,12 @@ class AsyncAudioPlayer(private val context: Context) {
         RIGHT_HEEL_SLIDE -> Instruction(
             text = text,
             player = MediaPlayer.create(context, R.raw.right_heel_slide)
+        )
+        PULL_IN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.pull_in))
+        PULL_OUT -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.pull_out))
+        TURN_TO_THE_OTHER_SIDE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.turn_to_the_other_side)
         )
         else -> Instruction(text = text, player = null)
     }
