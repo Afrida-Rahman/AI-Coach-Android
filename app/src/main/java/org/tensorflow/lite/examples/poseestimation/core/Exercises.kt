@@ -179,6 +179,7 @@ object Exercises {
             ScapularRetractionElbowFlexed90DegreeWithWeightsStanding(context),
             ScapularStabilizationKneelingStabilityBallSingleHand(context),
             RightShoulderInternalRotationWithResistanceBand(context),
+            PiriformisStretchInSupine(context),
         )
     }
 

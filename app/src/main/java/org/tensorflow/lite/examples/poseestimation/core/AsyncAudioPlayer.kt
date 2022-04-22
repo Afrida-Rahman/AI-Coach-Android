@@ -221,6 +221,14 @@ class AsyncAudioPlayer(private val context: Context) {
         const val PULL_IN = "pull in"
         const val PULL_OUT = "pull out"
         const val TURN_TO_THE_OTHER_SIDE = "turn to the other side"
+        const val HANDS_ON_THE_BALL = "hands on the ball"
+        const val LEFT_FOOT_ON_RIGHT_KNEE = "left foot on right knee"
+        const val LEFT_HAND_ON_THE_BALL = "left hand on the ball"
+        const val LEFT_HEEL_DOWN = "left heel down"
+        const val PULL_LEGS_BACK_HOLD = "pull legs back hold"
+        const val RIGHT_FOOT_ON_LEFT_KNEE = "right foot on left knee"
+        const val RIGHT_HAND_ON_THE_BALL = "right hand on the ball"
+        const val RIGHT_HEEL_DOWN = "right heel down"
     }
 
     fun playText(instruction: Instruction) {
@@ -891,6 +899,38 @@ class AsyncAudioPlayer(private val context: Context) {
         TURN_TO_THE_OTHER_SIDE -> Instruction(
             text = text,
             player = MediaPlayer.create(context, R.raw.turn_to_the_other_side)
+        )
+        HANDS_ON_THE_BALL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.hands_on_the_ball)
+        )
+        LEFT_FOOT_ON_RIGHT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_foot_on_right_knee)
+        )
+        LEFT_HAND_ON_THE_BALL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_hand_on_the_ball)
+        )
+        LEFT_HEEL_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_heel_down)
+        )
+        PULL_LEGS_BACK_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.pull_legs_back_hold)
+        )
+        RIGHT_FOOT_ON_LEFT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_foot_on_left_knee)
+        )
+        RIGHT_HAND_ON_THE_BALL -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_hand_on_the_ball)
+        )
+        RIGHT_HEEL_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_heel_down)
         )
         else -> Instruction(text = text, player = null)
     }
