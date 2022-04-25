@@ -93,6 +93,7 @@ class ExerciseGuidelineFragment(
             exoplayer.pause()
         }
         if (active) {
+            startWorkoutButton.visibility = View.VISIBLE
             startWorkoutButton.setOnClickListener {
                 val intent = Intent(context, ExerciseActivity::class.java).apply {
                     putExtra(ExerciseActivity.ExerciseId, exercise.id)
@@ -106,6 +107,7 @@ class ExerciseGuidelineFragment(
                 view.context.startActivity(intent)
             }
         } else {
+            startWorkoutButton.visibility = View.GONE
             startWorkoutButton.setOnClickListener {
                 Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
             }

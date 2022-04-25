@@ -72,64 +72,64 @@ class ExerciseListAdapter(
 
             if (exercise.active) {
                 exerciseStatus.setImageResource(R.drawable.ic_check1)
+                manualTrackingButton.visibility = View.GONE
+                startWorkoutButton.visibility = View.VISIBLE
                 startWorkoutButton.setOnClickListener {
                     askForGuidelines(context, exercise, gifUrl)
                 }
             } else {
                 exerciseStatus.setImageResource(R.drawable.ic_cross)
-                startWorkoutButton.setOnClickListener {
-                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
+                startWorkoutButton.visibility = View.GONE
+                manualTrackingButton.visibility = View.VISIBLE
+                manualTrackingButton.setOnClickListener {
+                    val alertDialog = AlertDialog.Builder(context)
+                    val layout = LinearLayout(context)
+                    layout.orientation = LinearLayout.VERTICAL
+
+                    alertDialog.setTitle("Manual Tracking")
+                    val setInput = EditText(context)
+                    setInput.setSingleLine()
+                    setInput.hint = "Enter Set Count"
+                    setInput.inputType = InputType.TYPE_CLASS_NUMBER
+                    layout.addView(setInput)
+
+                    val repInput = EditText(context)
+                    repInput.setSingleLine()
+                    repInput.hint = "Enter Repetition Count"
+                    repInput.inputType = InputType.TYPE_CLASS_NUMBER
+                    layout.addView(repInput)
+
+                    val wrongInput = EditText(context)
+                    wrongInput.setSingleLine()
+                    wrongInput.hint = "Enter Wrong Count"
+                    wrongInput.inputType = InputType.TYPE_CLASS_NUMBER
+                    layout.addView(wrongInput)
+
+                    layout.setPadding(100, 50, 100, 50)
+                    alertDialog.setView(layout)
+
+                    alertDialog.setPositiveButton("Submit") { _, _ ->
+                        val setText = setInput.text.toString().toInt()
+                        val repText = repInput.text.toString().toInt()
+                        val wrongText = wrongInput.text.toString().toInt()
+
+                        saveManualTrackingData(
+                            ExerciseId = exercise.id,
+                            TestId = testId,
+                            ProtocolId = exercise.protocolId,
+                            PatientId = patientId,
+                            ExerciseDate = Utilities.currentDate(),
+                            NoOfReps = setText,
+                            NoOfSets = repText,
+                            NoOfWrongCount = wrongText,
+                            Tenant = tenant,
+                            context = it.context
+                        )
+                    }
+                    alertDialog.setNegativeButton("Cancel") { alert, _ -> alert.cancel() }
+
+                    alertDialog.show()
                 }
-            }
-
-            manualTrackingButton.setOnClickListener {
-                val alertDialog = AlertDialog.Builder(context)
-                val layout = LinearLayout(context)
-                layout.orientation = LinearLayout.VERTICAL
-
-                alertDialog.setTitle("Manual Tracking")
-                val setInput = EditText(context)
-                setInput.setSingleLine()
-                setInput.hint = "Enter Set Count"
-                setInput.inputType = InputType.TYPE_CLASS_NUMBER
-                layout.addView(setInput)
-
-                val repInput = EditText(context)
-                repInput.setSingleLine()
-                repInput.hint = "Enter Repetition Count"
-                repInput.inputType = InputType.TYPE_CLASS_NUMBER
-                layout.addView(repInput)
-
-                val wrongInput = EditText(context)
-                wrongInput.setSingleLine()
-                wrongInput.hint = "Enter Wrong Count"
-                wrongInput.inputType = InputType.TYPE_CLASS_NUMBER
-                layout.addView(wrongInput)
-
-                layout.setPadding(100, 50, 100, 50)
-                alertDialog.setView(layout)
-
-                alertDialog.setPositiveButton("Submit") { _, _ ->
-                    val setText = setInput.text.toString().toInt()
-                    val repText = repInput.text.toString().toInt()
-                    val wrongText = wrongInput.text.toString().toInt()
-
-                    saveManualTrackingData(
-                        ExerciseId = exercise.id,
-                        TestId = testId,
-                        ProtocolId = exercise.protocolId,
-                        PatientId = patientId,
-                        ExerciseDate = Utilities.currentDate(),
-                        NoOfReps = setText,
-                        NoOfSets = repText,
-                        NoOfWrongCount = wrongText,
-                        Tenant = tenant,
-                        context = it.context
-                    )
-                }
-                alertDialog.setNegativeButton("Cancel") { alert, _ -> alert.cancel() }
-
-                alertDialog.show()
             }
 
             guidelineButton.setOnClickListener {
