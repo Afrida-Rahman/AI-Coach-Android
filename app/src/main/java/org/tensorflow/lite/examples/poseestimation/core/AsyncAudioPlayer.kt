@@ -229,6 +229,24 @@ class AsyncAudioPlayer(private val context: Context) {
         const val RIGHT_FOOT_ON_LEFT_KNEE = "right foot on left knee"
         const val RIGHT_HAND_ON_THE_BALL = "right hand on the ball"
         const val RIGHT_HEEL_DOWN = "right heel down"
+        const val LAY_ON_YOUR_BACK = "lay on your back"
+        const val KNEES_BENT = "knees bent"
+        const val PROP_YOUR_ELBOWS = "prop your elbows"
+        const val PROP_ONTO_YOUR_HANDS_AND_KNEES = "prop onto your hands and knees"
+        const val LEFT_LEG_STRAIGHT = "left leg straight"
+        const val RIGHT_LEG_STRAIGHT = "right leg straight"
+        const val LEFT_KNEE_STRAIGHT = "left knee straight"
+        const val RIGHT_KNEE_STRAIGHT = "right knee straight"
+        const val LEFT_FOOT_STEP_FORWARD_RIGHT_KNEE_DOWN = "left foot step forward right knee down"
+        const val RIGHT_FOOT_STEP_FORWARD_LEFT_KNEE_DOWN = "right foot step forward left knee down"
+        const val HANDS_AT_THE_BACK_OF_HEAD_HOLD = "hands at the back of head hold"
+        const val PUSH_TO_THE_SIDE_HOLD = "push to the side hold"
+        const val LIFT_LEFT_KNEE_TO_CHEST = "lift left knee to chest"
+        const val LIFT_RIGHT_KNEE_TO_CHEST = "lift right knee to chest"
+        const val EXTEND_LEFT_KNEE_HOLD = "extend left knee hold"
+        const val EXTEND_RIGHT_KNEE_HOLD = "extend right knee hold"
+        const val LIFT_LEFT_LEG_UP = "lift left leg up"
+        const val LIFT_RIGHT_LEG_UP = "lift right leg up"
     }
 
     fun playText(instruction: Instruction) {
@@ -931,6 +949,78 @@ class AsyncAudioPlayer(private val context: Context) {
         RIGHT_HEEL_DOWN -> Instruction(
             text = text,
             player = MediaPlayer.create(context, R.raw.right_heel_down)
+        )
+        LAY_ON_YOUR_BACK -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lay_on_your_back)
+        )
+        KNEES_BENT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.knees_bent)
+        )
+        PROP_YOUR_ELBOWS -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.prop_your_elbows)
+        )
+        PROP_ONTO_YOUR_HANDS_AND_KNEES -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.prop_onto_your_hands_and_knees)
+        )
+        LEFT_LEG_STRAIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_leg_straight)
+        )
+        RIGHT_LEG_STRAIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_leg_straight)
+        )
+        LEFT_KNEE_STRAIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_knee_straight)
+        )
+        RIGHT_KNEE_STRAIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_knee_straight)
+        )
+        LEFT_FOOT_STEP_FORWARD_RIGHT_KNEE_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_foot_step_forward_right_knee_down)
+        )
+        RIGHT_FOOT_STEP_FORWARD_LEFT_KNEE_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_foot_step_forward_left_knee_down)
+        )
+        HANDS_AT_THE_BACK_OF_HEAD_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.hands_at_the_back_of_head_hold)
+        )
+        PUSH_TO_THE_SIDE_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.push_to_the_side_hold)
+        )
+        LIFT_LEFT_KNEE_TO_CHEST -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_knee_to_chest)
+        )
+        LIFT_RIGHT_KNEE_TO_CHEST -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_knee_to_chest)
+        )
+        EXTEND_LEFT_KNEE_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_left_knee_hold)
+        )
+        EXTEND_RIGHT_KNEE_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.extend_right_knee_hold)
+        )
+        LIFT_LEFT_LEG_UP -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_left_leg_up)
+        )
+        LIFT_RIGHT_LEG_UP -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_right_leg_up)
         )
         else -> Instruction(text = text, player = null)
     }
