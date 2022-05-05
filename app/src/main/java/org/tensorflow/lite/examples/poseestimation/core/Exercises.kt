@@ -7,8 +7,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.AnklePump
 import org.tensorflow.lite.examples.poseestimation.exercise.home.ankle.HeelSlides
 import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.*
-import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.KneelingSideKick
-import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.WallPushUps
+import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.functional.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.AdvancedBirdDog
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeInStanding
@@ -16,6 +15,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.shoulder.*
+import org.tensorflow.lite.examples.poseestimation.exercise.home.yoga.*
 
 object Exercises {
 
@@ -180,6 +180,20 @@ object Exercises {
             ScapularStabilizationKneelingStabilityBallSingleHand(context),
             RightShoulderInternalRotationWithResistanceBand(context),
             PiriformisStretchInSupine(context),
+            MountainClimbers(context),
+            SquatsShoulderOverheadWithWeights(context),
+            VerticalRowsWithResistanceBandInStanding(context),
+            DeskPushUps(context),
+            HipFlexorStretchInHalfKneeling(context),
+            BirdDogWithWeightsInQuadruped(context),
+            ModifiedSupermanInProne(context),
+            ShoulderOverheadPressWithWeightsForearmNeutralInSitting(context),
+            FunctionalSeries1(context),
+            Rite1(context),
+            Rite2(context),
+            Rite3(context),
+            Rite4(context),
+            Rite5(context),
         )
     }
 
