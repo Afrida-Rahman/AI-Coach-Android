@@ -3,4 +3,4 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.fitness
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
-class DeskPushUps(context: Context) : HomeExercise(context = context, id = 670)
+class OneLeggedSquats(context: Context) : HomeExercise(context = context, id = 652)

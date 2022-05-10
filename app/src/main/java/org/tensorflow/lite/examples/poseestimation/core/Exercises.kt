@@ -11,6 +11,8 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.functional.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.AdvancedBirdDog
 import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeInStanding
+import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeRightInStanding
+import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.SwimmerInProne
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
@@ -194,6 +196,9 @@ object Exercises {
             Rite3(context),
             Rite4(context),
             Rite5(context),
+            OneLeggedHingeRightInStanding(context),
+            OneLeggedSquats(context),
+            SwimmerInProne(context),
         )
     }
 
