@@ -199,6 +199,10 @@ object Exercises {
             OneLeggedHingeRightInStanding(context),
             OneLeggedSquats(context),
             SwimmerInProne(context),
+            IsometricCervicalCombinationStrengtheningInSitting(context),
+            IsometricCervicalCombinationStrengtheningInStanding(context),
+            CervicalFlexionWithResistanceBandInSitting(context),
+            CervicalExtensionWithResistanceBandInSitting(context),
         )
     }
 
