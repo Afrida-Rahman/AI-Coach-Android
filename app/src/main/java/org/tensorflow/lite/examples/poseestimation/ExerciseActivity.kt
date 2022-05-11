@@ -542,7 +542,7 @@ class ExerciseActivity : AppCompatActivity() {
                         exercise.getRepetitionCount(),
                         exercise.getSetCount()
                     )
-                    exercise.getPersonDistance(person)?.let {
+                    exercise.getPersonDistance(person).let {
                         distanceDisplay.text = getString(R.string.distance_text).format(it)
                         if (it <= 5f) {
                             phaseDialogueDisplay.textSize = 30f

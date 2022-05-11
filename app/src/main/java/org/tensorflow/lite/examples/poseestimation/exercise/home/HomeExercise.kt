@@ -30,6 +30,7 @@ import kotlin.math.sqrt
 abstract class HomeExercise(
     val context: Context,
     val id: Int,
+    val playPauseCue: Boolean = true,
     var name: String = "",
     val active: Boolean = true,
     var protocolId: Int = 0,
@@ -43,6 +44,7 @@ abstract class HomeExercise(
 
     companion object {
         private const val SET_INTERVAL = 7000L
+        private const val MAX_DISTANCE_FROM_CAMERA = 13
     }
 
     open var phaseIndex = 0
@@ -56,6 +58,9 @@ abstract class HomeExercise(
     private var focalLengths: FloatArray? = null
     private var previousCountDown = 0
     private var downTimeCounter = 0
+    private var distanceFromCamera = 0f
+    private var lastTimeDistanceCalculated = 0L
+    private val distanceCalculationInterval = 2000L
     open var phaseEntered = false
     private var phaseEnterTime = System.currentTimeMillis()
     private var takingRest = false
@@ -275,23 +280,28 @@ abstract class HomeExercise(
         }
     }
 
-    fun getPersonDistance(person: Person): Float? {
-        val pointA = person.keyPoints[BodyPart.LEFT_SHOULDER.position]
-        val pointB = person.keyPoints[BodyPart.LEFT_ELBOW.position]
-        val distanceInPx = sqrt(
-            (pointA.coordinate.x - pointB.coordinate.x).toDouble()
-                .pow(2) + (pointA.coordinate.y - pointB.coordinate.y).toDouble().pow(2)
-        )
-        var sum = 0f
-        var distance: Float? = null
-        focalLengths?.let {
-            focalLengths?.forEach { value ->
-                sum += value
+    fun getPersonDistance(person: Person): Float {
+        return if (System.currentTimeMillis() >= lastTimeDistanceCalculated + distanceCalculationInterval) {
+            val pointA = person.keyPoints[BodyPart.LEFT_SHOULDER.position]
+            val pointB = person.keyPoints[BodyPart.LEFT_ELBOW.position]
+            val distanceInPx = sqrt(
+                (pointA.coordinate.x - pointB.coordinate.x).toDouble()
+                    .pow(2) + (pointA.coordinate.y - pointB.coordinate.y).toDouble().pow(2)
+            )
+            var sum = 0f
+            var distance: Float? = null
+            focalLengths?.let {
+                focalLengths?.forEach { value ->
+                    sum += value
+                }
+                val avgFocalLength = (sum / focalLengths!!.size) * 0.04f
+                distance = (avgFocalLength / distanceInPx.toFloat()) * 12 * 3000f
             }
-            val avgFocalLength = (sum / focalLengths!!.size) * 0.04f
-            distance = (avgFocalLength / distanceInPx.toFloat()) * 12 * 3000f
+            distanceFromCamera = distance?.let { it / 12 } ?: 4f
+            distanceFromCamera
+        } else {
+            distanceFromCamera
         }
-        return distance?.let { it / 12 }
     }
 
     fun setFocalLength(lengths: FloatArray?) {
@@ -413,7 +423,7 @@ abstract class HomeExercise(
                     firstDelay = 0L,
                     firstInstruction = repetitionCounter.toString(),
                     secondDelay = repetitionInstruction.player?.duration?.toLong() ?: 500L,
-                    secondInstruction = AsyncAudioPlayer.PAUSE,
+                    secondInstruction = if (playPauseCue) AsyncAudioPlayer.PAUSE else null,
                     shouldTakeRest = true
                 )
             } else {
@@ -483,10 +493,8 @@ abstract class HomeExercise(
                 )
             ) onEvent(CommonInstructionEvent.OutSideOfBox)
         }
-        getPersonDistance(person)?.let {
-            if (it > 13) {
-                onEvent(CommonInstructionEvent.TooFarFromCamera)
-            }
+        if (getPersonDistance(person) > MAX_DISTANCE_FROM_CAMERA) {
+            onEvent(CommonInstructionEvent.TooFarFromCamera)
         }
     }
 
