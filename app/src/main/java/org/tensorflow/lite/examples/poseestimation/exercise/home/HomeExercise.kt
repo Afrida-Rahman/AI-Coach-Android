@@ -64,6 +64,7 @@ abstract class HomeExercise(
     open var phaseEntered = false
     private var phaseEnterTime = System.currentTimeMillis()
     private var takingRest = false
+    private var manuallyPaused = false
     private lateinit var asyncAudioPlayer: AsyncAudioPlayer
     private val instructions: MutableList<Instruction> = mutableListOf()
     private val commonExerciseInstructions = listOf(
@@ -260,6 +261,16 @@ abstract class HomeExercise(
         }
     }
 
+    fun pauseExercise() {
+        takingRest = true
+        manuallyPaused = true
+    }
+
+    fun resumeExercise() {
+        takingRest = false
+        manuallyPaused = false
+    }
+
     fun playInstruction(
         firstDelay: Long,
         firstInstruction: String,
@@ -276,7 +287,7 @@ abstract class HomeExercise(
             secondInstruction?.let {
                 asyncAudioPlayer.playText(getInstruction(it))
             }
-            if (shouldTakeRest) takingRest = false
+            if (shouldTakeRest and !manuallyPaused) takingRest = false
         }
     }
 
