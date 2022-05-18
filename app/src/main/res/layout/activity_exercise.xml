@@ -232,10 +232,24 @@
             android:layout_height="50dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_guideline"
+            android:contentDescription="@string/instructions"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/exercise_progress" />
+
+        <ImageView
+            android:id="@+id/pause_indicator"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_pause_video"
+            android:contentDescription="@string/pause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/green"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btn_done"

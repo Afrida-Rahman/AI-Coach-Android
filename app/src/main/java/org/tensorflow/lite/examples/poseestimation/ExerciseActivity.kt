@@ -103,6 +103,7 @@ class ExerciseActivity : AppCompatActivity() {
     private lateinit var gifButton: ImageButton
     private lateinit var pauseButton: Button
     private lateinit var resumeButton: Button
+    private lateinit var pauseIndicator: ImageView
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -228,6 +229,7 @@ class ExerciseActivity : AppCompatActivity() {
         gifButton = findViewById(R.id.btn_gif_display)
         pauseButton = findViewById(R.id.btn_pause)
         resumeButton = findViewById(R.id.btn_resume)
+        pauseIndicator = findViewById(R.id.pause_indicator)
 
         exerciseProgressBar.max = exercise.maxSetCount * exercise.maxRepCount
 
@@ -264,12 +266,14 @@ class ExerciseActivity : AppCompatActivity() {
         pauseButton.setOnClickListener {
             pauseButton.visibility = View.GONE
             resumeButton.visibility = View.VISIBLE
+            pauseIndicator.visibility = View.VISIBLE
             exercise.pauseExercise()
         }
 
         resumeButton.setOnClickListener {
             resumeButton.visibility = View.GONE
             pauseButton.visibility = View.VISIBLE
+            pauseIndicator.visibility = View.GONE
             exercise.resumeExercise()
         }
 
