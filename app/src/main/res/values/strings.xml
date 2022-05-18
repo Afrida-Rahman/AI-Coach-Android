@@ -120,4 +120,6 @@
     <string name="phase_number">Phase number</string>
     <string name="phase_image">Phase Image</string>
     <string name="_1">1</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
 </resources>
