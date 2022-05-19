@@ -203,6 +203,17 @@ object Exercises {
             IsometricCervicalCombinationStrengtheningInStanding(context),
             CervicalFlexionWithResistanceBandInSitting(context),
             CervicalExtensionWithResistanceBandInSitting(context),
+            ClassicBicepsCurlInStanding(context),
+            HammerCurlsInStanding(context),
+            OverheadPulleysInSitting(context),
+            WallClimbInStanding(context),
+            PreacherCurlInStanding(context),
+            ShortHeadBicepsCurlInStanding(context),
+            ClassicBicepsCurlInSitting(context),
+            HammerCurlsInSitting(context),
+            ShortHeadBicepsCurlInSitting(context),
+            LongHeadBicepsCurlInSitting(context),
+            SidePlankWithElbowFlexed(context),
         )
     }
 
