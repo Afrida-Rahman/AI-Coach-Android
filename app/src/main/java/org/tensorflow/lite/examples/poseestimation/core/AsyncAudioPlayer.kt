@@ -256,6 +256,33 @@ class AsyncAudioPlayer(private val context: Context) {
         const val BRING_ARMS_BACK_FORWARD = "bring arms back forward"
         const val LIFT_HEAD_AND_ARMS_UP = "lift head and arms up"
         const val RETURN_FLAT_ON_THE_MAT = "return flat on the mat"
+        const val BEGIN = "begin"
+        const val BEND_YOUR_KNEES = "bend your knees"
+        const val BEND_YOUR_LEFT_ELBOW = "bend your left elbow"
+        const val BEND_YOUR_RIGHT_ELBOW = "bend your right elbow"
+        const val BRING_YOUR_LEFT_ELBOW_TO_YOUR_RIGHT_KNEE =
+            "bring your left elbow to your right knee"
+        const val BRING_YOUR_RIGHT_ELBOW_TO_YOUR_LEFT_KNEE =
+            "bring your right elbow to your left knee"
+        const val LEFT = "left"
+        const val PLACE_YOUR_LEFT_FOOT_ON_THE_SEAT = "place your left foot on the seat"
+        const val PLACE_YOUR_RIGHT_FOOT_ON_THE_SEAT = "place your right foot on the seat"
+        const val PULL_AND_AND_SWING_YOUR_LEFT_HAND_OUT_TO_THE_LEFT =
+            "pull and and swing your left hand out to the left"
+        const val PULL_AND_SWING_YOUR_LEFT_HAND_IN_TO_THE_RIGHT =
+            "pull and swing your left hand in to the right"
+        const val PULL_AND_SWING_YOUR_RIGHT_HAND_IN_TO_THE_LEFT =
+            "pull and swing your right hand in to the left"
+        const val PULL_AND_SWING_YOUR_RIGHT_HAND_OUT_TO_THE_RIGHT =
+            "pull and swing your right hand out to the right"
+        const val RAISE_YOUR_LEFT_ARM = "raise your left arm"
+        const val RAISE_YOUR_LEFT_ARM_AND_YOUR_RIGHT_LEG = "raise your left arm and your right leg"
+        const val RAISE_YOUR_RIGHT_ARM = "raise your right arm"
+        const val RAISE_YOUR_RIGHT_ARM_AND_YOUR_LEFT_LEG = "raise your right arm and your left leg"
+        const val RETURN_TO_THE_STARTING_POSITION = "return to the starting position"
+        const val RIGHT = "right"
+        const val SWITCH_YOUR_LEFT_FOOT_WITH_YOUR_RIGHT_FOOT =
+            "switch your left foot with your right foot"
     }
 
     fun playText(instruction: Instruction) {
@@ -1066,6 +1093,89 @@ class AsyncAudioPlayer(private val context: Context) {
         RETURN_FLAT_ON_THE_MAT -> Instruction(
             text = text,
             player = MediaPlayer.create(context, R.raw.return_flat_on_the_mat)
+        )
+        BEGIN -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.begin))
+        BEND_YOUR_KNEES -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_your_knees)
+        )
+        BEND_YOUR_LEFT_ELBOW -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_your_left_elbow)
+        )
+        BEND_YOUR_RIGHT_ELBOW -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_your_right_elbow)
+        )
+        BRING_YOUR_LEFT_ELBOW_TO_YOUR_RIGHT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bring_your_left_elbow_to_your_right_knee)
+        )
+        BRING_YOUR_RIGHT_ELBOW_TO_YOUR_LEFT_KNEE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bring_your_right_elbow_to_your_left_knee)
+        )
+        LEFT -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.left))
+        PLACE_YOUR_LEFT_FOOT_ON_THE_SEAT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.place_your_left_foot_on_the_seat)
+        )
+        PLACE_YOUR_RIGHT_FOOT_ON_THE_SEAT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.place_your_right_foot_on_the_seat)
+        )
+        PULL_AND_AND_SWING_YOUR_LEFT_HAND_OUT_TO_THE_LEFT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(
+                context,
+                R.raw.pull_and_and_swing_your_left_hand_out_to_the_left
+            )
+        )
+        PULL_AND_SWING_YOUR_LEFT_HAND_IN_TO_THE_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(
+                context,
+                R.raw.pull_and_swing_your_left_hand_in_to_the_right
+            )
+        )
+        PULL_AND_SWING_YOUR_RIGHT_HAND_IN_TO_THE_LEFT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(
+                context,
+                R.raw.pull_and_swing_your_right_hand_in_to_the_left
+            )
+        )
+        PULL_AND_SWING_YOUR_RIGHT_HAND_OUT_TO_THE_RIGHT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(
+                context,
+                R.raw.pull_and_swing_your_right_hand_out_to_the_right
+            )
+        )
+        RAISE_YOUR_LEFT_ARM -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.raise_your_left_arm)
+        )
+        RAISE_YOUR_LEFT_ARM_AND_YOUR_RIGHT_LEG -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.raise_your_left_arm_and_your_right_leg)
+        )
+        RAISE_YOUR_RIGHT_ARM -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.raise_your_right_arm)
+        )
+        RAISE_YOUR_RIGHT_ARM_AND_YOUR_LEFT_LEG -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.raise_your_right_arm_and_your_left_leg)
+        )
+        RETURN_TO_THE_STARTING_POSITION -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.return_to_the_starting_position)
+        )
+        RIGHT -> Instruction(text = text, player = MediaPlayer.create(context, R.raw.right))
+        SWITCH_YOUR_LEFT_FOOT_WITH_YOUR_RIGHT_FOOT -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.switch_your_left_foot_with_your_right_foot)
         )
         else -> Instruction(text = text, player = null)
     }
