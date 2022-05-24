@@ -283,6 +283,11 @@ class AsyncAudioPlayer(private val context: Context) {
         const val RIGHT = "right"
         const val SWITCH_YOUR_LEFT_FOOT_WITH_YOUR_RIGHT_FOOT =
             "switch your left foot with your right foot"
+        const val BEND_YOUR_ELBOWS = "bend your elbows"
+        const val LAY_ON_YOUR_LEFT_SIDE = "lay on your left side"
+        const val LIFT_YOUR_HEAD_ARMS_AND_LEGS_UP = "lift your head, arms and legs up"
+        const val LIFT_YOUR_HIPS_AND_HOLD = "lift your hips and hold"
+        const val STRAIGHTEN_YOUR_ELBOWS = "straighten your elbows"
     }
 
     fun playText(instruction: Instruction) {
@@ -1176,6 +1181,26 @@ class AsyncAudioPlayer(private val context: Context) {
         SWITCH_YOUR_LEFT_FOOT_WITH_YOUR_RIGHT_FOOT -> Instruction(
             text = text,
             player = MediaPlayer.create(context, R.raw.switch_your_left_foot_with_your_right_foot)
+        )
+        BEND_YOUR_ELBOWS -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.bend_your_elbows)
+        )
+        LAY_ON_YOUR_LEFT_SIDE -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lay_on_your_left_side)
+        )
+        LIFT_YOUR_HEAD_ARMS_AND_LEGS_UP -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_your_head_arms_and_legs_up)
+        )
+        LIFT_YOUR_HIPS_AND_HOLD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.lift_your_hips_and_hold)
+        )
+        STRAIGHTEN_YOUR_ELBOWS -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.straighten_your_elbows)
         )
         else -> Instruction(text = text, player = null)
     }
