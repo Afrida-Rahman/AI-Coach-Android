@@ -288,6 +288,13 @@ class AsyncAudioPlayer(private val context: Context) {
         const val LIFT_YOUR_HEAD_ARMS_AND_LEGS_UP = "lift your head, arms and legs up"
         const val LIFT_YOUR_HIPS_AND_HOLD = "lift your hips and hold"
         const val STRAIGHTEN_YOUR_ELBOWS = "straighten your elbows"
+        const val LEFT_HAND_DOWN = "left hand down"
+        const val MOVE_YOUR_FEET_BACK_SLIGHTLY = "move your feet back slightly"
+        const val MOVE_YOUR_FEET_SLIGHTLY_FORWARD = "move your feet slightly forward"
+        const val RIGHT_HAND_DOWN = "right hand down"
+        const val YOU_ARE_IN_A_WRONG_POSITION = "you are in a wrong position"
+        const val YOU_ARE_NOW_IN_A_CORRECT_POSITION = "you are now in a correct position"
+        const val YOUR_EXERCISE_WILL_BEGIN_NOW = "your exercise will begin now"
     }
 
     fun playText(instruction: Instruction) {
@@ -1201,6 +1208,34 @@ class AsyncAudioPlayer(private val context: Context) {
         STRAIGHTEN_YOUR_ELBOWS -> Instruction(
             text = text,
             player = MediaPlayer.create(context, R.raw.straighten_your_elbows)
+        )
+        LEFT_HAND_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.left_hand_down)
+        )
+        MOVE_YOUR_FEET_BACK_SLIGHTLY -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.move_your_feet_back_slightly)
+        )
+        MOVE_YOUR_FEET_SLIGHTLY_FORWARD -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.move_your_feet_slightly_forward)
+        )
+        RIGHT_HAND_DOWN -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.right_hand_down)
+        )
+        YOU_ARE_IN_A_WRONG_POSITION -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.you_are_in_a_wrong_position)
+        )
+        YOU_ARE_NOW_IN_A_CORRECT_POSITION -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.you_are_now_in_a_correct_position)
+        )
+        YOUR_EXERCISE_WILL_BEGIN_NOW -> Instruction(
+            text = text,
+            player = MediaPlayer.create(context, R.raw.your_exercise_will_begin_now)
         )
         else -> Instruction(text = text, player = null)
     }
