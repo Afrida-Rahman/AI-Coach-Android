@@ -9,10 +9,7 @@ import org.tensorflow.lite.examples.poseestimation.exercise.home.back.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.elbow.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.fitness.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.functional.*
-import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.AdvancedBirdDog
-import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeInStanding
-import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.OneLeggedHingeRightInStanding
-import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.SwimmerInProne
+import org.tensorflow.lite.examples.poseestimation.exercise.home.golf.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.hip.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.knee.*
 import org.tensorflow.lite.examples.poseestimation.exercise.home.neck.*
@@ -214,6 +211,14 @@ object Exercises {
             ShortHeadBicepsCurlInSitting(context),
             LongHeadBicepsCurlInSitting(context),
             SidePlankWithElbowFlexed(context),
+            MiniSquatsWithResistanceBand(context),
+            ShoulderSupportedIr90DegreesElbowFlexionWithResistanceBandInStanding(context),
+            ShoulderSupportedEr90DegreesElbowFlexionWithResistanceBandInStanding(context),
+            SupermanInProne(context),
+            SidePlankWithElbowExtended(context),
+            ToeUps(context),
+            TrunkRotationInHalfKneeling(context),
+            SplitSquats(context),
         )
     }
 
