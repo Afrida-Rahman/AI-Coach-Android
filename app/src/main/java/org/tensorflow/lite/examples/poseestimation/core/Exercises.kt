@@ -219,6 +219,8 @@ object Exercises {
             ToeUps(context),
             TrunkRotationInHalfKneeling(context),
             SplitSquats(context),
+            BenchPressWithWeightsInSupineWithKneesFlexed(context),
+            BendOverRowsWithWeightsInTripod(context),
         )
     }
 
