@@ -95,6 +95,7 @@ abstract class HomeExercise(
         AsyncAudioPlayer.BEEP,
         AsyncAudioPlayer.PAUSE,
     )
+    val consideredIndices = mutableSetOf<Int>()
 
     fun addInstruction(dialogue: String?) {
         dialogue?.let { text ->
@@ -177,6 +178,9 @@ abstract class HomeExercise(
                                     val startPointIndex = getIndex(restriction.StartKeyPosition)
                                     val middlePointIndex = getIndex(restriction.MiddleKeyPosition)
                                     val endPointIndex = getIndex(restriction.EndKeyPosition)
+                                    consideredIndices.add(startPointIndex)
+                                    consideredIndices.add(middlePointIndex)
+                                    consideredIndices.add(endPointIndex)
                                     when (constraintType) {
                                         ConstraintType.LINE -> {
                                             if (startPointIndex >= 0 && endPointIndex >= 0) {
@@ -342,56 +346,77 @@ abstract class HomeExercise(
         canvasHeight: Int,
         canvasWidth: Int
     ) {
-        if (rightCountPhases.isNotEmpty() && phaseIndex < rightCountPhases.size && !takingRest) {
+        if (phaseIndex < rightCountPhases.size) {
             val phase = rightCountPhases[phaseIndex]
-            val constraintSatisfied = isConstraintSatisfied(
-                person,
-                phase.constraints
-            )
-            if (VisualizationUtils.isInsideBox(
+            val minConfidenceSatisfied = isMinConfidenceSatisfied(phase, person)
+            if (rightCountPhases.isNotEmpty() && !takingRest && minConfidenceSatisfied) {
+                val constraintSatisfied = isConstraintSatisfied(
                     person,
-                    canvasHeight,
-                    canvasWidth
-                ) && constraintSatisfied
-            ) {
-                if (!phaseEntered) {
-                    phaseEntered = true
-                    phaseEnterTime = System.currentTimeMillis()
-                }
-                val elapsedTime = ((System.currentTimeMillis() - phaseEnterTime) / 1000).toInt()
-                downTimeCounter = phase.holdTime - elapsedTime
-                if (downTimeCounter <= 0) {
-                    if (phaseIndex == rightCountPhases.size - 1) {
-                        phaseIndex = 0
-                        wrongStateIndex = 0
-                        repetitionCount()
-                    } else {
-                        phaseIndex++
-                        rightCountPhases[phaseIndex].phaseDialogue?.let {
-                            playInstruction(firstDelay = 500L, firstInstruction = it)
+                    phase.constraints
+                )
+                if (VisualizationUtils.isInsideBox(
+                        person,
+                        consideredIndices.toList(),
+                        canvasHeight,
+                        canvasWidth
+                    ) && constraintSatisfied
+                ) {
+                    if (!phaseEntered) {
+                        phaseEntered = true
+                        phaseEnterTime = System.currentTimeMillis()
+                    }
+                    val elapsedTime = ((System.currentTimeMillis() - phaseEnterTime) / 1000).toInt()
+                    downTimeCounter = phase.holdTime - elapsedTime
+                    if (downTimeCounter <= 0) {
+                        if (phaseIndex == rightCountPhases.size - 1) {
+                            phaseIndex = 0
+                            wrongStateIndex = 0
+                            repetitionCount()
+                        } else {
+                            phaseIndex++
+                            rightCountPhases[phaseIndex].phaseDialogue?.let {
+                                playInstruction(firstDelay = 500L, firstInstruction = it)
+                            }
+                            downTimeCounter = 0
                         }
-                        downTimeCounter = 0
+                    } else {
+                        if (phaseIndex != 0) countDownAudio(downTimeCounter)
                     }
                 } else {
-                    if (phaseIndex != 0) countDownAudio(downTimeCounter)
+                    downTimeCounter = 0
+                    phaseEntered = false
                 }
-            } else {
-                downTimeCounter = 0
-                phaseEntered = false
+                commonInstruction(
+                    person,
+                    rightCountPhases[phaseIndex].constraints,
+                    canvasHeight,
+                    canvasWidth
+                )
+                exerciseInstruction(person)
             }
-            commonInstruction(
-                person,
-                rightCountPhases[phaseIndex].constraints,
-                canvasHeight,
-                canvasWidth
-            )
-            exerciseInstruction(person)
         }
     }
 
     open fun wrongExerciseCount(person: Person, canvasHeight: Int, canvasWidth: Int) {}
 
     open fun exerciseInstruction(person: Person) {}
+
+    private fun isMinConfidenceSatisfied(phase: Phase, person: Person): Boolean {
+        val indices = mutableSetOf<Int>()
+        var isSatisfied = true
+        phase.constraints.forEach {
+            indices.add(it.startPointIndex)
+            indices.add(it.middlePointIndex)
+            indices.add(it.endPointIndex)
+        }
+        for (index in 0 until person.keyPoints.size) {
+            if (person.keyPoints[index].bodyPart.position in indices && person.keyPoints[index].score < VisualizationUtils.MIN_CONFIDENCE) {
+                isSatisfied = false
+                break
+            }
+        }
+        return isSatisfied
+    }
 
     private fun getInstruction(text: String): Instruction {
         var instruction = instructions.find {
@@ -499,6 +524,7 @@ abstract class HomeExercise(
         constraints.forEach { _ ->
             if (!VisualizationUtils.isInsideBox(
                     person,
+                    consideredIndices.toList(),
                     canvasHeight,
                     canvasWidth
                 )
