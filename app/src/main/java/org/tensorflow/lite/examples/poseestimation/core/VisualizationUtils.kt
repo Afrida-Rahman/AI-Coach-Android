@@ -12,6 +12,7 @@ import org.tensorflow.lite.examples.poseestimation.domain.model.Person
 import org.tensorflow.lite.examples.poseestimation.domain.model.Phase
 
 object VisualizationUtils {
+    const val MIN_CONFIDENCE = 0.3f
     private const val LINE_WIDTH = 3f
     private const val BORDER_WIDTH = 10f
     private var lastTimeChecked: Long = 0L
@@ -40,6 +41,7 @@ object VisualizationUtils {
     fun drawBodyKeyPoints(
         input: Bitmap,
         person: Person,
+        consideredIndices: List<Int>,
         phase: Phase?,
         isFrontCamera: Boolean = false
     ): Bitmap {
@@ -55,20 +57,22 @@ object VisualizationUtils {
         MAPPINGS.forEach { map ->
             val startPoint = person.keyPoints[map[0]].toCanvasPoint()
             val endPoint = person.keyPoints[map[1]].toCanvasPoint()
-            if (isFrontCamera) {
-                draw.line(
-                    Point(
-                        output.width - startPoint.x,
-                        startPoint.y
-                    ),
-                    Point(
-                        output.width - endPoint.x,
-                        endPoint.y
-                    ),
-                    _color = Color.rgb(170, 255, 0)
-                )
-            } else {
-                draw.line(startPoint, endPoint, _color = Color.rgb(170, 255, 0))
+            if (person.keyPoints[map[0]].score >= MIN_CONFIDENCE && person.keyPoints[map[1]].score >= MIN_CONFIDENCE) {
+                if (isFrontCamera) {
+                    draw.line(
+                        Point(
+                            output.width - startPoint.x,
+                            startPoint.y
+                        ),
+                        Point(
+                            output.width - endPoint.x,
+                            endPoint.y
+                        ),
+                        _color = Color.rgb(170, 255, 0)
+                    )
+                } else {
+                    draw.line(startPoint, endPoint, _color = Color.rgb(170, 255, 0))
+                }
             }
         }
 
@@ -95,58 +99,63 @@ object VisualizationUtils {
             for (constraint in it.constraints) {
                 val startPoint = person.keyPoints[constraint.startPointIndex].toCanvasPoint()
                 val endPoint = person.keyPoints[constraint.endPointIndex].toCanvasPoint()
-                if (constraint.type == ConstraintType.ANGLE) {
-                    val middlePoint = person.keyPoints[constraint.middlePointIndex].toCanvasPoint()
-                    if (isFrontCamera) {
-                        draw.angle(
-                            Point(
-                                output.width - startPoint.x,
-                                startPoint.y
-                            ),
-                            Point(
-                                output.width - middlePoint.x,
-                                middlePoint.y
-                            ),
-                            Point(
-                                output.width - endPoint.x,
-                                endPoint.y
-                            ),
-                            _clockWise = !constraint.clockWise,
-                            color = constraint.color
-                        )
+                if (person.keyPoints[constraint.startPointIndex].score >= MIN_CONFIDENCE && person.keyPoints[constraint.endPointIndex].score >= MIN_CONFIDENCE) {
+                    if (constraint.type == ConstraintType.ANGLE) {
+                        val middlePoint =
+                            person.keyPoints[constraint.middlePointIndex].toCanvasPoint()
+                        if (person.keyPoints[constraint.middlePointIndex].score >= MIN_CONFIDENCE) {
+                            if (isFrontCamera) {
+                                draw.angle(
+                                    Point(
+                                        output.width - startPoint.x,
+                                        startPoint.y
+                                    ),
+                                    Point(
+                                        output.width - middlePoint.x,
+                                        middlePoint.y
+                                    ),
+                                    Point(
+                                        output.width - endPoint.x,
+                                        endPoint.y
+                                    ),
+                                    _clockWise = !constraint.clockWise,
+                                    color = constraint.color
+                                )
+                            } else {
+                                draw.angle(
+                                    startPoint,
+                                    middlePoint,
+                                    endPoint,
+                                    _clockWise = constraint.clockWise,
+                                    color = constraint.color
+                                )
+                            }
+                        }
                     } else {
-                        draw.angle(
-                            startPoint,
-                            middlePoint,
-                            endPoint,
-                            _clockWise = constraint.clockWise,
-                            color = constraint.color
-                        )
-                    }
-                } else {
-                    if (isFrontCamera) {
-                        draw.line(
-                            Point(
-                                output.width - startPoint.x,
-                                startPoint.y
-                            ),
-                            Point(
-                                output.width - endPoint.x,
-                                endPoint.y
-                            ),
-                            _color = constraint.color
-                        )
-                    } else {
-                        draw.line(
-                            startPoint,
-                            endPoint,
-                            _color = constraint.color
-                        )
+                        if (isFrontCamera) {
+                            draw.line(
+                                Point(
+                                    output.width - startPoint.x,
+                                    startPoint.y
+                                ),
+                                Point(
+                                    output.width - endPoint.x,
+                                    endPoint.y
+                                ),
+                                _color = constraint.color
+                            )
+                        } else {
+                            draw.line(
+                                startPoint,
+                                endPoint,
+                                _color = constraint.color
+                            )
+                        }
                     }
                 }
             }
         }
-        if (!isInsideBox(person, height, width)) {
+        if (!isInsideBox(person, consideredIndices, height, width)) {
             draw.tetragonal(
                 Point(0f, 0f),
                 Point(0f, height.toFloat()),
@@ -159,13 +168,20 @@ object VisualizationUtils {
         return output
     }
 
-    fun isInsideBox(person: Person, canvasHeight: Int, canvasWidth: Int): Boolean {
+    fun isInsideBox(
+        person: Person,
+        consideredIndices: List<Int>,
+        canvasHeight: Int,
+        canvasWidth: Int
+    ): Boolean {
         var rightPosition = true
         person.keyPoints.forEach {
-            val x = it.coordinate.x
-            val y = it.coordinate.y
-            if (x < 0 || x > canvasWidth || y < 0 || y > canvasHeight) {
-                rightPosition = false
+            if (it.bodyPart.position in consideredIndices) {
+                val x = it.coordinate.x
+                val y = it.coordinate.y
+                if (x < 0 || x > canvasWidth || y < 0 || y > canvasHeight || it.score < MIN_CONFIDENCE) {
+                    rightPosition = false
+                }
             }
         }
         return rightPosition

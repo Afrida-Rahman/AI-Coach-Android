@@ -604,7 +604,8 @@ class ExerciseActivity : AppCompatActivity() {
                     input = bitmap,
                     person = person,
                     phase = phase,
-                    isFrontCamera = isFrontCamera
+                    isFrontCamera = isFrontCamera,
+                    consideredIndices = exercise.consideredIndices.toList()
                 )
             }
         }
