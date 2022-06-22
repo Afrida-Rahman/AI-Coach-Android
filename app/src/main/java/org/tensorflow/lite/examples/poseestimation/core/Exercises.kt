@@ -221,6 +221,11 @@ object Exercises {
             SplitSquats(context),
             BenchPressWithWeightsInSupineWithKneesFlexed(context),
             BendOverRowsWithWeightsInTripod(context),
+            BendOverRowsRightWithWeightsInTripod(context),
+            RightArmWallClimbingInStanding(context),
+            RightPreacherCurlsInStanding(context),
+            RightTrunkRotationInHalfKneeling(context),
+            LateralRaisesWithWeightsInStanding(context)
         )
     }
 
