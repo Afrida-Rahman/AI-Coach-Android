@@ -3,5 +3,5 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home.back
 import android.content.Context
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 
-class ModifiedSupermanInProne(context: Context) : HomeExercise(context = context, id = 251)
+class ModifiedSupermanInProne(context: Context) : HomeExercise(context = context, id = 351)
             
