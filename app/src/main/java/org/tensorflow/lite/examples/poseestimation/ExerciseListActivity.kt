@@ -124,8 +124,8 @@ class ExerciseListActivity : AppCompatActivity() {
                                     exerciseInstruction = exercise.Instructions,
                                     exerciseImageUrls = exercise.ImageURLs,
                                     exerciseVideoUrls = exercise.ExerciseMedia,
-                                    repetitionLimit = exercise.RepetitionInCount,
-                                    setLimit = exercise.SetInCount,
+                                    repetitionLimit = exercise.EvalExerciseProperties[0].RepetitionInCount,
+                                    setLimit = exercise.EvalExerciseProperties[0].SetInCount,
                                     protoId = exercise.ProtocolId,
                                     phases = exercise.Phases
                                 )
