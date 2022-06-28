@@ -49,7 +49,6 @@ abstract class HomeExercise(
 
     open var phaseIndex = 0
     open var rightCountPhases = mutableListOf<Phase>()
-    open var wrongStateIndex = 0
     private val audioPlayer = AudioPlayer(context)
     private var setCounter = 0
     private var wrongCounter = 0
@@ -61,6 +60,7 @@ abstract class HomeExercise(
     private var distanceFromCamera = 0f
     private var lastTimeDistanceCalculated = 0L
     private val distanceCalculationInterval = 2000L
+    private var firstPhaseExited = false
     open var phaseEntered = false
     private var phaseEnterTime = System.currentTimeMillis()
     private var takingRest = false
@@ -350,37 +350,55 @@ abstract class HomeExercise(
             val phase = rightCountPhases[phaseIndex]
             val minConfidenceSatisfied = isMinConfidenceSatisfied(phase, person)
             if (rightCountPhases.isNotEmpty() && !takingRest && minConfidenceSatisfied) {
-                val constraintSatisfied = isConstraintSatisfied(
-                    person,
-                    phase.constraints
-                )
                 if (VisualizationUtils.isInsideBox(
                         person,
                         consideredIndices.toList(),
                         canvasHeight,
                         canvasWidth
-                    ) && constraintSatisfied
+                    )
                 ) {
-                    if (!phaseEntered) {
-                        phaseEntered = true
-                        phaseEnterTime = System.currentTimeMillis()
+                    val firstPhase = rightCountPhases[0]
+                    if (!firstPhaseExited && firstPhase.constraints.isNotEmpty()) {
+                        firstPhaseExited =
+                            !isConstraintSatisfied(person, firstPhase.constraints)
                     }
-                    val elapsedTime = ((System.currentTimeMillis() - phaseEnterTime) / 1000).toInt()
-                    downTimeCounter = phase.holdTime - elapsedTime
-                    if (downTimeCounter <= 0) {
-                        if (phaseIndex == rightCountPhases.size - 1) {
-                            phaseIndex = 0
-                            wrongStateIndex = 0
-                            repetitionCount()
-                        } else {
-                            phaseIndex++
-                            rightCountPhases[phaseIndex].phaseDialogue?.let {
-                                playInstruction(firstDelay = 500L, firstInstruction = it)
-                            }
-                            downTimeCounter = 0
+                    val constraintSatisfied = isConstraintSatisfied(
+                        person,
+                        phase.constraints
+                    )
+                    if (constraintSatisfied) {
+                        if (!phaseEntered) {
+                            phaseEntered = true
+                            phaseEnterTime = System.currentTimeMillis()
                         }
-                    } else {
-                        if (phaseIndex != 0) countDownAudio(downTimeCounter)
+                        val elapsedTime =
+                            ((System.currentTimeMillis() - phaseEnterTime) / 1000).toInt()
+                        downTimeCounter = phase.holdTime - elapsedTime
+                        if (downTimeCounter <= 0) {
+                            if (phaseIndex == rightCountPhases.size - 1) {
+                                firstPhaseExited = false
+                                phaseIndex = 0
+                                repetitionCount()
+                            } else {
+                                phaseIndex++
+                                rightCountPhases[phaseIndex].phaseDialogue?.let {
+                                    playInstruction(firstDelay = 500L, firstInstruction = it)
+                                }
+                                downTimeCounter = 0
+                            }
+                        } else {
+                            if (phaseIndex != 0) countDownAudio(downTimeCounter)
+                        }
+                    }
+                    val currentPhase = getCurrentPhase(
+                        person,
+                        rightCountPhases
+                    )
+                    if (firstPhaseExited && currentPhase == 0 && phaseIndex != rightCountPhases.size - 1
+                    ) {
+                        wrongCounter++
+                        firstPhaseExited = false
+                        phaseIndex = 0
                     }
                 } else {
                     downTimeCounter = 0
@@ -504,6 +522,18 @@ abstract class HomeExercise(
             }
         }
         return constraintSatisfied
+    }
+
+    private fun getCurrentPhase(person: Person, phases: List<Phase>): Int {
+        val reversedPhases = phases.sortedBy { it.phaseNumber }.reversed()
+        var index = phases.size - 2
+        while (index >= 0) {
+            if (isConstraintSatisfied(person, reversedPhases[index].constraints)) {
+                return index
+            }
+            index--
+        }
+        return -1
     }
 
     private fun sortedPhaseList(phases: List<Phase>): List<Phase> {
