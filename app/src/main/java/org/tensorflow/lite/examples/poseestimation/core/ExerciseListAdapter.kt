@@ -271,7 +271,15 @@ class ExerciseListAdapter(
             putExtra(ExerciseActivity.ImageUrl, gifUrl)
             putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
         }
-        context.startActivity(intent)
+        if (exercise.maxSetCount == 0) {
+            Toast.makeText(
+                context,
+                "Assigned set is zero. Please reset it from VA portal",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            context.startActivity(intent)
+        }
     }
 
     class ExerciseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {

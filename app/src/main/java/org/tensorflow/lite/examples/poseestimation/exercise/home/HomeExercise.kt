@@ -3,10 +3,7 @@ package org.tensorflow.lite.examples.poseestimation.exercise.home
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.RawRes
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
@@ -148,11 +145,14 @@ abstract class HomeExercise(
             ) {
                 val responseBody = response.body()
                 if (responseBody == null || responseBody.isEmpty()) {
-                    Toast.makeText(
-                        context,
-                        "Failed to get necessary constraints for this exercise and got empty response. So, this exercise can't be performed now!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    MainScope().launch {
+                        Toast.makeText(
+                            context,
+                            "Failed to get necessary constraints for this exercise and got empty response. So, this exercise can't be performed now!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
                 } else {
                     if (responseBody[0].KeyPointsRestrictionGroup.isNotEmpty()) {
                         playInstruction(
@@ -227,22 +227,26 @@ abstract class HomeExercise(
                             addInstruction(group.PhaseDialogue)
                         }
                     } else {
-                        Toast.makeText(
-                            context,
-                            "Don't have enough data to perform this exercise. Please provide details of this exercise using EMMA LPT app!",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        MainScope().launch {
+                            Toast.makeText(
+                                context,
+                                "Don't have enough data to perform this exercise. Please provide details of this exercise using EMMA LPT app!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
                 rightCountPhases = sortedPhaseList(rightCountPhases.toList()).toMutableList()
             }
 
             override fun onFailure(call: Call<KeyPointRestrictions>, t: Throwable) {
-                Toast.makeText(
-                    context,
-                    "Failed to get exercise response from API !!!",
-                    Toast.LENGTH_LONG
-                ).show()
+                MainScope().launch {
+                    Toast.makeText(
+                        context,
+                        "Failed to get exercise response from API !!!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         })
     }

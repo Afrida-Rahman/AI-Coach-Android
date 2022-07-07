@@ -104,7 +104,15 @@ class ExerciseGuidelineFragment(
                     putExtra(ExerciseActivity.ImageUrl, gifUrl)
                     putExtra(ExerciseActivity.ProtocolId, exercise.protocolId)
                 }
-                view.context.startActivity(intent)
+                if (exercise.maxSetCount == 0) {
+                    Toast.makeText(
+                        context,
+                        "Assigned set is zero. Please reset it from VA portal",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    view.context.startActivity(intent)
+                }
             }
         } else {
             startWorkoutButton.visibility = View.GONE
