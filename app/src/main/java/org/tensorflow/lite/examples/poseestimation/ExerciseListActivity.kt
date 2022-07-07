@@ -134,7 +134,7 @@ class ExerciseListActivity : AppCompatActivity() {
                                 val notImplementedExercise = GeneralExercise(
                                     context = this@ExerciseListActivity,
                                     exerciseId = exercise.ExerciseId,
-                                    active = false
+                                    active = true
                                 )
                                 notImplementedExercise.setExercise(
                                     exerciseName = exercise.ExerciseName,

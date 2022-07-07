@@ -34,6 +34,7 @@ import org.tensorflow.lite.examples.poseestimation.core.Utilities
 import org.tensorflow.lite.examples.poseestimation.core.VisualizationUtils
 import org.tensorflow.lite.examples.poseestimation.domain.model.Device
 import org.tensorflow.lite.examples.poseestimation.domain.model.LogInData
+import org.tensorflow.lite.examples.poseestimation.exercise.home.GeneralExercise
 import org.tensorflow.lite.examples.poseestimation.exercise.home.HomeExercise
 import org.tensorflow.lite.examples.poseestimation.ml.MoveNet
 import org.tensorflow.lite.examples.poseestimation.ml.PoseDetector
@@ -207,7 +208,13 @@ class ExerciseActivity : AppCompatActivity() {
         val imageUrl = intent.getStringExtra(ImageUrl)
         logInData = loadLogInData()
 
-        exercise = Exercises.get(this, exerciseId)
+        val existingExercise = Exercises.get(this, exerciseId)
+        exercise = existingExercise
+            ?: GeneralExercise(
+                context = this,
+                exerciseId = exerciseId,
+                active = true
+            )
         exercise.initializeConstraint(logInData.tenant)
         exercise.setExercise(
             exerciseName = exerciseName ?: "",

@@ -229,7 +229,7 @@ object Exercises {
         )
     }
 
-    fun get(context: Context, exerciseId: Int): HomeExercise {
-        return get(context).find { it.id == exerciseId }!!
+    fun get(context: Context, exerciseId: Int): HomeExercise? {
+        return get(context).find { it.id == exerciseId }
     }
 }
