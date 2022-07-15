@@ -1,8 +1,9 @@
 package org.tensorflow.lite.examples.poseestimation.api.response
 
-data class KeyPointsRestrictionGroup(
-    val KeyPointsRestriction: List<KeyPointsRestriction>,
+data class PhaseDetails(
     val HoldInSeconds: Int,
+    val Restrictions: List<Restrictions>,
+    val PhaseNumber: Int,
     val PhaseDialogue: String,
-    val Phase: Int
+    val CapturedImage: String
 )

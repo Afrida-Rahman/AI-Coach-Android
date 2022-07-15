@@ -6,7 +6,6 @@ import androidx.annotation.RawRes
 import kotlinx.coroutines.*
 import org.tensorflow.lite.examples.poseestimation.R
 import org.tensorflow.lite.examples.poseestimation.api.IExerciseService
-import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseData
 import org.tensorflow.lite.examples.poseestimation.api.request.ExerciseRequestPayload
 import org.tensorflow.lite.examples.poseestimation.api.response.KeyPointRestrictions
 import org.tensorflow.lite.examples.poseestimation.api.response.PhaseInfo1
@@ -133,9 +132,7 @@ abstract class HomeExercise(
             .create(IExerciseService::class.java)
         val requestPayload = ExerciseRequestPayload(
             Tenant = tenant,
-            KeyPointsRestrictions = listOf(
-                ExerciseData(id)
-            )
+            ExerciseId = id
         )
         val response = service.getExerciseConstraint(requestPayload)
         response.enqueue(object : Callback<KeyPointRestrictions> {
@@ -144,7 +141,7 @@ abstract class HomeExercise(
                 response: Response<KeyPointRestrictions>
             ) {
                 val responseBody = response.body()
-                if (responseBody == null || responseBody.isEmpty()) {
+                if (responseBody == null || responseBody.Phases.isEmpty()) {
                     MainScope().launch {
                         Toast.makeText(
                             context,
@@ -154,7 +151,7 @@ abstract class HomeExercise(
                     }
 
                 } else {
-                    if (responseBody[0].KeyPointsRestrictionGroup.isNotEmpty()) {
+                    if (responseBody.Phases.isNotEmpty()) {
                         playInstruction(
                             firstDelay = 5000L,
                             firstInstruction = AsyncAudioPlayer.GET_READY,
@@ -166,59 +163,56 @@ abstract class HomeExercise(
                         commonExerciseInstructions.forEach {
                             addInstruction(it)
                         }
-                        responseBody[0].KeyPointsRestrictionGroup.forEach { group ->
+                        responseBody.Phases.sortedBy { it.PhaseNumber }.forEach { group ->
                             val constraints = mutableListOf<Constraint>()
-                            group.KeyPointsRestriction.sortedByDescending { it.Id }
-                                .forEach { restriction ->
-                                    val constraintType = if (restriction.Scale == "degree") {
-                                        ConstraintType.ANGLE
-                                    } else {
-                                        ConstraintType.LINE
-                                    }
-                                    val startPointIndex = getIndex(restriction.StartKeyPosition)
-                                    val middlePointIndex = getIndex(restriction.MiddleKeyPosition)
-                                    val endPointIndex = getIndex(restriction.EndKeyPosition)
-                                    consideredIndices.add(startPointIndex)
-                                    consideredIndices.add(middlePointIndex)
-                                    consideredIndices.add(endPointIndex)
-                                    when (constraintType) {
-                                        ConstraintType.LINE -> {
-                                            if (startPointIndex >= 0 && endPointIndex >= 0) {
-                                                constraints.add(
-                                                    Constraint(
-                                                        minValue = restriction.MinValidationValue,
-                                                        maxValue = restriction.MaxValidationValue,
-                                                        uniqueId = restriction.Id,
-                                                        type = constraintType,
-                                                        startPointIndex = startPointIndex,
-                                                        middlePointIndex = middlePointIndex,
-                                                        endPointIndex = endPointIndex,
-                                                        clockWise = false
-                                                    )
+                            group.Restrictions.forEach { restriction ->
+                                val constraintType = if (restriction.Scale == "degree") {
+                                    ConstraintType.ANGLE
+                                } else {
+                                    ConstraintType.LINE
+                                }
+                                val startPointIndex = getIndex(restriction.StartKeyPosition)
+                                val middlePointIndex = getIndex(restriction.MiddleKeyPosition)
+                                val endPointIndex = getIndex(restriction.EndKeyPosition)
+                                consideredIndices.add(startPointIndex)
+                                consideredIndices.add(middlePointIndex)
+                                consideredIndices.add(endPointIndex)
+                                when (constraintType) {
+                                    ConstraintType.LINE -> {
+                                        if (startPointIndex >= 0 && endPointIndex >= 0) {
+                                            constraints.add(
+                                                Constraint(
+                                                    minValue = restriction.MinValidationValue,
+                                                    maxValue = restriction.MaxValidationValue,
+                                                    type = constraintType,
+                                                    startPointIndex = startPointIndex,
+                                                    middlePointIndex = middlePointIndex,
+                                                    endPointIndex = endPointIndex,
+                                                    clockWise = false
                                                 )
-                                            }
+                                            )
                                         }
-                                        ConstraintType.ANGLE -> {
-                                            if (startPointIndex >= 0 && middlePointIndex >= 0 && endPointIndex >= 0) {
-                                                constraints.add(
-                                                    Constraint(
-                                                        minValue = restriction.MinValidationValue,
-                                                        maxValue = restriction.MaxValidationValue,
-                                                        uniqueId = restriction.Id,
-                                                        type = constraintType,
-                                                        startPointIndex = startPointIndex,
-                                                        middlePointIndex = middlePointIndex,
-                                                        endPointIndex = endPointIndex,
-                                                        clockWise = restriction.AngleArea == "clockwise"
-                                                    )
+                                    }
+                                    ConstraintType.ANGLE -> {
+                                        if (startPointIndex >= 0 && middlePointIndex >= 0 && endPointIndex >= 0) {
+                                            constraints.add(
+                                                Constraint(
+                                                    minValue = restriction.MinValidationValue,
+                                                    maxValue = restriction.MaxValidationValue,
+                                                    type = constraintType,
+                                                    startPointIndex = startPointIndex,
+                                                    middlePointIndex = middlePointIndex,
+                                                    endPointIndex = endPointIndex,
+                                                    clockWise = restriction.AngleArea == "clockwise"
                                                 )
-                                            }
+                                            )
                                         }
                                     }
                                 }
+                            }
                             rightCountPhases.add(
                                 Phase(
-                                    phaseNumber = group.Phase,
+                                    phaseNumber = group.PhaseNumber,
                                     constraints = constraints,
                                     holdTime = group.HoldInSeconds,
                                     phaseDialogue = group.PhaseDialogue
