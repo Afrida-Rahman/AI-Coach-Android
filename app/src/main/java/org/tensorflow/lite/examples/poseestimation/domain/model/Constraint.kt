@@ -10,6 +10,5 @@ data class Constraint(
     val clockWise: Boolean = false,
     var color: Int = Color.WHITE,
     val minValue: Int,
-    val maxValue: Int,
-    val uniqueId: Int
+    val maxValue: Int
 )

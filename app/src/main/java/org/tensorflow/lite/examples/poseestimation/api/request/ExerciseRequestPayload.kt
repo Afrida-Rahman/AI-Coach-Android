@@ -2,8 +2,8 @@ package org.tensorflow.lite.examples.poseestimation.api.request
 
 
 data class ExerciseRequestPayload(
-    val KeyPointsRestrictions: List<ExerciseData>,
-    val Tenant : String
+    val Tenant: String,
+    val ExerciseId: Int
 )
 
 
