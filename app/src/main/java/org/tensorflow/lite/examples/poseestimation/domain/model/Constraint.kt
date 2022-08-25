@@ -10,5 +10,10 @@ data class Constraint(
     val clockWise: Boolean = false,
     var color: Int = Color.WHITE,
     val minValue: Int,
-    val maxValue: Int
+    val maxValue: Int,
+    var looseMin: Int,
+    var looseMax: Int,
+    var standardMin: Int,
+    var standardMax: Int,
+    var storedValues: ArrayList<Int> = ArrayList()
 )

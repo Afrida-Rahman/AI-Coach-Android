@@ -10,6 +10,8 @@ data class Restrictions(
     val EndKeyPosition: String,
     val MinValidationValue: Int,
     val MaxValidationValue: Int,
+    val LowestMinValidationValue: Int,
+    val LowestMaxValidationValue: Int,
     val AngleArea: String,
     val DrawExtensionFlexion: Boolean
 )

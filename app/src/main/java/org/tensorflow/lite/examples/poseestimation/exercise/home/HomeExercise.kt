@@ -63,6 +63,7 @@ abstract class HomeExercise(
     private var manuallyPaused = false
     private lateinit var asyncAudioPlayer: AsyncAudioPlayer
     private val instructions: MutableList<Instruction> = mutableListOf()
+    var trackIndex: Int = 0
     private val commonExerciseInstructions = listOf(
         AsyncAudioPlayer.GET_READY,
         AsyncAudioPlayer.START,
@@ -188,7 +189,11 @@ abstract class HomeExercise(
                                                     startPointIndex = startPointIndex,
                                                     middlePointIndex = middlePointIndex,
                                                     endPointIndex = endPointIndex,
-                                                    clockWise = false
+                                                    clockWise = false,
+                                                    looseMin = restriction.LowestMinValidationValue,
+                                                    looseMax = restriction.LowestMaxValidationValue,
+                                                    standardMin = restriction.MinValidationValue,
+                                                    standardMax = restriction.LowestMaxValidationValue
                                                 )
                                             )
                                         }
@@ -203,7 +208,11 @@ abstract class HomeExercise(
                                                     startPointIndex = startPointIndex,
                                                     middlePointIndex = middlePointIndex,
                                                     endPointIndex = endPointIndex,
-                                                    clockWise = restriction.AngleArea == "clockwise"
+                                                    clockWise = restriction.AngleArea == "clockwise",
+                                                    looseMin = restriction.LowestMinValidationValue,
+                                                    looseMax = restriction.LowestMaxValidationValue,
+                                                    standardMin = restriction.MinValidationValue,
+                                                    standardMax = restriction.LowestMaxValidationValue
                                                 )
                                             )
                                         }
@@ -348,6 +357,9 @@ abstract class HomeExercise(
             val phase = rightCountPhases[phaseIndex]
             val minConfidenceSatisfied = isMinConfidenceSatisfied(phase, person)
             if (rightCountPhases.isNotEmpty() && !takingRest && minConfidenceSatisfied) {
+                if (setCounter == 0) {
+                    trackMinMaxConstraints(person = person)
+                }
                 if (VisualizationUtils.isInsideBox(
                         person,
                         consideredIndices.toList(),
@@ -466,6 +478,9 @@ abstract class HomeExercise(
                     secondInstruction = AsyncAudioPlayer.START_AGAIN,
                     shouldTakeRest = true
                 )
+                if (setCounter == 1) {
+                    setNewConstraints()
+                }
             }
         } else {
             val phase = rightCountPhases[0]
@@ -483,6 +498,15 @@ abstract class HomeExercise(
                     firstDelay = 0L,
                     firstInstruction = repetitionCounter.toString()
                 )
+            }
+        }
+    }
+
+    fun setNewConstraints() {
+        trackIndex = 0
+        rightCountPhases.forEach { phase ->
+            phase.constraints.forEach { constraint ->
+                
             }
         }
     }
@@ -580,5 +604,28 @@ abstract class HomeExercise(
         object LeftHandIsNotStraight : CommonInstructionEvent()
         object RightHandIsNotStraight : CommonInstructionEvent()
         object TooFarFromCamera : CommonInstructionEvent()
+    }
+
+    private fun trackMinMaxConstraints(person: Person) {
+        rightCountPhases[trackIndex].constraints.forEach { it ->
+            when (it.type) {
+                ConstraintType.ANGLE -> {
+                    val angle = Utilities.angle(
+                        startPoint = person.keyPoints[it.startPointIndex].toRealPoint(),
+                        middlePoint = person.keyPoints[it.middlePointIndex].toRealPoint(),
+                        endPoint = person.keyPoints[it.endPointIndex].toRealPoint(),
+                        clockWise = it.clockWise
+                    )
+                    if (angle < it.minValue || angle > it.maxValue) {
+                        if (phaseIndex != trackIndex) {
+                            trackIndex = phaseIndex
+                        }
+                    } else {
+                        it.storedValues.add(angle.toInt())
+                    }
+                }
+                ConstraintType.LINE -> {}
+            }
+        }
     }
 }
