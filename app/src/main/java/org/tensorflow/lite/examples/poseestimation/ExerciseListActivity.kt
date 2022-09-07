@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -117,7 +118,7 @@ class ExerciseListActivity : AppCompatActivity() {
                         responseBody.Exercises.forEach { exercise ->
                             val implementedExercise =
                                 implementedExerciseList.find { it.id == exercise.ExerciseId }
-
+                            Log.d("TestExercise", "$exercise")
                             if (implementedExercise != null) {
                                 implementedExercise.setExercise(
                                     exerciseName = exercise.ExerciseName,

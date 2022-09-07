@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.poseestimation.exercise.home
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RawRes
 import kotlinx.coroutines.*
@@ -20,6 +21,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -183,13 +186,13 @@ abstract class HomeExercise(
                                         if (startPointIndex >= 0 && endPointIndex >= 0) {
                                             constraints.add(
                                                 Constraint(
-                                                    minValue = restriction.MinValidationValue,
-                                                    maxValue = restriction.MaxValidationValue,
                                                     type = constraintType,
                                                     startPointIndex = startPointIndex,
                                                     middlePointIndex = middlePointIndex,
                                                     endPointIndex = endPointIndex,
                                                     clockWise = false,
+                                                    minValue = restriction.MinValidationValue,
+                                                    maxValue = restriction.MaxValidationValue,
                                                     looseMin = restriction.LowestMinValidationValue,
                                                     looseMax = restriction.LowestMaxValidationValue,
                                                     standardMin = restriction.MinValidationValue,
@@ -202,12 +205,12 @@ abstract class HomeExercise(
                                         if (startPointIndex >= 0 && middlePointIndex >= 0 && endPointIndex >= 0) {
                                             constraints.add(
                                                 Constraint(
-                                                    minValue = restriction.MinValidationValue,
-                                                    maxValue = restriction.MaxValidationValue,
                                                     type = constraintType,
                                                     startPointIndex = startPointIndex,
                                                     middlePointIndex = middlePointIndex,
                                                     endPointIndex = endPointIndex,
+                                                    minValue = restriction.MinValidationValue,
+                                                    maxValue = restriction.MaxValidationValue,
                                                     clockWise = restriction.AngleArea == "clockwise",
                                                     looseMin = restriction.LowestMinValidationValue,
                                                     looseMax = restriction.LowestMaxValidationValue,
@@ -478,9 +481,9 @@ abstract class HomeExercise(
                     secondInstruction = AsyncAudioPlayer.START_AGAIN,
                     shouldTakeRest = true
                 )
-                if (setCounter == 1) {
-                    setNewConstraints()
-                }
+            }
+            if (setCounter == 1) {
+                setNewConstraints()
             }
         } else {
             val phase = rightCountPhases[0]
@@ -504,9 +507,42 @@ abstract class HomeExercise(
 
     fun setNewConstraints() {
         trackIndex = 0
+        Log.d("setCount", "right count phases: $rightCountPhases \n \n ")
         rightCountPhases.forEach { phase ->
             phase.constraints.forEach { constraint ->
-                
+                Log.d("setCount", "phase:: ${phase.phaseNumber}")
+                val standardValues = constraint.getStandardConstraints()
+                val standardConstraintGap = standardValues.standardMax - standardValues.standardMin
+                val minMaxMedian = constraint.getMinMaxMedian()
+                val refinedConstraintGap = minMaxMedian.max - minMaxMedian.max
+                Log.d("setCount", "median:: ${minMaxMedian.median}")
+
+                if (minMaxMedian.median < standardValues.standardMin || minMaxMedian.median > standardValues.standardMax) {
+                    Log.d("setCount", "Out of the standard constraints!")
+                    if (refinedConstraintGap > standardConstraintGap) {
+                        val newMin = minMaxMedian.median - (standardConstraintGap / 2)
+                        val newMax = minMaxMedian.median + (standardConstraintGap / 2)
+                        constraint.setRefinedConstraints(min = newMin, max = newMax)
+                    } else {
+                        val minimumGap = 15
+                        if (refinedConstraintGap <= minimumGap) {
+                            val newMin = minMaxMedian.median - (minimumGap / 2)
+                            val newMax = minMaxMedian.median + (minimumGap / 2)
+                            constraint.setRefinedConstraints(min = newMin, max = newMax)
+                        } else {
+                            val newMin = minMaxMedian.median - (refinedConstraintGap / 2)
+                            val newMax = minMaxMedian.median + (refinedConstraintGap / 2)
+                            constraint.setRefinedConstraints(min = newMin, max = newMax)
+                        }
+                    }
+
+                } else {
+                    Log.d("setCount", "Satisfies the standard constraints!")
+                    constraint.setStandardConstraints()
+                }
+                constraint.storedValues.clear()
+                Log.d("setCount", "new minValue:: ${constraint.minValue}")
+                Log.d("setCount", "new maxValue:: ${constraint.maxValue}")
             }
         }
     }
@@ -536,7 +572,9 @@ abstract class HomeExercise(
                         endPoint = person.keyPoints[it.endPointIndex].toRealPoint(),
                         clockWise = it.clockWise
                     )
-                    if (angle < it.minValue || angle > it.maxValue) {
+                    val minValue = min(it.minValue, it.standardMin)
+                    val maxValue = max(it.maxValue, it.standardMax)
+                    if (angle < minValue.toFloat() || angle > maxValue.toFloat()) {
                         constraintSatisfied = false
                     }
                 }
@@ -607,7 +645,7 @@ abstract class HomeExercise(
     }
 
     private fun trackMinMaxConstraints(person: Person) {
-        rightCountPhases[trackIndex].constraints.forEach { it ->
+        rightCountPhases[trackIndex].constraints.forEach {
             when (it.type) {
                 ConstraintType.ANGLE -> {
                     val angle = Utilities.angle(
