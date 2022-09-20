@@ -191,12 +191,12 @@ abstract class HomeExercise(
                                                     middlePointIndex = middlePointIndex,
                                                     endPointIndex = endPointIndex,
                                                     clockWise = false,
-                                                    minValue = restriction.MinValidationValue,
-                                                    maxValue = restriction.MaxValidationValue,
+                                                    minValue = restriction.LowestMinValidationValue,
+                                                    maxValue = restriction.LowestMaxValidationValue,
                                                     looseMin = restriction.LowestMinValidationValue,
                                                     looseMax = restriction.LowestMaxValidationValue,
                                                     standardMin = restriction.MinValidationValue,
-                                                    standardMax = restriction.LowestMaxValidationValue
+                                                    standardMax = restriction.MaxValidationValue
                                                 )
                                             )
                                         }
@@ -209,13 +209,13 @@ abstract class HomeExercise(
                                                     startPointIndex = startPointIndex,
                                                     middlePointIndex = middlePointIndex,
                                                     endPointIndex = endPointIndex,
-                                                    minValue = restriction.MinValidationValue,
-                                                    maxValue = restriction.MaxValidationValue,
                                                     clockWise = restriction.AngleArea == "clockwise",
+                                                    minValue = restriction.LowestMinValidationValue,
+                                                    maxValue = restriction.LowestMaxValidationValue,
                                                     looseMin = restriction.LowestMinValidationValue,
                                                     looseMax = restriction.LowestMaxValidationValue,
                                                     standardMin = restriction.MinValidationValue,
-                                                    standardMax = restriction.LowestMaxValidationValue
+                                                    standardMax = restriction.MaxValidationValue
                                                 )
                                             )
                                         }

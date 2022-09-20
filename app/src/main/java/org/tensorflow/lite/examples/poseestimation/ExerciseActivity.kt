@@ -580,8 +580,8 @@ class ExerciseActivity : AppCompatActivity() {
                         }
                     }
 
-                    wrongCountDisplay.text =
-                        getString(R.string.wrong_text).format(exercise.getWrongCount())
+//                    wrongCountDisplay.text =
+//                        getString(R.string.wrong_text).format(exercise.getWrongCount())
                     phase?.let {
                         val timeToDisplay = exercise.getHoldTimeLimitCount()
                         it.phaseDialogue?.let { dialogue ->
