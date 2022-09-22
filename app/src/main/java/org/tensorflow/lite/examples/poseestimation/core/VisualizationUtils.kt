@@ -179,7 +179,7 @@ object VisualizationUtils {
             if (it.bodyPart.position in consideredIndices) {
                 val x = it.coordinate.x
                 val y = it.coordinate.y
-                if (x < 0 || x > canvasWidth || y < 0 || y > canvasHeight || it.score < MIN_CONFIDENCE) {
+                if (x < 0 || x > canvasWidth || y < 0 || y > canvasHeight) {
                     rightPosition = false
                 }
             }
