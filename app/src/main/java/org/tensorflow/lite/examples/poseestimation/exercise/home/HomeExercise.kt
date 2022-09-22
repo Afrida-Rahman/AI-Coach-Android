@@ -621,7 +621,7 @@ abstract class HomeExercise(
             ) onEvent(CommonInstructionEvent.OutSideOfBox)
         }
         if (getPersonDistance(person) > MAX_DISTANCE_FROM_CAMERA) {
-            onEvent(CommonInstructionEvent.TooFarFromCamera)
+//            onEvent(CommonInstructionEvent.TooFarFromCamera)
         }
     }
 
